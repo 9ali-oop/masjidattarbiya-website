@@ -109,6 +109,12 @@ registration, a privacy notice and a decision on who owns the data.
 Pushing to `main` publishes automatically via GitHub Pages.
 Preview: https://9ali-oop.github.io/masjidattarbiya-website/
 
+**Note on link previews before cutover:** every page's `og:image`, `og:url` and `canonical` point
+at `https://masjidattarbiya.org/...`, which is the intended final home but is currently served by
+the donation-page repo. So sharing the github.io preview link will *not* show a preview card yet.
+That is expected; the tags become correct the moment the domain moves. Do not "fix" them by
+pointing at github.io unless you also remember to change them back at cutover.
+
 The custom domain masjidattarbiya.org currently points at the **separate donation-page repo**.
 It moves here only once this site is clearly better than what is already live. When it does,
 follow the cutover checklist in `INTEGRATION.md` in that repo - in particular, the 22 GoCardless
