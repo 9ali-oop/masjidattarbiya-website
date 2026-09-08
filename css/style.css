@@ -5,7 +5,8 @@
 :root {
   --green-dark: #1a7078;   /* deepened teal for banners/footer, derived from real logo file */
   --green: #42bac5;        /* exact brand teal sampled from the original logo artwork */
-  --green-light: #e9f7f9;  /* light teal tint for section backgrounds */
+  --green-light: #e9f7f9;
+  --green-text: #17808a;  /* accessible teal for text - 4.68:1 on white */  /* light teal tint for section backgrounds */
   --gold: #d4ae61;         /* exact brand gold sampled from the original logo artwork */
   --gold-light: #f8f0e0;
   --ink: #1c2321;
@@ -34,7 +35,7 @@ body {
 
 img { max-width: 100%; display: block; }
 
-a { color: var(--green); text-decoration: none; }
+a { color: var(--green-text); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 .container {
@@ -1031,4 +1032,112 @@ form.contact-form button:disabled { opacity: 0.6; cursor: not-allowed; }
   .footer-grid { grid-template-columns: 1fr; }
   .prayer-card { margin-top: 24px; }
   .hero { padding: 56px 0 100px; }
+}
+
+/* ==========================================================================
+   Accessibility, hero and button additions
+   ========================================================================== */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  background: var(--green-dark);
+  color: var(--white);
+  padding: 12px 20px;
+  border-radius: 0 0 var(--radius) 0;
+  font-weight: 600;
+}
+.skip-link:focus { left: 0; text-decoration: none; }
+
+:focus-visible {
+  outline: 3px solid var(--green-text);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.hero-slide-body :focus-visible,
+.site-footer :focus-visible,
+.donate-hero :focus-visible {
+  outline-color: var(--white);
+}
+
+.hero-slide-body h1 {
+  color: var(--white);
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 0.3em;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+.hero-actions .btn { margin-top: 0; align-self: flex-start; }
+
+/* Outline button for use on dark photography */
+.btn-ghost {
+  background: transparent;
+  border: 2px solid var(--white);
+  color: var(--white);
+}
+.btn-ghost:hover { background: var(--white); color: var(--green-dark); }
+
+/* Solid button sitting on the gold donate panel - dark text for contrast */
+.btn-on-gold {
+  background: var(--white);
+  color: #7a5c1f;
+  font-weight: 700;
+}
+.btn-on-gold:hover { background: var(--ink); color: var(--white); }
+
+.prayer-source {
+  margin: 14px 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* Footer text contrast: lifted from 0.7/0.75 alpha to meet AA on the teal footer */
+.site-footer p { color: rgba(255,255,255,0.92); }
+.site-footer a { color: rgba(255,255,255,0.95); }
+.site-footer .footer-bottom { color: rgba(255,255,255,0.88); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Post-payment thank-you banner, injected by js/main.js */
+.thanks-banner {
+  background: linear-gradient(135deg, var(--green-text), var(--green-dark));
+  color: var(--white);
+  text-align: center;
+  padding: 16px 20px;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+.thanks-banner strong {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 1.15rem;
+  margin-bottom: 2px;
+}
+
+/* Contact page: direct contact actions in place of a form */
+.contact-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+  margin: 20px 0 16px;
+}
+.contact-actions .btn { text-align: center; }
+.contact-note { font-size: 0.9rem; color: var(--ink-soft); }
+@media (min-width: 600px) {
+  .contact-actions { flex-direction: row; flex-wrap: wrap; }
+  .contact-actions .btn { flex: 1 1 auto; }
 }
