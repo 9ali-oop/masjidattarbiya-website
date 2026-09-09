@@ -10,6 +10,12 @@ for page in sorted(glob.glob("*.html")):
         url = m.group(1)
         if url.startswith(("http://", "https://", "mailto:", "tel:", "#", "data:")):
             continue
+        # Root-relative paths resolve against the domain root. The site is served
+        # from a subpath on GitHub Pages, so they 404 there - this is exactly how
+        # every link and asset on the 404 page came to be broken.
+        if url.startswith("/"):
+            problems.append(f"{page}: root-relative path {url} - use a relative path")
+
         target = url.lstrip("/").split("?")[0].split("#")[0]
         if not os.path.exists(target):
             problems.append(f"{page}: links to missing {url}")

@@ -40,9 +40,16 @@ for page in sorted(glob.glob("*.html")):
     if page != "404.html" and CHARITY not in html:
         problems.append(f"{page}: missing charity number {CHARITY}")
 
-    # Prayer times must never be hardcoded into the markup.
-    if re.search(r"\b(Fajr|Dhuhr|Asr|Maghrib|Isha)\b[^<]{0,40}\d{1,2}[:.]\d{2}\s*(am|pm)?", html, re.I):
-        problems.append(f"{page}: looks like a hardcoded prayer time - use the live data")
+    # Prayer times must never be hardcoded into the markup. The giveaway is a
+    # prayer name and a clock time close together, which is what a pasted
+    # timetable looks like. The live table is built by JavaScript, so nothing
+    # like this should appear in a source file.
+    for m in re.finditer(r"<t[dh][^>]*>\s*(Fajr|Dhuhr|Zuhr|Asr|Maghrib|Isha|Jumu)", text, re.I):
+        if re.search(r"\d{1,2}[:.]\d{2}", text[m.start():m.start() + 260]):
+            problems.append(f"{page}: hardcoded prayer timetable near {m.group(1)!r} - use the live data")
+            break
+    if re.search(r"(Fajr|Maghrib|Isha)\b[^<>]{0,30}\d{1,2}[:.]\d{2}\s*(am|pm)", text, re.I):
+        problems.append(f"{page}: a prayer time appears in the copy - use the live data")
 
 for p in problems:
     print("FAIL: " + p)

@@ -23,3 +23,6 @@ jobs:
 
       - name: Contact details are consistent
         run: python scripts/check_facts.py
+
+      - name: Prayer times data is valid and current
+        run: python scripts/check_data.py

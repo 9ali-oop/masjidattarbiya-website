@@ -17,12 +17,18 @@ below. Never invent a value that is not on this list.
 | Address | 2 Revesby Walk, Nechells, Birmingham B7 4LG |
 | Charity number | 1142204 |
 | Phone | 07908 854187 (`tel:+447908854187`, `wa.me/447908854187`) |
-| Email | info@masjidatarbiya.org (note: **one** 't' - see the open question below) |
+| Email | info@masjidatarbiya.org (note: **one** 't', and that is correct - see below) |
 | Website | masjidattarbiya.org (note: **two** t's) |
 | Prayer times | https://masjidbox.com/prayer-times/masjid-attarbiya |
 | Facebook | https://www.facebook.com/p/Attarbiya-Masjid-Kowneyn-Community-Center-100088731259188/ |
 | Instagram | https://www.instagram.com/masjid.attarbiya/ |
 | YouTube | https://www.youtube.com/@MasjidAttarbiyaBirmingham |
+
+**The email really does have one 't'.** `masjidatarbiya.org` has live Google Workspace mail
+records, so that address works; our website domain `masjidattarbiya.org` has no mail records at
+all. The two simply have different histories. Do not "correct" the email to match the website.
+(If you ever want `info@masjidattarbiya.org` to work as well, Cloudflare Email Routing forwards
+it free.)
 
 **Open question:** the masjid's own signage shows a phone number beginning `07929`, which matches
 neither the number above nor an older leaflet. The number above comes from the Charity Commission
@@ -79,9 +85,15 @@ Three checks run in CI on every push, and are worth running before you commit:
 
 ```bash
 python scripts/sync_chrome.py --check   # header/footer identical across pages
-python scripts/check_links.py           # no broken links, balanced tags, one h1 per page
+python scripts/check_links.py           # no broken links or root-relative paths, balanced tags, one h1
 python scripts/check_facts.py           # contact details consistent, no hardcoded prayer times
+python scripts/check_data.py            # prayer times data valid, in order, and still current
 ```
+
+`check_data.py` matters most of the four: `assets/prayer-times.json` is the only file that changes
+on its own, written by a scheduled scrape of a third party, so it is the most likely thing to break
+quietly. It catches missing prayers, times out of order, a Jumu'ah copied from Dhuhr, and data that
+has gone stale because the daily job stopped.
 
 This duplication is deliberate for now: a build step would add a toolchain that a volunteer
 cannot debug, and the site is only five pages. **Revisit when news or blog posts are added** -
