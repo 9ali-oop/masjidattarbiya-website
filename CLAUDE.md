@@ -125,6 +125,39 @@ on white, so use `--green-text` for anything readable.
 Every page has one `<h1>`, a `<main id="main">` landmark, a skip link, and visible focus styles.
 Tap targets are at least 44px. The site respects `prefers-reduced-motion`. Keep all of that.
 
+## Parked, waiting on content
+
+Nothing here is blocked by code. Each needs material from the masjid first.
+
+**Photography.** The youth team are taking these; drop them in `assets/` and they get placed:
+1. Exterior, bright day, straight on from across Revesby Walk so the sign reads. Landscape.
+2. The entrance at an angle, door open.
+3. Prayer hall empty, from the back corner toward the mihrab, lights on. Landscape.
+4. The mihrab and minbar closer up - the marble wall is the most photogenic thing here.
+5. A madrasah classroom, empty, set up as if a class is about to start.
+
+Landscape, not cropped tight - text gets placed over these. `assets/prayer-hall.jpg` is a
+stopgap pulled from a WhatsApp export; replace it when a better one exists.
+
+**Instagram.** `masjid.attarbiya` is public and the youth team run the account, but anonymous
+scraping gets HTTP 429 immediately. It needs a logged-in session, run locally by someone on the
+team - never paste credentials into a chat:
+
+```bash
+instaloader --login YOUR_USERNAME --no-videos --no-metadata-json --fast-update masjid.attarbiya
+```
+
+For twenty or thirty photos, saving them from the app by hand is honestly quicker.
+
+**Events and madrasah pages.** Waiting on real details: which classes run on which days
+(Tue/Wed/Sat/Sun), term dates, ages, whether places are open. Past events can be built from
+posters the masjid itself published.
+
+**Photos of people.** Running the masjid's accounts covers content the masjid published. It does
+not cover individual likenesses, and much of the available material shows teenagers. Group shots
+need a quick "can we put this on the website?" first, and anything involving children needs
+parental consent - the masjid runs children's classes, so that standard applies here anyway.
+
 ## Not currently published
 
 `services.html`, `events.html`, `madrasah.html` and `registration.html` were removed from the
