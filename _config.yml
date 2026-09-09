@@ -1,0 +1,12 @@
+# GitHub Pages (Jekyll) build settings.
+#
+# The site is plain HTML - Jekyll is only here because it is the Pages default.
+# This file exists to keep working files out of the published site, so that
+# header/footer fragments are not crawled and indexed as if they were pages.
+
+exclude:
+  - scripts/
+  - partials/
+  - CLAUDE.md
+  - README.md
+  - .github/

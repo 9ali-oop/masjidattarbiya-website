@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /partials/
+Disallow: /scripts/
 
 Sitemap: https://masjidattarbiya.org/sitemap.xml
