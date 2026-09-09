@@ -1174,3 +1174,83 @@ form.contact-form button:disabled { opacity: 0.6; cursor: not-allowed; }
   .prayer-card .map-frame { aspect-ratio: 3 / 4; }
   .amount-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ==========================================================================
+   Prayer times, rendered from assets/prayer-times.json
+   ========================================================================== */
+
+.prayer-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 12px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.prayer-greg { font-weight: 600; color: var(--ink); }
+.prayer-hijri { color: var(--ink-soft); font-size: 0.92rem; }
+
+.prayer-table { width: 100%; border-collapse: collapse; }
+.prayer-table thead th {
+  text-align: left;
+  font: 600 0.75rem/1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 14px 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.prayer-table thead th:not(:first-child),
+.prayer-table td { text-align: right; }
+.prayer-table tbody th {
+  text-align: left;
+  font: 600 1.05rem/1.2 var(--font-body);
+  color: var(--green-dark);
+  padding: 14px 8px;
+}
+.prayer-table td {
+  font-variant-numeric: tabular-nums;
+  font-size: 1.15rem;
+  color: var(--ink);
+  padding: 14px 8px;
+}
+.prayer-table tbody tr + tr th,
+.prayer-table tbody tr + tr td { border-top: 1px solid var(--border); }
+
+.prayer-table tr.is-next th,
+.prayer-table tr.is-next td { background: var(--green-light); }
+.prayer-table tr.is-next th { border-left: 3px solid var(--green-text); padding-left: 12px; }
+.next-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--green-text);
+  color: var(--white);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.prayer-fallback {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+.prayer-loading { color: var(--ink-soft); font-size: 0.95rem; margin: 8px 0 0; }
+
+@media (max-width: 420px) {
+  .prayer-table tbody th { font-size: 0.98rem; }
+  .prayer-table td { font-size: 1.05rem; }
+  .prayer-table thead th,
+  .prayer-table tbody th,
+  .prayer-table td { padding-left: 4px; padding-right: 4px; }
+}
+
+/* YouTube glyph: the body and the play triangle were both filled white, so the
+   triangle vanished. Knock it out in the footer colour instead. */
+.social-row a[title^="YouTube"] svg path + path { fill: var(--green-dark); }
