@@ -49,6 +49,13 @@ def extract_timetable(html):
     return json.loads(text[start:end])
 
 
+def first_time(value):
+    """Masjidbox stores jumu'ah as a list of ISO timestamps; take the first."""
+    if isinstance(value, list):
+        value = value[0] if value else None
+    return hhmm(value)
+
+
 def hhmm(iso):
     if not isinstance(iso, str) or "T" not in iso:
         return None
@@ -71,6 +78,14 @@ def build(rows):
             "times": {p: hhmm(row.get(p)) for p in PRAYERS if hhmm(row.get(p))},
             "iqamah": {p: hhmm(v) for p, v in iq.items() if hhmm(v)},
         }
+        # Jumu'ah is its own service, not a relabelled Dhuhr: Masjidbox gives it a
+        # separate field (a list, since a masjid can hold more than one jumu'ah).
+        jum = first_time(row.get("jumuah"))
+        if jum:
+            day["times"]["jumuah"] = jum
+            jum_iq = first_time(iq.get("jumuah"))
+            if jum_iq:
+                day["iqamah"]["jumuah"] = jum_iq
         days.append(day)
     if not days:
         raise ValueError("timetable parsed but contained no usable days")

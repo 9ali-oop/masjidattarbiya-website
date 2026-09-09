@@ -1254,3 +1254,27 @@ form.contact-form button:disabled { opacity: 0.6; cursor: not-allowed; }
 /* YouTube glyph: the body and the play triangle were both filled white, so the
    triangle vanished. Knock it out in the footer colour instead. */
 .social-row a[title^="YouTube"] svg path + path { fill: var(--green-dark); }
+
+/* Prayer card: live clock, hijri line, jumu'ah row */
+.prayer-now { color: var(--ink-soft); font-size: 0.9rem; }
+.prayer-now b { font-variant-numeric: tabular-nums; color: var(--green-dark); font-weight: 600; }
+.prayer-hijri { margin: 8px 0 0; color: var(--ink-soft); font-size: 0.92rem; }
+.prayer-table tr.is-jumuah th { color: var(--gold-deep); }
+.prayer-jumuah {
+  margin: 14px 0 0;
+  padding: 10px 14px;
+  border-left: 3px solid var(--gold);
+  background: var(--gold-light);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+
+/* On a phone, prayer times are the reason most people open the site, so keep the
+   hero short enough that the timetable is reachable almost immediately. */
+@media (max-width: 700px) {
+  .hero-slideshow { height: auto; min-height: 0; }
+  .hero-slide { position: relative; }
+  .hero-slide-body { padding: 40px 20px; min-height: 320px; }
+  .prayer-card { margin-top: 18px; }
+}

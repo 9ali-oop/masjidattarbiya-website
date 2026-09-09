@@ -95,10 +95,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /* --------------------------------------------------------------------------
    Prayer times.
-   Rendered from assets/prayer-times.json, which a daily GitHub Action refreshes
-   from the masjid's own Masjidbox timetable. If that data is missing or stale we
-   say so plainly and send people to the live Masjidbox page rather than showing
-   times that might be wrong.
+   Rendered from assets/prayer-times.json, refreshed daily by a GitHub Action
+   from the masjid's own Masjidbox timetable. If the data is missing or has no
+   entry for today we say so and link to the live Masjidbox page, rather than
+   showing times that might be wrong.
    -------------------------------------------------------------------------- */
 (function () {
   var mount = document.getElementById("prayer-times");
@@ -106,29 +106,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var LIVE = "https://masjidbox.com/prayer-times/masjid-attarbiya";
   var LABELS = {
-    fajr: "Fajr", sunrise: "Sunrise", dhuhr: "Dhuhr",
+    fajr: "Fajr", sunrise: "Sunrise", dhuhr: "Dhuhr", jumuah: "Jumu'ah",
     asr: "Asr", maghrib: "Maghrib", isha: "Isha"
   };
-  var ORDER = ["fajr", "sunrise", "dhuhr", "asr", "maghrib", "isha"];
+  var ORDER = ["fajr", "sunrise", "dhuhr", "jumuah", "asr", "maghrib", "isha"];
+
+  function pad(n) { return String(n).padStart(2, "0"); }
 
   function todayISO() {
     var d = new Date();
-    return d.getFullYear() + "-" +
-      String(d.getMonth() + 1).padStart(2, "0") + "-" +
-      String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
   }
 
-  function pretty(iso) {
-    var parts = iso.split("-");
-    return new Date(parts[0], parts[1] - 1, parts[2]).toLocaleDateString("en-GB", {
+  function prettyDate(iso) {
+    var p = iso.split("-");
+    return new Date(p[0], p[1] - 1, p[2]).toLocaleDateString("en-GB", {
       weekday: "long", day: "numeric", month: "long", year: "numeric"
     });
   }
 
+  function toMinutes(hm) {
+    var p = hm.split(":");
+    return Number(p[0]) * 60 + Number(p[1]);
+  }
+
   function fallback(message) {
-    mount.innerHTML =
-      '<p class="prayer-fallback">' + message +
+    mount.innerHTML = '<p class="prayer-fallback">' + message +
       ' <a href="' + LIVE + '" target="_blank" rel="noopener">View live prayer times</a>.</p>';
+  }
+
+  function startClock(el) {
+    function tick() {
+      var d = new Date();
+      el.textContent = pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  function nextFriday(days, todayIso) {
+    for (var i = 0; i < days.length; i++) {
+      if (days[i].date >= todayIso && days[i].times.jumuah) return days[i];
+    }
+    return null;
   }
 
   function render(data) {
@@ -138,52 +158,61 @@ document.addEventListener("DOMContentLoaded", function () {
       if (data.days[i].date === today) { day = data.days[i]; break; }
     }
     if (!day) {
-      fallback("Today&rsquo;s times are not available right now.");
+      fallback("Today&rsquo;s prayer times are not available right now.");
       return;
     }
 
-    // Which prayer is next, so we can highlight it.
+    // Highlight whichever prayer is next today.
     var now = new Date();
     var mins = now.getHours() * 60 + now.getMinutes();
     var next = null;
     for (var j = 0; j < ORDER.length; j++) {
       var k = ORDER[j];
-      if (k === "sunrise" || !day.times[k]) continue;
-      var hm = day.times[k].split(":");
-      if (Number(hm[0]) * 60 + Number(hm[1]) > mins) { next = k; break; }
+      if (k === "sunrise" || k === "jumuah" || !day.times[k]) continue;
+      if (toMinutes(day.times[k]) > mins) { next = k; break; }
     }
 
-    var isFriday = new Date(today).getDay() === 5;
     var rows = "";
     ORDER.forEach(function (k) {
       if (!day.times[k]) return;
-      var name = (isFriday && k === "dhuhr") ? "Jumu'ah" : LABELS[k];
       var iq = day.iqamah && day.iqamah[k] ? day.iqamah[k] : "&mdash;";
       rows +=
-        '<tr' + (k === next ? ' class="is-next"' : '') + '>' +
-        '<th scope="row">' + name + (k === next ? ' <span class="next-tag">Next</span>' : '') + '</th>' +
+        '<tr' + (k === next ? ' class="is-next"' : '') + (k === "jumuah" ? ' class="is-jumuah"' : '') + '>' +
+        '<th scope="row">' + LABELS[k] +
+          (k === next ? ' <span class="next-tag">Next</span>' : '') + '</th>' +
         '<td>' + day.times[k] + '</td>' +
         '<td>' + (k === "sunrise" ? "&mdash;" : iq) + '</td>' +
         '</tr>';
     });
 
+    // A standing Jumu'ah line, so people can plan ahead on any day of the week.
+    var jum = nextFriday(data.days, today);
+    var jumLine = "";
+    if (jum && !day.times.jumuah) {
+      jumLine = '<p class="prayer-jumuah">Jumu’ah: khutbah ' + jum.times.jumuah +
+        (jum.iqamah.jumuah ? ', iqamah ' + jum.iqamah.jumuah : '') + '</p>';
+    }
+
     mount.innerHTML =
       '<div class="prayer-dates">' +
-        '<span class="prayer-greg">' + pretty(day.date) + '</span>' +
-        (day.hijri ? '<span class="prayer-hijri">' + day.hijri + '</span>' : '') +
+        '<span class="prayer-greg">' + prettyDate(day.date) + '</span>' +
+        '<span class="prayer-now">Now <b id="prayer-clock">--:--:--</b></span>' +
       '</div>' +
+      (day.hijri ? '<p class="prayer-hijri">' + day.hijri + '</p>' : '') +
       '<table class="prayer-table">' +
         '<thead><tr><th scope="col">Prayer</th><th scope="col">Begins</th><th scope="col">Iqamah</th></tr></thead>' +
         '<tbody>' + rows + '</tbody>' +
       '</table>' +
+      jumLine +
       '<p class="prayer-source">Updated daily from the masjid&rsquo;s own ' +
       '<a href="' + LIVE + '" target="_blank" rel="noopener">Masjidbox timetable</a>.</p>';
+
+    var clock = document.getElementById("prayer-clock");
+    if (clock) startClock(clock);
   }
 
   fetch("assets/prayer-times.json", { cache: "no-cache" })
     .then(function (r) { if (!r.ok) throw new Error("not found"); return r.json(); })
     .then(render)
-    .catch(function () {
-      fallback("Prayer times could not be loaded.");
-    });
+    .catch(function () { fallback("Prayer times could not be loaded."); });
 })();
