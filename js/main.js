@@ -32,7 +32,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Donate page: Monthly / One-off tab switcher
+  // Donate page: Monthly / One-off tabs, and pick-an-amount then confirm.
+  //
+  // The amounts are real links to GoCardless, so with JavaScript disabled they
+  // still work by tapping one directly. With JavaScript on we intercept the tap
+  // to select it instead, and the confirm button below carries the donor through.
+  // That extra step is deliberate: setting up a monthly Direct Debit is a real
+  // commitment and the donor should see exactly what they are agreeing to.
   var donateTabs = document.querySelectorAll(".donate-clone-tab");
   if (donateTabs.length) {
     donateTabs.forEach(function (tab) {
@@ -49,6 +55,40 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
+
+  document.querySelectorAll(".donate-tab-panel").forEach(function (panel) {
+    var kind = panel.getAttribute("data-panel");
+    var cta = panel.querySelector(".donate-cta");
+    var amounts = panel.querySelectorAll(".amount-btn");
+    if (!cta || !amounts.length) return;
+
+    var placeholder = cta.textContent;
+
+    amounts.forEach(function (link) {
+      link.setAttribute("role", "radio");
+      link.setAttribute("aria-checked", "false");
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        amounts.forEach(function (a) {
+          var on = a === link;
+          a.classList.toggle("selected", on);
+          a.setAttribute("aria-checked", on ? "true" : "false");
+        });
+        cta.href = link.getAttribute("href");
+        cta.classList.remove("is-empty");
+        cta.textContent = kind === "monthly"
+          ? "Donate " + link.textContent.trim() + " every month"
+          : "Donate " + link.textContent.trim() + " now";
+      });
+    });
+
+    cta.addEventListener("click", function (e) {
+      if (cta.classList.contains("is-empty")) {
+        e.preventDefault();
+        cta.textContent = placeholder;
+      }
+    });
+  });
 
 });
 
@@ -162,6 +202,14 @@ document.addEventListener("DOMContentLoaded", function () {
       rowsFor(day, nextKey) + "</tbody></table>";
   }
 
+  /** Tomorrow's first prayer, for the hours between Isha and midnight. */
+  function tomorrowFajr(days, todayDate) {
+    for (var i = 0; i < days.length; i++) {
+      if (days[i].date > todayDate && days[i].times.fajr) return days[i];
+    }
+    return null;
+  }
+
   function standingJumuah(days, fromDate) {
     for (var i = 0; i < days.length; i++) {
       var d = days[i];
@@ -172,6 +220,15 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
     return "";
+  }
+
+  /** A line for after the day's prayers are done, so "next" is never blank. */
+  function upNext(data, day, minutes) {
+    if (nextPrayer(day, minutes)) return "";
+    var t = tomorrowFajr(data.days, day.date);
+    if (!t) return "";
+    return '<p class="prayer-upnext"><span class="next-tag">Next</span> Fajr tomorrow at ' +
+      t.times.fajr + (t.iqamah.fajr ? ", iqamah " + t.iqamah.fajr : "") + "</p>";
   }
 
   function renderToday(data) {
@@ -192,9 +249,10 @@ document.addEventListener("DOMContentLoaded", function () {
       "</div>" +
       (day.hijri ? '<p class="prayer-hijri" lang="ar" dir="rtl">' + day.hijri + "</p>" : "") +
       tableFor(day, nextPrayer(day, now.minutes), "prayer-rows") +
+      '<div id="prayer-upnext">' + upNext(data, day, now.minutes) + "</div>" +
       (isFriday(day.date) ? "" : standingJumuah(data.days, now.date)) +
-      '<p class="prayer-source">Updated daily from the masjid&rsquo;s own ' +
-      '<a href="' + LIVE + '" target="_blank" rel="noopener">Masjidbox timetable</a>.</p>';
+      '<p class="prayer-source"><a href="' + LIVE + '" target="_blank" rel="noopener">' +
+      'View on Masjidbox</a></p>';
 
     // Keep the clock ticking, move the "Next" tag along with it, and reload once
     // the date rolls over so the page never sits on yesterday.
@@ -209,6 +267,8 @@ document.addEventListener("DOMContentLoaded", function () {
         shownNext = n;
         var body = document.getElementById("prayer-rows");
         if (body) body.innerHTML = rowsFor(day, n);
+        var up = document.getElementById("prayer-upnext");
+        if (up) up.innerHTML = upNext(data, day, t.minutes);
       }
     }, 1000);
   }

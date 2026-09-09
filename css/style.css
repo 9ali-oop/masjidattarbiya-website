@@ -1314,3 +1314,84 @@ form.contact-form button:disabled { opacity: 0.6; cursor: not-allowed; }
   color: var(--ink-soft);
   text-align: center;
 }
+
+/* ==========================================================================
+   Prayer card: breathing room, and the after-Isha "next" line
+   ========================================================================== */
+
+.prayer-card { padding: 32px 30px 30px; }
+@media (max-width: 700px) {
+  .prayer-card { padding: 22px 18px 20px; margin-top: 20px; }
+}
+
+.prayer-card-head { margin-bottom: 18px; }
+.prayer-dates { padding-bottom: 14px; margin-bottom: 0; }
+.prayer-hijri { margin: 10px 0 0; }
+.prayer-table { margin-top: 14px; }
+
+/* A little more air between rows than the default table rhythm */
+.prayer-table tbody th,
+.prayer-table td { padding-top: 16px; padding-bottom: 16px; }
+
+.prayer-source {
+  margin-top: 18px;
+  font-size: 0.82rem;
+  text-align: right;
+}
+.prayer-source a { color: var(--ink-soft); }
+.prayer-source a:hover { color: var(--green-text); }
+
+/* Shown once the day's prayers have passed, so "next" is never blank */
+.prayer-upnext { margin: 16px 0 0; }
+.prayer-upnext p {
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--green-light);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+.prayer-jumuah { margin-top: 16px; }
+
+/* ==========================================================================
+   Donation page: pick an amount, then confirm
+   ========================================================================== */
+
+.amount-grid { gap: 12px; margin-bottom: 4px; }
+
+.amount-btn.selected {
+  background: var(--green-text);
+  border-color: var(--green-text);
+  color: var(--white);
+  box-shadow: 0 4px 12px rgba(23, 128, 138, 0.3);
+  transform: translateY(-1px);
+}
+
+/* The confirm button: the page's focal point, and the last thing a donor reads
+   before they commit, so it spells out exactly what is about to happen. */
+.donate-cta {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 17px 20px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(176, 141, 63, 0.35);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.donate-cta:hover { text-decoration: none; color: var(--ink); }
+.donate-cta:active { transform: scale(0.985); }
+.donate-cta.is-empty {
+  background: var(--border);
+  color: var(--ink-soft);
+  box-shadow: none;
+  cursor: default;
+  font-weight: 600;
+}
+
+.donate-clone-fineprint { margin-top: 14px; }
