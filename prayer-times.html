@@ -64,7 +64,7 @@
   <div class="container">
 <div class="prayer-card" style="margin-top:0;">
       <div class="prayer-card-head">
-        <h2>Live Prayer Times</h2>
+        <h2>Today</h2>
         <a href="https://masjidbox.com/prayer-times/masjid-attarbiya" target="_blank" rel="noopener" class="btn btn-outline-dark" style="padding:8px 18px; font-size:0.85rem;">Full Screen Times</a>
       </div>
       <div id="prayer-times"><p class="prayer-loading">Loading prayer times&hellip;</p></div>
@@ -72,11 +72,16 @@
 
     
 
-    <div class="card" style="margin-top:24px;">
-      <div class="icon"><svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg></div>
-      <h3>Daily Prayers &amp; Jumu'ah</h3>
-      <p>All five daily prayers held in congregation. Jumu'ah khutbah and prayer held weekly &mdash; see the live times and snapshot above for the current schedule.</p>
+    <div class="week-head">
+      <h2>The Week Ahead</h2>
+      <p>Times for the coming days, updated automatically each night.</p>
     </div>
+    <div id="prayer-week"><p class="prayer-loading">Loading the weekly timetable&hellip;</p></div>
+
+    <noscript>
+      <p class="prayer-fallback">Prayer times need JavaScript to display.
+        <a href="https://masjidbox.com/prayer-times/masjid-attarbiya" target="_blank" rel="noopener">View the live timetable on Masjidbox</a>.</p>
+    </noscript>
   </div>
 </section>
 

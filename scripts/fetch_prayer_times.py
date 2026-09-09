@@ -87,8 +87,18 @@ def build(rows):
             if jum_iq:
                 day["iqamah"]["jumuah"] = jum_iq
         days.append(day)
-    if not days:
-        raise ValueError("timetable parsed but contained no usable days")
+    # Refuse to publish a thin or broken timetable. Overwriting good data with an
+    # empty one would leave the site showing an empty table under a caption that
+    # claims it updates daily, which is worse than showing nothing.
+    required = {"fajr", "dhuhr", "asr", "maghrib", "isha"}
+    days = [d for d in days if required <= set(d["times"])]
+    if len(days) < 3:
+        raise ValueError(
+            f"only {len(days)} usable day(s) parsed - refusing to overwrite the existing timetable"
+        )
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    if not any(d["date"] >= today for d in days):
+        raise ValueError("timetable holds no dates from today onwards - refusing to publish")
     return {
         "source": SOURCE,
         "fetched": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),

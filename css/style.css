@@ -9,6 +9,7 @@
   --green-text: #17808a;  /* accessible teal for text - 4.68:1 on white */  /* light teal tint for section backgrounds */
   --gold: #d4ae61;         /* exact brand gold sampled from the original logo artwork */
   --gold-deep: #b08d3f;    /* deep gold, matches the donation page */
+  --gold-text: #7a5c1f;    /* the only gold safe as text - 6.22:1 on white */
   --green-ink: #0e4a50;    /* darkest teal, for headings */
   --gold-light: #f8f0e0;
   --ink: #1c2321;
@@ -84,14 +85,14 @@ p { margin: 0 0 1em; color: var(--ink-soft); }
 }
 .btn:hover { text-decoration: none; transform: translateY(-1px); }
 
-.btn-primary { background: var(--gold); color: var(--white); }
-.btn-primary:hover { background: #b3872f; }
+.btn-primary { background: var(--gold); color: var(--ink); font-weight: 700; }
+.btn-primary:hover { background: var(--gold-deep); color: var(--ink); }
 
 .btn-outline { background: transparent; border-color: var(--white); color: var(--white); }
 .btn-outline:hover { background: rgba(255,255,255,0.12); }
 
-.btn-outline-dark { background: transparent; border-color: var(--green); color: var(--green); }
-.btn-outline-dark:hover { background: var(--green); color: var(--white); }
+.btn-outline-dark { background: transparent; border-color: var(--green-text); color: var(--green-text); }
+.btn-outline-dark:hover { background: var(--green-text); color: var(--white); }
 
 /* ---------- placeholder flag ---------- */
 .needs-content {
@@ -212,7 +213,7 @@ p { margin: 0 0 1em; color: var(--ink-soft); }
   font-weight: 600;
   font-size: 0.95rem;
 }
-.main-nav a.active { color: var(--green); }
+.main-nav a.active { color: var(--green-text); }
 .header-cta { display: flex; align-items: center; gap: 18px; }
 .header-cta .btn { padding: 10px 22px; }
 
@@ -362,36 +363,8 @@ p { margin: 0 0 1em; color: var(--ink-soft); }
 .prayer-card-head h2 { margin: 0; font-size: 1.3rem; }
 .prayer-card-head .date-line { color: var(--ink-soft); font-size: 0.9rem; }
 
-table.prayer-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-}
-table.prayer-table th, table.prayer-table td {
-  text-align: center;
-  padding: 10px 8px;
-  border-bottom: 1px solid var(--border);
-}
-table.prayer-table th {
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  color: var(--ink-soft);
-}
-table.prayer-table td:first-child, table.prayer-table th:first-child {
-  text-align: left;
-  font-weight: 600;
-  color: var(--green-dark);
-}
-table.prayer-table tr:last-child td { border-bottom: none; }
-.jummah-note {
-  margin-top: 16px;
-  background: var(--gold-light);
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-size: 0.9rem;
-  color: #6b5316;
-}
+/* (old table.prayer-table block removed - superseded by the .prayer-table
+   styles further down, which the JS-rendered timetable uses) */
 
 /* ---------- icon system: inline SVG line icons in tinted circle badges ---------- */
 .icon svg,
@@ -1157,7 +1130,9 @@ form.contact-form button:disabled { opacity: 0.6; cursor: not-allowed; }
   align-items: center;
   justify-content: center;
 }
-@media (max-width: 860px) {
+/* Must match the breakpoint where .main-nav collapses (700px), otherwise the
+   hamburger is visible but inert while the menu is already showing. */
+@media (max-width: 700px) {
   .nav-toggle { display: inline-flex; }
 }
 .hero-slideshow-dots button { min-width: 24px; min-height: 24px; background-clip: content-box; padding: 7px; }
@@ -1277,4 +1252,65 @@ form.contact-form button:disabled { opacity: 0.6; cursor: not-allowed; }
   .hero-slide { position: relative; }
   .hero-slide-body { padding: 40px 20px; min-height: 320px; }
   .prayer-card { margin-top: 18px; }
+}
+
+/* ==========================================================================
+   Contrast corrections and the weekly timetable
+   ========================================================================== */
+
+/* Brand gold measures 2.01:1 on the page background, so it cannot carry type.
+   Eyebrow labels use the darker gold; on photography they stay light. */
+.eyebrow { color: var(--gold-text); }
+.hero-slide-body .eyebrow,
+.donate-hero .eyebrow { color: var(--gold-light); }
+
+/* Jumu'ah label was 3.12:1 in deep gold. */
+.prayer-table tr.is-jumuah th { color: var(--gold-text); }
+
+/* Mobile menu: make the whole row tappable rather than just the 19px of text. */
+@media (max-width: 700px) {
+  .main-nav li { padding: 0; }
+  .main-nav a { display: block; padding: 14px 0; min-height: 44px; }
+}
+
+/* Weekly timetable on the prayer times page */
+.week-head { margin: 40px 0 6px; text-align: center; }
+.week-head h2 { margin-bottom: 6px; }
+.week-head p { color: var(--ink-soft); }
+
+.week-day {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px 6px;
+  margin-bottom: 14px;
+}
+.week-day.is-today { border-color: var(--green-text); box-shadow: var(--shadow); }
+.week-day h3 {
+  font-size: 1.05rem;
+  color: var(--green-dark);
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.week-day .prayer-table thead { display: none; }
+.week-day .prayer-table tbody th { font-size: 0.95rem; font-weight: 500; }
+.week-day .prayer-table td { font-size: 1rem; }
+.week-day .prayer-table tbody th,
+.week-day .prayer-table td { padding: 8px 6px; }
+
+/* Photographs with a caption */
+.photo-figure { margin: 32px 0 0; }
+.photo-figure img {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.photo-figure figcaption {
+  margin-top: 10px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  text-align: center;
 }

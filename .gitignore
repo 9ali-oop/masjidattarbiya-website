@@ -9,3 +9,7 @@ __MACOSX/
 
 # local tooling
 .claude/
+
+# python bytecode
+__pycache__/
+*.pyc
