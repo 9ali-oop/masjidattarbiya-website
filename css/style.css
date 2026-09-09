@@ -961,10 +961,18 @@ p { margin: 0 0 1em; color: var(--ink-soft); }
 .week-day .prayer-table tbody th,
 .week-day .prayer-table td { padding: 8px 6px; }
 
-/* Photographs with a caption */
-.photo-figure { margin: 32px 0 0; }
+/* Photographs with a caption.
+   Capped at 680px: the source photographs are phone pictures around 900px wide,
+   and stretching one across a 1140px container both dominates the page and makes
+   it visibly soft. Never render a photo larger than it actually is. */
+.photo-figure {
+  margin: 36px auto 0;
+  max-width: 680px;
+}
 .photo-figure img {
   width: 100%;
+  height: auto;
+  display: block;
   border-radius: var(--radius);
   border: 1px solid var(--border);
 }

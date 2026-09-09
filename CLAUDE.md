@@ -148,6 +148,17 @@ contact page.** That is worth protecting: the privacy notice says so in as many 
 Every page has one `<h1>`, a `<main id="main">` landmark, a skip link, and visible focus styles.
 Tap targets are at least 44px. The site respects `prefers-reduced-motion`. Keep all of that.
 
+## Photographs
+
+**Never render a photo larger than it actually is.** The source pictures are phone photographs
+around 900px wide; stretched across the 1140px container one both dominates the page and goes
+visibly soft. `.photo-figure` is capped at 680px for that reason. Check a new image at desktop
+width, not just on a phone - a portrait photo at full container width can run to one and a half
+screen heights.
+
+Prefer landscape crops. Text sits better beside them and they do not push the rest of the page
+off the screen.
+
 ## Parked, waiting on content
 
 Nothing here is blocked by code. Each needs material from the masjid first.
