@@ -35,23 +35,52 @@ register. Confirm with the trustees before relying on either.
    it does not go on the site. An earlier draft of this site published invented service
    descriptions and guessed opening hours; that is what most of the cleanup was about.
 2. **Never hardcode prayer times.** They go stale within a day and that is precisely what made
-   the masjid's previous website a problem. Prayer times come from the live Masjidbox embed only.
+   the masjid's previous website a problem. See "Prayer times" below for how they actually work.
 3. **Never break the donation flow.** See "Donations" below.
 4. **Plain hyphens, not em dashes,** in all copy.
 5. **British English** throughout.
 
-## Duplication - the one real trap
+## Prayer times
 
-The header and footer are copy-pasted into every page. There is no templating. So:
+Prayer times are **not** an iframe any more, and are **not** hand-written into the HTML.
 
-- Changing the phone number, email, address, a nav item or a footer link means editing
-  **every HTML file**, not one.
-- After any such change, run the consistency check below before committing.
+- `scripts/fetch_prayer_times.py` reads the masjid's own Masjidbox page, pulls the timetable out
+  of the JSON embedded in it, and writes `assets/prayer-times.json` - about a week of start times,
+  iqamah times, hijri dates, and Jumu'ah as its own field.
+- `.github/workflows/prayer-times.yml` runs that daily at 02:20 UTC and commits any change.
+- `js/main.js` renders it into `<div id="prayer-times">` on the homepage and the prayer times page.
+
+Two things to respect:
+
+- **Jumu'ah is its own field, not Friday's Dhuhr.** They are different times (13:30 vs 13:09).
+  An earlier version relabelled Dhuhr and would have published the wrong khutbah time.
+- **Failure must stay honest.** If the JSON is missing, or has no entry for today, the page says
+  so and links to the live Masjidbox page. It must never fall back to guessed or stale times.
+
+To refresh by hand: `python scripts/fetch_prayer_times.py`
+
+## Duplication, and the checks that police it
+
+The header and footer are copy-pasted into every page. There is no templating, so a change to the
+phone number, a nav item or a footer link means editing **every** page. This has already gone wrong
+once: three pages kept an old footer carrying a stale "site rebuilt" note and hardcoded Jumu'ah times.
+
+The fix is a single source of truth plus a checker:
+
+- `partials/header.html` and `partials/footer.html` are canonical.
+- `python scripts/sync_chrome.py` stamps them into every page, setting the active nav link.
+- `python scripts/sync_chrome.py --check` reports drift without changing anything.
+
+**Edit the partials, then run the sync. Never edit a header or footer inside a page.**
+(`404.html` is excluded on purpose: GitHub Pages serves it for any missing path, so it needs
+root-relative asset URLs that the other pages must not use.)
+
+Three checks run in CI on every push, and are worth running before you commit:
 
 ```bash
-# every page should return the same count; anything at 0 has been missed
-grep -c "07908 854187" *.html
-grep -l "info@masjidatarbiya.org" *.html
+python scripts/sync_chrome.py --check   # header/footer identical across pages
+python scripts/check_links.py           # no broken links, balanced tags, one h1 per page
+python scripts/check_facts.py           # contact details consistent, no hardcoded prayer times
 ```
 
 This duplication is deliberate for now: a build step would add a toolchain that a volunteer

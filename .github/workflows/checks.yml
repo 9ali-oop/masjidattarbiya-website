@@ -1,0 +1,25 @@
+name: Site checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Header and footer are identical across pages
+        run: python scripts/sync_chrome.py --check
+
+      - name: No broken internal links or missing assets
+        run: python scripts/check_links.py
+
+      - name: Contact details are consistent
+        run: python scripts/check_facts.py
