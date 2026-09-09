@@ -18,7 +18,8 @@ import glob
 import re
 import sys
 
-PAGES = ["index.html", "about.html", "prayer-times.html", "donate.html", "contact.html"]
+PAGES = ["index.html", "about.html", "prayer-times.html", "donate.html", "contact.html",
+         "privacy.html"]
 HEADER_START, HEADER_END = '<header class="site-header">', "</header>"
 FOOTER_START, FOOTER_END = '<footer class="site-footer">', "</footer>"
 

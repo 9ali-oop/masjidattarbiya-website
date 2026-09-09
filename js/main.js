@@ -41,17 +41,33 @@ document.addEventListener("DOMContentLoaded", function () {
   // commitment and the donor should see exactly what they are agreeing to.
   var donateTabs = document.querySelectorAll(".donate-clone-tab");
   if (donateTabs.length) {
-    donateTabs.forEach(function (tab) {
-      tab.addEventListener("click", function () {
-        var target = tab.getAttribute("data-tab");
-        donateTabs.forEach(function (t) {
-          var isCurrent = t === tab;
-          t.classList.toggle("active", isCurrent);
-          t.setAttribute("aria-selected", isCurrent ? "true" : "false");
-        });
-        document.querySelectorAll(".donate-tab-panel").forEach(function (panel) {
-          panel.hidden = panel.getAttribute("data-panel") !== target;
-        });
+    var tabList = Array.prototype.slice.call(donateTabs);
+
+    function selectTab(tab, moveFocus) {
+      var target = tab.getAttribute("data-tab");
+      tabList.forEach(function (t) {
+        var isCurrent = t === tab;
+        t.classList.toggle("active", isCurrent);
+        t.setAttribute("aria-selected", isCurrent ? "true" : "false");
+        // Roving tabindex: one stop for the whole tablist, arrows move within it.
+        t.tabIndex = isCurrent ? 0 : -1;
+      });
+      document.querySelectorAll(".donate-tab-panel").forEach(function (panel) {
+        panel.hidden = panel.getAttribute("data-panel") !== target;
+      });
+      if (moveFocus) tab.focus();
+    }
+
+    tabList.forEach(function (tab, i) {
+      tab.tabIndex = tab.getAttribute("aria-selected") === "true" ? 0 : -1;
+      tab.addEventListener("click", function () { selectTab(tab, false); });
+      tab.addEventListener("keydown", function (e) {
+        var to = null;
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") to = tabList[(i + 1) % tabList.length];
+        else if (e.key === "ArrowLeft" || e.key === "ArrowUp") to = tabList[(i - 1 + tabList.length) % tabList.length];
+        else if (e.key === "Home") to = tabList[0];
+        else if (e.key === "End") to = tabList[tabList.length - 1];
+        if (to) { e.preventDefault(); selectTab(to, true); }
       });
     });
   }

@@ -632,7 +632,7 @@ form.contact-form button:disabled { opacity: 0.6; cursor: not-allowed; }
   padding-bottom: 32px;
   border-bottom: 1px solid rgba(255,255,255,0.15);
 }
-.site-footer h4 { color: var(--white); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; }
+.site-footer .footer-heading { color: var(--white); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; }
 .site-footer p { color: rgba(255,255,255,0.7); }
 .site-footer ul { list-style: none; margin: 0; padding: 0; }
 .site-footer li { margin-bottom: 10px; }
@@ -1395,3 +1395,18 @@ form.contact-form button:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
 .donate-clone-fineprint { margin-top: 14px; }
+
+/* Donation tabs: a real 44px target, matching everything else on the page */
+.donate-clone-tab { min-height: 44px; }
+
+/* Long-form text pages (privacy, and anything similar later) */
+.prose { max-width: 720px; }
+.prose h2 {
+  font-size: 1.3rem;
+  margin-top: 36px;
+  margin-bottom: 10px;
+}
+.prose h2:first-child { margin-top: 0; }
+.prose p, .prose li { color: var(--ink-soft); }
+.prose ul { padding-left: 20px; margin-bottom: 1em; }
+.prose li { margin-bottom: 8px; }
