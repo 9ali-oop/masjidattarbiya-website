@@ -10,3 +10,4 @@ exclude:
   - CLAUDE.md
   - README.md
   - .github/
+  - staging/

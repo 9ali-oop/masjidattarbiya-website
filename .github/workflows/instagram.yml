@@ -1,0 +1,43 @@
+name: Sync Instagram posts to staging
+
+# Pulls the masjid's own Instagram posts into staging/ for a human to review.
+# It publishes NOTHING: staging/ is excluded from the built site and the events
+# page never reads it. Someone moves an entry into assets/events.json by hand,
+# with a real event date, before anything appears publicly.
+#
+# Needs one secret, IG_TOKEN, set in Settings > Secrets and variables > Actions.
+# The token is never printed and never committed.
+on:
+  schedule:
+    - cron: "10 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch posts
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+        run: python scripts/fetch_instagram.py
+
+      - name: Commit if anything new arrived
+        run: |
+          if git diff --quiet -- staging; then
+            echo "Nothing new on Instagram."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add staging
+          git commit -m "New Instagram posts for review"
+          git push

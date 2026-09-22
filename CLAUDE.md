@@ -174,6 +174,27 @@ Four things that script is careful about, each for a reason worth keeping:
 - Do not move the cron into 09:00-12:00 UTC: Google's feed endpoint has been throwing intermittent
   404s and 500s in that window since late 2025.
 
+### Instagram sync
+
+`scripts/fetch_instagram.py` + `.github/workflows/instagram.yml` (04:10 UTC) pull the masjid's own
+posts into **`staging/instagram.json`**. `_config.yml` excludes `staging/` from the built site and
+`events.html` never reads it, so **this publishes nothing**. A person moves an entry into
+`assets/events.json`, with a real event date, to publish it. That gate is the whole point: the API
+returns when a post was made, never when the event happened, and captions say things like
+"Saturday 11th April" with no year.
+
+Needs one secret, `IG_TOKEN`, with scope `instagram_business_basic` (read-only). App
+`1536463652013581`, account `17841465709272542`, unpublished, the account holds the Instagram
+Tester role. The token is long-lived but finite: the job calls `refresh_access_token` each night,
+prints the days remaining, and **deliberately fails when under 14 days** so the failure email
+arrives while there is still time to replace it. If Meta ever returns a *different* token string,
+the job says so - it cannot write a new value into the secret by itself.
+
+Captions are redacted on the way in (sort codes, account numbers, phone numbers) and
+`check_events.py` blocks the same things on the way out.
+
+Images are downloaded immediately because Instagram's `media_url` links expire within hours.
+
 ### What was deliberately not automated, and why
 
 Researched properly in September 2026; do not redo this without reading it.
