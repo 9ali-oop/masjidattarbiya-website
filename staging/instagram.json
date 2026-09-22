@@ -1,6 +1,6 @@
 {
  "account": "masjid.attarbiya",
- "updated": "2026-09-22T23:18:00Z",
+ "updated": "2026-09-22T23:21:05Z",
  "note": "Staging only. Not served: _config.yml excludes staging/. Move an entry into assets/events.json by hand, with a real event date, to publish it.",
  "posts": [
   {
@@ -36,7 +36,7 @@
    "type": "CAROUSEL_ALBUM",
    "permalink": "https://www.instagram.com/p/DKiEdtFCYxc/",
    "caption": "🌙 Eid Mubarak!\n\n‎ تقبل الله منا ومنكم صالح الأعمال \n\nMay Allah accept our dua, fasts, sacrifices and shower us with endless blessings.\n\n 🕌 Join Us for Eid Salah!\n📍 2 Revesby Walk, Nechells, Birmingham\n⏱️ Eid Salah Time: 8AM & 9AM",
-   "image": null,
+   "image": "staging/instagram/18100268101558720.jpg",
    "promoted": false
   },
   {
@@ -63,7 +63,7 @@
    "type": "CAROUSEL_ALBUM",
    "permalink": "https://www.instagram.com/p/DHjskU1g-xs/",
    "caption": "Did you know that fasting in Ramadan comes with a reward so great that only Allah Himself knows its true value? \n\nClick link in bio for full video!\n\nFor any inquires:\ninfo@masjidatarbiya.org\n\nDonate:\nKowneyn Education and Cultural Centre\n[sort code removed]\n[account number removed]",
-   "image": null,
+   "image": "staging/instagram/17863687782283188.jpg",
    "promoted": false
   },
   {
