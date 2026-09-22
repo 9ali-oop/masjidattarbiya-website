@@ -131,9 +131,24 @@ def main():
         existing[v["id"]] = v
 
     videos = sorted(existing.values(), key=lambda v: v["published"], reverse=True)
+
+    # Only rewrite when the videos themselves changed. A "last fetched" timestamp
+    # that updates on every run would make this job commit every single night,
+    # even though this channel publishes a few times a year - which buries any
+    # real change in noise. So the timestamp records the last CHANGE, not the
+    # last check.
+    if os.path.exists(OUT):
+        try:
+            before = json.load(open(OUT, encoding="utf-8"))
+        except ValueError:
+            before = {}
+        if before.get("videos") == videos:
+            print(f"{OUT}: no change ({len(videos)} videos, newest {videos[0]['published']})")
+            return 0
+
     data = {
         "source": f"https://www.youtube.com/channel/{CHANNEL_ID}",
-        "fetched": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "videos": videos,
     }
     with open(OUT, "w", encoding="utf-8") as f:
