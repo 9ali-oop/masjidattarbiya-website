@@ -215,6 +215,34 @@ account or link Pages to make this work, and nobody should create a throwaway on
 account owner and pasted by them into the repo's Settings > Secrets and variables > Actions. It
 does not go in a file, a commit, or a chat message.
 
+## History timeline
+
+`history.html` renders `assets/history.json` as a 3D timeline. **Not in the nav or the sitemap
+yet** - it is a draft to put in front of the elders, not a finished page.
+
+**The gaps are the feature.** Six of the ten milestones are `"status": "unknown"` and render as
+open questions rather than being left out. People correct a draft far faster than they answer
+"tell me our history". Fill one in, give it a `source`, and delete its `asks` list.
+
+What is actually evidenced: the 3 September 2006 Declaration of Trust and the 5 March 2021
+renaming (both Charity Commission), and the March 2024 arrival of the YouTube and Instagram
+accounts. Everything else is a question.
+
+**Do not publish the pub's name until someone confirms it.** closedpubs.co.uk lists an *Ashted
+Hamlet* on Revesby Walk (1966-1997), but the Birmingham History Forum says that pub was
+*demolished* around 2007-08 and replaced. So either this building is the replacement, which makes
+it "built on the site of a pub" rather than a conversion, or it was a different pub. Unresolved.
+
+**The animation fails visible, on purpose.** An early version had the cards start at `opacity: 0`
+and rely on `IntersectionObserver` to reveal them - which rendered ten invisible cards whenever
+the observer did not fire. Now the resting state is fully readable, the script opts in by adding
+`.is-animated`, and a 3 second timer adds `.is-settled` (which snaps with `transition: none`) if
+nothing was ever revealed. It snaps rather than fades because a background tab pauses transitions.
+Keep that shape if you touch it.
+
+**Photographs:** use Street View history for research only. Publishing Google imagery breaks
+their terms, and embedding it live would break the site's no-third-parties promise.
+
 ## Design
 
 The palette and type are sampled from the masjid's logo and shared with the donation page.
