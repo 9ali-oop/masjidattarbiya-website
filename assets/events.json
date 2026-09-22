@@ -98,7 +98,7 @@
       "precision": "day",
       "time": "14:00 to 19:00",
       "summary": "A day class explaining Maqasid as-Siyam by al-'Izz ibn 'Abdus-Salam as-Sulami, taught by Ustadh Anas Tayib and Ustadh Abdur-Raheem, in preparation for Ramadan.",
-      "evidence": "Transcribed from the masjid's own event poster when the first version of this website was built. The stated weekday and date agree only for 2025, which supports the year."
+      "evidence": "Confirmed by the masjid's own Instagram post of 11 February 2025, which gives the date, the times and both teachers. Previously this rested only on a transcribed poster."
     },
     {
       "id": "winter-conference-2025-01",
@@ -107,8 +107,8 @@
       "start": "2025-01-04",
       "precision": "day",
       "time": "15:00 to 19:45",
-      "summary": "Two sessions: an introduction to the sciences of qira'aat and tafsir with Ustadh Anas Abdullahi, and an introduction to the sciences of fiqh and usool al-fiqh with Ustadh Anas Tayib.",
-      "evidence": "Transcribed from the masjid's own event poster when the first version of this website was built. The stated weekday and date agree only for 2025, which supports the year."
+      "summary": "A one-day seminar in two parts: an introduction to the sciences of fiqh and usool al-fiqh, and an introduction to the sciences of qira'aat and tafsir, with Ustadh Anas Tayib and Ustadh Anas Abdullahi, graduates of Madinah University.",
+      "evidence": "Confirmed by the masjid's own Instagram post of 3 January 2025, which gives the date, the times, both teachers and both subjects. Previously this rested only on a transcribed poster."
     },
     {
       "id": "winter-conference-2023-12",
@@ -118,7 +118,26 @@
       "end": "2023-12-31",
       "precision": "day",
       "summary": "A weekend of talks on the lives of the companions, may Allah be pleased with them, including Mus'ab ibn 'Umayr, 'Abdullah ibn 'Umar, 'Uthman ibn 'Affan, Abu Hurayrah, 'Aisha and Anas ibn Malik. Talks ran after Jumu'ah, Asr, Maghrib and Isha across the three days.",
-      "evidence": "Transcribed from the masjid's own conference poster and timetable when the first version of this website was built. The stated weekdays and dates agree only for 2023, which supports the year."
+      "evidence": "Transcribed from the masjid's own conference poster and timetable when the first version of this website was built. The stated weekdays and dates agree only for 2023, which supports the year. Note this one predates the masjid's Instagram account, whose first post is 18 March 2024, so there is no second source for it."
+    },
+    {
+      "id": "eid-al-fitr-2024",
+      "title": "Eid al-Fitr prayers",
+      "kind": "Eid",
+      "start": "2024-04-10",
+      "precision": "day",
+      "summary": "Two jama'ahs at the masjid: 8:00am with a talk in English by Shaykh Anas Tayib, and 9:00am with a talk in Arabic by Shaykh Abdulqadir Hashi. Worshippers were asked to bring their own prayer mats and a bag for their shoes.",
+      "evidence": "Announced on the masjid's Instagram, 9 April 2024. This is the only Eid announcement that states the calendar date outright."
+    },
+    {
+      "id": "evening-lessons-2024",
+      "title": "Evening lesson series",
+      "kind": "Class",
+      "start": "2024-07",
+      "precision": "month",
+      "time": "Tuesdays and Wednesdays, 20:00",
+      "summary": "A new run of evening lessons open to brothers and sisters, covering the lessons drawn from the story of Yusuf, peace be upon him, and Lum'atul-I'tiqaad.",
+      "evidence": "Announced on the masjid's Instagram, 1 July 2024. An earlier post of 18 April 2024 shows weekly Tuesday lessons already running at 19:00. Whether these continue today is not confirmed - do not present them as current class times."
     }
   ]
 }

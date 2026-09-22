@@ -126,12 +126,13 @@ know the event happened; `scripts/check_events.py` fails the build if one is mis
 
 Where the current entries came from, so nobody has to re-derive it:
 
-- Six are quoted from the masjid's own Instagram announcements, which are readable without
-  logging in because Instagram still serves the full caption in a post's `og:description`.
-- Three are transcribed from the masjid's event posters by the volunteer who built the first
-  version of this site. Each states a weekday and a date, and every one of those pairs resolves
-  to exactly one year, which is why the years are trusted. They are the least certain entries
-  here; if a trustee can confirm them, say so in the `evidence` field.
+- Most are quoted from the masjid's own Instagram announcements, now pulled through the API into
+  `staging/instagram.json`.
+- **One** is transcribed from a poster by the volunteer who built the first version of this site:
+  the December 2023 Winter Conference. It predates the Instagram account, whose first post is 18
+  March 2024, so there is no second source for it. Two others that rested on transcriptions - the
+  January 2025 Winter Conference and the February 2025 Objectives of Fasting - have since been
+  confirmed against the masjid's own posts, which also proved the transcriptions were accurate.
 - Two Eid entries carry a month and no day, because the announcements gave prayer times but never
   a calendar date. Do not fill those in by calculating Eid yourself - it moves with the sighting
   and with what the masjid decided that year.
@@ -207,7 +208,7 @@ account or link Pages to make this work, and nobody should create a throwaway on
 |---|---|
 | YouTube Atom feed | **Built.** No credentials, nothing expires. |
 | Facebook Page | **Rejected on content, not plumbing.** The Page has 7 followers and 5 public items, the newest from May 2023, and not one is an event. A never-expiring Page token is genuinely obtainable, so revisit only if the masjid starts posting there. Also: a *second* Facebook page for the masjid ranks higher in search - somebody should work out which one is real. |
-| Instagram Graph API | **Possible, not yet built.** Needs the account converted to Business or Creator, a Meta app, and a 60-day token that a nightly job must keep refreshing. No App Review needed to read your own posts. The catch is that GitHub disables scheduled workflows in a quiet public repo after 60 days, which is the same window - so both clocks can run out together. A System User token in a Meta Business portfolio never expires and removes that trap. |
+| Instagram API with Instagram Login | **Built, staged not published** - see the Instagram sync above. Confirmed in practice: the dashboard token is long-lived (the first run reported 59 days left) and no App Review, Page or business verification was needed. **Known problem:** each nightly refresh returns a *different* token string, and the job cannot write that back into the repository secret, so the stored token still dies on its original 60-day clock. Either add a fine-grained PAT with Secrets write so the job can rotate it, or replace the token by hand when the job starts failing at 14 days. |
 | Scraping Instagram with a login | **Rejected outright.** Anonymous requests for this account already return HTTP 429, instaloader's own issue tracker shows logged-in sessions hitting 429s and `feedback_required` blocks, and Meta's terms make automated collection grounds for disabling the account. The masjid's account is worth more than the feature. |
 
 **Never accept a password for any of these.** If a token is ever needed it is created by the
@@ -271,15 +272,10 @@ Nothing here is blocked by code. Each needs material from the masjid first.
 Landscape, not cropped tight - text gets placed over these. `assets/prayer-hall.jpg` is a
 stopgap pulled from a WhatsApp export; replace it when a better one exists.
 
-**Instagram.** `masjid.attarbiya` is public and the youth team run the account, but anonymous
-scraping gets HTTP 429 immediately. It needs a logged-in session, run locally by someone on the
-team - never paste credentials into a chat:
-
-```bash
-instaloader --login YOUR_USERNAME --no-videos --no-metadata-json --fast-update masjid.attarbiya
-```
-
-For twenty or thirty photos, saving them from the app by hand is honestly quicker.
+**Instagram.** Solved - see "Instagram sync" above. The official API now pulls all 21 posts on
+the masjid's own account into `staging/`, with images. Do not go back to scraping. The account
+has 24 posts; the 3 the API does not return are the collaborations posted under Al Kissaii, which
+would need their own token.
 
 **Events and madrasah pages.** Waiting on real details: which classes run on which days
 (Tue/Wed/Sat/Sun), term dates, ages, whether places are open. Past events can be built from

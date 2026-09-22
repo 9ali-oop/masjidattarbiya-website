@@ -40,7 +40,10 @@ API = "https://graph.instagram.com"
 OUT = "staging/instagram.json"
 IMG_DIR = "staging/instagram"
 
-FIELDS = "id,caption,media_type,media_url,permalink,timestamp,thumbnail_url"
+FIELDS = ("id,caption,media_type,media_url,permalink,timestamp,thumbnail_url,"
+          # Carousels carry no media_url of their own - the pictures live on the
+          # children edge, so without this a multi-image post arrives with no image.
+          "children{media_url,media_type,thumbnail_url}")
 
 # Fail the job while there is still time to act, rather than after it has died.
 WARN_DAYS = 14
@@ -87,6 +90,25 @@ def download(url, dest):
     with open(dest, "wb") as f:
         f.write(data)
     return True
+
+
+def first_image(media):
+    """Best still image for a post, whatever kind of post it is.
+
+    IMAGE posts carry media_url. VIDEO posts carry a thumbnail_url. CAROUSEL_ALBUM
+    posts carry neither: their pictures hang off the children edge, which is why
+    the first sync saved nothing for the two Eid carousels.
+    """
+    kind = media.get("media_type")
+    if kind == "IMAGE":
+        return media.get("media_url")
+    if kind == "VIDEO":
+        return media.get("thumbnail_url")
+    for child in (media.get("children") or {}).get("data", []):
+        url = child.get("media_url") if child.get("media_type") == "IMAGE" else child.get("thumbnail_url")
+        if url:
+            return url
+    return media.get("thumbnail_url") or media.get("media_url")
 
 
 def check_token(token):
@@ -136,7 +158,7 @@ def main():
     posts = []
     for m in items:
         pid = m["id"]
-        image = m.get("media_url") if m.get("media_type") == "IMAGE" else m.get("thumbnail_url")
+        image = first_image(m)
         entry = known.get(pid, {})
         local = entry.get("image")
         if image and not local:
