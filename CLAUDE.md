@@ -141,9 +141,14 @@ Where the current entries came from, so nobody has to re-derive it:
 1. **A post's date is not the event's date.** Captions say "Saturday 11th April" with no year, and
    some give a time and no date at all. Nothing about this is machine-readable, which is the main
    reason the events list is not automated.
-2. **A third of the best event posts are not the masjid's.** Both Youth Nights and the January
-   community evening were posted by Al Kissaii Institute as collaborations held at the masjid.
-   They are credited with "Held with", and must not be presented as the masjid's own.
+2. **A third of the best event posts come from a different account that is still the masjid's.**
+   Both Youth Nights and the January community evening were posted by **Al Kissaii**, which is not
+   an outside partner: the masjid runs it as its programme for teens and older children. **Al
+   Furqan** is the same arrangement for the madrasah. Treat all three as one organisation under
+   different names, credit the right one, and never describe them as a partnership. The events
+   that came from those accounts carry a `credit` line saying which programme ran them.
+   Note this also means the Instagram API, which returns only the masjid's own account's media,
+   will miss anything posted under the Al Kissaii or Al Furqan accounts.
 3. **Captions contain things that must not be republished here.** The summer course post carries a
    volunteer's mobile number and the Ramadan appeal carries the charity's sort code and account
    number. On the masjid's own Instagram that is its choice. Mirrored onto this site, next to a
@@ -172,6 +177,10 @@ Four things that script is careful about, each for a reason worth keeping:
 ### What was deliberately not automated, and why
 
 Researched properly in September 2026; do not redo this without reading it.
+
+Confirmed from Meta's documentation in September 2026: **"Instagram API with Instagram Login"
+does not require a Facebook Page to be linked to the account.** Nobody needs to create a Facebook
+account or link Pages to make this work, and nobody should create a throwaway one to try.
 
 | Route | Verdict |
 |---|---|

@@ -24,7 +24,7 @@ EVENTS = "assets/events.json"
 VIDEOS = "assets/youtube.json"
 
 REQUIRED = ("id", "title", "kind", "start", "summary", "evidence")
-TEXT_FIELDS = ("title", "summary", "time", "with", "kind")
+TEXT_FIELDS = ("title", "summary", "time", "credit", "kind")
 
 # Things that must never appear in published event copy.
 BANNED = [

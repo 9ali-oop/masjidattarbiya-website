@@ -375,7 +375,7 @@ document.addEventListener("DOMContentLoaded", function () {
         (ev.kind ? '<span class="event-kind">' + esc(ev.kind) + "</span>" : "") +
         "<h3>" + esc(ev.title) + "</h3>" +
         "<p>" + esc(ev.summary) + "</p>" +
-        (ev["with"] ? '<span class="event-with">Held with ' + esc(ev["with"]) + "</span>" : "") +
+        (ev.credit ? '<span class="event-with">' + esc(ev.credit) + "</span>" : "") +
       "</div>" +
     "</li>";
   }
