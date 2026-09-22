@@ -1201,3 +1201,175 @@ p { margin: 0 0 1em; color: var(--ink-soft); }
   .video-card { transition: none; }
   .video-card:hover, .video-card:focus-visible { transform: none; }
 }
+
+/* ---------------------------------------------------------------------------
+   History timeline
+
+   The depth is real - CSS 3D transforms, no library and no third-party request -
+   but it is kept deliberately restrained. Cards sit back and settle forward as
+   they scroll into view. Anyone who has asked for reduced motion gets the whole
+   thing flat and still, and the page reads correctly with no JavaScript at all.
+   --------------------------------------------------------------------------- */
+
+.timeline {
+  position: relative;
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 940px;
+  perspective: 1400px;
+}
+
+/* The spine. Fades at both ends so it reads as a thread rather than a rule. */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: linear-gradient(180deg,
+    transparent, var(--green) 6%, var(--green) 94%, transparent);
+  opacity: 0.45;
+}
+
+.tl-item {
+  position: relative;
+  width: 50%;
+  padding: 0 44px 40px 0;
+  box-sizing: border-box;
+}
+.tl-item:nth-child(even) {
+  margin-left: 50%;
+  padding: 0 0 40px 44px;
+}
+
+/* The marker on the spine. */
+.tl-item::after {
+  content: "";
+  position: absolute;
+  top: 26px;
+  right: -7px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--green-dark);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 3px rgba(66, 186, 197, 0.25);
+}
+.tl-item:nth-child(even)::after { right: auto; left: -7px; }
+.tl-item.is-unknown::after { background: var(--gold-deep); box-shadow: 0 0 0 3px rgba(212, 174, 97, 0.3); }
+
+.tl-year {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--green-text);
+  margin-bottom: 10px;
+}
+.tl-item.is-unknown .tl-year { color: var(--gold-text); }
+
+/* Readable first. The card's resting state is fully visible with no transform,
+   so the page is correct with no JavaScript, with JavaScript that fails after
+   render, or in any browser where the observer never fires. The animation is
+   opt-in: the script adds .is-animated to the list only once it is certain it
+   can finish the job. An earlier version had this backwards and rendered ten
+   invisible cards. */
+.tl-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  box-shadow: var(--shadow);
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1),
+              opacity 0.7s ease,
+              box-shadow 0.7s ease;
+}
+
+/* The depth, only once the script has taken responsibility for revealing it. */
+.timeline.is-animated .tl-card {
+  transform: translateZ(-90px) rotateY(7deg);
+  opacity: 0;
+  box-shadow: none;
+  will-change: transform, opacity;
+}
+.timeline.is-animated .tl-item:nth-child(even) .tl-card {
+  transform: translateZ(-90px) rotateY(-7deg);
+}
+.timeline.is-animated .tl-item.is-visible .tl-card {
+  transform: translateZ(0) rotateY(0);
+  opacity: 1;
+  box-shadow: var(--shadow);
+  will-change: auto;
+}
+
+.tl-card h3 { margin: 0 0 8px; font-size: 1.1rem; }
+.tl-card p { margin: 0; color: var(--ink-soft); }
+
+.tl-source {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  opacity: 0.85;
+}
+
+/* A gap we want the community to fill, not a finished entry. */
+.tl-item.is-unknown .tl-card {
+  background: var(--gold-light);
+  border-style: dashed;
+  border-color: var(--gold-deep);
+}
+.tl-asks { margin: 14px 0 0; padding-left: 18px; }
+.tl-asks li { color: var(--ink); margin-bottom: 4px; font-size: 0.92rem; }
+.tl-askhead {
+  display: block;
+  margin-top: 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-text);
+}
+
+@media (max-width: 760px) {
+  .timeline { perspective: none; }
+  .timeline::before { left: 7px; }
+  .tl-item,
+  .tl-item:nth-child(even) {
+    width: 100%;
+    margin-left: 0;
+    padding: 0 0 32px 34px;
+  }
+  .tl-item::after,
+  .tl-item:nth-child(even)::after { left: 1px; right: auto; }
+  .timeline.is-animated .tl-card,
+  .timeline.is-animated .tl-item:nth-child(even) .tl-card { transform: translateY(16px); }
+  .timeline.is-animated .tl-item.is-visible .tl-card { transform: translateY(0); }
+}
+
+/* The escape hatch. If the reveal never happened, the script adds this and the
+   cards snap to readable with no transition at all - so it cannot depend on a
+   transition being allowed to run, which a background tab will not do. */
+.timeline.is-settled .tl-card,
+.timeline.is-settled .tl-item:nth-child(even) .tl-card {
+  transform: none !important;
+  opacity: 1 !important;
+  box-shadow: var(--shadow);
+  transition: none !important;
+}
+
+/* Motion turned down: never animate, never hide, whatever the script does. */
+@media (prefers-reduced-motion: reduce) {
+  .timeline, .timeline.is-animated { perspective: none; }
+  .timeline.is-animated .tl-card,
+  .timeline.is-animated .tl-item:nth-child(even) .tl-card,
+  .timeline.is-animated .tl-item.is-visible .tl-card {
+    transform: none;
+    opacity: 1;
+    box-shadow: var(--shadow);
+    transition: none;
+  }
+}

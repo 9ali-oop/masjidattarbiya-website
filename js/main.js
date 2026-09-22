@@ -460,3 +460,81 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 })();
+
+/* ---------------------------------------------------------------------------
+   History timeline.
+
+   Renders assets/history.json. Entries marked "unknown" are deliberate gaps:
+   they render as open questions rather than being quietly left out, because the
+   point of the page is partly to get them answered.
+   --------------------------------------------------------------------------- */
+(function () {
+  var el = document.getElementById("timeline");
+  if (!el) return;
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function card(m) {
+    var unknown = m.status === "unknown";
+    var asks = (m.asks || []).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
+    return '<li class="tl-item' + (unknown ? " is-unknown" : "") + '">' +
+      '<span class="tl-year">' + esc(m.year) + "</span>" +
+      '<div class="tl-card">' +
+        "<h3>" + esc(m.title) + "</h3>" +
+        "<p>" + esc(m.body) + "</p>" +
+        (asks ? '<span class="tl-askhead">Can you fill this in?</span>' +
+                '<ul class="tl-asks">' + asks + "</ul>" : "") +
+        (m.source ? '<span class="tl-source">' + esc(m.source) + "</span>" : "") +
+      "</div>" +
+    "</li>";
+  }
+
+  function reveal(items) {
+    // The cards are already readable at this point: the animation only starts
+    // once we know we can finish it. Anything that stops us - no observer,
+    // reduced motion - simply leaves the timeline as it is, fully visible.
+    var reduced = window.matchMedia
+      && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced || !("IntersectionObserver" in window)) return;
+
+    el.classList.add("is-animated");
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
+    items.forEach(function (i) { io.observe(i); });
+
+    // Belt and braces. If the observer has revealed nothing after a few seconds
+    // - a background tab, a browser quirk - show everything rather than leaving
+    // a reader looking at an empty page.
+    setTimeout(function () {
+      if (!el.querySelector(".tl-item.is-visible")) {
+        // Snap, do not fade: a background tab pauses transitions, so fading back
+        // would leave the cards stuck at invisible.
+        el.classList.add("is-settled");
+        el.classList.remove("is-animated");
+      }
+    }, 3000);
+  }
+
+  fetch("assets/history.json", { cache: "no-cache" })
+    .then(function (r) { if (!r.ok) throw new Error("not found"); return r.json(); })
+    .then(function (d) {
+      var ms = (d && d.milestones) || [];
+      if (!ms.length) throw new Error("empty");
+      el.innerHTML = ms.map(card).join("");
+      reveal(Array.prototype.slice.call(el.querySelectorAll(".tl-item")));
+    })
+    .catch(function () {
+      el.innerHTML = '<li class="tl-item"><div class="tl-card">' +
+        "<p>The timeline could not be loaded. Please try again.</p></div></li>";
+    });
+})();

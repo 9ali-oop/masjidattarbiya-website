@@ -1,0 +1,106 @@
+{
+  "note": "The masjid's own story. Same rule as events.json: a milestone is only published with a 'source' saying how we know it. Entries with \"status\": \"unknown\" are deliberate gaps - they are questions for the people who were there, and they render as open questions rather than facts. Fill one in and delete its 'asks' list.",
+  "milestones": [
+    {
+      "id": "the-pub",
+      "year": "?",
+      "title": "Before the masjid, a pub",
+      "status": "unknown",
+      "body": "Everyone knows the building's first life was as a pub. Almost nothing about that is written down anywhere we can check.",
+      "asks": [
+        "What was the pub called?",
+        "When did it close?",
+        "Was the pub building converted, or knocked down and rebuilt?"
+      ]
+    },
+    {
+      "id": "trust-2006",
+      "year": "2006",
+      "title": "The charity is founded",
+      "status": "confirmed",
+      "body": "A Declaration of Trust is signed on 3 September 2006, establishing the charity under its original name, the Somali Education and Cultural Centre.",
+      "source": "Charity Commission register, charity number 1142204."
+    },
+    {
+      "id": "the-building",
+      "year": "?",
+      "title": "The building becomes ours",
+      "status": "unknown",
+      "body": "The moment the community took on the building. This is the turning point of the whole story and we cannot date it yet.",
+      "asks": [
+        "What year was the building bought?",
+        "Who drove it, and how was it paid for?",
+        "What state was it in when we got the keys?"
+      ]
+    },
+    {
+      "id": "first-prayer",
+      "year": "?",
+      "title": "The first prayer",
+      "status": "unknown",
+      "body": "The first salah prayed in the building. Someone remembers this. It belongs at the centre of this page.",
+      "asks": [
+        "When was the first prayer held here?",
+        "When was the first Jumu'ah?",
+        "Who led it, and how many people came?"
+      ]
+    },
+    {
+      "id": "the-fit-out",
+      "year": "?",
+      "title": "Becoming a masjid",
+      "status": "unknown",
+      "body": "Turning a building into a place of worship: the prayer hall, the wudu area, the mihrab and minbar, the classrooms upstairs.",
+      "asks": [
+        "Which years did the main works happen?",
+        "What was built or refitted, and in what order?",
+        "Are there photographs from during the work?"
+      ]
+    },
+    {
+      "id": "madrasah",
+      "year": "?",
+      "title": "Al Furqan, the madrasah",
+      "status": "unknown",
+      "body": "The masjid's supplementary school. The charity's registered activities have included an after-school club and a supplementary education programme for years, so this goes back a long way.",
+      "asks": [
+        "What year did the madrasah start?",
+        "How many children were there at the start, and how many now?"
+      ]
+    },
+    {
+      "id": "rename-2021",
+      "year": "2021",
+      "title": "A new name",
+      "status": "confirmed",
+      "body": "On 5 March 2021 the charity is formally renamed Attarbiya Masjid and Kowneyn Community Centre, the name it carries today.",
+      "source": "Charity Commission register, recorded governing document amendment."
+    },
+    {
+      "id": "al-kissaii",
+      "year": "?",
+      "title": "Al Kissaii, for the teens",
+      "status": "unknown",
+      "body": "The masjid's programme for teenagers and older children, which runs the youth nights.",
+      "asks": [
+        "What year did Al Kissaii start, and who started it?"
+      ]
+    },
+    {
+      "id": "online-2024",
+      "year": "2024",
+      "title": "The masjid goes online",
+      "status": "confirmed",
+      "body": "The masjid starts publishing its own record. The YouTube channel is created on 21 March 2024 and the first Instagram post, welcoming people to the masjid's official platform, follows on 18 March 2024. Almost everything on our events page is evidenced by these two accounts.",
+      "source": "Channel creation date from YouTube's own feed; first post date from the masjid's Instagram account."
+    },
+    {
+      "id": "today",
+      "year": "Today",
+      "title": "Five prayers, every day",
+      "status": "confirmed",
+      "body": "Daily prayers and Jumu'ah, the madrasah, evening lessons, youth nights, winter conferences and Eid. The timetable is published live on this site and the programme is on the events page.",
+      "source": "Prayer times come from the masjid's own Masjidbox timetable; events are evidenced individually on the events page."
+    }
+  ]
+}
