@@ -116,6 +116,74 @@ financial infrastructure:
   with `?thanks=oneoff` or `?thanks=monthly`, and `js/main.js` shows a thank-you banner. Opening
   checkout in a new tab strands that redirect.
 
+## Events
+
+`events.html` renders two lists, both from JSON, neither typed into the markup.
+
+**`assets/events.json` is written by hand and reviewed before it is published.** That is
+deliberate and should stay that way. Everything on it carries an `evidence` field saying how we
+know the event happened; `scripts/check_events.py` fails the build if one is missing.
+
+Where the current entries came from, so nobody has to re-derive it:
+
+- Six are quoted from the masjid's own Instagram announcements, which are readable without
+  logging in because Instagram still serves the full caption in a post's `og:description`.
+- Three are transcribed from the masjid's event posters by the volunteer who built the first
+  version of this site. Each states a weekday and a date, and every one of those pairs resolves
+  to exactly one year, which is why the years are trusted. They are the least certain entries
+  here; if a trustee can confirm them, say so in the `evidence` field.
+- Two Eid entries carry a month and no day, because the announcements gave prayer times but never
+  a calendar date. Do not fill those in by calculating Eid yourself - it moves with the sighting
+  and with what the masjid decided that year.
+
+**Three traps, all of which have already been hit once:**
+
+1. **A post's date is not the event's date.** Captions say "Saturday 11th April" with no year, and
+   some give a time and no date at all. Nothing about this is machine-readable, which is the main
+   reason the events list is not automated.
+2. **A third of the best event posts are not the masjid's.** Both Youth Nights and the January
+   community evening were posted by Al Kissaii Institute as collaborations held at the masjid.
+   They are credited with "Held with", and must not be presented as the masjid's own.
+3. **Captions contain things that must not be republished here.** The summer course post carries a
+   volunteer's mobile number and the Ramadan appeal carries the charity's sort code and account
+   number. On the masjid's own Instagram that is its choice. Mirrored onto this site, next to a
+   donate page and indexed by search engines, it becomes a fraud risk. `check_events.py` blocks
+   bank details, phone numbers and email addresses in event copy.
+
+### Recorded talks
+
+`assets/youtube.json` and `assets/youtube/*.jpg` are refreshed nightly by
+`scripts/fetch_youtube.py` (`.github/workflows/youtube.yml`, 03:40 UTC). **This needs no API key,
+no login and no secret** - the channel's Atom feed is public. Channel `UCHTSGHCZzLQVVjYPDMlnMlg`.
+
+Four things that script is careful about, each for a reason worth keeping:
+
+- It **accumulates by video id**. The feed only returns the newest 15, so a wholesale overwrite
+  would silently drop older talks once the channel grows past fifteen.
+- It sorts on `published`, never `updated` - `updated` changes whenever YouTube touches metadata.
+- It **downloads thumbnails into the repo**. Hotlinking `i.ytimg.com` would make this the only
+  page that contacts a third party, which the privacy notice explicitly denies. Note that YouTube
+  answers a missing thumbnail size with HTTP 404 *and* a grey JPEG body, so the script checks the
+  status code and the byte size.
+- It **drops video descriptions entirely**, for the same bank-details reason as above.
+- Do not move the cron into 09:00-12:00 UTC: Google's feed endpoint has been throwing intermittent
+  404s and 500s in that window since late 2025.
+
+### What was deliberately not automated, and why
+
+Researched properly in September 2026; do not redo this without reading it.
+
+| Route | Verdict |
+|---|---|
+| YouTube Atom feed | **Built.** No credentials, nothing expires. |
+| Facebook Page | **Rejected on content, not plumbing.** The Page has 7 followers and 5 public items, the newest from May 2023, and not one is an event. A never-expiring Page token is genuinely obtainable, so revisit only if the masjid starts posting there. Also: a *second* Facebook page for the masjid ranks higher in search - somebody should work out which one is real. |
+| Instagram Graph API | **Possible, not yet built.** Needs the account converted to Business or Creator, a Meta app, and a 60-day token that a nightly job must keep refreshing. No App Review needed to read your own posts. The catch is that GitHub disables scheduled workflows in a quiet public repo after 60 days, which is the same window - so both clocks can run out together. A System User token in a Meta Business portfolio never expires and removes that trap. |
+| Scraping Instagram with a login | **Rejected outright.** Anonymous requests for this account already return HTTP 429, instaloader's own issue tracker shows logged-in sessions hitting 429s and `feedback_required` blocks, and Meta's terms make automated collection grounds for disabling the account. The masjid's account is worth more than the feature. |
+
+**Never accept a password for any of these.** If a token is ever needed it is created by the
+account owner and pasted by them into the repo's Settings > Secrets and variables > Actions. It
+does not go in a file, a commit, or a chat message.
+
 ## Design
 
 The palette and type are sampled from the masjid's logo and shared with the donation page.
@@ -194,7 +262,7 @@ parental consent - the masjid runs children's classes, so that standard applies 
 
 ## Not currently published
 
-`services.html`, `events.html`, `madrasah.html` and `registration.html` were removed from the
+`services.html`, `madrasah.html` and `registration.html` were removed from the
 launch scope because their content was invented or, in the case of registration, collected
 children's personal data through an embedded Google Form with no privacy notice. They remain in
 git history (see the first commit) and can be restored once there is real content and, for

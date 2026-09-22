@@ -26,3 +26,6 @@ jobs:
 
       - name: Prayer times data is valid and current
         run: python scripts/check_data.py
+
+      - name: Events and recordings are valid
+        run: python scripts/check_events.py

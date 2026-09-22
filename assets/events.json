@@ -1,0 +1,124 @@
+{
+  "note": "Written by hand and reviewed before publishing. See scripts/check_events.py for the rules. Every entry must carry an 'evidence' field saying how we know it happened - do not add an event without one.",
+  "events": [
+    {
+      "id": "youth-night-2026-04",
+      "title": "Youth Night",
+      "kind": "Youth",
+      "start": "2026-04-11",
+      "precision": "day",
+      "time": "17:15, after Asr",
+      "with": "Al Kissaii Institute",
+      "summary": "An evening for under-15s: stories of the Sahaabah, the six pillars of imaan, games and refreshments.",
+      "evidence": "Announced on Instagram, 7 April 2026, by Al Kissaii Institute, held at the masjid."
+    },
+    {
+      "id": "eid-al-fitr-2026",
+      "title": "Eid al-Fitr prayers",
+      "kind": "Eid",
+      "start": "2026-03",
+      "precision": "month",
+      "summary": "Two jama'ahs on Eid morning: 7:00am in English led by Ustadh Anas Tayib, and 8:00am in Arabic led by Shaykh Abdullahi.",
+      "evidence": "Announced on the masjid's Instagram, 19 March 2026. The announcement gave both prayer times but not the calendar date, so only the month is published here."
+    },
+    {
+      "id": "community-evening-2026-01",
+      "title": "Community evening and Ramadan preparation",
+      "kind": "Community",
+      "start": "2026-01-24",
+      "precision": "day",
+      "time": "18:30",
+      "with": "Al Kissaii Institute",
+      "summary": "An evening of meeting other Muslims and building friendships, alongside preparation for Ramadan and reflections from the life of the Prophet, peace be upon him. Free food, brothers and sisters welcome.",
+      "evidence": "Announced on Instagram, 22 January 2026, by Al Kissaii Institute, held at the masjid and sponsored by the Y Sharif Foundation."
+    },
+    {
+      "id": "youth-night-2025-12",
+      "title": "Youth Night",
+      "kind": "Youth",
+      "start": "2025-12-12",
+      "precision": "day",
+      "time": "19:00",
+      "with": "Al Kissaii Institute",
+      "summary": "A night for the youth, by the youth: Qur'an reflections, reminders, Islamic trivia and refreshments.",
+      "evidence": "Announced on Instagram, 10 December 2025, by Al Kissaii Institute, held at the masjid."
+    },
+    {
+      "id": "quran-intensive-2025",
+      "title": "Qur'an Intensive Course",
+      "kind": "Course",
+      "start": "2025-07-21",
+      "end": "2025-08-24",
+      "precision": "day",
+      "time": "Monday to Thursday, 10:00 to 15:00",
+      "summary": "A summer programme for under-16s covering Qur'an hifdh, the fiqh of salah, basic Arabic reading and Islamic studies.",
+      "evidence": "Announced on the masjid's Instagram, 13 July 2025."
+    },
+    {
+      "id": "eid-al-adha-1446",
+      "title": "Eid al-Adha prayers",
+      "kind": "Eid",
+      "start": "2025-06",
+      "precision": "month",
+      "summary": "Eid al-Adha 1446. Two jama'ahs on Eid morning, at 8:00am and 9:00am.",
+      "evidence": "Announced on the masjid's Instagram, 5 June 2025. The announcement gave the prayer times but not the calendar date, so only the month is published here."
+    },
+    {
+      "id": "eid-al-fitr-2025",
+      "title": "Eid al-Fitr",
+      "kind": "Eid",
+      "start": "2025-03",
+      "precision": "month",
+      "summary": "Eid prayers and a gathering at the masjid at the end of Ramadan 1446.",
+      "evidence": "The masjid posted a recap video of the gathering on Instagram on 1 April 2025, so this is one of the few events we can confirm actually took place rather than only being announced."
+    },
+    {
+      "id": "laylatul-qadr-2025",
+      "title": "Laylatul-Qadr programme",
+      "kind": "Ramadan",
+      "start": "2025-03",
+      "precision": "month",
+      "summary": "Tafsir of Surah al-Qadr and an explanation of Laylatul-Qadr, taught by Ustadh Anas Tayib during Ramadan 1446. The full session is on the masjid's YouTube channel.",
+      "evidence": "Posted on the masjid's Instagram, 27 March 2025, linking to the full recording on YouTube."
+    },
+    {
+      "id": "tafsir-surah-maryam-2025",
+      "title": "Completion of the tafsir of Surah Maryam",
+      "kind": "Class",
+      "start": "2025-03",
+      "precision": "month",
+      "summary": "The end of a running tafsir series taught by Ustadh Anas Tayib, marked with a recitation from the surah.",
+      "evidence": "Posted on the masjid's Instagram, 12 March 2025."
+    },
+    {
+      "id": "objectives-of-fasting-2025",
+      "title": "The Objectives of Fasting",
+      "kind": "Class",
+      "start": "2025-02-15",
+      "precision": "day",
+      "time": "14:00 to 19:00",
+      "summary": "A day class explaining Maqasid as-Siyam by al-'Izz ibn 'Abdus-Salam as-Sulami, taught by Ustadh Anas Tayib and Ustadh Abdur-Raheem, in preparation for Ramadan.",
+      "evidence": "Transcribed from the masjid's own event poster when the first version of this website was built. The stated weekday and date agree only for 2025, which supports the year."
+    },
+    {
+      "id": "winter-conference-2025-01",
+      "title": "Winter Conference",
+      "kind": "Conference",
+      "start": "2025-01-04",
+      "precision": "day",
+      "time": "15:00 to 19:45",
+      "summary": "Two sessions: an introduction to the sciences of qira'aat and tafsir with Ustadh Anas Abdullahi, and an introduction to the sciences of fiqh and usool al-fiqh with Ustadh Anas Tayib.",
+      "evidence": "Transcribed from the masjid's own event poster when the first version of this website was built. The stated weekday and date agree only for 2025, which supports the year."
+    },
+    {
+      "id": "winter-conference-2023-12",
+      "title": "Winter Conference: Lives of the Sahabah",
+      "kind": "Conference",
+      "start": "2023-12-29",
+      "end": "2023-12-31",
+      "precision": "day",
+      "summary": "A weekend of talks on the lives of the companions, may Allah be pleased with them, including Mus'ab ibn 'Umayr, 'Abdullah ibn 'Umar, 'Uthman ibn 'Affan, Abu Hurayrah, 'Aisha and Anas ibn Malik. Talks ran after Jumu'ah, Asr, Maghrib and Isha across the three days.",
+      "evidence": "Transcribed from the masjid's own conference poster and timetable when the first version of this website was built. The stated weekdays and dates agree only for 2023, which supports the year."
+    }
+  ]
+}

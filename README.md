@@ -7,7 +7,7 @@ Live preview: https://9ali-oop.github.io/masjidattarbiya-website/
 
 ## What this is
 
-Five pages of plain HTML, CSS and JavaScript. No framework, no build step, no dependencies to
+Six pages of plain HTML, CSS and JavaScript. No framework, no build step, no dependencies to
 install. Edit a file, commit, and GitHub Pages publishes it within a minute or two.
 
 | | |
@@ -15,6 +15,7 @@ install. Edit a file, commit, and GitHub Pages publishes it within a minute or t
 | **Home** | Today's prayer times, who we are, and how to give |
 | **About** | The masjid's history and what it does |
 | **Prayer Times** | Today plus the coming week, updated automatically |
+| **Events** | What the masjid has run, plus talks from its YouTube channel |
 | **Donate** | One-off and monthly giving through GoCardless |
 | **Contact** | Phone, WhatsApp, email and a map |
 
@@ -30,7 +31,7 @@ python -m http.server 8000
 
 Then open http://localhost:8000.
 
-Before you commit, run the four checks. They take a second and they catch the mistakes this
+Before you commit, run the five checks. They take a second and they catch the mistakes this
 project has actually made:
 
 ```bash
@@ -38,6 +39,7 @@ python scripts/sync_chrome.py --check   # the header and footer are identical on
 python scripts/check_links.py           # no broken links, balanced tags, one h1 per page
 python scripts/check_facts.py           # contact details consistent, no hardcoded prayer times
 python scripts/check_data.py            # prayer times valid, in order, and still current
+python scripts/check_events.py          # events evidenced, dates sane, no contact details in copy
 ```
 
 They also run automatically on every push.
@@ -61,8 +63,9 @@ it before making changes, especially to the donate page.
 |---|---|
 | `fetch_prayer_times.py` | Pulls the timetable from Masjidbox. Runs nightly; safe to run by hand. |
 | `sync_chrome.py` | Stamps the shared header and footer into every page |
+| `fetch_youtube.py` | Pulls the talk recordings from YouTube's public feed. No API key needed. |
 | `fetch_fonts.py` | Re-downloads the typefaces, which are served from this site rather than Google |
-| `check_*.py` | The four checks above |
+| `check_*.py` | The five checks above |
 
 ## Licence and credit
 

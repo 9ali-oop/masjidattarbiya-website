@@ -1,0 +1,46 @@
+name: Update recorded talks
+
+# The masjid's YouTube channel publishes a public Atom feed that needs no API
+# key, no login and no secret, so this job holds no credentials at all - the
+# deliberate reason this route was chosen over the social platforms.
+#
+# Thumbnails are downloaded into the repo rather than hotlinked, so the site
+# still contacts no third party when someone opens the events page.
+on:
+  schedule:
+    # 03:40 UTC. Google's feeds.xml endpoint has been returning intermittent
+    # 404s and 500s between roughly 09:00 and 12:00 UTC since late 2025, so the
+    # job deliberately runs well outside that window.
+    - cron: "40 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch the channel feed
+        run: python scripts/fetch_youtube.py
+
+      - name: Check the result before publishing it
+        run: python scripts/check_events.py
+
+      - name: Commit if anything changed
+        run: |
+          if git diff --quiet -- assets/youtube.json assets/youtube; then
+            echo "No new videos."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/youtube.json assets/youtube
+          git commit -m "Update recorded talks from YouTube"
+          git push

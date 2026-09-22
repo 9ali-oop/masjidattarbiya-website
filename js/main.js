@@ -317,3 +317,146 @@ document.addEventListener("DOMContentLoaded", function () {
       fallback(weekEl, "The weekly timetable could not be loaded.");
     });
 })();
+
+/* ---------------------------------------------------------------------------
+   Events, and the recorded talks below them.
+
+   Both render from plain JSON files in assets/. events.json is written by hand
+   and reviewed before publishing; youtube.json is refreshed nightly from the
+   channel's public feed. Neither page contacts a third party: the thumbnails
+   are served from this site.
+   --------------------------------------------------------------------------- */
+(function () {
+  var listEl = document.getElementById("events-list");
+  var videoEl = document.getElementById("video-list");
+  if (!listEl && !videoEl) return;
+
+  var MONTHS = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function parts(iso) {
+    var b = String(iso).split("-");
+    return { y: +b[0], m: +b[1], d: b.length > 2 ? +b[2] : null };
+  }
+
+  function monthName(p) { return MONTHS[p.m - 1] || ""; }
+
+  /* "11 April 2026", "March 2026", "21 July to 24 August 2025", "29 to 31 December 2023" */
+  function formatWhen(ev) {
+    var s = parts(ev.start);
+    if (ev.precision === "month" || s.d === null) return monthName(s) + " " + s.y;
+
+    var from = s.d + " " + monthName(s);
+    if (!ev.end) return from + " " + s.y;
+
+    var e = parts(ev.end);
+    if (e.y === s.y && e.m === s.m) return s.d + " to " + e.d + " " + monthName(e) + " " + e.y;
+    if (e.y === s.y) return from + " to " + e.d + " " + monthName(e) + " " + e.y;
+    return from + " " + s.y + " to " + e.d + " " + monthName(e) + " " + e.y;
+  }
+
+  /* Sorts and groups on the raw string: ISO dates compare correctly as text,
+     and "2026-03" sorts just ahead of "2026-03-01", which is what we want. */
+  function yearOf(ev) { return String(ev.start).slice(0, 4); }
+
+  function eventHtml(ev) {
+    return '<li class="event">' +
+      '<div class="event-when">' +
+        '<span class="event-date">' + esc(formatWhen(ev)) + "</span>" +
+        (ev.time ? '<span class="event-time">' + esc(ev.time) + "</span>" : "") +
+      "</div>" +
+      '<div class="event-body">' +
+        (ev.kind ? '<span class="event-kind">' + esc(ev.kind) + "</span>" : "") +
+        "<h3>" + esc(ev.title) + "</h3>" +
+        "<p>" + esc(ev.summary) + "</p>" +
+        (ev["with"] ? '<span class="event-with">Held with ' + esc(ev["with"]) + "</span>" : "") +
+      "</div>" +
+    "</li>";
+  }
+
+  function group(events) {
+    var html = "", year = null;
+    events.forEach(function (ev) {
+      var y = yearOf(ev);
+      if (y !== year) {
+        if (year !== null) html += "</ul>";
+        html += '<h2 class="event-year">' + esc(y) + '</h2><ul class="event-list">';
+        year = y;
+      }
+      html += eventHtml(ev);
+    });
+    return year === null ? "" : html + "</ul>";
+  }
+
+  function renderEvents(events) {
+    if (!events.length) {
+      listEl.innerHTML = '<p class="events-empty">No events are listed yet.</p>';
+      return;
+    }
+    // Compare at the entry's own precision, so a month-only date like "2026-03"
+    // is weighed against "2026-09" rather than against a full date it cannot match.
+    // A day either side does not matter here, so UTC rather than London is fine.
+    var today = new Date().toISOString().slice(0, 10);
+    var upcoming = [], past = [];
+    events.forEach(function (e) {
+      var start = String(e.start);
+      (start >= today.slice(0, start.length) ? upcoming : past).push(e);
+    });
+
+    upcoming.sort(function (a, b) { return a.start < b.start ? -1 : 1; });
+    past.sort(function (a, b) { return a.start > b.start ? -1 : 1; });
+
+    var html = "";
+    if (upcoming.length) {
+      html += '<h2 class="event-year">Coming up</h2><ul class="event-list">' +
+              upcoming.map(eventHtml).join("") + "</ul>";
+    }
+    html += group(past);
+    listEl.innerHTML = html;
+  }
+
+  function renderVideos(videos) {
+    if (!videos.length) {
+      videoEl.innerHTML = '<p class="video-empty">No recordings are listed yet.</p>';
+      return;
+    }
+    videoEl.innerHTML = videos.map(function (v) {
+      var p = parts(v.published);
+      var when = p.d + " " + monthName(p) + " " + p.y;
+      return '<a class="video-card" href="' + esc(v.url) + '" target="_blank" rel="noopener">' +
+        (v.thumb
+          ? '<div class="video-thumb"><img src="' + esc(v.thumb) + '" alt="" loading="lazy" width="320" height="180" /></div>'
+          : "") +
+        '<div class="video-meta"><h3>' + esc(v.title) + "</h3>" +
+        '<span class="video-date">' + esc(when) + "</span></div></a>";
+    }).join("");
+  }
+
+  if (listEl) {
+    fetch("assets/events.json", { cache: "no-cache" })
+      .then(function (r) { if (!r.ok) throw new Error("not found"); return r.json(); })
+      .then(function (d) { renderEvents((d && d.events) || []); })
+      .catch(function () {
+        listEl.innerHTML = '<p class="events-empty">The list of events could not be loaded. ' +
+          'Please try again, or see the masjid\u2019s ' +
+          '<a href="https://www.instagram.com/masjid.attarbiya/" target="_blank" rel="noopener">Instagram</a>.</p>';
+      });
+  }
+
+  if (videoEl) {
+    fetch("assets/youtube.json", { cache: "no-cache" })
+      .then(function (r) { if (!r.ok) throw new Error("not found"); return r.json(); })
+      .then(function (d) { renderVideos((d && d.videos) || []); })
+      .catch(function () {
+        videoEl.innerHTML = '<p class="video-empty">The recordings could not be loaded. ' +
+          'They are all on the masjid\u2019s ' +
+          '<a href="https://www.youtube.com/@MasjidAttarbiyaBirmingham" target="_blank" rel="noopener">YouTube channel</a>.</p>';
+      });
+  }
+})();
