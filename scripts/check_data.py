@@ -54,9 +54,15 @@ for day in days:
     seen.add(d)
 
     times = day.get("times") or {}
-    missing = [p for p in REQUIRED if p not in times]
+    iqamah = day.get("iqamah") or {}
+    # A start time can be legitimately absent when the source published a
+    # placeholder (the fetch script drops those), but then the iqamah must be
+    # there, or the prayer has nothing to show at all.
+    missing = [p for p in REQUIRED if p not in times and p not in iqamah]
     if missing:
         fail(f"{d}: missing {', '.join(missing)}")
+    if "00:00" in times.values():
+        fail(f"{d}: a start time of 00:00 is a placeholder, not a time")
 
     for name, value in list(times.items()) + list((day.get("iqamah") or {}).items()):
         if not valid_hhmm(value):
