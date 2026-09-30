@@ -4,8 +4,13 @@ The site is plain HTML with no build step, so the header and footer are physical
 copied into each page. That is fine until someone edits one page and forgets the
 others - which has already happened once, leaving three pages with a stale footer.
 
-This script stamps partials/header.html and partials/footer.html into every page,
-marking the current page's nav link as active.
+This script stamps the header and footer partials into every page, marking the
+current page's nav link as active.
+
+The Al Furqan madrasah pages carry their own header (partials/madrasah-header.html)
+so parents know they are in the madrasah's part of the site, with a way back to
+the masjid. They share the masjid's footer on purpose: the madrasah is part of the
+same charity, not a separate organisation, and the footer says so.
 
     python scripts/sync_chrome.py          apply the partials to every page
     python scripts/sync_chrome.py --check  report drift and exit 1 (used in CI)
@@ -18,9 +23,12 @@ import glob
 import re
 import sys
 
-PAGES = ["index.html", "about.html", "prayer-times.html", "events.html", "history.html", "donate.html", "contact.html",
-         "privacy.html"]
-HEADER_START, HEADER_END = '<header class="site-header">', "</header>"
+MASJID_PAGES = ["index.html", "about.html", "prayer-times.html", "events.html", "history.html", "donate.html",
+                "contact.html", "privacy.html"]
+MADRASAH_PAGES = ["madrasah.html", "portal.html"]
+PAGES = MASJID_PAGES + MADRASAH_PAGES
+# A prefix, so the madrasah's header (class "site-header site-header--furqan") matches too.
+HEADER_START, HEADER_END = '<header class="site-header', "</header>"
 FOOTER_START, FOOTER_END = '<footer class="site-footer">', "</footer>"
 
 
@@ -40,12 +48,13 @@ def block(text, start, end):
 
 
 def header_for(page):
-    """The shared header with this page's nav link marked active."""
-    html = read("partials/header.html").rstrip("\n")
+    """The right header for this page, with this page's nav link marked active."""
+    partial = "partials/madrasah-header.html" if page in MADRASAH_PAGES else "partials/header.html"
+    html = read(partial).rstrip("\n")
     slug = page[:-5]  # strip ".html"
     return re.sub(
         r'<a href="([^"]+)" data-nav="' + re.escape(slug) + r'"',
-        r'<a href="\1" class="active" data-nav="' + slug + '"',
+        r'<a href="\1" class="active" aria-current="page" data-nav="' + slug + '"',
         html,
     )
 
@@ -67,7 +76,7 @@ def sync(page, check_only):
             drift.append(f"{page}: no {label} found")
             continue
         if have != want:
-            drift.append(f"{page}: {label} differs from partials/{label}.html")
+            drift.append(f"{page}: {label} differs from its partial")
             if not check_only:
                 text = text[:i] + want + text[j:]
 

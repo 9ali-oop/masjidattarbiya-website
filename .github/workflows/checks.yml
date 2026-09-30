@@ -29,3 +29,6 @@ jobs:
 
       - name: Events and recordings are valid
         run: python scripts/check_events.py
+
+      - name: Parent portal settings hold no secret key
+        run: python scripts/check_portal.py

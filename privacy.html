@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Privacy | Attarbiya Masjid</title>
 <meta name="description" content="How this website handles your information. Attarbiya Masjid and Kowneyn Community Centre, registered charity 1142204." />
 <link rel="canonical" href="https://masjidattarbiya.org/privacy.html" />
@@ -18,7 +18,7 @@
 <meta property="og:image:alt" content="Attarbiya Masjid logo" />
 <meta property="og:locale" content="en_GB" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="theme-color" content="#17808a" />
+<meta name="theme-color" content="#0b2c30" />
 
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
@@ -30,34 +30,40 @@
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <header class="site-header">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <p class="topbar-next" id="topbar-next"><a href="prayer-times.html">Today's prayer times</a></p>
+      <a href="madrasah.html" class="topbar-madrasah"><span class="ar" lang="ar">مدرسة الفرقان</span> <span>Madrasah Al Furqan</span></a>
+      <a href="portal.html" class="topbar-portal">Parent login</a>
+    </div>
+  </div>
   <div class="header-inner">
     <a href="index.html" class="brand">
-      <img src="assets/logo.png" alt="Attarbiya Masjid logo" class="brand-logo" />
+      <img src="assets/logo.png" alt="Attarbiya Masjid, home" class="brand-logo" width="400" height="196" />
     </a>
-    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span></button>
-    <nav class="main-nav">
+    <nav class="main-nav" id="main-nav" aria-label="Main">
       <ul>
-        <li><a href="index.html" data-nav="index">Home</a></li>
         <li><a href="about.html" data-nav="about">About</a></li>
+        <li><a href="history.html" data-nav="history">Our Story</a></li>
         <li><a href="prayer-times.html" data-nav="prayer-times">Prayer Times</a></li>
         <li><a href="events.html" data-nav="events">Events</a></li>
+        <li><a href="madrasah.html" data-nav="madrasah">Madrasah</a></li>
         <li><a href="contact.html" data-nav="contact">Contact</a></li>
+        <li class="nav-mobile-only"><a href="portal.html">Parent login</a></li>
       </ul>
     </nav>
-    <div class="header-cta">
-      <a href="contact.html" class="btn btn-outline-dark">Contact</a>
-      <a href="donate.html" class="btn btn-primary">Donate</a>
-    </div>
+    <a href="donate.html" class="btn btn-gold header-donate">Donate</a>
+    <button class="nav-toggle" type="button" aria-controls="main-nav" aria-expanded="false"><span class="nav-toggle-bars" aria-hidden="true"></span><span class="visually-hidden">Menu</span></button>
   </div>
 </header>
 
 <main id="main">
 
-<section class="page-hero">
+<section class="page-hero on-night pattern">
   <div class="container">
-    <div class="breadcrumb"><a href="index.html">Home</a> / Privacy</div>
+    <p class="crumbs"><a href="index.html">Home</a> / Privacy</p>
     <h1>Privacy</h1>
-    <p>What this website does and does not do with your information.</p>
+    <p class="lede">What this website does and does not do with your information.</p>
   </div>
 </section>
 
@@ -65,21 +71,35 @@
   <div class="container prose">
 
     <h2>The short version</h2>
-    <p>This website does not ask you for any information, and we do not track you. There are no forms, no accounts, no analytics and no advertising. We set no cookies of our own.</p>
+    <p>The masjid's pages do not ask you for any information, and we do not track you. There are no analytics and no advertising, and we set no cookies of our own. The one exception is the Al Furqan parent portal, which exists so that parents can register a child with the madrasah, and which is explained in full below.</p>
 
     <h2>What happens when you visit</h2>
     <p>The site is hosted on GitHub Pages. Like any web host, their servers receive your IP address in order to send you the page, and they may keep short-term logs for security and abuse prevention. We have no access to those logs and we do not receive any visitor statistics.</p>
 
-    <h2>The one thing loaded from elsewhere</h2>
-    <p>Being straight about this, because it is the only way your details reach anyone else without you clicking:</p>
+    <h2>What is loaded from elsewhere</h2>
+    <p>Being straight about this, because these are the only ways your details reach anyone else without you clicking:</p>
     <ul>
-      <li><strong>The map on the Contact page.</strong> That page embeds a Google map, so Google receives your IP address and may set its own cookies. It is the only embedded thing on the whole site, and no other page loads it.</li>
+      <li><strong>The map on the Contact page.</strong> That page embeds a Google map, so Google receives your IP address and may set its own cookies. No other page loads it.</li>
+      <li><strong>The parent portal, once it opens.</strong> The portal page talks to the service that stores madrasah registrations, described below. No other page does.</li>
     </ul>
-    <p>Everything else comes from this website. Our typefaces are served from here rather than from Google, and prayer times are a plain file on this site, so reading them involves nobody but us.</p>
+    <p>Everything else comes from this website. Our typefaces are served from here rather than from Google, and prayer times, events and talks are plain files on this site, so reading them involves nobody but us.</p>
 
     <h2>If you donate</h2>
     <p>Donations are handled entirely by <a href="https://gocardless.com/privacy/" target="_blank" rel="noopener">GoCardless</a>, a payments provider authorised by the Financial Conduct Authority. When you choose an amount you leave this website for theirs.</p>
     <p><strong>Your bank details never touch this website.</strong> We cannot see them and we do not store them. GoCardless collects your name, email address and bank details in order to set up the payment, and their privacy notice governs that. The masjid receives a record of the donation and the donor's name so that we can account for the money properly, as a registered charity must.</p>
+
+    <h2 id="portal">The Al Furqan parent portal</h2>
+    <p><strong>The portal is not open yet.</strong> Before it opens, the trustees will confirm the details in this section, including exactly who at the madrasah can see registrations and how long they are kept. Until then, nothing is collected through it.</p>
+    <p>When it opens, this is how it will work:</p>
+    <ul>
+      <li><strong>Signing in.</strong> You sign in with your email address. We email you a one-time code, so there is no password to remember or leak.</li>
+      <li><strong>What we ask for about you.</strong> Your name, a phone number, your relationship to the child, and an emergency contact.</li>
+      <li><strong>What we ask for about your child.</strong> Their name, date of birth, school year, Qur'an reading level, anything we need to know to keep them safe (such as allergies or medical needs), and whether you agree to photographs.</li>
+      <li><strong>Why.</strong> To run the madrasah: to place your child in the right class, to contact you, and to look after your child while they are with us.</li>
+      <li><strong>Who can see it.</strong> You can see and change your own details and your own children's. Madrasah staff named by the trustees can see all registrations. Nobody else can, and it is never sold or shared for marketing.</li>
+      <li><strong>Where it is kept.</strong> With a database provider that stores it on servers in the UK or EU, under a data processing agreement with the charity.</li>
+      <li><strong>Health information</strong> is only collected if you choose to give it, and only used to keep your child safe.</li>
+    </ul>
 
     <h2>If you contact us</h2>
     <p>There is no contact form on this site. If you call, message us on WhatsApp or send an email, we keep what you send only for as long as we need to deal with it, and we do not add you to any list.</p>
@@ -100,53 +120,55 @@
 </main>
 
 <footer class="site-footer">
+  <div class="saff saff--footer" aria-hidden="true"></div>
   <div class="container">
     <div class="footer-grid">
-      <div>
-        <div class="footer-logo-chip"><img src="assets/logo.png" alt="Attarbiya Masjid logo" class="footer-logo" /></div>
+      <div class="footer-id">
+        <p class="footer-ar ar" lang="ar">مسجد التربية</p>
+        <p class="footer-name">Attarbiya Masjid &amp; Kowneyn Community Centre</p>
         <p>2 Revesby Walk, Nechells, Birmingham B7 4LG</p>
-        <p style="font-size:0.8rem;">Registered UK Charity No. 1142204</p>
+        <p class="footer-charity">Registered charity no. 1142204</p>
         <div class="social-row">
-          <a href="https://www.facebook.com/p/Attarbiya-Masjid-Kowneyn-Community-Center-100088731259188/" target="_blank" rel="noopener" title="Facebook"><svg viewBox="0 0 24 24"><path d="M15 8.5h2V5.2c-.35-.05-1.54-.15-2.94-.15-2.91 0-4.9 1.78-4.9 5.04V13H6.5v3.6h2.66V24h3.7v-7.4h2.55l.4-3.6h-2.95v-2.5c0-1.04.28-1.75 1.79-1.75z"/></svg></a>
-          <a href="https://www.instagram.com/masjid.attarbiya/" target="_blank" rel="noopener" title="Instagram: @masjid.attarbiya"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" style="fill:currentColor;stroke:none;"/></svg></a>
-          <a href="https://www.youtube.com/@MasjidAttarbiyaBirmingham" target="_blank" rel="noopener" title="YouTube: @MasjidAttarbiyaBirmingham"><svg viewBox="0 0 24 24"><path d="M22 8.5s-.2-1.6-.85-2.3c-.8-.9-1.7-.9-2.1-.95C16.2 5 12 5 12 5h0s-4.2 0-7.05.25c-.4.05-1.3.05-2.1.95C2.2 6.9 2 8.5 2 8.5S1.8 10.4 1.8 12.3v1.4C1.8 15.6 2 17.5 2 17.5s.2 1.6.85 2.3c.8.9 1.85.87 2.3.97C6.8 21 12 21 12 21s4.2 0 7.05-.25c.4-.05 1.3-.05 2.1-.95.65-.7.85-2.3.85-2.3s.2-1.9.2-3.8v-1.4c0-1.9-.2-3.8-.2-3.8z"/><path d="M9.8 15.2V8.8l6 3.2z" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.facebook.com/p/Attarbiya-Masjid-Kowneyn-Community-Center-100088731259188/" target="_blank" rel="noopener" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 8.5h2V5.2c-.35-.05-1.54-.15-2.94-.15-2.91 0-4.9 1.78-4.9 5.04V13H6.5v3.6h2.66V24h3.7v-7.4h2.55l.4-3.6h-2.95v-2.5c0-1.04.28-1.75 1.79-1.75z"/></svg><span class="visually-hidden">Facebook</span></a>
+          <a href="https://www.instagram.com/masjid.attarbiya/" target="_blank" rel="noopener" title="Instagram: @masjid.attarbiya"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" class="dot"/></svg><span class="visually-hidden">Instagram</span></a>
+          <a href="https://www.youtube.com/@MasjidAttarbiyaBirmingham" target="_blank" rel="noopener" title="YouTube: @MasjidAttarbiyaBirmingham"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 8.5s-.2-1.6-.85-2.3c-.8-.9-1.7-.9-2.1-.95C16.2 5 12 5 12 5h0s-4.2 0-7.05.25c-.4.05-1.3.05-2.1.95C2.2 6.9 2 8.5 2 8.5S1.8 10.4 1.8 12.3v1.4C1.8 15.6 2 17.5 2 17.5s.2 1.6.85 2.3c.8.9 1.85.87 2.3.97C6.8 21 12 21 12 21s4.2 0 7.05-.25c.4-.05 1.3-.05 2.1-.95.65-.7.85-2.3.85-2.3s.2-1.9.2-3.8v-1.4c0-1.9-.2-3.8-.2-3.8z"/><path class="play" d="M9.8 15.2V8.8l6 3.2z"/></svg><span class="visually-hidden">YouTube</span></a>
         </div>
       </div>
       <div>
-        <h2 class="footer-heading">Explore</h2>
+        <h2 class="footer-heading">The masjid</h2>
         <ul>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="prayer-times.html">Prayer Times</a></li>
-          <li><a href="events.html">Events</a></li>
+          <li><a href="about.html">About us</a></li>
+          <li><a href="history.html">Our story</a></li>
+          <li><a href="prayer-times.html">Prayer times</a></li>
+          <li><a href="events.html">Events and talks</a></li>
           <li><a href="donate.html">Donate</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="privacy.html">Privacy</a></li>
         </ul>
       </div>
       <div>
-        <h2 class="footer-heading">Contact</h2>
+        <h2 class="footer-heading">Madrasah Al Furqan</h2>
+        <ul>
+          <li><a href="madrasah.html">The madrasah</a></li>
+          <li><a href="portal.html">Parent portal</a></li>
+          <li><a href="portal.html#register">Register a child</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="footer-heading">Get in touch</h2>
         <ul>
           <li><a href="tel:+447908854187">07908 854187</a></li>
-          <li><a href="mailto:info@masjidatarbiya.org">info@masjidatarbiya.org</a></li>
           <li><a href="https://wa.me/447908854187" target="_blank" rel="noopener">WhatsApp</a></li>
-        </ul>
-      </div>
-      <div>
-        <h2 class="footer-heading">Visit</h2>
-        <ul>
-          <li>2 Revesby Walk<br />Nechells, Birmingham<br />B7 4LG</li>
-          <li><a href="https://maps.google.com/?q=2+Revesby+Walk,+Birmingham+B7+4LG" target="_blank" rel="noopener">Get directions</a></li>
+          <li><a href="mailto:info@masjidatarbiya.org">info@masjidatarbiya.org</a></li>
+          <li><a href="https://maps.google.com/?q=2+Revesby+Walk,+Birmingham+B7+4LG" target="_blank" rel="noopener">Directions</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; <span id="year"></span> Attarbiya Masjid &amp; Kowneyn Community Centre</span>
-      <span>Registered Charity No. 1142204</span>
+      <span>&copy; <span id="year">2026</span> Attarbiya Masjid &amp; Kowneyn Community Centre</span>
+      <a href="privacy.html">Privacy</a>
     </div>
   </div>
 </footer>
 
 <script src="js/main.js"></script>
-<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>

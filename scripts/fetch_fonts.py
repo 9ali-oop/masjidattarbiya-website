@@ -6,12 +6,17 @@ ago, so hosting the files ourselves costs nothing in speed and removes a third
 party from the privacy notice entirely.
 
 Only what the site actually uses is downloaded:
-  - the latin subset only, because no character on the site needs latin-ext
+  - the latin subset only for Inter and Marcellus, because no character on the
+    site needs latin-ext
   - Inter at 400, 600 and 700, and Marcellus at 400
+  - Reem Kufi, arabic subset only, for the Arabic display lettering (the name of
+    the masjid and the madrasah). Its geometric Kufi echoes the lettering in the
+    masjid's logo. Running Arabic text such as the hijri date is left to the
+    visitor's system fonts, which handle it well.
 
 Re-run this if the typefaces or weights change, or if content ever needs
 accented characters (macrons in transliteration, say) - then add "latin-ext"
-to SUBSETS.
+to that family's entry in SUBSETS.
 
     python scripts/fetch_fonts.py
 """
@@ -22,8 +27,9 @@ import sys
 import urllib.request
 
 CSS_URL = ("https://fonts.googleapis.com/css2"
-           "?family=Marcellus&family=Inter:wght@400;600;700&display=swap")
-SUBSETS = ("latin",)
+           "?family=Marcellus&family=Inter:wght@400;600;700&family=Reem+Kufi:wght@500&display=swap")
+# Which subset of each family to keep. Anything not listed is not downloaded.
+SUBSETS = {"Inter": ("latin",), "Marcellus": ("latin",), "Reem Kufi": ("arabic",)}
 FONT_DIR = "assets/fonts"
 OUT_CSS = "css/fonts.css"
 
@@ -42,7 +48,8 @@ def main():
     css = get(CSS_URL, UA).decode("utf-8")
 
     blocks = re.findall(r"/\* ([a-z-]+) \*/\s*(@font-face \{.*?\})", css, re.S)
-    wanted = [(sub, b) for sub, b in blocks if sub in SUBSETS]
+    wanted = [(sub, b) for sub, b in blocks
+              if sub in SUBSETS.get(re.search(r"font-family: '([^']+)'", b).group(1), ())]
     if not wanted:
         print("no matching font faces returned - has the Google Fonts API changed?", file=sys.stderr)
         return 1

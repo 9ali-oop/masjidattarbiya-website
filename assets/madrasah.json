@@ -1,0 +1,5 @@
+{
+  "note": "Al Furqan Madrasah, rendered by madrasah.html. Written by hand, and the same rule as the rest of the site applies: publish only what the madrasah has confirmed. While 'classes' is empty the page says plainly that times are being confirmed and invites parents to ask. Class entry: {\"name\": \"Qur'an reading\", \"ages\": \"Ages 6 to 10\", \"when\": \"Tuesday and Wednesday, 17:00 to 19:00\", \"summary\": \"One sentence on what the class covers.\"}. Resource entry: {\"title\": \"...\", \"url\": \"assets/furqan/file.pdf or https://...\", \"description\": \"...\"}. Resources listed here are public; ones only for registered parents go in the portal's own resources table instead.",
+  "classes": [],
+  "resources": []
+}

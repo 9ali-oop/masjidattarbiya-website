@@ -1,0 +1,32 @@
+name: Keep the parent portal awake
+
+# Supabase pauses a free project after a week without activity, which would take
+# the parent portal offline until someone restores it by hand. One tiny request a
+# day prevents that. Until js/portal-config.js is filled in, this does nothing.
+
+on:
+  schedule:
+    - cron: "15 5 * * *"   # 05:15 UTC, clear of the other nightly jobs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ping the portal database
+        run: |
+          url=$(sed -n 's/.*supabaseUrl: *"\([^"]*\)".*/\1/p' js/portal-config.js)
+          key=$(sed -n 's/.*supabaseAnonKey: *"\([^"]*\)".*/\1/p' js/portal-config.js)
+          if [ -z "$url" ] || [ -z "$key" ]; then
+            echo "The parent portal is not configured yet - nothing to keep awake."
+            exit 0
+          fi
+          curl -fsS -X POST "$url/rest/v1/rpc/portal_ping" \
+            -H "apikey: $key" -H "Content-Type: application/json" -d '{}'
+          echo
+          echo "Portal database answered."

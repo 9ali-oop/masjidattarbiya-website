@@ -16,6 +16,7 @@ deliberately blunt:
 """
 
 import json
+import os
 import re
 import sys
 from datetime import date
@@ -106,7 +107,18 @@ def check_events():
         if start.year < 2000:
             problems.append(f"{where}: starts in {start.year}, which looks like a typo")
 
-        for field in TEXT_FIELDS:
+        # Posters are copied into the repo, never hotlinked: Instagram image links
+        # expire within hours, and hotlinking would contact a third party.
+        if ev.get("image"):
+            img = str(ev["image"])
+            if not img.startswith("assets/events/"):
+                problems.append(f"{where}: image must live in assets/events/, not {img}")
+            elif not os.path.exists(img):
+                problems.append(f"{where}: image {img} does not exist")
+            if not ev.get("image_alt"):
+                problems.append(f"{where}: an image needs 'image_alt' describing it")
+
+        for field in TEXT_FIELDS + ("image_alt",):
             value = ev.get(field)
             if not isinstance(value, str):
                 continue
