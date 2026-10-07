@@ -65,6 +65,21 @@ def hhmm(iso):
         return None
 
 
+def clean_times(date, times):
+    """Drop start times that are plainly placeholders rather than times.
+
+    Masjidbox has published an Isha of exactly 00:00 for a single day, which would
+    have gone out on the site as a real time. No prayer starts at midnight on the
+    dot, so that value means "missing". Leaving the start blank is honest: the
+    iqamah for the same prayer is usually still valid and is shown on its own.
+    """
+    for p in list(times):
+        if times[p] == "00:00":
+            print(f"  {date}: dropping {p} start of 00:00 - looks like a placeholder", file=sys.stderr)
+            del times[p]
+    return times
+
+
 def build(rows):
     days = []
     for row in rows:
@@ -75,7 +90,8 @@ def build(rows):
         day = {
             "date": row["date"][:10],
             "hijri": hijri.get("formatted") or "",
-            "times": {p: hhmm(row.get(p)) for p in PRAYERS if hhmm(row.get(p))},
+            "times": clean_times(row["date"][:10],
+                                 {p: hhmm(row.get(p)) for p in PRAYERS if hhmm(row.get(p))}),
             "iqamah": {p: hhmm(v) for p, v in iq.items() if hhmm(v)},
         }
         # Jumu'ah is its own service, not a relabelled Dhuhr: Masjidbox gives it a
@@ -90,8 +106,9 @@ def build(rows):
     # Refuse to publish a thin or broken timetable. Overwriting good data with an
     # empty one would leave the site showing an empty table under a caption that
     # claims it updates daily, which is worse than showing nothing.
+    # Every prayer needs at least a start time or an iqamah to be worth showing.
     required = {"fajr", "dhuhr", "asr", "maghrib", "isha"}
-    days = [d for d in days if required <= set(d["times"])]
+    days = [d for d in days if required <= set(d["times"]) | set(d["iqamah"])]
     if len(days) < 3:
         raise ValueError(
             f"only {len(days)} usable day(s) parsed - refusing to overwrite the existing timetable"

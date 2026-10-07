@@ -14,6 +14,8 @@ below. Never invent a value that is not on this list.
 | Fact | Value |
 |---|---|
 | Name | Attarbiya Masjid & Kowneyn Community Centre |
+| Registered name | Kowneyn Education and Cultural Centre (what donors see at GoCardless checkout) |
+| Madrasah | **Madrasah Al Furqan** (مدرسة الفرقان), the masjid's own madrasah - not a separate organisation |
 | Address | 2 Revesby Walk, Nechells, Birmingham B7 4LG |
 | Charity number | 1142204 |
 | Phone | 07908 854187 (`tel:+447908854187`, `wa.me/447908854187`) |
@@ -40,6 +42,11 @@ register. Confirm with the trustees before relying on either.
    teacher names or facilities. If a fact is not in the table above or confirmed by the masjid,
    it does not go on the site. An earlier draft of this site published invented service
    descriptions and guessed opening hours; that is what most of the cleanup was about.
+   **The one agreed exception** is the madrasah's timetable, term dates, group descriptions,
+   places and resources (`assets/madrasah.json`), which the masjid asked for as placeholders in
+   October 2026 so the page could be designed and reviewed. Every one of them is marked
+   `"placeholder": true` and carries a visible "To be confirmed" label on the page. Never add an
+   unlabelled placeholder, and never use the exception anywhere else.
 2. **Never hardcode prayer times.** They go stale within a day and that is precisely what made
    the masjid's previous website a problem. See "Prayer times" below for how they actually work.
 3. **Never break the donation flow.** See "Donations" below.
@@ -54,7 +61,14 @@ Prayer times are **not** an iframe any more, and are **not** hand-written into t
   of the JSON embedded in it, and writes `assets/prayer-times.json` - about a week of start times,
   iqamah times, hijri dates, and Jumu'ah as its own field.
 - `.github/workflows/prayer-times.yml` runs that daily at 02:20 UTC and commits any change.
-- `js/main.js` renders it into `<div id="prayer-times">` on the homepage and the prayer times page.
+- `js/main.js` renders it into four places: today's card (`#prayer-times`, homepage and prayer
+  times page), the week grid (`#prayer-week`), the "Next" line in the top bar of every page
+  (`#topbar-next`) and the Jumu'ah note on the homepage (`#visit-jumuah`).
+- **"Next" is measured against the iqamah**, not the start time, because that is when the
+  congregation stands. A prayer that has begun but whose jama'ah has not is still next.
+- **A start time of exactly 00:00 is a placeholder, not a time.** Masjidbox once published an
+  Isha of 00:00; the fetch script now drops such values, the page shows a dash for the start
+  and still shows the iqamah, and `check_data.py` fails if one ever gets through.
 
 Two things to respect:
 
@@ -74,20 +88,25 @@ once: three pages kept an old footer carrying a stale "site rebuilt" note and ha
 The fix is a single source of truth plus a checker:
 
 - `partials/header.html` and `partials/footer.html` are canonical.
-- `python scripts/sync_chrome.py` stamps them into every page, setting the active nav link.
+- `partials/madrasah-header.html` is the header for the madrasah's pages (`madrasah.html`,
+  `portal.html`). They share the masjid's footer on purpose - same charity.
+- `python scripts/sync_chrome.py` stamps them into every page, setting the active nav link
+  (with `aria-current="page"`). New pages must be added to its page lists.
 - `python scripts/sync_chrome.py --check` reports drift without changing anything.
 
 **Edit the partials, then run the sync. Never edit a header or footer inside a page.**
 (`404.html` is excluded on purpose: GitHub Pages serves it for any missing path, so it needs
 root-relative asset URLs that the other pages must not use.)
 
-Three checks run in CI on every push, and are worth running before you commit:
+These checks run in CI on every push, and are worth running before you commit:
 
 ```bash
 python scripts/sync_chrome.py --check   # header/footer identical across pages
 python scripts/check_links.py           # no broken links or root-relative paths, balanced tags, one h1
 python scripts/check_facts.py           # contact details consistent, no hardcoded prayer times
 python scripts/check_data.py            # prayer times data valid, in order, and still current
+python scripts/check_events.py          # events evidenced, posters local, no contact details in copy
+python scripts/check_madrasah.py        # madrasah data well formed; lists what is still a placeholder
 ```
 
 `check_data.py` matters most of the four: `assets/prayer-times.json` is the only file that changes
@@ -96,7 +115,7 @@ quietly. It catches missing prayers, times out of order, a Jumu'ah copied from D
 has gone stale because the daily job stopped.
 
 This duplication is deliberate for now: a build step would add a toolchain that a volunteer
-cannot debug, and the site is only five pages. **Revisit when news or blog posts are added** -
+cannot debug, and the site is still only ten pages. **Revisit when news or blog posts are added** -
 that is the point at which a static site generator (Eleventy) plus a git-based CMS earns its
 keep, because a CMS writes markdown and markdown needs building into pages.
 
@@ -118,7 +137,14 @@ financial infrastructure:
 
 ## Events
 
-`events.html` renders two lists, both from JSON, neither typed into the markup.
+`events.html` renders two lists, both from JSON, neither typed into the markup. The homepage
+also shows the three most recent events and the newest talks from the same files.
+
+**Posters.** An event can carry `image` and `image_alt`: the masjid's own poster, copied into
+`assets/events/<event-id>.jpg` at about 560px wide. Never hotlink Instagram (links expire and it
+would contact a third party), never use a poster that shows a phone number or bank details
+(the Qur'an Intensive poster was cropped to remove a volunteer's mobile), and prefer posters
+to photographs of people. `check_events.py` enforces the location and the alt text.
 
 **`assets/events.json` is written by hand and reviewed before it is published.** That is
 deliberate and should stay that way. Everything on it carries an `evidence` field saying how we
@@ -133,9 +159,10 @@ Where the current entries came from, so nobody has to re-derive it:
   March 2024, so there is no second source for it. Two others that rested on transcriptions - the
   January 2025 Winter Conference and the February 2025 Objectives of Fasting - have since been
   confirmed against the masjid's own posts, which also proved the transcriptions were accurate.
-- Two Eid entries carry a month and no day, because the announcements gave prayer times but never
-  a calendar date. Do not fill those in by calculating Eid yourself - it moves with the sighting
-  and with what the masjid decided that year.
+- Eid entries carry a month and no day where the announcement gave prayer times but never a
+  calendar date. Do not fill those in by calculating Eid yourself - it moves with the sighting
+  and with what the masjid decided that year. Eid al-Fitr 2026 now has its day because the
+  masjid's own poster in that post states it: Friday 20 March 2026.
 
 **Three traps, all of which have already been hit once:**
 
@@ -215,65 +242,170 @@ account or link Pages to make this work, and nobody should create a throwaway on
 account owner and pasted by them into the repo's Settings > Secrets and variables > Actions. It
 does not go in a file, a commit, or a chat message.
 
-## History timeline
+## Our Story (the history timeline)
 
-`history.html` renders `assets/history.json` as a 3D timeline. **Not in the nav or the sitemap
-yet** - it is a draft to put in front of the elders, not a finished page.
+`history.html` renders `assets/history.json`. It is **in the nav and the sitemap** as "Our
+Story", modelled on Green Lane Masjid's two-part history (the building, then the mosque), with
+each milestone tagged by strand (`charity`, `building`, `learning`, `community`) and filter
+buttons for each, plus "Still unknown".
 
-**The gaps are the feature.** Six of the ten milestones are `"status": "unknown"` and render as
-open questions rather than being left out. People correct a draft far faster than they answer
-"tell me our history". Fill one in, give it a `source`, and delete its `asks` list.
+**The gaps are the feature.** Unknown milestones render as dashed "unfinished page" cards with
+their questions and an "I remember this" button that opens WhatsApp with a message already
+started. People correct a draft far faster than they answer "tell me our history". Fill one
+in, give it a `source`, set `status` to `confirmed` and delete its `asks` list.
 
-What is actually evidenced: the 3 September 2006 Declaration of Trust and the 5 March 2021
-renaming (both Charity Commission), and the March 2024 arrival of the YouTube and Instagram
-accounts. Everything else is a question.
+**What is evidenced.** Researched properly on 7 October 2026 from official records. Read this
+before redoing it.
 
-**Do not publish the pub's name until someone confirms it.** closedpubs.co.uk lists an *Ashted
-Hamlet* on Revesby Walk (1966-1997), but the Birmingham History Forum says that pub was
-*demolished* around 2007-08 and replaced. So either this building is the replacement, which makes
-it "built on the site of a pub" rather than a conversion, or it was a different pub. Unresolved.
+- Declaration of Trust dated 3 September 2006, as the Somali Education and Cultural Centre
+  (Charity Commission register). Registered 2 June 2011, number 1142204. Governing document
+  amended 5 March 2021. **The registered name today is Kowneyn Education and Cultural Centre**;
+  an earlier draft wrongly said 2021 renamed it "Attarbiya Masjid and Kowneyn Community Centre".
+- The governing document's area of benefit is **Bordesley Green**. The charity's own accounts
+  (downloadable from the register) give its principal office as **The Garrison Centre, 106
+  Garrison Lane, B9** up to 2021/22, and 2 Revesby Walk from 2022/23.
+- **The building was the Vauxhall Sports and Social Club, not a pub.** Companies House has a
+  "Vauxhall Sports and Social Club Community Interest Company" (06409217) with its registered
+  office at 2 Revesby Walk, incorporated October 2007, dissolved June 2010. The masjid's own
+  earlier website (kowneyn.org) says the same.
+- **The pub was a different building.** The Ashted Hamlet stood on Revesby Walk from 1966 to
+  1997 and was demolished around 2007, replaced by a community resource centre
+  (closedpubs.co.uk, Birmingham History Forum). That is where the "it used to be a pub" memory
+  comes from. A 2005 forum post also places the East Birmingham Constitutional Club ("the
+  Conservative club") "at the top of Revesby Walk"; whether that was the same building as the
+  Vauxhall club is an open question on the page, not a fact.
+- **June 2019: the charity acquired 2 Revesby Walk.** HM Land Registry's price paid data records
+  a sale of 2 Revesby Walk on 14 June 2019, and every balance sheet from 2020/21 lists "land and
+  buildings" at exactly that price. The site does not publish the price.
+- The accounts show heavy spending on "premises repairs and renewals" in each year from
+  2020/21 to 2022/23: the conversion into a masjid.
+- Registered activities: after-school club and supplementary education. Policies on file include
+  safeguarding, complaints, and bullying and harassment. Not recognised by HMRC for Gift Aid, so
+  never mention Gift Aid on the donate page.
+- The Winter Conference of December 2023 (poster), the Instagram and YouTube accounts in March
+  2024, the summer Qur'an Intensive of 2025 (Instagram).
 
-**The animation fails visible, on purpose.** An early version had the cards start at `opacity: 0`
-and rely on `IntersectionObserver` to reveal them - which rendered ten invisible cards whenever
-the observer did not fire. Now the resting state is fully readable, the script opts in by adding
-`.is-animated`, and a 3 second timer adds `.is-settled` (which snaps with `transition: none`) if
-nothing was ever revealed. It snaps rather than fades because a background tab pauses transitions.
+**Three loose ends for the trustees, found along the way, none of them published:**
+
+1. The register's governance page says the charity "does not own and/or lease land or
+   property", which contradicts its own accounts. The next annual return should correct it.
+2. The accounts call the building "freehold"; Land Registry records the 2019 sale as leasehold.
+3. A separate company, Kowneyn Community CIC (15241519, incorporated 27 October 2023), is
+   registered at 2 Revesby Walk. The site does not mention it; worth knowing it exists.
+
+The accounts also show the building was partly funded by loans from members, still being
+repaid. That is the community's business, not the website's.
+
+**The animation fails visible, by construction.** An early version started cards at `opacity: 0`
+and relied on `IntersectionObserver` to reveal them, which rendered invisible cards whenever the
+observer did not fire (and still did, for off-screen cards, in full-page captures). Now cards
+are never transparent: with `.is-animated` they wait tilted back in depth and settle forward
+when reached, so a missed card is still readable. The 3 second `.is-settled` escape hatch and a
+`beforeprint` handler remain. The spine fills with gold as the reader scrolls (`--progress`).
 Keep that shape if you touch it.
 
 **Photographs:** use Street View history for research only. Publishing Google imagery breaks
 their terms, and embedding it live would break the site's no-third-parties promise.
 
+## Madrasah Al Furqan
+
+`madrasah.html` is the madrasah's home, and `portal.html` the front door to its parent portal.
+Both use `partials/madrasah-header.html`: the madrasah's wordmark with the masjid's logo beside
+it, a top bar leading back to the masjid, and a rule in the madrasah's colour. The footer is the
+masjid's.
+
+**It must always read as part of the masjid**, never as a partner or a separate charity. That
+was an explicit request. The page says so in words ("Under one roof") as well as in the design.
+
+- **The name** is Madrasah Al Furqan (مدرسة الفرقان), taken from its logo. Use "Al Furqan" as
+  the short form.
+- **Confirmed by the masjid:** classes six days a week, **no classes on Friday**, Saturday runs
+  most of the day, and two age groups, **6 and over** and **12 and over**.
+- **Everything else on the page is a placeholder** (see Rule 1): the times, the term dates, the
+  group descriptions, "places available" and the resources list. They live in
+  `assets/madrasah.json`, each with `"placeholder": true`, and each shows a "To be confirmed"
+  label. While `"provisional"` is true the page also shows a draft notice. When the madrasah
+  confirms an item, correct it and delete its flag; `check_madrasah.py` lists what is left and
+  fails if the file claims to be final while placeholders remain. Fees are deliberately "to be
+  confirmed" with no placeholder figure.
+- **The logos** are in `assets/furqan/`: `madrasah-al-furqan-brown.png` (Arabic with "MADRASAH
+  AL FURQAN" underneath) and `madrasah-al-furqan-navy.png` (bold, Arabic only). They were cut out
+  of screenshots onto transparent backgrounds, and are small (175 and 507 pixels wide), so the
+  CSS never shows them much larger than that. If the madrasah has the original artwork (an SVG
+  or a large PNG), replace these two files with it at the same names. They are used as CSS
+  masks (`.furqan-logo-brown`, `.furqan-logo-navy`), so one file gives every colour: the
+  logo's own colour on white, gold on the dark bands. Under the navy logo the English name is
+  set in type, because that logo has none. Mask widths are fixed in pixels on purpose: the
+  logo sits in a shrink-to-fit box where a percentage width resolves to nothing and the logo
+  silently disappears.
+- **Brown or navy is undecided.** Both palettes exist (`--furqan`, `--furqan-deep`,
+  `--furqan-mid`; brown on `:root`, navy on `:root[data-furqan="navy"]`). Brown shows by
+  default. Add `?furqan=navy` or `?furqan=brown` to any page address to preview: a switch
+  appears and the choice sticks for the visit. Once the trustees choose, delete the other
+  palette, the switch (top of `js/main.js`) and the `.colour-preview` styles.
+
+### The parent portal
+
+**The madrasah will use Teach 'n Go** (chosen October 2026: best rated for ease of use, and
+already used by Green Lane's madrasah). `portal.html` is just the front door: a "Register a
+child" button for the enrolment form and a "Log in" button, both shown as "opening soon" until
+the account exists. The reasoning, the runner-up (e-Maktab) and the switch-on steps are in
+**`PORTAL.md`**. A self-built Supabase portal existed briefly and was removed in favour of Teach
+'n Go so that parents never meet two systems; it is in git history at `42ed7b3`.
+
 ## Design
+
+**Concept: arches and rows.** Photographs and key panels sit inside the pointed arch of the
+windows in the masjid's logo; today's prayer card is cut into a mihrab arch; sections are
+divided by a row of small arches (`.saff`), like the prayer rows on the prayer-hall carpet; night
+bands carry a faint eight-pointed star lattice. The name is the thesis: *tarbiya* means raising
+someone well, and the homepage says so.
 
 The palette and type are sampled from the masjid's logo and shared with the donation page.
 
 | Token | Value | Use |
 |---|---|---|
-| `--green` | `#42bac5` | fills, borders, backgrounds - **not text** |
-| `--green-text` | `#17808a` | teal text and links (4.68:1 on white, passes AA) |
-| `--green-dark` | `#1a7078` | headings, footer, banners |
-| `--green-ink` | `#0e4a50` | darkest teal |
-| `--gold` | `#d4ae61` | fills only - fails contrast as text |
+| `--green` | `#42bac5` | fills and borders on light - **not text on white**; fine as text on `--night` |
+| `--green-text` | `#17808a` | large teal text on white (4.68:1) |
+| `--green-dark` | `#1a7078` | solid teal buttons |
+| `--green-ink` | `#0e4a50` | headings and links on light surfaces |
+| `--gold` | `#d4ae61` | fills; safe as text **only on `--night`** |
 | `--gold-deep` | `#b08d3f` | deeper gold |
+| `--gold-text` | `#7a5c1f` | the only gold safe as text on white (6.22:1) |
+| `--night` | `#0b2c30` | the dark bands: heroes, prayer panels, footer |
+| `--furqan` | `#52322e` brown, or `#003060` navy | Madrasah Al Furqan's colour, sampled from its two logo files; brown is the default until the trustees choose |
+| `--furqan-deep` | `#33201d` / `#001f3f` | the madrasah's dark bands (its hero, its arch on the homepage) |
 
-| `--gold-text` | `#7a5c1f` | the only gold safe as text (6.22:1 on white) |
+The dark bands are why the redesign can use the real brand colours: bright teal and gold both
+fail WCAG AA as text on white, but pass comfortably on `--night`.
 
-Headings use **Marcellus**, body uses **Inter**. Bright teal and gold both fail WCAG AA as text
-on white, so use `--green-text` or `--gold-text` for anything readable.
+Headings use **Marcellus**, body uses **Inter**, and Arabic display lettering uses **Reem Kufi**
+(its geometric Kufi echoes the logo's Arabic). Running Arabic text, such as the hijri date, is
+left to system fonts.
 
 **The typefaces are served from this site, not from Google.** `css/fonts.css` and
 `assets/fonts/` are generated by `python scripts/fetch_fonts.py`; edit that script, not the
-generated CSS. Only the latin subset at the weights actually used (Inter 400/600/700, Marcellus
-400) is downloaded, which keeps it to 155KB. If content ever needs accented characters - macrons
-in transliteration, say - add `latin-ext` to `SUBSETS` in that script and re-run it.
+generated CSS. Only the subsets and weights actually used are downloaded (Inter 400/600/700
+latin, Marcellus 400 latin, Reem Kufi 500 arabic), about 165KB. If content ever needs accented
+characters - macrons in transliteration, say - add `latin-ext` to the family's entry in `SUBSETS`
+in that script and re-run it.
 
 The result is that **no third party is contacted on any page except the Google map on the
-contact page.** That is worth protecting: the privacy notice says so in as many words.
+contact page**. The parent portal does not change that: `portal.html` only links to Teach 'n
+Go, and nothing loads from them until a parent chooses to go there. That is worth protecting:
+the privacy notice says so in as many words.
 
 ## Accessibility, don't regress it
 
 Every page has one `<h1>`, a `<main id="main">` landmark, a skip link, and visible focus styles.
 Tap targets are at least 44px. The site respects `prefers-reduced-motion`. Keep all of that.
+
+Teachers and parents will use the madrasah pages and the portal regularly, often on a phone, so
+navigation there matters most. The phone menu repeats the links the top bar carries on a wide
+screen (Parent login, Prayer times), opening it moves focus to the first link, Escape closes it
+and returns focus to the button, and a tap outside closes it. The current page is marked with
+`aria-current` and a gold bar, never colour alone. Wide tables scroll inside their own
+`position: relative` box, so nothing makes the page scroll sideways at 390px.
 
 ## Photographs
 
@@ -305,9 +437,9 @@ the masjid's own account into `staging/`, with images. Do not go back to scrapin
 has 24 posts; the 3 the API does not return are the collaborations posted under Al Kissaii, which
 would need their own token.
 
-**Events and madrasah pages.** Waiting on real details: which classes run on which days
-(Tue/Wed/Sat/Sun), term dates, ages, whether places are open. Past events can be built from
-posters the masjid itself published.
+**Madrasah details.** `madrasah.html` is built, with labelled placeholders. It is waiting on the
+real times, term dates, group descriptions, places and fees for `assets/madrasah.json`, on the
+trustees' choice of brown or navy (see "Madrasah Al Furqan").
 
 **Photos of people.** Running the masjid's accounts covers content the masjid published. It does
 not cover individual likenesses, and much of the available material shows teenagers. Group shots
@@ -316,11 +448,11 @@ parental consent - the masjid runs children's classes, so that standard applies 
 
 ## Not currently published
 
-`services.html`, `madrasah.html` and `registration.html` were removed from the
-launch scope because their content was invented or, in the case of registration, collected
-children's personal data through an embedded Google Form with no privacy notice. They remain in
-git history (see the first commit) and can be restored once there is real content and, for
-registration, a privacy notice and a decision on who owns the data.
+`services.html` and `registration.html` were removed from the launch scope because their content
+was invented or, in the case of registration, collected children's personal data through an
+embedded Google Form with no privacy notice. They remain in git history (see the first commit).
+`madrasah.html` has since been rebuilt, and registration will go through Teach 'n Go, which is
+not switched on yet (see `PORTAL.md`).
 
 ## Deploying
 

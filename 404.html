@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Page not found | Attarbiya Masjid</title>
-<meta name="description" content="That page could not be found. Return to the Attarbiya Masjid homepage for prayer times, donations and contact details." />
+<meta name="description" content="That page could not be found. Return to the Attarbiya Masjid homepage for prayer times, the madrasah, donations and contact details." />
 <meta name="robots" content="noindex" />
-<meta name="theme-color" content="#17808a" />
+<meta name="theme-color" content="#0b2c30" />
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="css/fonts.css" />
@@ -17,27 +17,32 @@
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <header class="site-header">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <p class="topbar-note"><a href="prayer-times.html">Today's prayer times</a></p>
+      <a href="madrasah.html" class="topbar-madrasah"><span class="ar" lang="ar">مدرسة الفرقان</span> <span>Madrasah Al Furqan</span></a>
+    </div>
+  </div>
   <div class="header-inner">
     <a href="index.html" class="brand">
-      <img src="assets/logo.png" alt="Attarbiya Masjid logo" class="brand-logo" />
+      <img src="assets/logo.png" alt="Attarbiya Masjid, home" class="brand-logo" width="400" height="196" />
     </a>
-    <div class="header-cta">
-      <a href="donate.html" class="btn btn-primary">Donate</a>
-    </div>
+    <a href="donate.html" class="btn btn-gold header-donate" style="margin-left:auto;">Donate</a>
   </div>
 </header>
 
 <main id="main">
   <section class="section">
-    <div class="container" style="text-align:center; max-width:640px;">
+    <div class="container lost">
+      <p class="hero-ar ar" lang="ar">عذرًا</p>
       <h1>Page not found</h1>
-      <p>Sorry, that page does not exist. It may have moved, or the link may be out of date.</p>
-      <div class="contact-actions" style="justify-content:center; margin-top:28px;">
-        <a href="index.html" class="btn btn-primary">Go to the homepage</a>
-        <a href="prayer-times.html" class="btn btn-outline-dark">Prayer times</a>
-        <a href="donate.html" class="btn btn-outline-dark">Donate</a>
+      <p class="lede" style="margin-inline:auto;">Sorry, that page does not exist. It may have moved, or the link may be out of date.</p>
+      <div class="btn-row">
+        <a href="index.html" class="btn btn-teal">Go to the homepage</a>
+        <a href="prayer-times.html" class="btn btn-line">Prayer times</a>
+        <a href="madrasah.html" class="btn btn-line">Madrasah Al Furqan</a>
       </div>
-      <p class="contact-note" style="margin-top:28px;">
+      <p class="muted" style="margin-top:32px;">
         If you were looking for our donation page, the only official one is
         <a href="donate.html">our Donate page</a>. If in doubt, call us on
         <a href="tel:+447908854187">07908 854187</a>.
@@ -47,10 +52,11 @@
 </main>
 
 <footer class="site-footer">
+  <div class="saff saff--footer" aria-hidden="true"></div>
   <div class="container">
     <div class="footer-bottom">
-      <span>&copy; <span id="year"></span> Attarbiya Masjid &amp; Kowneyn Community Centre</span>
-      <span>Registered Charity No. 1142204</span>
+      <span>&copy; <span id="year">2026</span> Attarbiya Masjid &amp; Kowneyn Community Centre</span>
+      <span>Registered charity no. 1142204</span>
     </div>
   </div>
 </footer>

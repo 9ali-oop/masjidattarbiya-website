@@ -1,41 +1,91 @@
 {
-  "note": "The masjid's own story. Same rule as events.json: a milestone is only published with a 'source' saying how we know it. Entries with \"status\": \"unknown\" are deliberate gaps - they are questions for the people who were there, and they render as open questions rather than facts. Fill one in and delete its 'asks' list.",
+  "note": "The masjid's own story, rendered by history.html. Same rule as events.json: a milestone is only published as fact with a 'source' saying how we know it. Entries with \"status\": \"unknown\" are deliberate gaps - questions for the people who were there - and they render as open questions rather than facts. When one is answered, give it a year, a source, set status to confirmed and delete its 'asks' list. Every 'source' must be something a reader could check: the Charity Commission register or the charity's filed accounts, Companies House, HM Land Registry, the masjid's own posts. 'strand' is one of: charity, building, learning, community.",
+  "checked": "2026-10-07",
   "milestones": [
     {
-      "id": "the-pub",
+      "id": "before",
       "year": "?",
-      "title": "Before the masjid, a pub",
+      "strand": "building",
+      "title": "Before the club",
       "status": "unknown",
-      "body": "Everyone knows the building's first life was as a pub. Almost nothing about that is written down anywhere we can check.",
+      "body": "How long the club was on Revesby Walk, and what the building was before it, is not written down anywhere we can check. Many people remember a pub on the street: that was the Ashted Hamlet, which stood on Revesby Walk from 1966 to 1997 and was later demolished. It was a different building from the masjid.",
       "asks": [
-        "What was the pub called?",
-        "When did it close?",
-        "Was the pub building converted, or knocked down and rebuilt?"
-      ]
+        "When was the building built, and who for?",
+        "Was the club ever called the East Birmingham Constitutional Club, the 'Conservative club' at the top of Revesby Walk?",
+        "Do you have photographs of the club, inside or out?"
+      ],
+      "source": "Ashted Hamlet: closedpubs.co.uk and the Birmingham History Forum. The 'Conservative club' at the top of Revesby Walk: a 2005 post on the Birmingham History Forum."
     },
     {
       "id": "trust-2006",
       "year": "2006",
+      "strand": "charity",
       "title": "The charity is founded",
       "status": "confirmed",
-      "body": "A Declaration of Trust is signed on 3 September 2006, establishing the charity under its original name, the Somali Education and Cultural Centre.",
-      "source": "Charity Commission register, charity number 1142204."
+      "body": "A Declaration of Trust dated 3 September 2006 sets up the charity as the Somali Education and Cultural Centre. Its first purpose is the advancement of Islam, alongside education, the relief of poverty and sickness, and recreation for the community.",
+      "source": "Charity Commission register, charity 1142204: governing document and previous names."
     },
     {
-      "id": "the-building",
-      "year": "?",
-      "title": "The building becomes ours",
-      "status": "unknown",
-      "body": "The moment the community took on the building. This is the turning point of the whole story and we cannot date it yet.",
+      "id": "the-club",
+      "year": "2007",
+      "strand": "building",
+      "title": "The Vauxhall Sports and Social Club",
+      "status": "confirmed",
+      "body": "Before it was a masjid, 2 Revesby Walk was a social club. A community interest company for the Vauxhall Sports and Social Club was registered at this address from October 2007 until it was dissolved in June 2010.",
+      "source": "Companies House, company 06409217. The masjid's earlier website also describes the building as the former home of the Vauxhall Sports and Social Club."
+    },
+    {
+      "id": "registered-2011",
+      "year": "2011",
+      "strand": "charity",
+      "title": "A registered charity",
+      "status": "confirmed",
+      "body": "On 2 June 2011 the Charity Commission registers the charity, with the number it still carries: 1142204.",
+      "source": "Charity Commission register, registration history."
+    },
+    {
+      "id": "garrison-lane",
+      "year": "To 2022",
+      "strand": "community",
+      "title": "The Garrison Lane years",
+      "status": "confirmed",
+      "body": "The charity's governing document names the community in Bordesley Green as the people it serves. Its accounts give its principal office as The Garrison Centre, 106 Garrison Lane, in Bordesley, up to the year ending March 2022. From the following year it is 2 Revesby Walk.",
       "asks": [
-        "What year was the building bought?",
-        "Who drove it, and how was it paid for?",
-        "What state was it in when we got the keys?"
-      ]
+        "What happened at Garrison Lane: prayers, classes, or both?",
+        "Who remembers the move to Nechells?"
+      ],
+      "source": "The charity's annual accounts, 2021/22 and 2022/23, filed with the Charity Commission."
+    },
+    {
+      "id": "revesby-walk",
+      "year": "2019",
+      "strand": "building",
+      "title": "2 Revesby Walk becomes ours",
+      "status": "confirmed",
+      "body": "In June 2019 the building at 2 Revesby Walk changes hands, and from then on the charity's accounts list land and buildings of exactly the price that was paid. This is the turning point of the whole story.",
+      "asks": [
+        "Who made it happen, and how was the money raised?",
+        "What state was the building in when we got the keys?"
+      ],
+      "source": "HM Land Registry price paid record for 2 Revesby Walk, 14 June 2019, and the charity's balance sheets from 2020/21 onwards."
+    },
+    {
+      "id": "fit-out",
+      "year": "2020",
+      "strand": "building",
+      "title": "Becoming a masjid",
+      "status": "confirmed",
+      "body": "Turning a club into a place of worship: the prayer hall and its carpet, the wudu area, and the marble wall around the mihrab and minbar. The charity's accounts record substantial spending on repairs and renewals to the building in each of the three years from April 2020 to March 2023.",
+      "asks": [
+        "What was built or refitted, and in what order?",
+        "Are there photographs from during the work?"
+      ],
+      "source": "The charity's annual accounts, 2020/21 to 2022/23, filed with the Charity Commission."
     },
     {
       "id": "first-prayer",
       "year": "?",
+      "strand": "community",
       "title": "The first prayer",
       "status": "unknown",
       "body": "The first salah prayed in the building. Someone remembers this. It belongs at the centre of this page.",
@@ -46,40 +96,49 @@
       ]
     },
     {
-      "id": "the-fit-out",
-      "year": "?",
-      "title": "Becoming a masjid",
-      "status": "unknown",
-      "body": "Turning a building into a place of worship: the prayer hall, the wudu area, the mihrab and minbar, the classrooms upstairs.",
-      "asks": [
-        "Which years did the main works happen?",
-        "What was built or refitted, and in what order?",
-        "Are there photographs from during the work?"
-      ]
+      "id": "governing-2021",
+      "year": "2021",
+      "strand": "charity",
+      "title": "A new chapter on paper",
+      "status": "confirmed",
+      "body": "The charity's Declaration of Trust is amended on 5 March 2021. Today it is registered as Kowneyn Education and Cultural Centre, and its earlier names on the register include Somali Education and Cultural Centre. The community knows it as Attarbiya Masjid.",
+      "source": "Charity Commission register: governing document amended 5 March 2021; registered name and previous names."
     },
     {
       "id": "madrasah",
       "year": "?",
+      "strand": "learning",
       "title": "Al Furqan, the madrasah",
       "status": "unknown",
-      "body": "The masjid's supplementary school. The charity's registered activities have included an after-school club and a supplementary education programme for years, so this goes back a long way.",
+      "body": "The masjid's own madrasah. The charity's registered activities are an after-school club and supplementary education, so teaching children has been part of its work for a long time.",
       "asks": [
-        "What year did the madrasah start?",
+        "What year did the madrasah start, and who taught first?",
         "How many children were there at the start, and how many now?"
       ]
     },
     {
-      "id": "rename-2021",
-      "year": "2021",
-      "title": "A new name",
+      "id": "winter-2023",
+      "year": "2023",
+      "strand": "learning",
+      "title": "The first Winter Conference on record",
       "status": "confirmed",
-      "body": "On 5 March 2021 the charity is formally renamed Attarbiya Masjid and Kowneyn Community Centre, the name it carries today.",
-      "source": "Charity Commission register, recorded governing document amendment."
+      "body": "Three days on the lives of the Sahabah, from 29 to 31 December 2023, with talks after Jumu'ah, Asr, Maghrib and Isha. A second, a one-day seminar, followed in January 2025.",
+      "source": "The masjid's own conference poster and timetable. See the events page."
+    },
+    {
+      "id": "online-2024",
+      "year": "2024",
+      "strand": "community",
+      "title": "The masjid goes online",
+      "status": "confirmed",
+      "body": "The masjid starts publishing its own record. The first Instagram post, welcoming people to the masjid's official page, is on 18 March 2024, and the YouTube channel follows on 21 March. Almost everything on our events page is evidenced by these two accounts.",
+      "source": "First post date from the masjid's Instagram account; channel creation date from YouTube's own feed."
     },
     {
       "id": "al-kissaii",
       "year": "?",
-      "title": "Al Kissaii, for the teens",
+      "strand": "learning",
+      "title": "Al Kissaii, for the teenagers",
       "status": "unknown",
       "body": "The masjid's programme for teenagers and older children, which runs the youth nights.",
       "asks": [
@@ -87,20 +146,22 @@
       ]
     },
     {
-      "id": "online-2024",
-      "year": "2024",
-      "title": "The masjid goes online",
+      "id": "intensive-2025",
+      "year": "2025",
+      "strand": "learning",
+      "title": "A summer of Qur'an",
       "status": "confirmed",
-      "body": "The masjid starts publishing its own record. The YouTube channel is created on 21 March 2024 and the first Instagram post, welcoming people to the masjid's official platform, follows on 18 March 2024. Almost everything on our events page is evidenced by these two accounts.",
-      "source": "Channel creation date from YouTube's own feed; first post date from the masjid's Instagram account."
+      "body": "A Qur'an Intensive Course for under-16s runs from 21 July to 24 August 2025, Monday to Thursday: hifdh, the fiqh of salah, basic Arabic reading and Islamic studies.",
+      "source": "The masjid's Instagram, 13 July 2025. See the events page."
     },
     {
       "id": "today",
       "year": "Today",
+      "strand": "community",
       "title": "Five prayers, every day",
       "status": "confirmed",
-      "body": "Daily prayers and Jumu'ah, the madrasah, evening lessons, youth nights, winter conferences and Eid. The timetable is published live on this site and the programme is on the events page.",
-      "source": "Prayer times come from the masjid's own Masjidbox timetable; events are evidenced individually on the events page."
+      "body": "Daily prayers and Jumu'ah, the Al Furqan madrasah, lessons and conferences, youth nights and Eid. The timetable is published live on this site and the programme is on the events page.",
+      "source": "Prayer times come from the masjid's own Masjidbox timetable; events are evidenced one by one on the events page."
     }
   ]
 }

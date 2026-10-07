@@ -1,1375 +1,1430 @@
 /* ==========================================================================
-   Attarbiya Masjid & Kownayn Community Centre — site stylesheet
+   Attarbiya Masjid & Kowneyn Community Centre - site stylesheet
+
+   Layout concept: arches and rows. Photographs and key panels sit inside the
+   pointed arch of the windows in the masjid's logo, and sections are divided by
+   a row of small arches, like the prayer rows (saff) woven into the carpet of
+   the prayer hall. Dark "night" bands carry the prayer times and the story:
+   the brand teal and gold fail contrast as text on white, but pass comfortably
+   on night, so that is where they get to be used at full strength.
+
+   Plain CSS, no build step. Sections run top to bottom in page order.
    ========================================================================== */
 
 :root {
-  --green-dark: #1a7078;   /* deepened teal for banners/footer, derived from real logo file */
-  --green: #42bac5;        /* exact brand teal sampled from the original logo artwork */
-  --green-light: #e9f7f9;
-  --green-text: #17808a;  /* accessible teal for text - 4.68:1 on white */  /* light teal tint for section backgrounds */
-  --gold: #d4ae61;         /* exact brand gold sampled from the original logo artwork */
-  --gold-deep: #b08d3f;    /* deep gold, matches the donation page */
-  --gold-text: #7a5c1f;    /* the only gold safe as text - 6.22:1 on white */
-  --green-ink: #0e4a50;    /* darkest teal, for headings */
-  --gold-light: #f8f0e0;
-  --ink: #1c2321;
-  --ink-soft: #4b5a55;
-  --bg: #fbfaf7;
-  --white: #ffffff;
-  --border: #e2e0d8;
-  --radius: 10px;
-  --shadow: 0 6px 24px rgba(1, 88, 99, 0.1);
-  --max-width: 1140px;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-head: "Marcellus", Georgia, "Times New Roman", serif;
+  /* Brand, sampled from the logo. See CLAUDE.md before changing any of these. */
+  --green: #42bac5;        /* fills and borders on light; safe as text on --night */
+  --green-text: #17808a;   /* teal for large text on white (4.68:1) */
+  --green-dark: #1a7078;   /* solid teal buttons, white text on it passes */
+  --green-ink: #0e4a50;    /* headings and links on light surfaces */
+  --gold: #d4ae61;         /* fills; safe as text on --night only */
+  --gold-deep: #b08d3f;
+  --gold-text: #7a5c1f;    /* the only gold safe as text on white (6.22:1) */
+
+  /* Madrasah Al Furqan's own colour, sampled from its brown logo. Brown is
+     the default until the trustees choose; navy is defined further down. */
+  --furqan: #52322e;
+  --furqan-deep: #33201d;   /* the madrasah's dark bands */
+  --furqan-mid: #442a26;
+
+  /* Surfaces and neutrals, all leaning slightly toward the brand teal */
+  --night: #0b2c30;        /* the dark bands: hero, prayer panels, footer */
+  --night-2: #12393e;      /* raised surfaces on night */
+  --page: #fbfcfb;
+  --paper: #ffffff;
+  --mist: #e8f1ef;         /* quiet teal panel */
+  --sand: #f7f0e1;         /* quiet gold panel */
+  --ink: #152120;
+  --ink-soft: #4a5957;
+  --line: #d9e3e0;
+  --line-night: rgba(255, 255, 255, 0.14);
+  --on-night: rgba(255, 255, 255, 0.86);
+
+  /* Type: Marcellus is the logo's flared serif, Reem Kufi echoes its Kufic
+     Arabic, Inter carries everything that has to be read quickly. */
+  --font-display: "Marcellus", Georgia, "Times New Roman", serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-arabic: "Reem Kufi", "Geeza Pro", "Noto Kufi Arabic", "Segoe UI", Tahoma, sans-serif;
+
+  --step--1: 0.84rem;
+  --step-0: 1rem;
+  --step-1: 1.2rem;
+  --step-2: clamp(1.35rem, 1.2rem + 0.6vw, 1.6rem);
+  --step-3: clamp(1.7rem, 1.35rem + 1.6vw, 2.35rem);
+  --step-4: clamp(2.2rem, 1.5rem + 3.2vw, 3.5rem);
+  --step-5: clamp(2.8rem, 1.6rem + 5.4vw, 5.2rem);
+
+  --max: 1160px;
+  --gutter: clamp(16px, 4vw, 32px);
+  --radius: 6px;
+  --shadow: 0 1px 2px rgba(11, 44, 48, 0.06), 0 14px 34px -14px rgba(11, 44, 48, 0.28);
+  --topbar-h: 38px;
+
+  /* Shapes, used as masks so their colour comes from the element. */
+  --arch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 125' preserveAspectRatio='none'%3E%3Cpath d='M0 125V50C0 24 25 9 50 0c25 9 50 24 50 50v75z'/%3E%3C/svg%3E");
+  --arch-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' preserveAspectRatio='none'%3E%3Cpath d='M0 60V42C0 25 28 12 50 0c22 12 50 25 50 42v18z'/%3E%3C/svg%3E");
+  --saff: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 18'%3E%3Cpath d='M1.5 18v-8C1.5 5.5 7 2.4 14 .8c7 1.6 12.5 4.7 12.5 9.2v8' fill='none' stroke='%23000' stroke-width='1.3'/%3E%3C/svg%3E");
+  --star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath d='M40 14l7.6 18.4L66 40l-18.4 7.6L40 66l-7.6-18.4L14 40l18.4-7.6z'/%3E%3Crect x='24' y='24' width='32' height='32'/%3E%3Cpath d='M0 0l24 24M80 0L56 24M0 80l24-24M80 80L56 56'/%3E%3C/g%3E%3C/svg%3E");
 }
 
-* { box-sizing: border-box; }
+/* ---------- base ---------- */
 
-html { scroll-behavior: smooth; }
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
   font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
   color: var(--ink);
-  background: var(--bg);
-  line-height: 1.6;
+  background: var(--page);
 }
 
-img { max-width: 100%; display: block; }
-
-a { color: var(--green-text); text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-.container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 20px;
-}
+img { max-width: 100%; height: auto; display: block; }
 
 h1, h2, h3, h4 {
-  font-family: var(--font-head);
-  color: var(--green-dark);
-  line-height: 1.25;
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--green-ink);
+  line-height: 1.15;
   margin: 0 0 0.5em;
+  text-wrap: balance;
+}
+h1 { font-size: var(--step-4); letter-spacing: -0.01em; }
+h2 { font-size: var(--step-3); }
+h3 { font-size: var(--step-2); }
+
+p { margin: 0 0 1em; }
+p, li { text-wrap: pretty; }
+
+a {
+  color: var(--green-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--green);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
+
+:focus-visible { outline: 3px solid var(--green-text); outline-offset: 3px; border-radius: 2px; }
+.on-night :focus-visible, .site-footer :focus-visible, .topbar :focus-visible { outline-color: var(--gold); }
+
+.ar { font-family: var(--font-arabic); font-weight: 500; line-height: 1.3; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
 }
 
-h1 { font-size: clamp(1.9rem, 4vw, 2.8rem); }
-h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
-h3 { font-size: 1.25rem; }
+.skip-link {
+  position: absolute;
+  left: 12px; top: -80px;
+  z-index: 100;
+  padding: 12px 18px;
+  background: var(--night);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.skip-link:focus { top: 0; color: #fff; }
 
-p { margin: 0 0 1em; color: var(--ink-soft); }
+.container { max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
 
-.section { padding: 64px 0; }
-.section-alt { background: var(--green-light); }
-.section-head { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+.section { padding-block: clamp(56px, 8vw, 104px); }
+.section--tight { padding-block: clamp(40px, 5vw, 64px); }
+.section--mist { background: var(--mist); }
+.section--sand { background: var(--sand); }
+
+/* Night bands. Anything inside inherits light text and gold focus rings. */
+.on-night { background: var(--night); color: var(--on-night); }
+.on-night h1, .on-night h2, .on-night h3 { color: #fff; }
+.on-night a:not(.btn) { color: #fff; text-decoration-color: var(--gold); }
+.on-night a:not(.btn):hover { color: var(--gold); }
+.on-night .eyebrow { color: var(--gold); }
+
 .eyebrow {
-  display: inline-block;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.75rem;
+  display: block;
+  margin: 0 0 14px;
+  font-size: 0.74rem;
   font-weight: 700;
-  color: var(--gold);
-  margin-bottom: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-text);
 }
+
+.lede { font-size: var(--step-1); line-height: 1.6; color: var(--ink-soft); max-width: 60ch; }
+.on-night .lede { color: var(--on-night); }
+.muted { color: var(--ink-soft); }
+
+.section-intro { max-width: 680px; margin-bottom: clamp(32px, 4vw, 52px); }
+.section-intro p { color: var(--ink-soft); }
+.section-intro--split {
+  max-width: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px 32px;
+}
+.section-intro--split > div { max-width: 640px; }
+.section-intro--split h2 { margin-bottom: 0; }
+
+/* A plain text link with an arrow, for "see all" and "read more". */
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--green-ink);
+  border-bottom: 1.5px solid var(--green);
+  padding-bottom: 2px;
+}
+.more::after { content: "\2192"; transition: transform 0.2s ease; }
+.more:hover { color: var(--green-dark); border-bottom-color: currentColor; }
+.more:hover::after { transform: translateX(3px); }
+.on-night .more { color: #fff; border-bottom-color: var(--gold); }
+
+/* ---------- motifs ---------- */
+
+/* A row of small arches, one per worshipper, as on the prayer-hall carpet. */
+.saff {
+  height: 18px;
+  background: var(--saff-colour, var(--gold));
+  -webkit-mask: var(--saff) repeat-x 0 100% / 28px 18px;
+  mask: var(--saff) repeat-x 0 100% / 28px 18px;
+}
+.saff--quiet { --saff-colour: var(--line); }
+.saff--footer { --saff-colour: var(--gold); opacity: 0.55; }
+
+/* The eight-pointed star lattice, laid very faintly over night bands. */
+.pattern { position: relative; isolation: isolate; }
+.pattern::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--green);
+  opacity: 0.09;
+  -webkit-mask: var(--star) 0 0 / 80px 80px repeat;
+  mask: var(--star) 0 0 / 80px 80px repeat;
+  pointer-events: none;
+}
+
+/* A photograph in the pointed arch from the logo's windows, with a gold arch
+   offset behind it. The picture is never stretched past its real size. */
+.arch-frame { position: relative; isolation: isolate; max-width: 460px; }
+.arch-frame::before {
+  content: "";
+  position: absolute;
+  inset: 18px -18px -18px 18px;
+  z-index: -1;
+  background: var(--gold);
+  -webkit-mask: var(--arch) 0 0 / 100% 100% no-repeat;
+  mask: var(--arch) 0 0 / 100% 100% no-repeat;
+}
+.arch {
+  aspect-ratio: 4 / 5;
+  background: var(--night-2);
+  -webkit-mask: var(--arch) 0 0 / 100% 100% no-repeat;
+  mask: var(--arch) 0 0 / 100% 100% no-repeat;
+}
+.arch img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- buttons ---------- */
 
 .btn {
-  display: inline-block;
-  padding: 13px 28px;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  border: 2px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 11px 22px;
+  border: 1.5px solid transparent;
+  border-radius: 4px;
+  font: 600 0.96rem/1.2 var(--font-body);
+  text-decoration: none;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 .btn:hover { text-decoration: none; transform: translateY(-1px); }
+.btn:active { transform: none; }
 
-.btn-primary { background: var(--gold); color: var(--ink); font-weight: 700; }
-.btn-primary:hover { background: var(--gold-deep); color: var(--ink); }
+.btn-gold { background: var(--gold); color: var(--ink); }
+.btn-gold:hover { background: #e0bd74; color: var(--ink); }
 
-.btn-outline { background: transparent; border-color: var(--white); color: var(--white); }
-.btn-outline:hover { background: rgba(255,255,255,0.12); }
+.btn-teal { background: var(--green-dark); color: #fff; }
+.btn-teal:hover { background: var(--green-ink); color: #fff; }
 
-.btn-outline-dark { background: transparent; border-color: var(--green-text); color: var(--green-text); }
-.btn-outline-dark:hover { background: var(--green-text); color: var(--white); }
+.btn-line { background: transparent; border-color: var(--green-ink); color: var(--green-ink); }
+.btn-line:hover { background: var(--green-ink); color: #fff; }
 
-/* ---------- header ---------- */
+.btn-ghost { background: transparent; border-color: rgba(255, 255, 255, 0.55); color: #fff; }
+.btn-ghost:hover { background: #fff; border-color: #fff; color: var(--night); }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* ==========================================================================
+   Header: a night top bar (next prayer, the madrasah, parent login) above the
+   main bar. The whole header is sticky with a negative offset equal to the top
+   bar, so on scroll the top bar slides away and the main bar stays.
+   ========================================================================== */
+
 .site-header {
   position: sticky;
-  top: 0;
+  top: calc(env(safe-area-inset-top, 0px) - var(--topbar-h));
   z-index: 50;
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-}
-.header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  max-width: var(--max-width);
-  margin: 0 auto;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--green-dark);
-}
-.brand:hover { text-decoration: none; }
-.brand-logo {
-  height: 46px;
-  width: auto;
-  flex-shrink: 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
 }
 
-.footer-logo-chip {
-  display: inline-block;
-  background: var(--white);
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin-bottom: 14px;
+.topbar { height: var(--topbar-h); background: var(--night); color: var(--on-night); font-size: 0.84rem; }
+.topbar-inner {
+  max-width: var(--max);
+  height: 100%;
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: 22px;
 }
-.footer-logo {
-  height: 34px;
-  width: auto;
+.topbar a { color: var(--on-night); text-decoration: none; }
+.topbar a:hover { color: #fff; text-decoration: underline; text-decoration-color: var(--gold); }
+.topbar-next, .topbar-note {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar-next b { color: #fff; font-weight: 600; }
+.topbar-next .gold { color: var(--gold); }
+.topbar-next .tabular { font-variant-numeric: tabular-nums; }
+.topbar-madrasah { display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+.topbar a.topbar-madrasah { color: var(--gold); font-weight: 600; }
+.topbar-madrasah .ar { font-size: 1.05rem; }
+.topbar-portal, .topbar-back { white-space: nowrap; }
+.topbar-portal { padding-left: 22px; border-left: 1px solid var(--line-night); }
+
+.header-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 12px var(--gutter);
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.brand { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+.brand-logo { height: 50px; width: auto; }
+
+.main-nav { margin-left: auto; }
+.main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 26px; }
+.main-nav a {
+  position: relative;
   display: block;
+  padding-block: 8px;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
 }
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+.main-nav a:hover { color: var(--green-ink); }
+.main-nav a:hover::after, .main-nav a.active::after { transform: scaleX(1); }
+.main-nav a.active { color: var(--green-ink); }
+
+.header-donate { flex-shrink: 0; }
+/* Links the top bar carries on a wide screen, repeated in the phone menu where
+   the top bar has no room for them. */
+.nav-mobile-only { display: none; }
 
 .nav-toggle {
   display: none;
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 10px;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
 }
-.nav-toggle span, .nav-toggle span::before, .nav-toggle span::after {
+.nav-toggle-bars, .nav-toggle-bars::before, .nav-toggle-bars::after {
   display: block;
   width: 20px;
   height: 2px;
   background: var(--ink);
-  position: relative;
-  transition: 0.2s;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
-.nav-toggle span::before, .nav-toggle span::after { content: ""; position: absolute; }
-.nav-toggle span::before { top: -6px; }
-.nav-toggle span::after { top: 6px; }
+.nav-toggle-bars { position: relative; }
+.nav-toggle-bars::before, .nav-toggle-bars::after { content: ""; position: absolute; left: 0; }
+.nav-toggle-bars::before { top: -6px; }
+.nav-toggle-bars::after { top: 6px; }
+.site-header.is-open .nav-toggle-bars { background: transparent; }
+.site-header.is-open .nav-toggle-bars::before { transform: translateY(6px) rotate(45deg); }
+.site-header.is-open .nav-toggle-bars::after { transform: translateY(-6px) rotate(-45deg); }
 
-.main-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 28px;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-}
-.main-nav a {
-  color: var(--ink);
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-.main-nav a.active { color: var(--green-text); }
-.header-cta { display: flex; align-items: center; gap: 18px; }
-.header-cta .btn { padding: 10px 22px; }
-
-/* ---------- hero ---------- */
-.hero {
-  background: linear-gradient(135deg, var(--green-dark), var(--green) 70%);
-  color: var(--white);
-  padding: 84px 0 96px;
-  position: relative;
-  overflow: hidden;
-}
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 85% 20%, rgba(201,154,60,0.35), transparent 55%);
-  pointer-events: none;
-}
-.hero h1 { color: var(--white); }
-.hero p.lead { color: rgba(255,255,255,0.88); font-size: 1.15rem; max-width: 560px; }
-.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 26px; }
-
-/* ---------- hero slideshow ---------- */
-.hero-slideshow {
-  position: relative;
-  height: min(60vh, 560px);
-  min-height: 420px;
-  overflow: hidden;
-  background: var(--ink);
-}
-.hero-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.8s ease;
-  background-size: cover;
-  background-position: center;
-}
-.hero-slide.is-active { opacity: 1; visibility: visible; z-index: 1; }
-.hero-slide::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(10,20,18,0.72) 0%, rgba(10,20,18,0.45) 45%, rgba(10,20,18,0.15) 75%);
-}
-.hero-slide-body {
-  position: relative;
-  z-index: 2;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 620px;
-  padding: 0 20px;
-  margin: 0 auto;
-  color: var(--white);
-}
-.hero-slide-body .eyebrow { color: var(--gold-light); }
-.hero-slide-body h2 { color: var(--white); font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: 0.4em; }
-.hero-slide-body p { color: rgba(255,255,255,0.9); font-size: 1.05rem; max-width: 480px; }
-.hero-slide-body .btn { margin-top: 12px; align-self: flex-start; }
-.hero-slideshow-nav.next { right: 20px; }
-.hero-slideshow-dots button.is-active { background: var(--white); transform: scale(1.2); }
-
-@media (max-width: 720px) {
-  .hero-slideshow { height: min(80vh, 520px); }
-  .hero-slideshow-nav { width: 36px; height: 36px; }
-  .hero-slideshow-nav.prev { left: 10px; }
-  .hero-slideshow-nav.next { right: 10px; }
-}
-
-.page-hero {
-  background: linear-gradient(135deg, var(--green-dark), var(--green) 70%);
-  color: var(--white);
-  padding: 56px 0;
-  text-align: center;
-}
-.page-hero h1 { color: var(--white); margin-bottom: 8px; }
-.page-hero p { color: rgba(255,255,255,0.85); margin: 0; }
-.breadcrumb { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-bottom: 10px; }
-.breadcrumb a { color: rgba(255,255,255,0.85); }
-
-/* ---------- prayer times widget ---------- */
-.prayer-card {
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 28px;
-  margin-top: -56px;
-  position: relative;
-  z-index: 2;
-}
-.prayer-card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 18px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 14px;
-}
-.prayer-card-head h2 { margin: 0; font-size: 1.3rem; }
-.prayer-card-head .date-line { color: var(--ink-soft); font-size: 0.9rem; }
-
-/* (old table.prayer-table block removed - superseded by the .prayer-table
-   styles further down, which the JS-rendered timetable uses) */
-
-/* ---------- icon system: inline SVG line icons in tinted circle badges ---------- */
-.icon svg,
-.service-tile-icon svg,
-.contact-info-list .icon svg,
-.feature-list .icon svg,
-.step-card .icon svg {
-  width: 55%;
-  height: 55%;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* social-row logos: Facebook/YouTube are solid glyphs, Instagram is a stroked
-   outline with one solid dot — fill inherits currentColor, no forced stroke-only */
-.social-row a svg {
-  width: 52%;
-  height: 52%;
-  fill: currentColor;
-  stroke: currentColor;
-  stroke-width: 0;
-}
-.social-row a[title^="Instagram"] svg {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* ---------- grid / cards ---------- */
-.grid {
-  display: grid;
-  gap: 24px;
-}
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-
-.card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 26px;
-  height: 100%;
-}
-.card .icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--green-light);
-  color: var(--green-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  margin-bottom: 14px;
-}
-.card h3 { margin-bottom: 8px; }
-
-/* neutral placeholder avatar for leadership/committee cards without a real photo yet */
-.avatar-placeholder {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  background: var(--green-light);
-  color: var(--green-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px;
-}
-.avatar-placeholder svg {
-  width: 56%;
-  height: 56%;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.about-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: center;
-}
-.img-frame {
-  background: var(--green-light);
-  border: 1px dashed var(--gold);
-  border-radius: var(--radius);
-  aspect-ratio: 4/3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-soft);
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 20px;
-}
-
-/* ---------- donate ---------- */
-.donate-hero {
-  background: linear-gradient(135deg, var(--gold), #b3872f);
-  color: var(--white);
-  border-radius: var(--radius);
-  padding: 40px;
-  text-align: center;
-  margin-bottom: 40px;
-}
-.donate-hero h2 { color: var(--white); }
-.donate-hero p { color: rgba(255,255,255,0.9); }
-
-/* ---------- contact ---------- */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-}
-.contact-info-list { list-style: none; margin: 0; padding: 0; }
-.contact-info-list li {
-  display: flex;
-  gap: 14px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
-}
-.contact-info-list li:last-child { border-bottom: none; }
-.contact-info-list .icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--green-light);
-  color: var(--green-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.map-frame {
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid var(--border);
-  aspect-ratio: 4/3;
-}
-.map-frame iframe { width: 100%; height: 100%; border: 0; }
-
-/* ---------- footer ---------- */
-.site-footer {
-  background: var(--green-dark);
-  color: rgba(255,255,255,0.85);
-  padding: 56px 0 24px;
-  margin-top: 40px;
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
-  gap: 32px;
-  padding-bottom: 32px;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
-}
-.site-footer .footer-heading { color: var(--white); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; }
-.site-footer p { color: rgba(255,255,255,0.7); }
-.site-footer ul { list-style: none; margin: 0; padding: 0; }
-.site-footer li { margin-bottom: 10px; }
-.site-footer a { color: rgba(255,255,255,0.75); }
-.site-footer a:hover { color: var(--white); }
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding-top: 20px;
-  font-size: 0.82rem;
-  color: rgba(255,255,255,0.55);
-}
-.social-row { display: flex; gap: 10px; }
-.social-row a {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.85rem;
-}
-.feature-list .icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: var(--green-dark);
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  flex-shrink: 0;
-}
-.step-card .icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--green-light);
-  color: var(--green-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
-  margin: 0 auto 12px;
-}
-
-/* ---------- donate page: clone of masjidattarbiya.org ---------- */
-.donate-clone {
-  padding: 56px 20px 80px;
-}
-.donate-clone-inner {
-  max-width: 560px;
-  margin: 0 auto;
-  text-align: center;
-}
-.donate-clone-logo {
-  height: 70px;
-  width: auto;
-  margin: 0 auto 24px;
-}
-.donate-clone-inner h1 {
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
-  margin-bottom: 12px;
-}
-.donate-clone-lead {
-  color: var(--ink-soft);
-  font-size: 1.05rem;
-  margin-bottom: 28px;
-}
-.donate-clone-quote {
-  margin: 0 0 32px;
-  padding: 22px 24px;
-  background: var(--green-light);
-  border-radius: var(--radius);
-  font-family: var(--font-head);
-  font-style: italic;
-  font-size: 1.1rem;
-  color: var(--green-dark);
-}
-.donate-clone-quote cite {
-  display: block;
-  margin-top: 10px;
-  font-style: normal;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  color: var(--ink-soft);
-}
-
-.donate-clone-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 28px;
-  margin-bottom: 24px;
-}
-.donate-clone-tabs {
-  display: flex;
-  gap: 8px;
-  background: var(--green-light);
-  border-radius: 999px;
-  padding: 4px;
-  margin-bottom: 18px;
-}
-.donate-clone-tab {
-  flex: 1;
-  border: none;
-  background: transparent;
-  padding: 10px 16px;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-  cursor: pointer;
-}
-.donate-clone-tab.active {
-  background: var(--green);
-  color: var(--white);
-}
-.donate-clone-sub {
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-  margin-bottom: 18px;
-}
-
-.amount-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 6px;
-}
-.amount-btn {
-  display: block;
-  text-align: center;
-  padding: 14px 8px;
-  border-radius: 10px;
-  background: var(--green-light);
-  color: var(--green-dark);
-  font-weight: 700;
-  font-size: 1.05rem;
-  border: 2px solid transparent;
-  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-}
-.amount-btn:hover {
-  text-decoration: none;
-  background: var(--white);
-  border-color: var(--green);
-  transform: translateY(-1px);
-}
-
-.donate-clone-fineprint {
-  font-size: 0.78rem;
-  color: var(--ink-soft);
-  margin: 14px 0 0;
-}
-
-.donate-clone-alt {
-  font-size: 0.92rem;
-  color: var(--ink-soft);
-  margin-bottom: 32px;
-  line-height: 1.7;
-}
-
-.donate-clone-trust {
-  text-align: left;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 24px 0;
-  margin-bottom: 40px;
-}
-.donate-clone-trust p {
-  font-size: 0.86rem;
-  margin-bottom: 12px;
-}
-.donate-clone-trust p:last-child { margin-bottom: 0; }
-.donate-clone-trust strong { color: var(--green-dark); }
-
-.donate-clone-visit h2 { margin-bottom: 10px; }
-.donate-clone-visit p { margin-bottom: 4px; }
-.donate-clone-links {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 16px;
-}
-.donate-clone-links .btn { padding: 10px 18px; font-size: 0.88rem; }
-
-/* ---------- responsive ---------- */
-@media (max-width: 860px) {
-  .grid-3 { grid-template-columns: 1fr; }
-  .grid-2 { grid-template-columns: 1fr; }
-  .grid-4 { grid-template-columns: repeat(2, 1fr); }
-  .about-split { grid-template-columns: 1fr; }
-  .contact-grid { grid-template-columns: 1fr; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-  .video-grid { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-  .step-row { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 700px) {
-  .grid-4 { grid-template-columns: 1fr; }
-  .nav-toggle { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; }
+@media (max-width: 980px) {
+  .nav-toggle { display: inline-flex; }
+  .header-donate { margin-left: auto; }
   .main-nav {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
+    margin: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
     box-shadow: var(--shadow);
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
   }
-  .main-nav.open { display: block; }
-  .main-nav ul { flex-direction: column; align-items: flex-start; gap: 0; padding: 10px 20px 18px; }
-  .main-nav li { width: 100%; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .header-cta .btn-outline-dark { display: none; }
-  .footer-grid { grid-template-columns: 1fr; }
-  .prayer-card { margin-top: 24px; }
-  .hero { padding: 56px 0 100px; }
+  .site-header.is-open .main-nav { display: block; }
+  .main-nav ul { flex-direction: column; align-items: stretch; gap: 0; padding: 8px var(--gutter) 20px; }
+  .main-nav li + li { border-top: 1px solid var(--line); }
+  .main-nav a { padding: 14px 0; font: 400 1.3rem/1.3 var(--font-display); color: var(--green-ink); }
+  .main-nav a::after { display: none; }
+  .main-nav a.active { color: var(--gold-text); }
+  .main-nav a.active { box-shadow: inset 3px 0 0 var(--gold); padding-left: 14px; }
+  .nav-mobile-only { display: block; }
+  .nav-mobile-only a { font: 600 1rem/1.3 var(--font-body); color: var(--ink); }
+}
+
+@media (max-width: 640px) {
+  .topbar-inner { gap: 14px; }
+  .topbar-portal { display: none; }
+  .topbar-madrasah .ar { display: none; }
+  .brand-logo { height: 42px; }
+  .header-inner { min-height: 66px; gap: 12px; }
+  .header-donate { padding: 9px 16px; min-height: 44px; }
+}
+
+/* The madrasah's header: same structure as the masjid's, the madrasah's own
+   wordmark, and the masjid's logo beside it, so it is plain that the madrasah
+   belongs to the masjid. A rule in the madrasah's colour marks the section. */
+.site-header--furqan { border-bottom: 3px solid var(--furqan); }
+.site-header--furqan .topbar a.topbar-back { color: var(--gold); font-weight: 600; }
+.site-header--furqan .topbar-note { text-align: center; color: rgba(255, 255, 255, 0.7); }
+.brand-furqan { gap: 16px; }
+.brand-furqan-parent { padding-left: 16px; border-left: 1px solid var(--line); }
+.brand-furqan-parent img { height: 34px; width: auto; }
+
+/* The madrasah's logos, from assets/furqan/. Each is used as a mask, so one
+   file serves every colour: the logo's own colour on white, gold on the dark
+   bands. Brown shows by default; the navy logo (Arabic only, so the English
+   name is set beneath it) shows when the navy palette is chosen. The source
+   files are small, so the widths stay close to their real size. */
+.furqan-logo { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; color: var(--furqan); line-height: 1; }
+.furqan-logo-brown, .furqan-logo-navy { display: block; background: currentColor; }
+.furqan-logo-brown {
+  width: 170px;
+  aspect-ratio: 175 / 59;
+  -webkit-mask: url("../assets/furqan/madrasah-al-furqan-brown.png") center / contain no-repeat;
+  mask: url("../assets/furqan/madrasah-al-furqan-brown.png") center / contain no-repeat;
+}
+.furqan-logo-navy {
+  display: none;
+  width: 160px;
+  aspect-ratio: 507 / 104;
+  -webkit-mask: url("../assets/furqan/madrasah-al-furqan-navy.png") center / contain no-repeat;
+  mask: url("../assets/furqan/madrasah-al-furqan-navy.png") center / contain no-repeat;
+}
+.furqan-logo-en { display: none; font: 600 0.58rem/1 var(--font-body); letter-spacing: 0.22em; text-transform: uppercase; }
+:root[data-furqan="navy"] .furqan-logo-brown { display: none; }
+:root[data-furqan="navy"] .furqan-logo-navy,
+:root[data-furqan="navy"] .furqan-logo-en { display: block; }
+@media (forced-colors: active) {
+  .furqan-logo-brown, .furqan-logo-navy { forced-color-adjust: none; background: CanvasText; }
+}
+@media (max-width: 640px) {
+  .site-header--furqan .topbar-note { display: none; }
+  .site-header--furqan .topbar-inner { justify-content: space-between; }
+  .brand-furqan-parent { display: none; }
+  .furqan-logo-brown { width: 140px; }
+  .furqan-logo-navy { width: 132px; }
 }
 
 /* ==========================================================================
-   Accessibility, hero and button additions
+   Footer
    ========================================================================== */
 
-.skip-link {
-  position: absolute;
-  left: -9999px;
-  top: 0;
-  z-index: 999;
-  background: var(--green-dark);
-  color: var(--white);
-  padding: 12px 20px;
-  border-radius: 0 0 var(--radius) 0;
-  font-weight: 600;
+.site-footer { background: var(--night); color: var(--on-night); padding-bottom: 28px; }
+.site-footer .saff { margin-bottom: 56px; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 40px 32px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--line-night);
 }
-.skip-link:focus { left: 0; text-decoration: none; }
-
-:focus-visible {
-  outline: 3px solid var(--green-text);
-  outline-offset: 2px;
-  border-radius: 4px;
+.footer-ar { font-size: 2.3rem; color: var(--gold); margin: 0 0 6px; }
+.footer-name { font: 400 1.15rem/1.35 var(--font-display); color: #fff; margin-bottom: 10px; }
+.site-footer p { margin: 0 0 6px; }
+.footer-charity { font-size: 0.86rem; color: rgba(255, 255, 255, 0.72); }
+.footer-heading {
+  font: 700 0.74rem/1.2 var(--font-body);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 6px 0 16px;
 }
-.hero-slide-body :focus-visible,
-.site-footer :focus-visible,
-.donate-hero :focus-visible {
-  outline-color: var(--white);
-}
-
-.hero-slide-body h1 {
-  color: var(--white);
-  font-size: clamp(2rem, 5vw, 3rem);
-  margin-bottom: 0.3em;
-}
-.hero-actions {
+.site-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.site-footer a { color: rgba(255, 255, 255, 0.92); text-decoration: none; }
+.site-footer a:hover { color: #fff; text-decoration: underline; text-decoration-color: var(--gold); }
+.footer-bottom {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 14px;
-}
-.hero-actions .btn { margin-top: 0; align-self: flex-start; }
-
-/* Outline button for use on dark photography */
-.btn-ghost {
-  background: transparent;
-  border: 2px solid var(--white);
-  color: var(--white);
-}
-.btn-ghost:hover { background: var(--white); color: var(--green-dark); }
-
-/* Solid button sitting on the gold donate panel - dark text for contrast */
-.btn-on-gold {
-  background: var(--white);
-  color: #7a5c1f;
-  font-weight: 700;
-}
-.btn-on-gold:hover { background: var(--ink); color: var(--white); }
-
-.prayer-source {
-  margin: 14px 0 0;
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-  text-align: center;
+  justify-content: space-between;
+  gap: 10px 24px;
+  padding-top: 22px;
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.72);
 }
 
-/* Footer text contrast: lifted from 0.7/0.75 alpha to meet AA on the teal footer */
-.site-footer p { color: rgba(255,255,255,0.92); }
-.site-footer a { color: rgba(255,255,255,0.95); }
-.site-footer .footer-bottom { color: rgba(255,255,255,0.88); }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* Post-payment thank-you banner, injected by js/main.js */
-.thanks-banner {
-  background: linear-gradient(135deg, var(--green-text), var(--green-dark));
-  color: var(--white);
-  text-align: center;
-  padding: 16px 20px;
-  line-height: 1.5;
-  font-size: 0.95rem;
-}
-.thanks-banner strong {
-  display: block;
-  font-family: var(--font-head);
-  font-size: 1.15rem;
-  margin-bottom: 2px;
-}
-
-/* Contact page: direct contact actions in place of a form */
-.contact-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: stretch;
-  margin: 20px 0 16px;
-}
-.contact-actions .btn { text-align: center; }
-.contact-note { font-size: 0.9rem; color: var(--ink-soft); }
-@media (min-width: 600px) {
-  .contact-actions { flex-direction: row; flex-wrap: wrap; }
-  .contact-actions .btn { flex: 1 1 auto; }
-}
-
-/* ==========================================================================
-   Mobile ergonomics: tap targets and viewport heights
-   ========================================================================== */
-
-/* The hamburger is the only route to the menu on a phone, so give it a real
-   44px target while keeping the three-bar icon the same visual size. */
-.nav-toggle {
-  min-width: 44px;
-  min-height: 44px;
-  display: none;
+.social-row { display: flex; gap: 8px; margin-top: 18px; }
+.social-row a {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid var(--line-night);
+  border-radius: 50%;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
-/* Must match the breakpoint where .main-nav collapses (700px), otherwise the
-   hamburger is visible but inert while the menu is already showing. */
-@media (max-width: 700px) {
-  .nav-toggle { display: inline-flex; }
-}
-.social-row a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+.social-row a:hover { border-color: var(--gold); background: var(--night-2); }
+.social-row svg { width: 20px; height: 20px; fill: currentColor; }
+.social-row a[title^="Instagram"] svg { fill: none; stroke: currentColor; stroke-width: 1.6; }
+.social-row a[title^="Instagram"] .dot { fill: currentColor; stroke: none; }
+.social-row .play { fill: var(--night); }
 
-/* Short landscape phones: don't force a hero taller than the screen */
-@media (max-height: 520px) and (orientation: landscape) {
-  .hero-slideshow { min-height: 0; height: auto; padding: 48px 0; }
-}
-
-/* The prayer-times embed is the single thing most visitors come for, so give
-   it a usable height on narrow screens instead of a 16:10 letterbox. */
-@media (max-width: 700px) {
-  .prayer-card .map-frame { aspect-ratio: 3 / 4; }
-  .amount-grid { grid-template-columns: repeat(2, 1fr); }
-}
+@media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } .footer-id { grid-column: 1 / -1; } }
+@media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
 
 /* ==========================================================================
-   Prayer times, rendered from assets/prayer-times.json
+   Inner page heading band
    ========================================================================== */
+
+.page-hero { padding-block: clamp(48px, 7vw, 88px) clamp(40px, 6vw, 72px); }
+.page-hero h1 { margin-bottom: 14px; }
+.page-hero .lede { margin: 0; }
+.page-hero-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+.page-hero-ar { font-size: clamp(2rem, 1.4rem + 3vw, 3.4rem); color: var(--gold); margin: 0 0 4px; }
+.crumbs { font-size: 0.84rem; margin: 0 0 18px; color: rgba(255, 255, 255, 0.7); }
+.crumbs a { color: rgba(255, 255, 255, 0.85); }
+@media (max-width: 760px) { .page-hero-grid { grid-template-columns: 1fr; gap: 20px; } }
+
+/* ==========================================================================
+   Home
+   ========================================================================== */
+
+.home-hero { padding-block: clamp(40px, 6vw, 84px) clamp(48px, 7vw, 96px); overflow: hidden; }
+.home-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+}
+.hero-ar {
+  font-size: var(--step-5);
+  line-height: 1.05;
+  color: var(--gold);
+  margin: 0 0 10px;
+}
+.home-hero h1 { font-size: var(--step-4); margin-bottom: 18px; }
+.hero-lede { font-size: var(--step-1); color: var(--on-night); max-width: 34em; margin-bottom: 28px; }
+.hero-lede em { font-style: normal; color: var(--gold); }
+.hero-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 30px 0 0;
+  padding: 18px 0 0;
+  border-top: 1px solid var(--line-night);
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.72);
+  list-style: none;
+}
+.hero-facts b { color: #fff; font-weight: 600; }
+@media (max-width: 900px) { .home-hero-grid { grid-template-columns: 1fr; } }
+/* On a phone the timetable is the reason most people come, so the hero keeps
+   itself short enough that today's card starts near the first screen. */
+@media (max-width: 600px) {
+  .home-hero { padding-top: 28px; }
+  .home-hero .eyebrow { margin-bottom: 8px; }
+  .hero-ar { font-size: 2.6rem; margin-bottom: 4px; }
+  .home-hero h1 { font-size: 2.1rem; margin-bottom: 12px; }
+  .hero-lede { font-size: 1rem; margin-bottom: 20px; }
+  .hero-facts { display: none; }
+  .home-hero-grid { gap: 28px; }
+}
+
+/* Three words: what the masjid is for. Columns divided by hairlines. */
+.pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pillar { padding: 0 clamp(20px, 3vw, 40px); display: flex; flex-direction: column; gap: 10px; }
+.pillar:first-child { padding-left: 0; }
+.pillar:last-child { padding-right: 0; }
+.pillar + .pillar { border-left: 1px solid var(--line); }
+.pillar-ar { font-size: clamp(2.6rem, 2rem + 2.4vw, 3.6rem); color: var(--green-text); margin: 0; line-height: 1.1; }
+.pillar h3 { margin: 0; }
+.pillar h3 small {
+  display: block;
+  margin-top: 6px;
+  font: 700 0.72rem/1.2 var(--font-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-text);
+}
+.pillar p { color: var(--ink-soft); margin: 0; }
+.pillar .more { margin-top: auto; align-self: flex-start; }
+@media (max-width: 820px) {
+  .pillars { grid-template-columns: 1fr; gap: 36px; }
+  .pillar, .pillar:first-child, .pillar:last-child { padding: 0; }
+  .pillar + .pillar { border-left: 0; border-top: 1px solid var(--line); padding-top: 36px; }
+}
+
+/* The madrasah, introduced from the masjid's homepage. */
+.furqan-band { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
+.furqan-arch {
+  position: relative;
+  isolation: isolate;
+  max-width: 340px;
+  width: 100%;
+  margin-inline: auto;
+  aspect-ratio: 4 / 5;
+  background: var(--night);
+  -webkit-mask: var(--arch) 0 0 / 100% 100% no-repeat;
+  mask: var(--arch) 0 0 / 100% 100% no-repeat;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  padding: 28% 12% 12%;
+  text-align: center;
+}
+.furqan-arch .furqan-logo { color: var(--gold); gap: 10px; }
+/* Fixed widths: the logo sits in a shrink-to-fit box, so a percentage here
+   would resolve to nothing and the logo would vanish. */
+.furqan-arch .furqan-logo-brown { width: 175px; }
+.furqan-arch .furqan-logo-navy { width: 200px; }
+@media (max-width: 760px) {
+  .furqan-arch .furqan-logo-brown { width: 150px; }
+  .furqan-arch .furqan-logo-navy { width: 160px; }
+}
+.furqan-arch .furqan-logo-en { color: #fff; font-size: 0.68rem; }
+.furqan-arch-caption { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255, 255, 255, 0.75); margin: 0; }
+.furqan-band ul { margin: 0 0 26px; padding-left: 1.1em; color: var(--ink-soft); }
+.furqan-band li + li { margin-top: 6px; }
+@media (max-width: 760px) { .furqan-band { grid-template-columns: 1fr; } .furqan-arch { max-width: 240px; } }
+
+/* From the masjid: recent events and the newest recorded talks. */
+.feed { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 64px); }
+.feed h3 { font-size: var(--step-1); font-family: var(--font-body); font-weight: 700; color: var(--ink); margin-bottom: 18px; }
+.feed-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.feed-head h3 { margin: 0 0 12px; }
+.feed-list { list-style: none; margin: 0; padding: 0; }
+.feed-item {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+}
+.feed-thumb { display: block; width: 72px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; background: var(--mist); }
+/* No poster: a small arch in its place, so every row keeps the same shape. */
+.feed-thumb--none { position: relative; }
+.feed-thumb--none::before {
+  content: "";
+  position: absolute;
+  inset: 22% 26% 16%;
+  background: var(--green-text);
+  opacity: 0.35;
+  -webkit-mask: var(--arch) 0 0 / 100% 100% no-repeat;
+  mask: var(--arch) 0 0 / 100% 100% no-repeat;
+}
+.feed-item h4 { font: 600 1rem/1.35 var(--font-body); color: var(--ink); margin: 2px 0 4px; }
+.feed-meta { font-size: 0.84rem; color: var(--ink-soft); margin: 0; }
+.feed-meta b { color: var(--green-ink); font-weight: 600; }
+.feed-empty { color: var(--ink-soft); padding: 18px 0; }
+
+.talk-feature { display: block; color: inherit; text-decoration: none; margin-top: 16px; }
+.talk-feature:hover { color: inherit; }
+.talk-feature .video-thumb { border-radius: var(--radius); overflow: hidden; }
+.talk-feature h4 { font: 400 1.3rem/1.3 var(--font-display); color: var(--green-ink); margin: 14px 0 4px; }
+.talk-feature:hover h4 { text-decoration: underline; text-decoration-color: var(--green); }
+.talk-list { list-style: none; margin: 12px 0 0; padding: 0; }
+.talk-list li { border-top: 1px solid var(--line); }
+.talk-list a { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 0.94rem; }
+.talk-list a:hover { color: var(--green-ink); }
+.talk-list span { flex-shrink: 0; font-weight: 400; color: var(--ink-soft); font-size: 0.84rem; }
+@media (max-width: 820px) { .feed { grid-template-columns: 1fr; } }
+
+/* Our story, in brief. */
+.story-band { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+.years { margin: 0; display: flex; align-items: baseline; gap: 18px; }
+.years-num { font: 400 clamp(5rem, 3rem + 9vw, 9.5rem)/0.9 var(--font-display); color: var(--gold); font-variant-numeric: lining-nums; }
+.years-label { font-size: 1.05rem; line-height: 1.4; color: #fff; max-width: 12em; }
+.years-note { margin: 16px 0 0; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
+
+.mini-line { list-style: none; margin: 0 0 30px; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; }
+.mini-line::before { content: ""; position: absolute; left: 0; right: 0; top: 30px; height: 1px; background: var(--line-night); }
+.mini-line li { position: relative; padding-top: 48px; padding-right: 12px; font-size: 0.86rem; line-height: 1.4; color: rgba(255, 255, 255, 0.78); }
+.mini-line li::before {
+  content: "";
+  position: absolute;
+  top: 25px; left: 0;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 4px var(--night);
+}
+.mini-line li.is-open::before { background: var(--night); border: 1.5px dashed var(--gold); }
+.mini-line b { position: absolute; top: 0; left: 0; font: 400 1.3rem/1 var(--font-display); color: #fff; }
+.mini-line li.is-open b { color: var(--gold); }
+@media (max-width: 900px) { .story-band { grid-template-columns: 1fr; } }
+@media (max-width: 560px) {
+  .mini-line { grid-template-columns: 1fr; gap: 0; }
+  .mini-line::before { left: 5px; right: auto; top: 0; bottom: 0; width: 1px; height: auto; }
+  .mini-line li { padding: 0 0 18px 32px; }
+  .mini-line li::before { top: 4px; }
+  .mini-line b { position: static; display: block; margin-bottom: 4px; }
+}
+
+/* Giving. */
+.give { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.give blockquote { margin: 0; }
+.give blockquote p { font: 400 var(--step-3)/1.3 var(--font-display); color: var(--green-ink); margin: 0 0 14px; }
+.give cite { font-style: normal; font-size: 0.9rem; color: var(--gold-text); font-weight: 600; }
+.give-card { background: var(--paper); border: 1px solid #e7dbc0; border-radius: var(--radius); padding: 28px; }
+.give-card h3 { font-size: var(--step-2); margin-bottom: 8px; }
+.give-card p { color: var(--ink-soft); font-size: 0.95rem; }
+.give-card .btn { width: 100%; }
+.give-card small { display: block; margin-top: 12px; color: var(--ink-soft); font-size: 0.82rem; }
+@media (max-width: 820px) { .give { grid-template-columns: 1fr; } }
+
+/* Visit. */
+.visit { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(40px, 6vw, 96px); align-items: center; }
+.visit address { font-style: normal; font: 400 var(--step-2)/1.35 var(--font-display); color: var(--green-ink); margin-bottom: 18px; }
+.visit-jumuah { padding: 14px 18px; background: var(--sand); border-radius: var(--radius); margin-bottom: 24px; }
+.visit-jumuah p { margin: 0; }
+@media (max-width: 820px) { .visit { grid-template-columns: 1fr; } .visit .arch-frame { max-width: 320px; } }
+
+/* ==========================================================================
+   Prayer times. The card's top is cut into an arch, like a mihrab.
+   ========================================================================== */
+
+.prayer-card {
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 58px clamp(20px, 3vw, 32px) 26px;
+  -webkit-mask: var(--arch-top) top / 100% 56px no-repeat, linear-gradient(#000, #000) bottom / 100% calc(100% - 55px) no-repeat;
+  mask: var(--arch-top) top / 100% 56px no-repeat, linear-gradient(#000, #000) bottom / 100% calc(100% - 55px) no-repeat;
+}
+.prayer-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+.prayer-card-head h2 { font-size: 1.35rem; margin: 0; color: var(--green-ink); }
+.prayer-card-head a { font-size: 0.86rem; font-weight: 600; }
+.on-night .prayer-card a:not(.btn) { color: var(--green-ink); text-decoration-color: var(--green); }
+.on-night .prayer-card a:not(.btn):hover { color: var(--green-dark); }
 
 .prayer-dates {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 16px;
   justify-content: space-between;
   align-items: baseline;
-  padding-bottom: 12px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid var(--border);
+  gap: 2px 16px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
 }
 .prayer-greg { font-weight: 600; color: var(--ink); }
-.prayer-hijri { color: var(--ink-soft); font-size: 0.92rem; }
+.prayer-now b { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--green-ink); }
+.prayer-hijri { margin: 2px 0 0; font-size: 0.95rem; color: var(--gold-text); }
 
-.prayer-table { width: 100%; border-collapse: collapse; }
+.prayer-next {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 4px 16px;
+  margin: 16px 0 6px;
+  padding: 16px 18px;
+  background: var(--night);
+  color: var(--on-night);
+  border-radius: var(--radius);
+}
+.prayer-next-label { grid-column: 1 / -1; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+.prayer-next-name { font: 400 1.9rem/1 var(--font-display); color: #fff; }
+.prayer-next-when { text-align: right; font-size: 0.86rem; line-height: 1.35; }
+.prayer-next-when b { display: block; font: 600 1.6rem/1.1 var(--font-body); color: #fff; font-variant-numeric: tabular-nums; }
+.prayer-next-count { grid-column: 1 / -1; font-size: 0.86rem; color: rgba(255, 255, 255, 0.75); font-variant-numeric: tabular-nums; }
+
+.prayer-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
 .prayer-table thead th {
-  text-align: left;
-  font: 600 0.75rem/1 var(--font-body);
-  letter-spacing: 0.08em;
+  padding: 12px 8px 8px;
+  text-align: right;
+  font: 700 0.7rem/1 var(--font-body);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  padding: 14px 8px 10px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--line);
 }
-.prayer-table thead th:not(:first-child),
-.prayer-table td { text-align: right; }
-.prayer-table tbody th {
-  text-align: left;
-  font: 600 1.05rem/1.2 var(--font-body);
-  color: var(--green-dark);
-  padding: 14px 8px;
-}
-.prayer-table td {
-  font-variant-numeric: tabular-nums;
-  font-size: 1.15rem;
-  color: var(--ink);
-  padding: 14px 8px;
-}
-.prayer-table tbody tr + tr th,
-.prayer-table tbody tr + tr td { border-top: 1px solid var(--border); }
-
-.prayer-table tr.is-next th,
-.prayer-table tr.is-next td { background: var(--green-light); }
-.prayer-table tr.is-next th { border-left: 3px solid var(--green-text); padding-left: 12px; }
+.prayer-table thead th:first-child { text-align: left; }
+.prayer-table tbody th { text-align: left; padding: 11px 8px; font: 600 1rem/1.2 var(--font-body); color: var(--green-ink); }
+.prayer-table td { text-align: right; padding: 11px 8px; font-size: 1.05rem; color: var(--ink-soft); }
+.prayer-table td + td { color: var(--ink); font-weight: 600; }
+.prayer-table tbody tr + tr > * { border-top: 1px solid var(--line); }
+.prayer-table tr.is-next > * { background: var(--mist); }
+.prayer-table tr.is-next th { box-shadow: inset 3px 0 0 var(--gold); }
+.prayer-table tr.is-jumuah th { color: var(--gold-text); }
+.prayer-table tr.is-passed th, .prayer-table tr.is-passed td { color: #7b8886; font-weight: 400; }
 .next-tag {
   display: inline-block;
   margin-left: 8px;
   padding: 2px 8px;
   border-radius: 999px;
-  background: var(--green-text);
-  color: var(--white);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  background: var(--green-dark);
+  color: #fff;
+  font: 700 0.64rem/1.5 var(--font-body);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  vertical-align: middle;
+  vertical-align: 2px;
 }
 
-.prayer-fallback {
-  margin: 8px 0 0;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-}
-.prayer-loading { color: var(--ink-soft); font-size: 0.95rem; margin: 8px 0 0; }
-
-@media (max-width: 420px) {
-  .prayer-table tbody th { font-size: 0.98rem; }
-  .prayer-table td { font-size: 1.05rem; }
-  .prayer-table thead th,
-  .prayer-table tbody th,
-  .prayer-table td { padding-left: 4px; padding-right: 4px; }
-}
-
-/* YouTube glyph: the body and the play triangle were both filled white, so the
-   triangle vanished. Knock it out in the footer colour instead. */
-.social-row a[title^="YouTube"] svg path + path { fill: var(--green-dark); }
-
-/* Prayer card: live clock, hijri line, jumu'ah row */
-.prayer-now { color: var(--ink-soft); font-size: 0.9rem; }
-.prayer-now b { font-variant-numeric: tabular-nums; color: var(--green-dark); font-weight: 600; }
-.prayer-hijri { margin: 8px 0 0; color: var(--ink-soft); font-size: 0.92rem; }
-.prayer-table tr.is-jumuah th { color: var(--gold-deep); }
-.prayer-jumuah {
+.prayer-note, .prayer-upnext p, .prayer-jumuah {
   margin: 14px 0 0;
-  padding: 10px 14px;
-  border-left: 3px solid var(--gold);
-  background: var(--gold-light);
-  border-radius: 0 8px 8px 0;
+  padding: 11px 14px;
+  border-radius: var(--radius);
   font-size: 0.92rem;
   color: var(--ink);
 }
-
-/* On a phone, prayer times are the reason most people open the site, so keep the
-   hero short enough that the timetable is reachable almost immediately. */
-@media (max-width: 700px) {
-  .hero-slideshow { height: auto; min-height: 0; }
-  .hero-slide { position: relative; }
-  .hero-slide-body { padding: 40px 20px; min-height: 320px; }
-  .prayer-card { margin-top: 18px; }
-}
-
-/* ==========================================================================
-   Contrast corrections and the weekly timetable
-   ========================================================================== */
-
-/* Brand gold measures 2.01:1 on the page background, so it cannot carry type.
-   Eyebrow labels use the darker gold; on photography they stay light. */
-.eyebrow { color: var(--gold-text); }
-.hero-slide-body .eyebrow,
-.donate-hero .eyebrow { color: var(--gold-light); }
-
-/* Jumu'ah label was 3.12:1 in deep gold. */
-.prayer-table tr.is-jumuah th { color: var(--gold-text); }
-
-/* Mobile menu: make the whole row tappable rather than just the 19px of text. */
-@media (max-width: 700px) {
-  .main-nav li { padding: 0; }
-  .main-nav a { display: block; padding: 14px 0; min-height: 44px; }
-}
-
-/* Weekly timetable on the prayer times page */
-.week-head { margin: 40px 0 6px; text-align: center; }
-.week-head h2 { margin-bottom: 6px; }
-.week-head p { color: var(--ink-soft); }
-
-.week-day {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 18px 6px;
-  margin-bottom: 14px;
-}
-.week-day.is-today { border-color: var(--green-text); box-shadow: var(--shadow); }
-.week-day h3 {
-  font-size: 1.05rem;
-  color: var(--green-dark);
-  margin: 0 0 4px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.week-day .prayer-table thead { display: none; }
-.week-day .prayer-table tbody th { font-size: 0.95rem; font-weight: 600; }
-.week-day .prayer-table td { font-size: 1rem; }
-.week-day .prayer-table tbody th,
-.week-day .prayer-table td { padding: 8px 6px; }
-
-/* Photographs with a caption.
-   Capped at 680px: the source photographs are phone pictures around 900px wide,
-   and stretching one across a 1140px container both dominates the page and makes
-   it visibly soft. Never render a photo larger than it actually is. */
-.photo-figure {
-  margin: 36px auto 0;
-  max-width: 680px;
-}
-.photo-figure img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-}
-.photo-figure figcaption {
-  margin-top: 10px;
-  font-size: 0.88rem;
-  color: var(--ink-soft);
-  text-align: center;
-}
-
-/* ==========================================================================
-   Prayer card: breathing room, and the after-Isha "next" line
-   ========================================================================== */
-
-.prayer-card { padding: 32px 30px 30px; }
-@media (max-width: 700px) {
-  .prayer-card { padding: 22px 18px 20px; margin-top: 20px; }
-}
-
-.prayer-card-head { margin-bottom: 18px; }
-.prayer-dates { padding-bottom: 14px; margin-bottom: 0; }
-.prayer-hijri { margin: 10px 0 0; }
-.prayer-table { margin-top: 14px; }
-
-/* A little more air between rows than the default table rhythm */
-.prayer-table tbody th,
-.prayer-table td { padding-top: 16px; padding-bottom: 16px; }
-
-.prayer-source {
-  margin-top: 18px;
-  font-size: 0.82rem;
-  text-align: right;
-}
+.prayer-jumuah { background: var(--sand); }
+.prayer-upnext p { background: var(--mist); margin: 0; }
+.prayer-upnext:not(:empty) { margin-top: 14px; }
+.prayer-source { margin: 14px 0 0; font-size: 0.82rem; text-align: right; }
 .prayer-source a { color: var(--ink-soft); }
-.prayer-source a:hover { color: var(--green-text); }
+.prayer-loading, .prayer-fallback { color: var(--ink-soft); font-size: 0.95rem; margin: 8px 0 0; }
+.on-night .prayer-fallback { color: var(--on-night); }
 
-/* Shown once the day's prayers have passed, so "next" is never blank */
-.prayer-upnext { margin: 16px 0 0; }
-.prayer-upnext p {
-  margin: 0;
-  padding: 12px 14px;
-  background: var(--green-light);
-  border-radius: 10px;
-  font-size: 0.95rem;
-  color: var(--ink);
+@media (max-width: 420px) {
+  .prayer-table tbody th, .prayer-table td { padding-inline: 4px; }
+  .prayer-next-name { font-size: 1.6rem; }
 }
-.prayer-jumuah { margin-top: 16px; }
+
+/* The prayer times page. */
+.prayer-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+.prayer-layout .prayer-card { box-shadow: none; border: 1px solid var(--line); -webkit-mask: none; mask: none; border-radius: var(--radius); padding-top: 26px; }
+.prayer-aside h2 { font-size: var(--step-2); }
+.prayer-aside dl { margin: 0; display: grid; gap: 18px; }
+.prayer-aside dt { font-weight: 700; color: var(--ink); }
+.prayer-aside dd { margin: 4px 0 0; color: var(--ink-soft); }
+@media (max-width: 860px) { .prayer-layout { grid-template-columns: 1fr; } }
+
+.week-wrap { position: relative; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
+.week-table { width: 100%; min-width: 680px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.week-table th, .week-table td { padding: 12px 10px; text-align: center; border-bottom: 1px solid var(--line); }
+.week-table thead th { vertical-align: bottom; font-weight: 600; font-size: 0.9rem; color: var(--ink); background: var(--paper); }
+.week-table thead th span { display: block; font: 400 1.35rem/1.1 var(--font-display); color: var(--green-ink); }
+.week-table tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+  background: var(--paper);
+  font-weight: 600;
+  color: var(--green-ink);
+  box-shadow: 1px 0 0 var(--line);
+}
+.week-table td { font-size: 0.98rem; }
+.week-table td small { display: block; font-size: 0.78rem; color: var(--ink-soft); }
+.week-table td b { font-weight: 600; color: var(--ink); }
+.week-table .is-today { background: var(--mist); }
+.week-table thead .is-today { box-shadow: inset 0 3px 0 var(--gold); background: var(--mist); }
+.week-table tbody tr:last-child > * { border-bottom: 0; }
+.week-key { font-size: 0.86rem; color: var(--ink-soft); margin-top: 12px; }
 
 /* ==========================================================================
-   Donation page: pick an amount, then confirm
+   Events and recorded talks
    ========================================================================== */
-
-.amount-grid { gap: 12px; margin-bottom: 4px; }
-
-.amount-btn.selected {
-  background: var(--green-text);
-  border-color: var(--green-text);
-  color: var(--white);
-  box-shadow: 0 4px 12px rgba(23, 128, 138, 0.3);
-  transform: translateY(-1px);
-}
-
-/* The confirm button: the page's focal point, and the last thing a donor reads
-   before they commit, so it spells out exactly what is about to happen. */
-.donate-cta {
-  display: block;
-  width: 100%;
-  margin-top: 20px;
-  padding: 17px 20px;
-  border: 0;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
-  color: var(--ink);
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-align: center;
-  box-shadow: 0 6px 18px rgba(176, 141, 63, 0.35);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-.donate-cta:hover { text-decoration: none; color: var(--ink); }
-.donate-cta:active { transform: scale(0.985); }
-.donate-cta.is-empty {
-  background: var(--border);
-  color: var(--ink-soft);
-  box-shadow: none;
-  cursor: default;
-  font-weight: 600;
-}
-
-.donate-clone-fineprint { margin-top: 14px; }
-
-/* Donation tabs: a real 44px target, matching everything else on the page */
-.donate-clone-tab { min-height: 44px; }
-
-/* Long-form text pages (privacy, and anything similar later) */
-.prose { max-width: 720px; }
-.prose h2 {
-  font-size: 1.3rem;
-  margin-top: 36px;
-  margin-bottom: 10px;
-}
-.prose h2:first-child { margin-top: 0; }
-.prose p, .prose li { color: var(--ink-soft); }
-.prose ul { padding-left: 20px; margin-bottom: 1em; }
-.prose li { margin-bottom: 8px; }
-
-/* ---------------------------------------------------------------------------
-   Events
-   A timeline rather than a card grid. The masjid runs a handful of events a
-   year, so a grid sits half-empty and draws attention to the gaps; a dated
-   list reads as a record and looks correct at any length.
-   --------------------------------------------------------------------------- */
 
 .event-year {
-  font-family: var(--font-head);
-  font-size: 1.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  font-size: var(--step-3);
+  margin: 56px 0 8px;
   color: var(--green-ink);
-  margin: 44px 0 18px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
 }
-.event-year:first-of-type { margin-top: 0; }
+.event-year::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.events > .event-year:first-child { margin-top: 0; }
+.event-year--next { color: var(--gold-text); }
 
-.event-list { list-style: none; padding: 0; margin: 0; }
-
+.event-list { list-style: none; margin: 0; padding: 0; }
 .event {
   display: grid;
-  grid-template-columns: 170px 1fr;
-  gap: 24px;
-  padding: 22px 0;
-  border-bottom: 1px solid var(--border);
+  grid-template-columns: 180px minmax(0, 1fr) 120px;
+  gap: 28px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
 }
 .event:last-child { border-bottom: 0; }
-
-.event-when { padding-top: 2px; }
-.event-date {
-  font-weight: 600;
-  color: var(--green-text);
-  display: block;
-}
-.event-time {
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-  display: block;
-  margin-top: 2px;
-}
-
+.event-when { display: flex; flex-direction: column; gap: 2px; }
+.event-date { font-weight: 600; color: var(--green-ink); }
+.event-time { font-size: 0.86rem; color: var(--ink-soft); }
 .event-kind {
   display: inline-block;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--green-ink);
-  background: var(--green-light);
-  border-radius: 999px;
-  padding: 3px 10px;
   margin-bottom: 8px;
-}
-
-.event-body h3 { margin: 0 0 8px; font-size: 1.15rem; }
-.event-body p { margin: 0; color: var(--ink-soft); }
-
-.event-with {
-  display: block;
-  margin-top: 8px;
-  font-size: 0.85rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--gold-text);
 }
-
-@media (max-width: 640px) {
-  .event { grid-template-columns: 1fr; gap: 6px; }
-  .event-when { order: 2; padding-top: 6px; }
-  .event-body { order: 1; }
+.event-body h3 { font-size: 1.4rem; margin: 0 0 8px; }
+.event-body p { margin: 0; color: var(--ink-soft); max-width: 62ch; }
+.event-with { display: block; margin-top: 10px; font-size: 0.86rem; color: var(--green-ink); }
+.event-poster { display: block; align-self: start; border-radius: 3px; overflow: hidden; border: 1px solid var(--line); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.event-poster:hover { transform: rotate(-1.5deg) translateY(-2px); box-shadow: var(--shadow); }
+.event-poster img { width: 100%; }
+.event:not(:has(.event-poster)) { grid-template-columns: 180px minmax(0, 1fr); }
+@media (max-width: 760px) {
+  .event, .event:not(:has(.event-poster)) { grid-template-columns: minmax(0, 1fr) 88px; gap: 8px 18px; }
+  .event-when { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; gap: 4px 12px; }
+  .event-poster { grid-row: 2; grid-column: 2; }
+  .event:not(:has(.event-poster)) .event-body { grid-column: 1 / -1; }
 }
 
-/* Recorded talks, pulled nightly from the masjid's YouTube channel. */
-
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 22px;
-}
-
-.video-card {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
-}
-.video-card:hover, .video-card:focus-visible { box-shadow: var(--shadow); transform: translateY(-2px); }
-
-.video-thumb { position: relative; background: var(--green-ink); line-height: 0; }
-.video-thumb img { width: 100%; height: auto; display: block; }
-
-/* Play badge, drawn in CSS so no icon file or third-party request is needed. */
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 28px 22px; }
+.video-card { display: block; color: inherit; text-decoration: none; }
+.video-card:hover { color: inherit; }
+.video-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--night); overflow: hidden; border-radius: var(--radius); }
+.video-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+.video-card:hover .video-thumb img, .talk-feature:hover .video-thumb img { transform: scale(1.03); }
+/* Play badge drawn in CSS, so no icon file or third-party request is needed. */
 .video-thumb::after {
   content: "";
   position: absolute;
   left: 50%; top: 50%;
-  width: 0; height: 0;
-  transform: translate(-40%, -50%);
-  border-left: 18px solid rgba(255, 255, 255, 0.92);
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+  width: 54px; height: 54px;
+  margin: -27px 0 0 -27px;
+  border-radius: 50%;
+  background: rgba(11, 44, 48, 0.78) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7v10l8-5z' fill='%23d4ae61'/%3E%3C/svg%3E") center / 26px no-repeat;
 }
+.video-meta h3 { font: 600 0.98rem/1.4 var(--font-body); color: var(--ink); margin: 12px 0 4px; }
+.video-card:hover h3 { color: var(--green-ink); text-decoration: underline; text-decoration-color: var(--green); }
+.video-date { font-size: 0.82rem; color: var(--ink-soft); }
+.events-empty, .video-empty { color: var(--ink-soft); background: var(--mist); border-radius: var(--radius); padding: 20px 22px; margin: 0; }
 
-.video-meta { padding: 14px 16px 16px; }
-.video-meta h3 { font-family: var(--font-body); font-size: 0.95rem; margin: 0 0 6px; line-height: 1.4; }
-.video-date { font-size: 0.8rem; color: var(--ink-soft); }
+/* ==========================================================================
+   Our Story: the timeline
+   A spine down the middle that fills with gold as the reader scrolls. Open
+   questions are drawn as unfinished pages, dashed, asking to be filled in.
+   ========================================================================== */
 
-.events-empty, .video-empty {
-  color: var(--ink-soft);
-  background: var(--green-light);
-  border-radius: var(--radius);
-  padding: 20px 22px;
-  margin: 0;
+.story-stats { display: flex; flex-wrap: wrap; gap: 14px 40px; margin: 28px 0 0; padding: 0; list-style: none; }
+.story-stats li { display: flex; flex-direction: column; font-size: 0.86rem; color: rgba(255, 255, 255, 0.72); }
+.story-stats b { font: 400 2rem/1.1 var(--font-display); color: var(--gold); }
+
+.tl-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 44px; }
+.tl-filter {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 600 0.9rem/1 var(--font-body);
+  cursor: pointer;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .video-card { transition: none; }
-  .video-card:hover, .video-card:focus-visible { transform: none; }
-}
-
-/* ---------------------------------------------------------------------------
-   History timeline
-
-   The depth is real - CSS 3D transforms, no library and no third-party request -
-   but it is kept deliberately restrained. Cards sit back and settle forward as
-   they scroll into view. Anyone who has asked for reduced motion gets the whole
-   thing flat and still, and the page reads correctly with no JavaScript at all.
-   --------------------------------------------------------------------------- */
+.tl-filter:hover { border-color: var(--green-ink); }
+.tl-filter[aria-pressed="true"] { background: var(--night); border-color: var(--night); color: #fff; }
 
 .timeline {
+  --progress: 0;
   position: relative;
   list-style: none;
   margin: 0 auto;
   padding: 0;
-  max-width: 940px;
+  max-width: 980px;
   perspective: 1400px;
 }
-
-/* The spine. Fades at both ends so it reads as a thread rather than a rule. */
-.timeline::before {
+.timeline::before, .timeline::after {
   content: "";
   position: absolute;
   left: 50%;
   top: 0;
-  bottom: 0;
   width: 2px;
   margin-left: -1px;
-  background: linear-gradient(180deg,
-    transparent, var(--green) 6%, var(--green) 94%, transparent);
-  opacity: 0.45;
 }
+.timeline::before { bottom: 0; background: var(--line); }
+.timeline::after { height: calc(var(--progress) * 100%); background: linear-gradient(var(--gold), var(--gold-deep)); }
 
-.tl-item {
-  position: relative;
-  width: 50%;
-  padding: 0 44px 40px 0;
-  box-sizing: border-box;
-}
-.tl-item:nth-child(even) {
-  margin-left: 50%;
-  padding: 0 0 40px 44px;
-}
+.tl-item { position: relative; width: 50%; padding: 0 52px 48px 0; }
+.tl-item.is-right { margin-left: 50%; padding: 0 0 48px 52px; }
+/* Opposite sides interleave, so the page is not half empty. Safe because every
+   item is taller than the overlap, so a card never meets the one above it on
+   its own side. */
+.tl-item:not([hidden]) ~ .tl-item:not([hidden]) { margin-top: -96px; }
+.tl-item[hidden] { display: none; }
 
-/* The marker on the spine. */
 .tl-item::after {
   content: "";
   position: absolute;
-  top: 26px;
-  right: -7px;
-  width: 12px;
-  height: 12px;
+  top: 10px;
+  right: -9px;
+  z-index: 1;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: var(--green-dark);
-  border: 2px solid var(--bg);
-  box-shadow: 0 0 0 3px rgba(66, 186, 197, 0.25);
+  background: var(--page);
+  border: 2px solid var(--line);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
-.tl-item:nth-child(even)::after { right: auto; left: -7px; }
-.tl-item.is-unknown::after { background: var(--gold-deep); box-shadow: 0 0 0 3px rgba(212, 174, 97, 0.3); }
+.tl-item.is-right::after { right: auto; left: -9px; }
+.tl-item.is-reached::after { border-color: var(--gold-deep); background: var(--gold); }
+.tl-item.is-unknown::after { border-style: dashed; }
 
-.tl-year {
-  display: block;
-  font-family: var(--font-head);
-  font-size: 1.6rem;
-  line-height: 1;
-  color: var(--green-text);
-  margin-bottom: 10px;
-}
+.tl-year { display: block; font: 400 clamp(2.2rem, 1.6rem + 2vw, 3.2rem)/1 var(--font-display); color: var(--green-ink); margin-bottom: 14px; font-variant-numeric: lining-nums; }
+.tl-item:not(.is-right) .tl-year { text-align: right; }
 .tl-item.is-unknown .tl-year { color: var(--gold-text); }
+.tl-strand {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green-text);
+}
 
-/* Readable first. The card's resting state is fully visible with no transform,
-   so the page is correct with no JavaScript, with JavaScript that fails after
-   render, or in any browser where the observer never fires. The animation is
-   opt-in: the script adds .is-animated to the list only once it is certain it
-   can finish the job. An earlier version had this backwards and rendered ten
-   invisible cards. */
+/* Readable first: the resting state is fully visible with no transform. The
+   script opts in to animation by adding .is-animated only once it knows it can
+   finish the reveal. See CLAUDE.md for why this matters. */
 .tl-card {
-  background: var(--white);
-  border: 1px solid var(--border);
+  background: var(--paper);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 22px 24px;
   box-shadow: var(--shadow);
-  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1),
-              opacity 0.7s ease,
-              box-shadow 0.7s ease;
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
-
-/* The depth, only once the script has taken responsibility for revealing it. */
-.timeline.is-animated .tl-card {
-  transform: translateZ(-90px) rotateY(7deg);
-  opacity: 0;
-  box-shadow: none;
-  will-change: transform, opacity;
-}
-.timeline.is-animated .tl-item:nth-child(even) .tl-card {
-  transform: translateZ(-90px) rotateY(-7deg);
-}
-.timeline.is-animated .tl-item.is-visible .tl-card {
-  transform: translateZ(0) rotateY(0);
-  opacity: 1;
-  box-shadow: var(--shadow);
-  will-change: auto;
-}
-
-.tl-card h3 { margin: 0 0 8px; font-size: 1.1rem; }
+.tl-card h3 { font-size: 1.45rem; margin: 0 0 8px; }
 .tl-card p { margin: 0; color: var(--ink-soft); }
+.tl-source { display: block; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 0.8rem; color: var(--ink-soft); }
+.tl-source::before { content: "Source: "; font-weight: 700; color: var(--ink); }
 
-.tl-source {
-  display: block;
-  margin-top: 12px;
-  font-size: 0.78rem;
-  color: var(--ink-soft);
-  opacity: 0.85;
-}
-
-/* A gap we want the community to fill, not a finished entry. */
 .tl-item.is-unknown .tl-card {
-  background: var(--gold-light);
-  border-style: dashed;
-  border-color: var(--gold-deep);
+  background: repeating-linear-gradient(0deg, transparent 0 31px, rgba(176, 141, 63, 0.14) 31px 32px), var(--sand);
+  border: 1.5px dashed var(--gold-deep);
+  box-shadow: none;
 }
-.tl-asks { margin: 14px 0 0; padding-left: 18px; }
-.tl-asks li { color: var(--ink); margin-bottom: 4px; font-size: 0.92rem; }
-.tl-askhead {
-  display: block;
-  margin-top: 14px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--gold-text);
-}
+.tl-askhead { display: block; margin-top: 16px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-text); }
+.tl-asks { margin: 8px 0 0; padding-left: 1.1em; }
+.tl-asks li { color: var(--ink); margin-bottom: 4px; font-size: 0.95rem; }
+.tl-remember { margin-top: 16px; min-height: 44px; padding: 9px 16px; font-size: 0.9rem; }
+
+/* Cards wait tilted back in depth and settle forward as they are reached. They
+   are never transparent: a card the observer misses (a full-page capture, a
+   print, a quirk) is still fully readable, just leaning slightly. */
+.timeline.is-animated .tl-card { transform: translateZ(-90px) rotateY(8deg); will-change: transform; }
+.timeline.is-animated .tl-item.is-right .tl-card { transform: translateZ(-90px) rotateY(-8deg); }
+.timeline.is-animated .tl-item.is-visible .tl-card { transform: none; will-change: auto; }
+
+/* The escape hatch: if nothing was ever revealed, snap everything readable
+   with no transition, because a background tab will not run one. */
+.timeline.is-settled .tl-card,
+.timeline.is-settled .tl-item.is-right .tl-card { transform: none !important; opacity: 1 !important; transition: none !important; }
 
 @media (max-width: 760px) {
   .timeline { perspective: none; }
-  .timeline::before { left: 7px; }
-  .tl-item,
-  .tl-item:nth-child(even) {
-    width: 100%;
-    margin-left: 0;
-    padding: 0 0 32px 34px;
-  }
-  .tl-item::after,
-  .tl-item:nth-child(even)::after { left: 1px; right: auto; }
-  .timeline.is-animated .tl-card,
-  .timeline.is-animated .tl-item:nth-child(even) .tl-card { transform: translateY(16px); }
-  .timeline.is-animated .tl-item.is-visible .tl-card { transform: translateY(0); }
+  .timeline::before, .timeline::after { left: 9px; }
+  .tl-item, .tl-item.is-right, .tl-item:not([hidden]) ~ .tl-item:not([hidden]) { width: 100%; margin: 0; padding: 0 0 36px 44px; }
+  .tl-item::after, .tl-item.is-right::after { left: 0; right: auto; top: 8px; }
+  .tl-item:not(.is-right) .tl-year { text-align: left; }
+  .timeline.is-animated .tl-card, .timeline.is-animated .tl-item.is-right .tl-card { transform: translateY(18px); }
+  .timeline.is-animated .tl-item.is-visible .tl-card { transform: none; }
 }
 
-/* The escape hatch. If the reveal never happened, the script adds this and the
-   cards snap to readable with no transition at all - so it cannot depend on a
-   transition being allowed to run, which a background tab will not do. */
-.timeline.is-settled .tl-card,
-.timeline.is-settled .tl-item:nth-child(even) .tl-card {
-  transform: none !important;
-  opacity: 1 !important;
+.help-band { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: 32px 56px; align-items: center; }
+@media (max-width: 760px) { .help-band { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   About, contact, prose
+   ========================================================================== */
+
+.split { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
+@media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+
+.prose { max-width: 68ch; }
+.prose h2 { font-size: var(--step-2); margin: 40px 0 12px; }
+.prose h2:first-child { margin-top: 0; }
+.prose p, .prose li { color: var(--ink-soft); }
+.prose strong { color: var(--ink); }
+.prose ul { padding-left: 1.2em; margin: 0 0 1em; }
+.prose li { margin-bottom: 8px; }
+
+/* A panel of facts quoted from the Charity Commission register. */
+.register { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 26px 20px; }
+.register h2 { font-size: 1.3rem; margin-bottom: 4px; }
+.register > p { font-size: 0.86rem; color: var(--ink-soft); }
+.register dl { margin: 16px 0 0; }
+.register dt { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-text); }
+.register dd { margin: 2px 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: var(--ink); }
+.register dd:last-of-type { border-bottom: 0; padding-bottom: 0; }
+
+.photo-figure { margin: 0; max-width: 680px; }
+.photo-figure img { width: 100%; border-radius: var(--radius); }
+.photo-figure figcaption { margin-top: 10px; font-size: 0.88rem; color: var(--ink-soft); }
+
+.people { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.people li { padding: 22px 24px 22px 0; border-bottom: 1px solid var(--line); }
+.people li + li { padding-left: 24px; border-left: 1px solid var(--line); }
+.people b { display: block; font: 400 1.3rem/1.3 var(--font-display); color: var(--green-ink); }
+.people span { font-size: 0.9rem; color: var(--ink-soft); }
+@media (max-width: 760px) {
+  .people { grid-template-columns: 1fr; }
+  .people li + li { padding-left: 0; border-left: 0; }
+}
+
+.contact-ways { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.contact-ways li { border-bottom: 1px solid var(--line); }
+.contact-ways a {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 4px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.contact-ways a:hover { background: var(--mist); }
+.contact-ways a::after { content: "\2192"; color: var(--green-ink); font-size: 1.2rem; transition: transform 0.2s ease; }
+.contact-ways a:hover::after { transform: translateX(4px); }
+.contact-ways .icon { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--night); color: var(--gold); }
+.contact-ways .icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.contact-ways b { display: block; font: 400 1.3rem/1.2 var(--font-display); color: var(--green-ink); }
+.contact-ways span span { font-size: 0.92rem; color: var(--ink-soft); }
+
+.map-frame { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); aspect-ratio: 4 / 3; background: var(--mist); }
+.map-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+/* ==========================================================================
+   Donate. The amounts are live GoCardless links: see CLAUDE.md before editing.
+   ========================================================================== */
+
+.donate-hero { text-align: center; padding-block: clamp(40px, 6vw, 72px) clamp(120px, 14vw, 170px); }
+.donate-hero img { width: 92px; margin: 0 auto 22px; }
+.donate-hero h1 { margin-bottom: 12px; }
+.donate-hero .lede { margin-inline: auto; }
+.donate-hero blockquote { margin: 26px auto 0; max-width: 34em; }
+.donate-hero blockquote p { font: 400 var(--step-1)/1.45 var(--font-display); color: #fff; margin: 0 0 8px; }
+.donate-hero cite { font-style: normal; font-size: 0.86rem; color: var(--gold); }
+
+.donate-main { max-width: 600px; margin: clamp(-150px, -12vw, -100px) auto 0; padding-inline: var(--gutter); padding-bottom: 72px; position: relative; }
+.donate-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(20px, 4vw, 32px); }
+.donate-tabs { display: flex; gap: 6px; background: var(--mist); border-radius: 6px; padding: 5px; margin-bottom: 20px; }
+.donate-clone-tab {
+  flex: 1;
+  min-height: 46px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-soft);
+  font: 600 0.95rem/1 var(--font-body);
+  cursor: pointer;
+}
+.donate-clone-tab.active { background: var(--night); color: #fff; }
+.donate-clone-sub { font-size: 0.94rem; color: var(--ink-soft); margin-bottom: 18px; text-align: center; }
+
+.amount-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.amount-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--green-ink);
+  font: 400 1.35rem/1 var(--font-display);
+  text-decoration: none;
+  font-variant-numeric: lining-nums;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.amount-btn:hover { border-color: var(--green-ink); color: var(--green-ink); }
+.amount-btn.selected { background: var(--green-dark); border-color: var(--green-dark); color: #fff; }
+
+/* The confirm button spells out exactly what is about to happen. */
+.donate-cta {
+  display: flex;
+  width: 100%;
+  margin-top: 18px;
+  min-height: 56px;
+  font-size: 1.05rem;
+  background: var(--gold);
+  color: var(--ink);
+}
+.donate-cta:hover { background: #e0bd74; color: var(--ink); }
+.donate-cta.is-empty { background: var(--mist); color: var(--ink-soft); cursor: default; transform: none; }
+.donate-clone-fineprint { font-size: 0.82rem; color: var(--ink-soft); text-align: center; margin: 12px 0 0; }
+
+.donate-clone-alt { text-align: center; color: var(--ink-soft); margin: 28px 0; }
+.donate-clone-trust { display: grid; gap: 16px; padding: 26px 0; border-block: 1px solid var(--line); margin-bottom: 36px; }
+.donate-clone-trust p { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
+.donate-clone-trust strong { color: var(--ink); }
+.donate-clone-visit { text-align: center; }
+.donate-clone-visit h2 { font-size: var(--step-2); }
+.donate-clone-visit p { margin-bottom: 4px; color: var(--ink-soft); }
+.donate-clone-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
+@media (max-width: 460px) { .amount-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Post-payment thank-you banner, injected by js/main.js */
+.thanks-banner { background: var(--green-dark); color: #fff; text-align: center; padding: 16px 20px; font-size: 0.95rem; }
+.thanks-banner strong { display: block; font: 400 1.2rem/1.3 var(--font-display); margin-bottom: 2px; }
+
+/* ==========================================================================
+   Madrasah Al Furqan and the parent portal
+   ========================================================================== */
+
+.furqan-hero-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+.furqan-hero-grid .furqan-arch { max-width: 300px; }
+.umbrella {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  padding: 6px 14px 6px 6px;
+  border: 1px solid var(--line-night);
+  border-radius: 999px;
+  font-size: 0.84rem;
+  color: var(--on-night);
+}
+.umbrella img { width: 30px; height: 30px; border-radius: 50%; background: #fff; object-fit: contain; padding: 2px; }
+@media (max-width: 760px) { .furqan-hero-grid { grid-template-columns: 1fr; } .furqan-hero-grid .furqan-arch { display: none; } }
+
+.one-roof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.one-roof > div { padding: 24px 24px 0 0; }
+.one-roof > div + div { padding-left: 24px; border-left: 1px solid var(--line); }
+.one-roof b { display: block; font: 400 1.3rem/1.3 var(--font-display); color: var(--green-ink); margin-bottom: 6px; }
+.one-roof p { color: var(--ink-soft); margin: 0; }
+@media (max-width: 760px) {
+  .one-roof { grid-template-columns: 1fr; }
+  .one-roof > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); margin-top: 24px; }
+}
+
+/* Registration is a real sequence, so these steps are numbered. */
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: step; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.steps li { counter-increment: step; position: relative; padding-top: 58px; }
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  top: 0; left: 0;
+  width: 44px; height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-deep);
+  font: 400 1.3rem/1 var(--font-display);
+  color: var(--gold-text);
+}
+.steps b { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+.steps p { margin: 0; color: var(--ink-soft); }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+
+.notice {
+  padding: 22px 24px;
+  border-radius: var(--radius);
+  background: var(--sand);
+  border: 1px solid #e7dbc0;
+}
+.notice h3 { font-size: 1.25rem; margin-bottom: 6px; }
+.notice p { color: var(--ink); }
+.notice p:last-child { margin-bottom: 0; }
+
+/* "To be confirmed": the label every placeholder carries, so nobody mistakes a
+   draft time or date for a confirmed one. Dashed, like the open questions on
+   Our Story, because it means the same thing. */
+.tbc {
+  display: inline-block;
+  padding: 2px 9px;
+  border: 1.5px dashed var(--gold-deep);
+  border-radius: 999px;
+  background: var(--sand);
+  color: var(--gold-text);
+  font: 700 0.68rem/1.5 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: 2px;
+}
+.draft-note {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  padding: 16px 18px;
+  border: 1.5px dashed var(--gold-deep);
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+.draft-note .tbc { flex-shrink: 0; margin-top: 2px; }
+.draft-note p { margin: 0; color: var(--ink); }
+@media (max-width: 560px) { .draft-note { flex-direction: column; gap: 8px; } }
+
+/* Madrasah at a glance */
+.furqan-facts { list-style: none; margin: 0 0 28px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.furqan-facts li { padding: 16px 18px 0 0; color: var(--ink-soft); font-size: 0.94rem; }
+.furqan-facts li + li { padding-left: 18px; border-left: 1px solid var(--line); }
+.furqan-facts b { display: block; font: 400 1.25rem/1.3 var(--font-display); color: var(--furqan); margin-bottom: 4px; }
+@media (max-width: 820px) {
+  .furqan-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 18px; }
+  .furqan-facts li:nth-child(3) { padding-left: 0; border-left: 0; }
+}
+@media (max-width: 460px) {
+  .furqan-facts { grid-template-columns: 1fr; }
+  .furqan-facts li, .furqan-facts li + li { padding: 14px 0 0; border-left: 0; }
+}
+
+.groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 28px; }
+.group-card { padding: 22px 24px; background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--furqan); border-radius: var(--radius); }
+.group-card h3 { margin: 0; font-size: var(--step-2); color: var(--furqan); }
+.group-ages { margin: 2px 0 10px; font-weight: 700; color: var(--ink); }
+.group-card p:not(.group-ages) { color: var(--ink-soft); }
+@media (max-width: 640px) { .groups { grid-template-columns: 1fr; } }
+
+.timetable-wrap { position: relative; overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); }
+.timetable { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.timetable caption { text-align: left; padding: 14px 16px 6px; font: 400 1.2rem/1.3 var(--font-display); color: var(--green-ink); }
+.timetable th, .timetable td { padding: 12px 16px; text-align: left; border-top: 1px solid var(--line); }
+.timetable thead th { font-weight: 600; color: var(--ink); }
+.timetable thead small { display: block; font-weight: 400; font-size: 0.82rem; color: var(--ink-soft); }
+.timetable tbody th { font-weight: 600; color: var(--green-ink); white-space: nowrap; }
+.timetable tr.is-today > * { background: var(--mist); }
+.timetable tr.is-today th { box-shadow: inset 3px 0 0 var(--gold); }
+.timetable tr.is-closed td { color: var(--ink-soft); font-style: italic; }
+@media (max-width: 480px) {
+  .timetable th, .timetable td { padding: 11px 8px; font-size: 0.88rem; }
+  .timetable td { white-space: nowrap; }
+  .timetable tbody .next-tag { display: table; margin: 4px 0 0; }
+  .timetable caption { padding-inline: 8px; }
+}
+
+.terms-year { font-weight: 700; color: var(--ink); }
+.terms { list-style: none; margin: 0 0 16px; padding: 0; border-top: 1px solid var(--line); }
+.terms li { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 2px 18px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.terms b { font: 400 1.2rem/1.3 var(--font-display); color: var(--furqan); grid-row: span 2; }
+.terms small { color: var(--ink-soft); font-size: 0.86rem; }
+@media (max-width: 480px) { .terms li { grid-template-columns: 1fr; } .terms b { grid-row: auto; } }
+
+.resource-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.resource-list li { border-bottom: 1px solid var(--line); }
+.resource-list a { display: block; padding: 16px 0; text-decoration: none; color: var(--ink); }
+.resource-list b { display: block; color: var(--green-ink); }
+.resource-list span { font-size: 0.9rem; color: var(--ink-soft); }
+.resource-list li.is-soon { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 0; }
+.resource-list li.is-soon b { color: var(--ink); }
+
+/* Parent portal: the madrasah uses Teach 'n Go. This page is the front door to
+   it - one action for new families, one for enrolled ones - and says plainly
+   when the portal is not open yet. */
+.portal-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+@media (max-width: 900px) { .portal-layout { grid-template-columns: 1fr; } }
+.portal-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 640px) { .portal-actions { grid-template-columns: 1fr; } }
+.portal-action { display: flex; flex-direction: column; gap: 10px; padding: 24px; background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--furqan); border-radius: var(--radius); box-shadow: var(--shadow); }
+.portal-action h2 { font-size: var(--step-2); margin: 0; color: var(--furqan); }
+.portal-action p { margin: 0; color: var(--ink-soft); }
+.portal-action .btn { margin-top: auto; align-self: flex-start; }
+.portal-action .btn[aria-disabled="true"] { background: var(--mist); color: var(--ink-soft); cursor: not-allowed; transform: none; }
+.portal-meanwhile { margin-top: 28px; }
+.portal-aside h2 { font-size: var(--step-2); }
+.portal-aside p, .portal-aside li { color: var(--ink-soft); font-size: 0.95rem; }
+.portal-aside ul { padding-left: 1.1em; }
+
+/* ==========================================================================
+   The madrasah's colour, and the brown / navy preview.
+
+   The madrasah has two logos, a brown one and a navy one, and the trustees
+   have not chosen yet. Both are defined here; brown is the default. Add
+   ?furqan=navy (or ?furqan=brown) to any page address to preview the other: a
+   small switch appears so the two can be compared, and the choice is kept for
+   the rest of the visit. Delete the losing palette, the switch and its script
+   once a decision is made.
+   ========================================================================== */
+:root[data-furqan="navy"] {
+  --furqan: #003060;        /* sampled from the navy logo */
+  --furqan-deep: #001f3f;
+  --furqan-mid: #002a52;
+}
+.furqan-hero { background: var(--furqan-deep); }
+.furqan-hero.pattern::before { background: var(--gold); opacity: 0.07; }
+.furqan-hero .furqan-arch { background: var(--furqan-mid); }
+.furqan-band .furqan-arch { background: var(--furqan-deep); }
+
+.colour-preview {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 6px 6px 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
   box-shadow: var(--shadow);
-  transition: none !important;
+  font-size: 0.84rem;
+  color: var(--ink);
 }
+.colour-preview button {
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  background: var(--mist);
+  color: var(--ink);
+  font: 600 0.86rem/1 var(--font-body);
+  cursor: pointer;
+}
+.colour-preview button[aria-pressed="true"] { background: var(--furqan); color: #fff; }
+@media (max-width: 480px) { .colour-preview { left: 16px; right: 16px; justify-content: center; } }
+.colour-preview button span { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 50%; vertical-align: 0; }
 
-/* Motion turned down: never animate, never hide, whatever the script does. */
+/* ==========================================================================
+   404
+   ========================================================================== */
+
+.lost { text-align: center; max-width: 640px; margin: 0 auto; }
+.lost .hero-ar { font-size: clamp(3rem, 2rem + 5vw, 5rem); }
+.lost .btn-row { justify-content: center; margin-top: 28px; }
+
+/* ==========================================================================
+   Motion
+   ========================================================================== */
+
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   .timeline, .timeline.is-animated { perspective: none; }
   .timeline.is-animated .tl-card,
-  .timeline.is-animated .tl-item:nth-child(even) .tl-card,
-  .timeline.is-animated .tl-item.is-visible .tl-card {
-    transform: none;
-    opacity: 1;
-    box-shadow: var(--shadow);
-    transition: none;
-  }
+  .timeline.is-animated .tl-item.is-right .tl-card,
+  .timeline.is-animated .tl-item.is-visible .tl-card { transform: none; opacity: 1; }
+  .btn:hover, .event-poster:hover { transform: none; }
 }

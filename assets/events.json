@@ -16,10 +16,12 @@
       "id": "eid-al-fitr-2026",
       "title": "Eid al-Fitr prayers",
       "kind": "Eid",
-      "start": "2026-03",
-      "precision": "month",
+      "start": "2026-03-20",
+      "precision": "day",
       "summary": "Two jama'ahs on Eid morning: 7:00am in English led by Ustadh Anas Tayib, and 8:00am in Arabic led by Shaykh Abdullahi.",
-      "evidence": "Announced on the masjid's Instagram, 19 March 2026. The announcement gave both prayer times but not the calendar date, so only the month is published here."
+      "evidence": "Announced on the masjid's Instagram, 19 March 2026. The caption gave only the prayer times, but the masjid's own poster in the same post states the date: Friday 20th March 2026, 1447.",
+      "image": "assets/events/eid-al-fitr-2026.jpg",
+      "image_alt": "The masjid's Eid al-Fitr poster for Friday 20 March 2026, with both jama'ah times and imams."
     },
     {
       "id": "community-evening-2026-01",
@@ -52,7 +54,9 @@
       "precision": "day",
       "time": "Monday to Thursday, 10:00 to 15:00",
       "summary": "A summer programme for under-16s covering Qur'an hifdh, the fiqh of salah, basic Arabic reading and Islamic studies.",
-      "evidence": "Announced on the masjid's Instagram, 13 July 2025."
+      "evidence": "Announced on the masjid's Instagram, 13 July 2025.",
+      "image": "assets/events/quran-intensive-2025.jpg",
+      "image_alt": "The masjid's poster for the summer Qur'an Intensive Course for under-16s."
     },
     {
       "id": "eid-al-adha-1446",
@@ -61,7 +65,9 @@
       "start": "2025-06",
       "precision": "month",
       "summary": "Eid al-Adha 1446. Two jama'ahs on Eid morning, at 8:00am and 9:00am.",
-      "evidence": "Announced on the masjid's Instagram, 5 June 2025. The announcement gave the prayer times but not the calendar date, so only the month is published here."
+      "evidence": "Announced on the masjid's Instagram, 5 June 2025. The announcement gave the prayer times but not the calendar date, so only the month is published here.",
+      "image": "assets/events/eid-al-adha-1446.jpg",
+      "image_alt": "The masjid's Eid Mubarak card for Eid al-Adha 1446."
     },
     {
       "id": "eid-al-fitr-2025",
@@ -98,7 +104,9 @@
       "precision": "day",
       "time": "14:00 to 19:00",
       "summary": "A day class explaining Maqasid as-Siyam by al-'Izz ibn 'Abdus-Salam as-Sulami, taught by Ustadh Anas Tayib and Ustadh Abdur-Raheem, in preparation for Ramadan.",
-      "evidence": "Confirmed by the masjid's own Instagram post of 11 February 2025, which gives the date, the times and both teachers. Previously this rested only on a transcribed poster."
+      "evidence": "Confirmed by the masjid's own Instagram post of 11 February 2025, which gives the date, the times and both teachers. Previously this rested only on a transcribed poster.",
+      "image": "assets/events/objectives-of-fasting-2025.jpg",
+      "image_alt": "The masjid's poster for An Explanation of the Objectives of Fasting, Saturday 15 February."
     },
     {
       "id": "winter-conference-2025-01",
@@ -108,7 +116,9 @@
       "precision": "day",
       "time": "15:00 to 19:45",
       "summary": "A one-day seminar in two parts: an introduction to the sciences of fiqh and usool al-fiqh, and an introduction to the sciences of qira'aat and tafsir, with Ustadh Anas Tayib and Ustadh Anas Abdullahi, graduates of Madinah University.",
-      "evidence": "Confirmed by the masjid's own Instagram post of 3 January 2025, which gives the date, the times, both teachers and both subjects. Previously this rested only on a transcribed poster."
+      "evidence": "Confirmed by the masjid's own Instagram post of 3 January 2025, which gives the date, the times, both teachers and both subjects. Previously this rested only on a transcribed poster.",
+      "image": "assets/events/winter-conference-2025-01.jpg",
+      "image_alt": "The masjid's poster for the Winter Conference 2025, Saturday 4 January."
     },
     {
       "id": "winter-conference-2023-12",
@@ -127,7 +137,9 @@
       "start": "2024-04-10",
       "precision": "day",
       "summary": "Two jama'ahs at the masjid: 8:00am with a talk in English by Shaykh Anas Tayib, and 9:00am with a talk in Arabic by Shaykh Abdulqadir Hashi. Worshippers were asked to bring their own prayer mats and a bag for their shoes.",
-      "evidence": "Announced on the masjid's Instagram, 9 April 2024. This is the only Eid announcement that states the calendar date outright."
+      "evidence": "Announced on the masjid's Instagram, 9 April 2024. This is the only Eid announcement that states the calendar date outright.",
+      "image": "assets/events/eid-al-fitr-2024.jpg",
+      "image_alt": "The masjid's Eid ul-Fitr poster for Wednesday 10 April 2024, with two prayers at 8:00 and 9:00."
     },
     {
       "id": "evening-lessons-2024",
@@ -137,7 +149,9 @@
       "precision": "month",
       "time": "Tuesdays and Wednesdays, 20:00",
       "summary": "A new run of evening lessons open to brothers and sisters, covering the lessons drawn from the story of Yusuf, peace be upon him, and Lum'atul-I'tiqaad.",
-      "evidence": "Announced on the masjid's Instagram, 1 July 2024. An earlier post of 18 April 2024 shows weekly Tuesday lessons already running at 19:00. Whether these continue today is not confirmed - do not present them as current class times."
+      "evidence": "Announced on the masjid's Instagram, 1 July 2024. An earlier post of 18 April 2024 shows weekly Tuesday lessons already running at 19:00. Whether these continue today is not confirmed - do not present them as current class times.",
+      "image": "assets/events/evening-lessons-2024.jpg",
+      "image_alt": "The masjid's poster for weekly lessons on the story of Yusuf and Lum'atul-I'tiqaad."
     }
   ]
 }

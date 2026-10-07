@@ -29,3 +29,6 @@ jobs:
 
       - name: Events and recordings are valid
         run: python scripts/check_events.py
+
+      - name: Madrasah details are well formed (lists what is still a placeholder)
+        run: python scripts/check_madrasah.py
