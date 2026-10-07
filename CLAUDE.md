@@ -474,6 +474,12 @@ not switched on yet (see `PORTAL.md`).
 Pushing to `main` publishes automatically via GitHub Pages.
 Preview: https://9ali-oop.github.io/masjidattarbiya-website/
 
+**When you change `css/style.css` or `js/main.js`, bump the `?v=` on every page** (it is the
+date, e.g. `css/style.css?v=20261007`; one `sed` does all eleven pages). GitHub Pages lets
+browsers keep those files for ten minutes, so without it a visitor gets the new page with the
+old stylesheet, which happened once and left the homepage banner unstyled. `check_links.py`
+fails if the pages disagree on the version.
+
 **Note on link previews before cutover:** every page's `og:image`, `og:url` and `canonical` point
 at `https://masjidattarbiya.org/...`, which is the intended final home but is currently served by
 the donation-page repo. So sharing the github.io preview link will *not* show a preview card yet.
