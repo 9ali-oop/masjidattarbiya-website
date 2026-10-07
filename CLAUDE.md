@@ -121,6 +121,16 @@ keep, because a CMS writes markdown and markdown needs building into pages.
 
 ## Donations
 
+**`donate.html` is the original donation page**, the one that was live on masjidattarbiya.org,
+moved here on 7 October 2026 with its own design intact. It is **self-contained on purpose**: its
+own styles, script, header and footer, and none of the site's shared chrome, `css/style.css` or
+`js/main.js`, so a mistake anywhere else on the site cannot break donations. `sync_chrome.py`
+leaves it out. The amounts and links live in the `LINKS` object in its script. The only changes
+made in the move: fonts served from this site instead of Google, the icons and logo read from
+`assets/`, the logo links to the homepage, metadata for the new address, `id="main"`, and the
+donate button no longer opens a new tab (see below). Keep its look as it is unless the masjid
+asks otherwise.
+
 The donation page links directly to **GoCardless payment templates**. Treat these as live
 financial infrastructure:
 
