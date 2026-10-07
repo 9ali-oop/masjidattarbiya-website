@@ -48,10 +48,10 @@ madrasah-specific tools (IlmFlow and others) were too new to trust with children
 4. **Sign Teach 'n Go's data processing agreement**, and decide who on the madrasah's side can
    see what, and how long records are kept after a child leaves.
 5. **Update this website** - three edits, all in `portal.html` and `privacy.html`:
-   - in `portal.html`, give the "Register a child" button the enrolment form's address as its
-     `href`, and the "Log in" button `https://app.teachngo.com/login`; remove
-     `role="link" aria-disabled="true"` and "(opening soon)" from both; delete the
-     `#portal-soon` note;
+   - in `portal.html`, turn the two `status-line` paragraphs ("Online registration form" and
+     "Parent login and app") into `btn btn-teal` links: the enrolment form's address for the
+     first, `https://app.teachngo.com/login` for the second; delete the `#portal-soon` status
+     line in the heading band and the "When does the portal open?" question in the FAQ;
    - in `privacy.html`, replace the "The portal is not open yet" paragraph with the retention
      period and who can see registrations.
 6. **Test it as a parent** with a spare email before telling families.

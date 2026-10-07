@@ -23,7 +23,7 @@
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="css/fonts.css" />
-<link rel="stylesheet" href="css/style.css?v=20261007c" />
+<link rel="stylesheet" href="css/style.css?v=20261007d" />
 </head>
 <body>
 
@@ -68,6 +68,8 @@
     <p class="lede">When each prayer begins, and when the congregation stands. Updated every night from the masjid's own timetable.</p>
   </div>
 </section>
+
+<div class="container"><div class="notices" aria-live="polite"></div></div>
 
 <section class="section">
   <div class="container prayer-layout">
@@ -117,7 +119,15 @@
       <p class="eyebrow">The week ahead</p>
       <h2>This week at a glance</h2>
     </div>
+    <div class="print-only" aria-hidden="true">
+      <p class="print-title">Attarbiya Masjid, prayer times for the week</p>
+      <p>2 Revesby Walk, Nechells, Birmingham B7 4LG. Small figure: the prayer begins. Bold figure: iqamah. From the masjid's own timetable, masjidattarbiya.org/prayer-times.html</p>
+    </div>
     <div id="prayer-week"><p class="prayer-loading">Loading the weekly timetable&hellip;</p></div>
+    <div class="week-actions">
+      <button type="button" class="btn btn-line btn-small" data-print>Print this week</button>
+      <a class="more" href="https://masjidbox.com/prayer-times/masjid-attarbiya" target="_blank" rel="noopener">Live timetable on Masjidbox</a>
+    </div>
     <noscript>
       <p class="prayer-fallback">The weekly timetable needs JavaScript to display.
         <a href="https://masjidbox.com/prayer-times/masjid-attarbiya" target="_blank" rel="noopener">View the live timetable on Masjidbox</a>.</p>
@@ -175,6 +185,6 @@
   </div>
 </footer>
 
-<script src="js/main.js?v=20261007c"></script>
+<script src="js/main.js?v=20261007d"></script>
 </body>
 </html>

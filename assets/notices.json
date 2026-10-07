@@ -1,0 +1,4 @@
+{
+  "_how": "Short announcements shown on the homepage and prayer times page while current. Each: kind (e.g. Eid, Ramadan, Notice), title, text, optional link and link_text, from and until as YYYY-MM-DD (inclusive, UK dates). Keep to three live at once. No phone numbers or bank details in text: link to the contact or donate page instead.",
+  "notices": []
+}

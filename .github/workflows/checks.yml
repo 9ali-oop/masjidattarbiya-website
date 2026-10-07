@@ -32,3 +32,5 @@ jobs:
 
       - name: Madrasah details are well formed (lists what is still a placeholder)
         run: python scripts/check_madrasah.py
+      - name: Notices well formed
+        run: python scripts/check_notices.py

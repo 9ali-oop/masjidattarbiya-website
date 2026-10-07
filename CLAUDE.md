@@ -47,8 +47,13 @@ register) is the one to publish.
    **The one agreed exception** is the madrasah's timetable, term dates, group descriptions,
    places and resources (`assets/madrasah.json`), which the masjid asked for as placeholders in
    October 2026 so the page could be designed and reviewed. Every one of them is marked
-   `"placeholder": true` and carries a visible "To be confirmed" label on the page. Never add an
-   unlabelled placeholder, and never use the exception anywhere else.
+   `"placeholder": true` and carries a visible "To be confirmed" label on the page. On 7 October
+   2026 the masjid widened this: a detail a page genuinely needs, which the masjid has not yet
+   confirmed, may appear as a **labelled** placeholder (the `.tbc` "To be confirmed" chip) so
+   the page can be built and reviewed, provided it is also on the list of questions for the
+   masjid (the "Questions for the masjid admins" doc). Never an unlabelled placeholder, never
+   a made-up fee, name or phone number, and never anything a visitor could act on wrongly
+   (a prayer time, an address, an opening hour).
 2. **Never hardcode prayer times.** They go stale within a day and that is precisely what made
    the masjid's previous website a problem. See "Prayer times" below for how they actually work.
 3. **Never break the donation flow.** See "Donations" below.
@@ -81,6 +86,11 @@ Two things to respect:
 
 To refresh by hand: `python scripts/fetch_prayer_times.py`
 
+**The week can be printed.** The prayer times page has a "Print this week" button and a print
+stylesheet that leaves only the masjid's name, the week table and where the times come from:
+the fridge-door timetable every big masjid offers as a PDF, without a PDF to keep up to date.
+Masjidbox only embeds seven days in its page, so a monthly table is not possible from it.
+
 ## Duplication, and the checks that police it
 
 The header and footer are copy-pasted into every page. There is no templating, so a change to the
@@ -109,6 +119,7 @@ python scripts/check_facts.py           # contact details consistent, no hardcod
 python scripts/check_data.py            # prayer times data valid, in order, and still current
 python scripts/check_events.py          # events evidenced, posters local, no contact details in copy
 python scripts/check_madrasah.py        # madrasah data well formed; lists what is still a placeholder
+python scripts/check_notices.py         # notices well formed, dated, and free of contact or bank details
 ```
 
 `check_data.py` matters most of the four: `assets/prayer-times.json` is the only file that changes
@@ -147,6 +158,17 @@ financial infrastructure:
 - **Do not add `target="_blank"`** to payment links. GoCardless returns the donor to this site
   with `?thanks=oneoff` or `?thanks=monthly`, and `js/main.js` shows a thank-you banner. Opening
   checkout in a new tab strands that redirect.
+
+## Notices
+
+`assets/notices.json` holds short, dated announcements: an Eid prayer time, a changed iqamah,
+a closure, a Ramadan programme. `js/main.js` shows up to three current ones in the `.notices`
+box on the homepage and the prayer times page; each has `from` and `until` dates (inclusive,
+UK), so a notice disappears by itself the day after. With nothing current the box is empty
+and takes no space. Write them by hand, like events; `check_notices.py` fails on a bad date,
+a missing `until`, or a phone number, email or bank detail in the text (link to the contact
+or donate page instead). This is how the big masjid sites handle Eid and Ramadan: a dated
+notice, not a rewrite of the page.
 
 ## Events
 
@@ -363,6 +385,14 @@ was an explicit request. The page says so in words ("Under one roof") as well as
   palette, the switch (top of `js/main.js`) and the `.colour-preview` styles.
 
 ### The parent portal
+
+`portal.html` is laid out as a guided path for a parent on a phone: WhatsApp and phone buttons
+in the heading band (they work today), three steps, one card per job (register, or log in),
+then a `details`/`summary` FAQ ("Questions parents ask") and a "Have these ready" list. The
+online form and login are **status lines, not disabled buttons**, until Teach 'n Go opens: a
+greyed button that does nothing gets tapped repeatedly and blamed on the phone. The page uses
+the masjid's teal, at the masjid's request, so it reads as part of the masjid's site. The
+FAQ's unconfirmed answers (times, fees) carry the "To be confirmed" chip.
 
 **The madrasah will use Teach 'n Go** (chosen October 2026: best rated for ease of use, and
 already used by Green Lane's madrasah). `portal.html` is just the front door: a "Register a
