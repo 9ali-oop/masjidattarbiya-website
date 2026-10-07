@@ -2,6 +2,11 @@
 import glob, os, re, sys
 
 problems = []
+# Pages load css/style.css and js/main.js with a ?v= version so that browsers
+# fetch the new file after a change, instead of pairing new pages with the old
+# stylesheet they kept (GitHub Pages lets them keep it for ten minutes). Bump
+# the version on every page when either file changes; this keeps them in step.
+versions = {}
 
 for page in sorted(glob.glob("*.html")):
     html = open(page, encoding="utf-8").read()
@@ -20,6 +25,10 @@ for page in sorted(glob.glob("*.html")):
         if not os.path.exists(target):
             problems.append(f"{page}: links to missing {url}")
 
+    for asset in ("css/style.css", "js/main.js"):
+        for v in re.findall(r'"' + re.escape(asset) + r'(\?v=[^"]*)?"', html):
+            versions.setdefault(asset, {}).setdefault(v or "(none)", []).append(page)
+
     for tag in ("div", "section", "main", "table", "ul", "header", "footer"):
         opened = len(re.findall(r"<" + tag + r"[\s>]", html))
         closed = len(re.findall(r"</" + tag + r">", html))
@@ -28,6 +37,11 @@ for page in sorted(glob.glob("*.html")):
 
     if len(re.findall(r"<h1[\s>]", html)) != 1:
         problems.append(f"{page}: should have exactly one <h1>")
+
+for asset, seen in versions.items():
+    if len(seen) > 1:
+        detail = "; ".join(f"{v} on {', '.join(pages)}" for v, pages in sorted(seen.items()))
+        problems.append(f"{asset} is loaded with different versions: {detail}")
 
 for p in problems:
     print("FAIL: " + p)
