@@ -21,11 +21,11 @@
   --gold-deep: #b08d3f;
   --gold-text: #7a5c1f;    /* the only gold safe as text on white (6.22:1) */
 
-  /* Madrasah Al Furqan's own colour, from its logo (judged by eye from the
-     artwork; replace with the exact value once the logo file is in the repo). */
-  --furqan: #6e3b2f;        /* brown, the default until the trustees choose */
-  --furqan-deep: #3b2420;   /* the madrasah's dark bands */
-  --furqan-mid: #4e302a;
+  /* Madrasah Al Furqan's own colour, sampled from its brown logo. Brown is
+     the default until the trustees choose; navy is defined further down. */
+  --furqan: #52322e;
+  --furqan-deep: #33201d;   /* the madrasah's dark bands */
+  --furqan-mid: #442a26;
 
   /* Surfaces and neutrals, all leaning slightly toward the brand teal */
   --night: #0b2c30;        /* the dark bands: hero, prayer panels, footer */
@@ -426,16 +426,39 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
 .brand-furqan-parent { padding-left: 16px; border-left: 1px solid var(--line); }
 .brand-furqan-parent img { height: 34px; width: auto; }
 
-/* The wordmark, set in type to match the madrasah's logo: Arabic above, the
-   English name in spaced capitals below. */
-.furqan-wordmark { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; color: var(--furqan); }
-.furqan-wordmark-ar { font-family: var(--font-arabic); font-weight: 500; font-size: 1.75rem; line-height: 1.15; }
-.furqan-wordmark-en { font: 400 0.6rem/1 var(--font-body); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 3px; }
+/* The madrasah's logos, from assets/furqan/. Each is used as a mask, so one
+   file serves every colour: the logo's own colour on white, gold on the dark
+   bands. Brown shows by default; the navy logo (Arabic only, so the English
+   name is set beneath it) shows when the navy palette is chosen. The source
+   files are small, so the widths stay close to their real size. */
+.furqan-logo { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; color: var(--furqan); line-height: 1; }
+.furqan-logo-brown, .furqan-logo-navy { display: block; background: currentColor; }
+.furqan-logo-brown {
+  width: 170px;
+  aspect-ratio: 175 / 59;
+  -webkit-mask: url("../assets/furqan/madrasah-al-furqan-brown.png") center / contain no-repeat;
+  mask: url("../assets/furqan/madrasah-al-furqan-brown.png") center / contain no-repeat;
+}
+.furqan-logo-navy {
+  display: none;
+  width: 160px;
+  aspect-ratio: 507 / 104;
+  -webkit-mask: url("../assets/furqan/madrasah-al-furqan-navy.png") center / contain no-repeat;
+  mask: url("../assets/furqan/madrasah-al-furqan-navy.png") center / contain no-repeat;
+}
+.furqan-logo-en { display: none; font: 600 0.58rem/1 var(--font-body); letter-spacing: 0.22em; text-transform: uppercase; }
+:root[data-furqan="navy"] .furqan-logo-brown { display: none; }
+:root[data-furqan="navy"] .furqan-logo-navy,
+:root[data-furqan="navy"] .furqan-logo-en { display: block; }
+@media (forced-colors: active) {
+  .furqan-logo-brown, .furqan-logo-navy { forced-color-adjust: none; background: CanvasText; }
+}
 @media (max-width: 640px) {
   .site-header--furqan .topbar-note { display: none; }
   .site-header--furqan .topbar-inner { justify-content: space-between; }
   .brand-furqan-parent { display: none; }
-  .furqan-wordmark-ar { font-size: 1.5rem; }
+  .furqan-logo-brown { width: 140px; }
+  .furqan-logo-navy { width: 132px; }
 }
 
 /* ==========================================================================
@@ -596,9 +619,16 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   padding: 28% 12% 12%;
   text-align: center;
 }
-.furqan-arch .furqan-wordmark { color: #fff; }
-.furqan-arch .furqan-wordmark-ar { font-size: clamp(1.7rem, 1.3rem + 1.4vw, 2.3rem); color: var(--gold); white-space: nowrap; }
-.furqan-arch .furqan-wordmark-en { font-size: 0.7rem; margin-top: 10px; color: #fff; }
+.furqan-arch .furqan-logo { color: var(--gold); gap: 10px; }
+/* Fixed widths: the logo sits in a shrink-to-fit box, so a percentage here
+   would resolve to nothing and the logo would vanish. */
+.furqan-arch .furqan-logo-brown { width: 175px; }
+.furqan-arch .furqan-logo-navy { width: 200px; }
+@media (max-width: 760px) {
+  .furqan-arch .furqan-logo-brown { width: 150px; }
+  .furqan-arch .furqan-logo-navy { width: 160px; }
+}
+.furqan-arch .furqan-logo-en { color: #fff; font-size: 0.68rem; }
 .furqan-arch-caption { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255, 255, 255, 0.75); margin: 0; }
 .furqan-band ul { margin: 0 0 26px; padding-left: 1.1em; color: var(--ink-soft); }
 .furqan-band li + li { margin-top: 6px; }
@@ -1338,9 +1368,9 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
    once a decision is made.
    ========================================================================== */
 :root[data-furqan="navy"] {
-  --furqan: #1f3566;
-  --furqan-deep: #142240;
-  --furqan-mid: #1d2f58;
+  --furqan: #003060;        /* sampled from the navy logo */
+  --furqan-deep: #001f3f;
+  --furqan-mid: #002a52;
 }
 .furqan-hero { background: var(--furqan-deep); }
 .furqan-hero.pattern::before { background: var(--gold); opacity: 0.07; }

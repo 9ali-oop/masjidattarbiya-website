@@ -45,8 +45,8 @@ function getJSON(url) {
     bar.setAttribute("role", "group");
     bar.setAttribute("aria-label", "Preview the madrasah colour");
     bar.innerHTML = "<span>Preview</span>" +
-      '<button type="button" data-c="brown"><span style="background:#6e3b2f"></span>Brown</button>' +
-      '<button type="button" data-c="navy"><span style="background:#1f3566"></span>Navy</button>';
+      '<button type="button" data-c="brown"><span style="background:#52322e"></span>Brown</button>' +
+      '<button type="button" data-c="navy"><span style="background:#003060"></span>Navy</button>';
     var buttons = bar.querySelectorAll("button");
     function mark() {
       buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-c") === choice)); });

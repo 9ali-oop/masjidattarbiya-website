@@ -328,12 +328,16 @@ was an explicit request. The page says so in words ("Under one roof") as well as
   confirms an item, correct it and delete its flag; `check_madrasah.py` lists what is left and
   fails if the file claims to be final while placeholders remain. Fees are deliberately "to be
   confirmed" with no placeholder figure.
-- **The logo.** The madrasah has two logos, a brown one with "MADRASAH AL FURQAN" underneath
-  and a bold navy Arabic-only one. They have not reached the repo yet (the volunteer has them on
-  their own computer). Until they do, the wordmark is set in type (`.furqan-wordmark`: Reem Kufi
-  plus spaced Inter capitals). When the files arrive, put them in `assets/furqan/`, replace the
-  `.furqan-wordmark` spans in the madrasah header, `index.html` and `madrasah.html` with an
-  `<img>` (alt "Madrasah Al Furqan"), and set the colour tokens to the logo's exact values.
+- **The logos** are in `assets/furqan/`: `madrasah-al-furqan-brown.png` (Arabic with "MADRASAH
+  AL FURQAN" underneath) and `madrasah-al-furqan-navy.png` (bold, Arabic only). They were cut out
+  of screenshots onto transparent backgrounds, and are small (175 and 507 pixels wide), so the
+  CSS never shows them much larger than that. If the madrasah has the original artwork (an SVG
+  or a large PNG), replace these two files with it at the same names. They are used as CSS
+  masks (`.furqan-logo-brown`, `.furqan-logo-navy`), so one file gives every colour: the
+  logo's own colour on white, gold on the dark bands. Under the navy logo the English name is
+  set in type, because that logo has none. Mask widths are fixed in pixels on purpose: the
+  logo sits in a shrink-to-fit box where a percentage width resolves to nothing and the logo
+  silently disappears.
 - **Brown or navy is undecided.** Both palettes exist (`--furqan`, `--furqan-deep`,
   `--furqan-mid`; brown on `:root`, navy on `:root[data-furqan="navy"]`). Brown shows by
   default. Add `?furqan=navy` or `?furqan=brown` to any page address to preview: a switch
@@ -369,8 +373,8 @@ The palette and type are sampled from the masjid's logo and shared with the dona
 | `--gold-deep` | `#b08d3f` | deeper gold |
 | `--gold-text` | `#7a5c1f` | the only gold safe as text on white (6.22:1) |
 | `--night` | `#0b2c30` | the dark bands: heroes, prayer panels, footer |
-| `--furqan` | `#6e3b2f` brown, or `#1f3566` navy | Madrasah Al Furqan's colour, judged by eye from its two logos; brown is the default until the trustees choose |
-| `--furqan-deep` | `#3b2420` / `#142240` | the madrasah's dark bands (its hero, its arch on the homepage) |
+| `--furqan` | `#52322e` brown, or `#003060` navy | Madrasah Al Furqan's colour, sampled from its two logo files; brown is the default until the trustees choose |
+| `--furqan-deep` | `#33201d` / `#001f3f` | the madrasah's dark bands (its hero, its arch on the homepage) |
 
 The dark bands are why the redesign can use the real brand colours: bright teal and gold both
 fail WCAG AA as text on white, but pass comfortably on `--night`.
@@ -435,7 +439,7 @@ would need their own token.
 
 **Madrasah details.** `madrasah.html` is built, with labelled placeholders. It is waiting on the
 real times, term dates, group descriptions, places and fees for `assets/madrasah.json`, on the
-logo files, and on the trustees' choice of brown or navy (see "Madrasah Al Furqan").
+trustees' choice of brown or navy (see "Madrasah Al Furqan").
 
 **Photos of people.** Running the masjid's accounts covers content the masjid published. It does
 not cover individual likenesses, and much of the available material shows teenagers. Group shots
