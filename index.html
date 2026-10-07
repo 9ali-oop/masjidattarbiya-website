@@ -18,7 +18,7 @@
 <meta property="og:image:alt" content="Attarbiya Masjid logo" />
 <meta property="og:locale" content="en_GB" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="theme-color" content="#0b2c30" />
+<meta name="theme-color" content="#17808a" />
 
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
@@ -68,6 +68,7 @@
     </a>
     <nav class="main-nav" id="main-nav" aria-label="Main">
       <ul>
+        <li><a href="index.html" class="active" aria-current="page" data-nav="index">Home</a></li>
         <li><a href="about.html" data-nav="about">About</a></li>
         <li><a href="history.html" data-nav="history">Our Story</a></li>
         <li><a href="prayer-times.html" data-nav="prayer-times">Prayer Times</a></li>
@@ -84,84 +85,74 @@
 
 <main id="main">
 
-<section class="home-hero on-night pattern">
-  <div class="container home-hero-grid">
-    <div>
-      <p class="eyebrow">2 Revesby Walk &middot; Nechells &middot; Birmingham</p>
-      <p class="hero-ar ar" lang="ar">مسجد التربية</p>
-      <h1>Attarbiya Masjid</h1>
-      <p class="hero-lede"><em>Tarbiya</em> is the Arabic word for raising someone well: nurturing a person in faith, knowledge and character over a lifetime. It is the name of our masjid in Nechells, and the work we try to do in it.</p>
-      <div class="btn-row">
-        <a href="prayer-times.html" class="btn btn-gold">Prayer times</a>
-        <a href="madrasah.html" class="btn btn-ghost">Madrasah Al Furqan</a>
-      </div>
-      <ul class="hero-facts">
-        <li><b>Five prayers</b> a day and Jumu'ah</li>
-        <li>Charity founded <b>2006</b></li>
-        <li>Registered charity <b>1142204</b></li>
-      </ul>
+<section class="hero-photo" style="background-image:url('assets/masjid-entrance-cleaned.jpg');">
+  <div class="hero-photo-body">
+    <p class="eyebrow">Nechells, Birmingham</p>
+    <p class="hero-ar ar" lang="ar">مسجد التربية</p>
+    <h1>Attarbiya Masjid</h1>
+    <p>A place of worship, learning and community on Revesby Walk, serving Nechells and the surrounding neighbourhoods.</p>
+    <div class="btn-row">
+      <a href="prayer-times.html" class="btn btn-gold">Prayer Times</a>
+      <a href="madrasah.html" class="btn btn-ghost">Madrasah Al Furqan</a>
     </div>
-
-    <aside class="prayer-card" aria-labelledby="today-title">
-      <div class="prayer-card-head">
-        <h2 id="today-title">Today at the masjid</h2>
-        <a href="prayer-times.html">This week</a>
-      </div>
-      <div id="prayer-times"><p class="prayer-loading">Loading today's prayer times&hellip;</p></div>
-      <noscript>
-        <p class="prayer-fallback">Prayer times need JavaScript to display.
-          <a href="https://masjidbox.com/prayer-times/masjid-attarbiya" target="_blank" rel="noopener">View the live timetable on Masjidbox</a>.</p>
-      </noscript>
-    </aside>
   </div>
 </section>
+
+<div class="container">
+  <div class="prayer-card prayer-card--home">
+    <div class="prayer-card-head">
+      <h2>Today's Prayer Times</h2>
+      <a href="prayer-times.html" class="btn btn-line btn-small">Full Timetable</a>
+    </div>
+    <div id="prayer-times"><p class="prayer-loading">Loading prayer times&hellip;</p></div>
+    <noscript>
+      <p class="prayer-fallback">Prayer times need JavaScript to display.
+        <a href="https://masjidbox.com/prayer-times/masjid-attarbiya" target="_blank" rel="noopener">View the live timetable on Masjidbox</a>.</p>
+    </noscript>
+  </div>
+</div>
 
 <section class="section">
   <div class="container">
-    <div class="section-intro">
-      <p class="eyebrow">What happens here</p>
-      <h2>Prayer, learning and each other</h2>
+    <div class="section-head">
+      <span class="eyebrow">About Us</span>
+      <h2>A place of worship, learning, and community</h2>
+      <p>Attarbiya Masjid and Kowneyn Community Centre is at 2 Revesby Walk, Nechells, Birmingham. We are a registered UK charity, number 1142204, serving the local Muslim community with daily congregational prayers, Jumu'ah, and Qur'an and Islamic studies classes.</p>
     </div>
-    <div class="pillars">
-      <article class="pillar">
+    <div class="grid grid-3">
+      <article class="card pillar">
         <p class="pillar-ar ar" lang="ar">صلاة</p>
-        <h3>Salah <small>Prayer</small></h3>
-        <p>The five daily prayers in congregation, and Jumu'ah every Friday. The times on this site come straight from the masjid's own timetable and refresh every night.</p>
+        <h3>Salah</h3>
+        <p>The five daily prayers in congregation, and Jumu'ah every Friday. The times on this site come straight from the masjid's own timetable.</p>
         <a class="more" href="prayer-times.html">Today's times</a>
       </article>
-      <article class="pillar">
+      <article class="card pillar">
         <p class="pillar-ar ar" lang="ar">علم</p>
-        <h3>&lsquo;Ilm <small>Knowledge</small></h3>
-        <p>Al Furqan, the masjid's madrasah for children. For adults, evening lessons, tafsir, day classes and winter conferences, with talks recorded for YouTube.</p>
+        <h3>Knowledge</h3>
+        <p>Madrasah Al Furqan for children, and for adults evening lessons, tafsir, day classes and winter conferences, with talks recorded for YouTube.</p>
         <a class="more" href="events.html#talks">Recorded talks</a>
       </article>
-      <article class="pillar">
+      <article class="card pillar">
         <p class="pillar-ar ar" lang="ar">جماعة</p>
-        <h3>Jama'ah <small>Community</small></h3>
-        <p>Youth nights run by Al Kissaii, the masjid's programme for teenagers, a community evening before Ramadan, and Eid prayers together on Revesby Walk.</p>
+        <h3>Community</h3>
+        <p>Youth nights run by Al Kissaii, the masjid's programme for teenagers, a community evening before Ramadan, and Eid prayers together.</p>
         <a class="more" href="events.html">What's been on</a>
       </article>
     </div>
+    <div class="center-row"><a href="about.html" class="btn btn-line">More About Us</a></div>
   </div>
 </section>
 
-<div class="container"><div class="saff saff--quiet" aria-hidden="true"></div></div>
-
-<section class="section">
+<section class="section section-alt">
   <div class="container furqan-band">
     <div class="furqan-arch" aria-hidden="true">
       <span class="furqan-logo" aria-hidden="true"><span class="furqan-logo-brown"></span><span class="furqan-logo-navy"></span><span class="furqan-logo-en">Madrasah Al Furqan</span></span>
       <p class="furqan-arch-caption">At Attarbiya Masjid</p>
     </div>
     <div>
-      <p class="eyebrow">Part of Attarbiya Masjid</p>
+      <span class="eyebrow">Part of Attarbiya Masjid</span>
       <h2>Madrasah Al Furqan</h2>
-      <p class="lede">The masjid's own madrasah for children aged 6 and over, six days a week, in the same building and run by the same charity. Al Furqan has its own pages, so parents can find everything in one place:</p>
-      <ul>
-        <li>what the madrasah teaches, and when</li>
-        <li>registering a child through the parent portal</li>
-        <li>resources from the madrasah for home</li>
-      </ul>
+      <p>The masjid's own madrasah for children aged 6 and over, six days a week, in the same building and run by the same charity. Find out what the madrasah teaches and when, and register your child through the parent portal.</p>
       <div class="btn-row">
         <a href="madrasah.html" class="btn btn-teal">Visit the madrasah</a>
         <a href="portal.html" class="btn btn-line">Parent login</a>
@@ -170,10 +161,10 @@
   </div>
 </section>
 
-<section class="section section--mist">
+<section class="section">
   <div class="container">
-    <div class="section-intro">
-      <p class="eyebrow">From the masjid</p>
+    <div class="section-head">
+      <span class="eyebrow">From the masjid</span>
       <h2>Recent events and talks</h2>
     </div>
     <div class="feed">
@@ -191,12 +182,11 @@
   </div>
 </section>
 
-<section class="section on-night pattern">
+<section class="section section-alt">
   <div class="container story-band">
     <div>
-      <p class="eyebrow">Our story</p>
+      <span class="eyebrow">Our Story</span>
       <p class="years"><span class="years-num" id="years-since" data-since="2006-09-03">20</span><span class="years-label">years since the charity was founded</span></p>
-      <p class="years-note">Declaration of Trust, 3 September 2006.</p>
     </div>
     <div>
       <ol class="mini-line">
@@ -208,35 +198,30 @@
       </ol>
       <p>Some of our history is on record. Much of it lives only in the memories of the people who were there. We are putting it together, gaps and all.</p>
       <div class="btn-row">
-        <a href="history.html" class="btn btn-gold">Read our story</a>
-        <a href="history.html#help" class="btn btn-ghost">Help fill the gaps</a>
+        <a href="history.html" class="btn btn-teal">Read our story</a>
+        <a href="history.html#help" class="btn btn-line">Help fill the gaps</a>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section section--sand">
-  <div class="container give">
-    <blockquote>
-      <p>&ldquo;Whoever builds a mosque for Allah, Allah will build for him a house like it in Paradise.&rdquo;</p>
-      <cite>The Prophet Muhammad &#65018; (Sahih Muslim)</cite>
-    </blockquote>
-    <div class="give-card">
-      <h3>Keep the masjid open</h3>
-      <p>Lighting, heating and upkeep all depend on donations. A monthly gift from &pound;5 is a sadaqah jariyah that keeps giving.</p>
-      <a href="donate.html" class="btn btn-gold">Donate</a>
-      <small>One-off or monthly, through GoCardless. Registered charity 1142204.</small>
+<section class="section">
+  <div class="container">
+    <div class="donate-hero">
+      <h2>Your Masjid, Your Support - A Continuous Reward</h2>
+      <p>Help us keep the masjid running and growing. Give once, or set up a monthly Direct Debit from &pound;5 a month as an ongoing sadaqah jariyah.</p>
+      <a href="donate.html" class="btn btn-on-gold">Donate</a>
     </div>
   </div>
 </section>
 
-<section class="section">
+<section class="section section-alt">
   <div class="container visit">
-    <div class="arch-frame">
-      <div class="arch"><img src="assets/masjid-entrance-cleaned.jpg" alt="The entrance to Attarbiya Masjid on Revesby Walk, with the masjid's sign above the door" width="1200" height="1141" loading="lazy" /></div>
-    </div>
+    <figure class="visit-photo">
+      <img src="assets/prayer-hall.jpg" alt="The main prayer hall at Attarbiya Masjid, with the marble wall around the mihrab and minbar" width="900" height="544" loading="lazy" />
+    </figure>
     <div>
-      <p class="eyebrow">Visit</p>
+      <span class="eyebrow">Visit</span>
       <h2>Find us on Revesby Walk</h2>
       <address>2 Revesby Walk<br />Nechells, Birmingham<br />B7 4LG</address>
       <div class="visit-jumuah" id="visit-jumuah"><p>For this Friday's Jumu'ah time, see <a href="prayer-times.html">prayer times</a>.</p></div>
@@ -251,12 +236,10 @@
 </main>
 
 <footer class="site-footer">
-  <div class="saff saff--footer" aria-hidden="true"></div>
   <div class="container">
     <div class="footer-grid">
       <div class="footer-id">
-        <p class="footer-ar ar" lang="ar">مسجد التربية</p>
-        <p class="footer-name">Attarbiya Masjid &amp; Kowneyn Community Centre</p>
+        <div class="footer-logo-chip"><img src="assets/logo.png" alt="Attarbiya Masjid" class="footer-logo" width="400" height="196" /></div>
         <p>2 Revesby Walk, Nechells, Birmingham B7 4LG</p>
         <p class="footer-charity">Registered charity no. 1142204</p>
         <div class="social-row">

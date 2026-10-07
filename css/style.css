@@ -1,70 +1,47 @@
 /* ==========================================================================
    Attarbiya Masjid & Kowneyn Community Centre - site stylesheet
 
-   Layout concept: arches and rows. Photographs and key panels sit inside the
-   pointed arch of the windows in the masjid's logo, and sections are divided by
-   a row of small arches, like the prayer rows (saff) woven into the carpet of
-   the prayer hall. Dark "night" bands carry the prayer times and the story:
-   the brand teal and gold fail contrast as text on white, but pass comfortably
-   on night, so that is where they get to be used at full strength.
+   The look: light and simple. A white header, the building's photograph at the
+   top of the homepage, teal page headings, cream and pale teal sections, and a
+   teal footer. Colours and type are sampled from the masjid's logo and shared
+   with the donation page.
 
    Plain CSS, no build step. Sections run top to bottom in page order.
    ========================================================================== */
 
 :root {
   /* Brand, sampled from the logo. See CLAUDE.md before changing any of these. */
-  --green: #42bac5;        /* fills and borders on light; safe as text on --night */
-  --green-text: #17808a;   /* teal for large text on white (4.68:1) */
-  --green-dark: #1a7078;   /* solid teal buttons, white text on it passes */
-  --green-ink: #0e4a50;    /* headings and links on light surfaces */
-  --gold: #d4ae61;         /* fills; safe as text on --night only */
+  --green: #42bac5;        /* fills and borders only: fails as text on white */
+  --green-text: #17808a;   /* large teal text on white (4.68:1) */
+  --green-dark: #1a7078;   /* headings, links, solid buttons, the footer */
+  --green-ink: #0e4a50;    /* darkest teal */
+  --green-light: #e9f7f9;  /* pale teal section background */
+  --gold: #d4ae61;         /* fills; never text on a light background */
   --gold-deep: #b08d3f;
   --gold-text: #7a5c1f;    /* the only gold safe as text on white (6.22:1) */
+  --gold-light: #f8f0e0;   /* cream panel; also gold-tinted text on teal (5:1) */
 
   /* Madrasah Al Furqan's own colour, sampled from its brown logo. Brown is
      the default until the trustees choose; navy is defined further down. */
   --furqan: #52322e;
-  --furqan-deep: #33201d;   /* the madrasah's dark bands */
-  --furqan-mid: #442a26;
+  --furqan-deep: #33201d;
 
-  /* Surfaces and neutrals, all leaning slightly toward the brand teal */
-  --night: #0b2c30;        /* the dark bands: hero, prayer panels, footer */
-  --night-2: #12393e;      /* raised surfaces on night */
-  --page: #fbfcfb;
-  --paper: #ffffff;
-  --mist: #e8f1ef;         /* quiet teal panel */
-  --sand: #f7f0e1;         /* quiet gold panel */
-  --ink: #152120;
-  --ink-soft: #4a5957;
-  --line: #d9e3e0;
-  --line-night: rgba(255, 255, 255, 0.14);
-  --on-night: rgba(255, 255, 255, 0.86);
-
-  /* Type: Marcellus is the logo's flared serif, Reem Kufi echoes its Kufic
-     Arabic, Inter carries everything that has to be read quickly. */
-  --font-display: "Marcellus", Georgia, "Times New Roman", serif;
-  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-arabic: "Reem Kufi", "Geeza Pro", "Noto Kufi Arabic", "Segoe UI", Tahoma, sans-serif;
-
-  --step--1: 0.84rem;
-  --step-0: 1rem;
-  --step-1: 1.2rem;
-  --step-2: clamp(1.35rem, 1.2rem + 0.6vw, 1.6rem);
-  --step-3: clamp(1.7rem, 1.35rem + 1.6vw, 2.35rem);
-  --step-4: clamp(2.2rem, 1.5rem + 3.2vw, 3.5rem);
-  --step-5: clamp(2.8rem, 1.6rem + 5.4vw, 5.2rem);
-
-  --max: 1160px;
-  --gutter: clamp(16px, 4vw, 32px);
-  --radius: 6px;
-  --shadow: 0 1px 2px rgba(11, 44, 48, 0.06), 0 14px 34px -14px rgba(11, 44, 48, 0.28);
+  --ink: #1c2321;
+  --ink-soft: #4b5a55;
+  --bg: #fbfaf7;
+  --white: #ffffff;
+  --border: #e2e0d8;
+  --radius: 10px;
+  --shadow: 0 6px 24px rgba(1, 88, 99, 0.1);
+  --max-width: 1140px;
   --topbar-h: 38px;
 
-  /* Shapes, used as masks so their colour comes from the element. */
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-head: "Marcellus", Georgia, "Times New Roman", serif;
+  --font-arabic: "Reem Kufi", "Geeza Pro", "Noto Kufi Arabic", "Segoe UI", Tahoma, sans-serif;
+
+  /* The pointed arch of the windows in the logo, used as a mask. */
   --arch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 125' preserveAspectRatio='none'%3E%3Cpath d='M0 125V50C0 24 25 9 50 0c25 9 50 24 50 50v75z'/%3E%3C/svg%3E");
-  --arch-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' preserveAspectRatio='none'%3E%3Cpath d='M0 60V42C0 25 28 12 50 0c22 12 50 25 50 42v18z'/%3E%3C/svg%3E");
-  --saff: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 18'%3E%3Cpath d='M1.5 18v-8C1.5 5.5 7 2.4 14 .8c7 1.6 12.5 4.7 12.5 9.2v8' fill='none' stroke='%23000' stroke-width='1.3'/%3E%3C/svg%3E");
-  --star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath d='M40 14l7.6 18.4L66 40l-18.4 7.6L40 66l-7.6-18.4L14 40l18.4-7.6z'/%3E%3Crect x='24' y='24' width='32' height='32'/%3E%3Cpath d='M0 0l24 24M80 0L56 24M0 80l24-24M80 80L56 56'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* ---------- base ---------- */
@@ -76,40 +53,31 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.65;
   color: var(--ink);
-  background: var(--page);
+  background: var(--bg);
+  line-height: 1.6;
 }
 
 img { max-width: 100%; height: auto; display: block; }
 
+a { color: var(--green-dark); text-decoration: underline; text-decoration-color: rgba(26, 112, 120, 0.35); text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+
 h1, h2, h3, h4 {
-  font-family: var(--font-display);
+  font-family: var(--font-head);
   font-weight: 400;
-  color: var(--green-ink);
-  line-height: 1.15;
+  color: var(--green-dark);
+  line-height: 1.25;
   margin: 0 0 0.5em;
-  text-wrap: balance;
 }
-h1 { font-size: var(--step-4); letter-spacing: -0.01em; }
-h2 { font-size: var(--step-3); }
-h3 { font-size: var(--step-2); }
+h1 { font-size: clamp(1.9rem, 4vw, 2.8rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
+h3 { font-size: 1.25rem; }
 
-p { margin: 0 0 1em; }
-p, li { text-wrap: pretty; }
+p { margin: 0 0 1em; color: var(--ink-soft); }
+strong { color: var(--ink); }
 
-a {
-  color: var(--green-ink);
-  text-decoration: underline;
-  text-decoration-color: var(--green);
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 3px;
-}
-a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
-
-:focus-visible { outline: 3px solid var(--green-text); outline-offset: 3px; border-radius: 2px; }
-.on-night :focus-visible, .site-footer :focus-visible, .topbar :focus-visible { outline-color: var(--gold); }
+.container { max-width: var(--max-width); margin: 0 auto; padding: 0 20px; }
 
 .ar { font-family: var(--font-arabic); font-weight: 500; line-height: 1.3; }
 
@@ -122,118 +90,60 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
 
 .skip-link {
   position: absolute;
-  left: 12px; top: -80px;
-  z-index: 100;
-  padding: 12px 18px;
-  background: var(--night);
-  color: #fff;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  background: var(--green-dark);
+  color: var(--white);
+  padding: 12px 20px;
+  border-radius: 0 0 var(--radius) 0;
   font-weight: 600;
-  border-radius: 0 0 var(--radius) var(--radius);
 }
-.skip-link:focus { top: 0; color: #fff; }
+.skip-link:focus { left: 0; color: var(--white); }
 
-.container { max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
+:focus-visible { outline: 3px solid var(--green-text); outline-offset: 2px; border-radius: 4px; }
+.topbar :focus-visible,
+.site-footer :focus-visible,
+.page-hero :focus-visible,
+.hero-photo :focus-visible { outline-color: var(--white); }
 
-.section { padding-block: clamp(56px, 8vw, 104px); }
-.section--tight { padding-block: clamp(40px, 5vw, 64px); }
-.section--mist { background: var(--mist); }
-.section--sand { background: var(--sand); }
+.section { padding: 64px 0; }
+.section-alt, .section--mist { background: var(--green-light); }
+.section--sand { background: var(--gold-light); }
 
-/* Night bands. Anything inside inherits light text and gold focus rings. */
-.on-night { background: var(--night); color: var(--on-night); }
-.on-night h1, .on-night h2, .on-night h3 { color: #fff; }
-.on-night a:not(.btn) { color: #fff; text-decoration-color: var(--gold); }
-.on-night a:not(.btn):hover { color: var(--gold); }
-.on-night .eyebrow { color: var(--gold); }
-
-.eyebrow {
-  display: block;
-  margin: 0 0 14px;
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--gold-text);
-}
-
-.lede { font-size: var(--step-1); line-height: 1.6; color: var(--ink-soft); max-width: 60ch; }
-.on-night .lede { color: var(--on-night); }
-.muted { color: var(--ink-soft); }
-
-.section-intro { max-width: 680px; margin-bottom: clamp(32px, 4vw, 52px); }
-.section-intro p { color: var(--ink-soft); }
+.section-head, .section-intro { text-align: center; max-width: 660px; margin: 0 auto 40px; }
 .section-intro--split {
   max-width: none;
+  text-align: left;
   display: flex;
   flex-wrap: wrap;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 12px 32px;
 }
 .section-intro--split > div { max-width: 640px; }
-.section-intro--split h2 { margin-bottom: 0; }
+.section-intro--split h2 { margin-bottom: 0.3em; }
+.section-intro--split p { margin-bottom: 0; }
+
+.eyebrow {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold-text);
+  margin: 0 0 10px;
+}
+
+.lede { font-size: 1.1rem; color: var(--ink-soft); }
+.muted { color: var(--ink-soft); }
+.center-row { display: flex; justify-content: center; margin-top: 36px; }
 
 /* A plain text link with an arrow, for "see all" and "read more". */
-.more {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  text-decoration: none;
-  color: var(--green-ink);
-  border-bottom: 1.5px solid var(--green);
-  padding-bottom: 2px;
-}
+.more { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; text-decoration: none; color: var(--green-dark); }
 .more::after { content: "\2192"; transition: transform 0.2s ease; }
-.more:hover { color: var(--green-dark); border-bottom-color: currentColor; }
+.more:hover { text-decoration: underline; }
 .more:hover::after { transform: translateX(3px); }
-.on-night .more { color: #fff; border-bottom-color: var(--gold); }
-
-/* ---------- motifs ---------- */
-
-/* A row of small arches, one per worshipper, as on the prayer-hall carpet. */
-.saff {
-  height: 18px;
-  background: var(--saff-colour, var(--gold));
-  -webkit-mask: var(--saff) repeat-x 0 100% / 28px 18px;
-  mask: var(--saff) repeat-x 0 100% / 28px 18px;
-}
-.saff--quiet { --saff-colour: var(--line); }
-.saff--footer { --saff-colour: var(--gold); opacity: 0.55; }
-
-/* The eight-pointed star lattice, laid very faintly over night bands. */
-.pattern { position: relative; isolation: isolate; }
-.pattern::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--green);
-  opacity: 0.09;
-  -webkit-mask: var(--star) 0 0 / 80px 80px repeat;
-  mask: var(--star) 0 0 / 80px 80px repeat;
-  pointer-events: none;
-}
-
-/* A photograph in the pointed arch from the logo's windows, with a gold arch
-   offset behind it. The picture is never stretched past its real size. */
-.arch-frame { position: relative; isolation: isolate; max-width: 460px; }
-.arch-frame::before {
-  content: "";
-  position: absolute;
-  inset: 18px -18px -18px 18px;
-  z-index: -1;
-  background: var(--gold);
-  -webkit-mask: var(--arch) 0 0 / 100% 100% no-repeat;
-  mask: var(--arch) 0 0 / 100% 100% no-repeat;
-}
-.arch {
-  aspect-ratio: 4 / 5;
-  background: var(--night-2);
-  -webkit-mask: var(--arch) 0 0 / 100% 100% no-repeat;
-  mask: var(--arch) 0 0 / 100% 100% no-repeat;
-}
-.arch img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ---------- buttons ---------- */
 
@@ -241,59 +151,64 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   min-height: 46px;
-  padding: 11px 22px;
-  border: 1.5px solid transparent;
-  border-radius: 4px;
-  font: 600 0.96rem/1.2 var(--font-body);
+  padding: 11px 26px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  font: 600 0.95rem/1.2 var(--font-body);
+  text-align: center;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
 .btn:hover { text-decoration: none; transform: translateY(-1px); }
-.btn:active { transform: none; }
 
-.btn-gold { background: var(--gold); color: var(--ink); }
-.btn-gold:hover { background: #e0bd74; color: var(--ink); }
+.btn-gold { background: var(--gold); color: var(--ink); font-weight: 700; }
+.btn-gold:hover { background: var(--gold-deep); color: var(--ink); }
 
-.btn-teal { background: var(--green-dark); color: #fff; }
-.btn-teal:hover { background: var(--green-ink); color: #fff; }
+.btn-teal { background: var(--green-dark); color: var(--white); }
+.btn-teal:hover { background: var(--green-ink); color: var(--white); }
 
-.btn-line { background: transparent; border-color: var(--green-ink); color: var(--green-ink); }
-.btn-line:hover { background: var(--green-ink); color: #fff; }
+.btn-line { background: transparent; border-color: var(--green-dark); color: var(--green-dark); }
+.btn-line:hover { background: var(--green-dark); color: var(--white); }
 
-.btn-ghost { background: transparent; border-color: rgba(255, 255, 255, 0.55); color: #fff; }
-.btn-ghost:hover { background: #fff; border-color: #fff; color: var(--night); }
+.btn-ghost { background: transparent; border-color: var(--white); color: var(--white); }
+.btn-ghost:hover { background: var(--white); color: var(--green-dark); }
+
+.btn-on-gold { background: var(--white); color: var(--gold-text); font-weight: 700; }
+.btn-on-gold:hover { background: var(--ink); color: var(--white); }
+
+.btn-small { min-height: 44px; padding: 8px 18px; font-size: 0.88rem; }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
 
 /* ==========================================================================
-   Header: a night top bar (next prayer, the madrasah, parent login) above the
-   main bar. The whole header is sticky with a negative offset equal to the top
-   bar, so on scroll the top bar slides away and the main bar stays.
+   Header: a slim teal top bar (next prayer, the madrasah, parent login) above
+   the white main bar. The whole header is sticky with a negative offset equal
+   to the top bar, so on scroll the top bar slides away and the main bar stays.
    ========================================================================== */
 
 .site-header {
   position: sticky;
   top: calc(env(safe-area-inset-top, 0px) - var(--topbar-h));
   z-index: 50;
-  background: var(--paper);
-  border-bottom: 1px solid var(--line);
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
 }
 
-.topbar { height: var(--topbar-h); background: var(--night); color: var(--on-night); font-size: 0.84rem; }
+.topbar { height: var(--topbar-h); background: var(--green-dark); font-size: 0.84rem; }
 .topbar-inner {
-  max-width: var(--max);
+  max-width: var(--max-width);
   height: 100%;
   margin: 0 auto;
-  padding-inline: var(--gutter);
+  padding: 0 20px;
   display: flex;
   align-items: center;
   gap: 22px;
 }
-.topbar a { color: var(--on-night); text-decoration: none; }
-.topbar a:hover { color: #fff; text-decoration: underline; text-decoration-color: var(--gold); }
+.topbar p { color: var(--white); }
+.topbar a { color: var(--white); text-decoration: none; }
+.topbar a:hover { text-decoration: underline; }
 .topbar-next, .topbar-note {
   flex: 1;
   min-width: 0;
@@ -302,38 +217,38 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.topbar-next b { color: #fff; font-weight: 600; }
-.topbar-next .gold { color: var(--gold); }
+.topbar-next b { color: var(--white); font-weight: 700; }
+.topbar-next .gold { color: var(--gold-light); }
 .topbar-next .tabular { font-variant-numeric: tabular-nums; }
 .topbar-madrasah { display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap; }
-.topbar a.topbar-madrasah { color: var(--gold); font-weight: 600; }
+.topbar a.topbar-madrasah { color: var(--gold-light); font-weight: 600; }
 .topbar-madrasah .ar { font-size: 1.05rem; }
 .topbar-portal, .topbar-back { white-space: nowrap; }
-.topbar-portal { padding-left: 22px; border-left: 1px solid var(--line-night); }
+.topbar-portal { padding-left: 22px; border-left: 1px solid rgba(255, 255, 255, 0.3); font-weight: 600; }
 
 .header-inner {
-  max-width: var(--max);
+  max-width: var(--max-width);
   margin: 0 auto;
-  padding: 12px var(--gutter);
-  min-height: 76px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   gap: 20px;
 }
-.brand { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
-.brand-logo { height: 50px; width: auto; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
+.brand-logo { height: 46px; width: auto; }
 
 .main-nav { margin-left: auto; }
 .main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 26px; }
 .main-nav a {
   position: relative;
   display: block;
-  padding-block: 8px;
+  padding: 8px 0;
   color: var(--ink);
   font-weight: 600;
   font-size: 0.95rem;
   text-decoration: none;
 }
+/* The current page gets a gold bar as well as colour, never colour alone. */
 .main-nav a::after {
   content: "";
   position: absolute;
@@ -344,11 +259,11 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   transform-origin: left;
   transition: transform 0.2s ease;
 }
-.main-nav a:hover { color: var(--green-ink); }
+.main-nav a:hover { color: var(--green-dark); }
 .main-nav a:hover::after, .main-nav a.active::after { transform: scaleX(1); }
-.main-nav a.active { color: var(--green-ink); }
+.main-nav a.active { color: var(--green-dark); }
 
-.header-donate { flex-shrink: 0; }
+.header-donate { flex-shrink: 0; padding: 10px 22px; }
 /* Links the top bar carries on a wide screen, repeated in the phone menu where
    the top bar has no room for them. */
 .nav-mobile-only { display: none; }
@@ -358,9 +273,9 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   width: 46px;
   height: 46px;
   padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--white);
   cursor: pointer;
   align-items: center;
   justify-content: center;
@@ -370,7 +285,7 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   width: 20px;
   height: 2px;
   background: var(--ink);
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 .nav-toggle-bars { position: relative; }
 .nav-toggle-bars::before, .nav-toggle-bars::after { content: ""; position: absolute; left: 0; }
@@ -380,7 +295,7 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
 .site-header.is-open .nav-toggle-bars::before { transform: translateY(6px) rotate(45deg); }
 .site-header.is-open .nav-toggle-bars::after { transform: translateY(-6px) rotate(-45deg); }
 
-@media (max-width: 980px) {
+@media (max-width: 1000px) {
   .nav-toggle { display: inline-flex; }
   .header-donate { margin-left: auto; }
   .main-nav {
@@ -390,40 +305,38 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
     left: 0;
     right: 0;
     margin: 0;
-    background: var(--paper);
-    border-bottom: 1px solid var(--line);
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
     box-shadow: var(--shadow);
     max-height: calc(100vh - 80px);
     overflow-y: auto;
   }
   .site-header.is-open .main-nav { display: block; }
-  .main-nav ul { flex-direction: column; align-items: stretch; gap: 0; padding: 8px var(--gutter) 20px; }
-  .main-nav li + li { border-top: 1px solid var(--line); }
-  .main-nav a { padding: 14px 0; font: 400 1.3rem/1.3 var(--font-display); color: var(--green-ink); }
+  .main-nav ul { flex-direction: column; align-items: stretch; gap: 0; padding: 6px 20px 16px; }
+  .main-nav li + li { border-top: 1px solid var(--border); }
+  .main-nav a { padding: 14px 0; min-height: 48px; font-size: 1rem; }
   .main-nav a::after { display: none; }
-  .main-nav a.active { color: var(--gold-text); }
   .main-nav a.active { box-shadow: inset 3px 0 0 var(--gold); padding-left: 14px; }
   .nav-mobile-only { display: block; }
-  .nav-mobile-only a { font: 600 1rem/1.3 var(--font-body); color: var(--ink); }
 }
 
 @media (max-width: 640px) {
   .topbar-inner { gap: 14px; }
   .topbar-portal { display: none; }
   .topbar-madrasah .ar { display: none; }
-  .brand-logo { height: 42px; }
-  .header-inner { min-height: 66px; gap: 12px; }
-  .header-donate { padding: 9px 16px; min-height: 44px; }
+  .brand-logo { height: 40px; }
+  .header-inner { padding: 10px 16px; gap: 12px; }
+  .header-donate { padding: 8px 18px; min-height: 44px; }
 }
 
 /* The madrasah's header: same structure as the masjid's, the madrasah's own
    wordmark, and the masjid's logo beside it, so it is plain that the madrasah
    belongs to the masjid. A rule in the madrasah's colour marks the section. */
 .site-header--furqan { border-bottom: 3px solid var(--furqan); }
-.site-header--furqan .topbar a.topbar-back { color: var(--gold); font-weight: 600; }
-.site-header--furqan .topbar-note { text-align: center; color: rgba(255, 255, 255, 0.7); }
+.site-header--furqan .topbar a.topbar-back { color: var(--gold-light); font-weight: 600; }
+.site-header--furqan .topbar-note { text-align: center; color: rgba(255, 255, 255, 0.9); }
 .brand-furqan { gap: 16px; }
-.brand-furqan-parent { padding-left: 16px; border-left: 1px solid var(--line); }
+.brand-furqan-parent { padding-left: 16px; border-left: 1px solid var(--border); }
 .brand-furqan-parent img { height: 34px; width: auto; }
 
 /* The madrasah's logos, from assets/furqan/. Each is used as a mask, so one
@@ -465,285 +378,341 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
    Footer
    ========================================================================== */
 
-.site-footer { background: var(--night); color: var(--on-night); padding-bottom: 28px; }
-.site-footer .saff { margin-bottom: 56px; }
+.site-footer {
+  background: var(--green-dark);
+  color: var(--white);
+  padding: 56px 0 24px;
+}
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr;
-  gap: 40px 32px;
-  padding-bottom: 40px;
-  border-bottom: 1px solid var(--line-night);
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
-.footer-ar { font-size: 2.3rem; color: var(--gold); margin: 0 0 6px; }
-.footer-name { font: 400 1.15rem/1.35 var(--font-display); color: #fff; margin-bottom: 10px; }
-.site-footer p { margin: 0 0 6px; }
-.footer-charity { font-size: 0.86rem; color: rgba(255, 255, 255, 0.72); }
-.footer-heading {
-  font: 700 0.74rem/1.2 var(--font-body);
-  letter-spacing: 0.16em;
+.footer-logo-chip {
+  display: inline-block;
+  background: var(--white);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.footer-logo { height: 34px; width: auto; }
+.site-footer p { color: rgba(255, 255, 255, 0.92); margin: 0 0 6px; }
+.footer-charity { font-size: 0.84rem; }
+.site-footer .footer-heading {
+  color: var(--white);
+  font: 400 1rem/1.3 var(--font-head);
   text-transform: uppercase;
-  color: var(--gold);
-  margin: 6px 0 16px;
+  letter-spacing: 0.06em;
+  margin: 4px 0 16px;
 }
-.site-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.site-footer a { color: rgba(255, 255, 255, 0.92); text-decoration: none; }
-.site-footer a:hover { color: #fff; text-decoration: underline; text-decoration-color: var(--gold); }
+.site-footer ul { list-style: none; margin: 0; padding: 0; }
+.site-footer li { margin-bottom: 10px; }
+.site-footer a { color: rgba(255, 255, 255, 0.95); text-decoration: none; }
+.site-footer a:hover { color: var(--white); text-decoration: underline; }
 .footer-bottom {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 10px 24px;
-  padding-top: 22px;
-  font-size: 0.84rem;
-  color: rgba(255, 255, 255, 0.72);
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 20px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.88);
 }
 
-.social-row { display: flex; gap: 8px; margin-top: 18px; }
+.social-row { display: flex; gap: 8px; margin-top: 16px; }
 .social-row a {
   width: 44px;
   height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--line-night);
-  border-radius: 50%;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
-.social-row a:hover { border-color: var(--gold); background: var(--night-2); }
+.social-row a:hover { background: rgba(255, 255, 255, 0.1); }
 .social-row svg { width: 20px; height: 20px; fill: currentColor; }
 .social-row a[title^="Instagram"] svg { fill: none; stroke: currentColor; stroke-width: 1.6; }
 .social-row a[title^="Instagram"] .dot { fill: currentColor; stroke: none; }
-.social-row .play { fill: var(--night); }
+.social-row .play { fill: var(--green-dark); }
 
 @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } .footer-id { grid-column: 1 / -1; } }
 @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
 
 /* ==========================================================================
-   Inner page heading band
+   Inner page heading band: teal, centred, with a breadcrumb. The gradient
+   stays between --green-dark and --green-text wherever text can sit, so white
+   type passes contrast; the brighter brand teal is only a glow in the corner.
    ========================================================================== */
 
-.page-hero { padding-block: clamp(48px, 7vw, 88px) clamp(40px, 6vw, 72px); }
-.page-hero h1 { margin-bottom: 14px; }
-.page-hero .lede { margin: 0; }
-.page-hero-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; align-items: end; }
-.page-hero-ar { font-size: clamp(2rem, 1.4rem + 3vw, 3.4rem); color: var(--gold); margin: 0 0 4px; }
-.crumbs { font-size: 0.84rem; margin: 0 0 18px; color: rgba(255, 255, 255, 0.7); }
-.crumbs a { color: rgba(255, 255, 255, 0.85); }
-@media (max-width: 760px) { .page-hero-grid { grid-template-columns: 1fr; gap: 20px; } }
+.page-hero {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(66, 186, 197, 0.55), transparent 32%),
+    linear-gradient(135deg, var(--green-dark) 0%, var(--green-text) 60%);
+  color: var(--white);
+  padding: 56px 0;
+  text-align: center;
+}
+.page-hero h1 { color: var(--white); margin-bottom: 8px; }
+.page-hero p { color: var(--white); margin: 0 auto; max-width: 640px; }
+.page-hero .lede { font-size: 1.05rem; }
+.page-hero .page-hero-ar { font-size: clamp(1.8rem, 1.4rem + 2vw, 2.6rem); line-height: 1.2; color: var(--gold-light); margin-bottom: 4px; }
+.page-hero .crumbs { font-size: 0.85rem; margin-bottom: 10px; }
+.crumbs a { color: var(--white); }
+
+/* Our Story carries two figures under its heading. */
+.story-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 48px; margin: 24px 0 0; padding: 0; list-style: none; }
+.story-stats li { display: flex; flex-direction: column; font-size: 0.86rem; color: rgba(255, 255, 255, 0.9); }
+.story-stats b { font: 400 1.9rem/1.1 var(--font-head); color: var(--gold-light); }
 
 /* ==========================================================================
    Home
    ========================================================================== */
 
-.home-hero { padding-block: clamp(40px, 6vw, 84px) clamp(48px, 7vw, 96px); overflow: hidden; }
-.home-hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: clamp(32px, 5vw, 72px);
-  align-items: center;
-}
-.hero-ar {
-  font-size: var(--step-5);
-  line-height: 1.05;
-  color: var(--gold);
-  margin: 0 0 10px;
-}
-.home-hero h1 { font-size: var(--step-4); margin-bottom: 18px; }
-.hero-lede { font-size: var(--step-1); color: var(--on-night); max-width: 34em; margin-bottom: 28px; }
-.hero-lede em { font-style: normal; color: var(--gold); }
-.hero-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 22px;
-  margin: 30px 0 0;
-  padding: 18px 0 0;
-  border-top: 1px solid var(--line-night);
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.72);
-  list-style: none;
-}
-.hero-facts b { color: #fff; font-weight: 600; }
-@media (max-width: 900px) { .home-hero-grid { grid-template-columns: 1fr; } }
-/* On a phone the timetable is the reason most people come, so the hero keeps
-   itself short enough that today's card starts near the first screen. */
-@media (max-width: 600px) {
-  .home-hero { padding-top: 28px; }
-  .home-hero .eyebrow { margin-bottom: 8px; }
-  .hero-ar { font-size: 2.6rem; margin-bottom: 4px; }
-  .home-hero h1 { font-size: 2.1rem; margin-bottom: 12px; }
-  .hero-lede { font-size: 1rem; margin-bottom: 20px; }
-  .hero-facts { display: none; }
-  .home-hero-grid { gap: 28px; }
-}
-
-/* Three words: what the masjid is for. Columns divided by hairlines. */
-.pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.pillar { padding: 0 clamp(20px, 3vw, 40px); display: flex; flex-direction: column; gap: 10px; }
-.pillar:first-child { padding-left: 0; }
-.pillar:last-child { padding-right: 0; }
-.pillar + .pillar { border-left: 1px solid var(--line); }
-.pillar-ar { font-size: clamp(2.6rem, 2rem + 2.4vw, 3.6rem); color: var(--green-text); margin: 0; line-height: 1.1; }
-.pillar h3 { margin: 0; }
-.pillar h3 small {
-  display: block;
-  margin-top: 6px;
-  font: 700 0.72rem/1.2 var(--font-body);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold-text);
-}
-.pillar p { color: var(--ink-soft); margin: 0; }
-.pillar .more { margin-top: auto; align-self: flex-start; }
-@media (max-width: 820px) {
-  .pillars { grid-template-columns: 1fr; gap: 36px; }
-  .pillar, .pillar:first-child, .pillar:last-child { padding: 0; }
-  .pillar + .pillar { border-left: 0; border-top: 1px solid var(--line); padding-top: 36px; }
-}
-
-/* The madrasah, introduced from the masjid's homepage. */
-.furqan-band { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
-.furqan-arch {
+/* The building, at the top, with the name over it. */
+.hero-photo {
   position: relative;
-  isolation: isolate;
-  max-width: 340px;
+  height: min(60vh, 560px);
+  min-height: 420px;
+  background-color: var(--ink);
+  background-size: cover;
+  background-position: center 30%;
+}
+.hero-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Dark enough under the text to keep white type readable over the white
+     sign; the right of the picture, where the sign is, stays clear. */
+  background: linear-gradient(90deg, rgba(10, 20, 18, 0.82) 0%, rgba(10, 20, 18, 0.72) 45%, rgba(10, 20, 18, 0.4) 70%, rgba(10, 20, 18, 0.12) 90%);
+}
+.hero-photo-body {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 20px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--white);
+}
+.hero-photo-body > * { max-width: 560px; }
+.hero-photo p { color: rgba(255, 255, 255, 0.92); font-size: 1.08rem; }
+.hero-photo .eyebrow { color: var(--gold-light); font-size: 0.75rem; }
+.hero-ar, .hero-photo .hero-ar { font-size: clamp(2.2rem, 1.6rem + 3vw, 3.4rem); line-height: 1.1; color: var(--gold); margin: 0 0 4px; }
+.hero-photo h1 { color: var(--white); font-size: clamp(2.1rem, 5vw, 3.1rem); margin-bottom: 0.3em; }
+.hero-photo .btn-row { margin-top: 10px; }
+
+@media (max-width: 700px) {
+  .hero-photo { height: auto; min-height: 0; }
+  .hero-photo-body { padding: 44px 20px 48px; }
+  .hero-photo::after { background: linear-gradient(180deg, rgba(10, 20, 18, 0.68), rgba(10, 20, 18, 0.82)); }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero-photo { height: auto; min-height: 0; }
+  .hero-photo-body { padding: 40px 20px; }
+}
+
+/* Today's prayer times, overlapping the photograph. */
+.prayer-card--home { margin-top: -56px; }
+@media (max-width: 700px) { .prayer-card--home { margin-top: 20px; } }
+
+/* Three words: what the masjid is for. */
+.grid { display: grid; gap: 24px; }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 860px) { .grid-3 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px;
+  height: 100%;
+}
+.card h3 { margin-bottom: 8px; }
+.card p:last-child { margin-bottom: 0; }
+.card .icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--green-light);
+  color: var(--green-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.card .icon svg { width: 55%; height: 55%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.pillar { display: flex; flex-direction: column; }
+.pillar-ar { font-size: 2.6rem; line-height: 1.1; color: var(--green-text); margin: 0 0 8px; }
+.pillar .more { margin-top: auto; padding-top: 6px; align-self: flex-start; }
+
+.card--person { text-align: center; }
+.avatar-placeholder {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--green-light);
+  color: var(--green-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.avatar-placeholder svg { width: 56%; height: 56%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.section-alt .card--person .avatar-placeholder { background: var(--green-light); }
+
+/* The madrasah, introduced from the masjid's homepage: its logo inside the
+   arch of the masjid's windows. */
+.furqan-band { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; align-items: center; }
+.furqan-arch {
+  max-width: 300px;
   width: 100%;
   margin-inline: auto;
   aspect-ratio: 4 / 5;
-  background: var(--night);
+  background: var(--white);
   -webkit-mask: var(--arch) 0 0 / 100% 100% no-repeat;
   mask: var(--arch) 0 0 / 100% 100% no-repeat;
   display: grid;
   place-items: center;
   align-content: center;
-  gap: 8px;
-  padding: 28% 12% 12%;
+  gap: 10px;
+  padding: 28% 10% 12%;
   text-align: center;
 }
-.furqan-arch .furqan-logo { color: var(--gold); gap: 10px; }
+.furqan-arch .furqan-logo { gap: 10px; }
 /* Fixed widths: the logo sits in a shrink-to-fit box, so a percentage here
    would resolve to nothing and the logo would vanish. */
 .furqan-arch .furqan-logo-brown { width: 175px; }
-.furqan-arch .furqan-logo-navy { width: 200px; }
+.furqan-arch .furqan-logo-navy { width: 190px; }
+.furqan-arch .furqan-logo-en { color: var(--furqan); font-size: 0.66rem; }
+.furqan-arch p.furqan-arch-caption { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); margin: 0; }
 @media (max-width: 760px) {
+  .furqan-band { grid-template-columns: 1fr; gap: 28px; }
+  .furqan-arch { max-width: 230px; }
   .furqan-arch .furqan-logo-brown { width: 150px; }
   .furqan-arch .furqan-logo-navy { width: 160px; }
 }
-.furqan-arch .furqan-logo-en { color: #fff; font-size: 0.68rem; }
-.furqan-arch-caption { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255, 255, 255, 0.75); margin: 0; }
-.furqan-band ul { margin: 0 0 26px; padding-left: 1.1em; color: var(--ink-soft); }
-.furqan-band li + li { margin-top: 6px; }
-@media (max-width: 760px) { .furqan-band { grid-template-columns: 1fr; } .furqan-arch { max-width: 240px; } }
 
 /* From the masjid: recent events and the newest recorded talks. */
-.feed { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 64px); }
-.feed h3 { font-size: var(--step-1); font-family: var(--font-body); font-weight: 700; color: var(--ink); margin-bottom: 18px; }
-.feed-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
-.feed-head h3 { margin: 0 0 12px; }
+.feed { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; }
+.feed-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-bottom: 2px solid var(--green-light); margin-bottom: 6px; }
+.feed-head h3 { margin: 0 0 10px; }
 .feed-list { list-style: none; margin: 0; padding: 0; }
 .feed-item {
   display: grid;
   grid-template-columns: 72px minmax(0, 1fr);
   gap: 16px;
   padding: 16px 0;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
   align-items: start;
 }
-.feed-thumb { display: block; width: 72px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; background: var(--mist); }
+.feed-thumb { display: block; width: 72px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; background: var(--green-light); }
 /* No poster: a small arch in its place, so every row keeps the same shape. */
 .feed-thumb--none { position: relative; }
 .feed-thumb--none::before {
   content: "";
   position: absolute;
   inset: 22% 26% 16%;
-  background: var(--green-text);
-  opacity: 0.35;
+  background: var(--green);
+  opacity: 0.5;
   -webkit-mask: var(--arch) 0 0 / 100% 100% no-repeat;
   mask: var(--arch) 0 0 / 100% 100% no-repeat;
 }
 .feed-item h4 { font: 600 1rem/1.35 var(--font-body); color: var(--ink); margin: 2px 0 4px; }
-.feed-meta { font-size: 0.84rem; color: var(--ink-soft); margin: 0; }
-.feed-meta b { color: var(--green-ink); font-weight: 600; }
-.feed-empty { color: var(--ink-soft); padding: 18px 0; }
+.feed-meta { font-size: 0.84rem; margin: 0; }
+.feed-meta b { color: var(--green-dark); font-weight: 600; }
+.feed-empty { padding: 18px 0; }
 
 .talk-feature { display: block; color: inherit; text-decoration: none; margin-top: 16px; }
-.talk-feature:hover { color: inherit; }
-.talk-feature .video-thumb { border-radius: var(--radius); overflow: hidden; }
-.talk-feature h4 { font: 400 1.3rem/1.3 var(--font-display); color: var(--green-ink); margin: 14px 0 4px; }
-.talk-feature:hover h4 { text-decoration: underline; text-decoration-color: var(--green); }
+.talk-feature h4 { font: 400 1.25rem/1.3 var(--font-head); color: var(--green-dark); margin: 14px 0 4px; }
+.talk-feature:hover h4 { text-decoration: underline; }
 .talk-list { list-style: none; margin: 12px 0 0; padding: 0; }
-.talk-list li { border-top: 1px solid var(--line); }
+.talk-list li { border-top: 1px solid var(--border); }
 .talk-list a { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 0.94rem; }
-.talk-list a:hover { color: var(--green-ink); }
+.talk-list a:hover { color: var(--green-dark); }
 .talk-list span { flex-shrink: 0; font-weight: 400; color: var(--ink-soft); font-size: 0.84rem; }
 @media (max-width: 820px) { .feed { grid-template-columns: 1fr; } }
 
 /* Our story, in brief. */
-.story-band { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
-.years { margin: 0; display: flex; align-items: baseline; gap: 18px; }
-.years-num { font: 400 clamp(5rem, 3rem + 9vw, 9.5rem)/0.9 var(--font-display); color: var(--gold); font-variant-numeric: lining-nums; }
-.years-label { font-size: 1.05rem; line-height: 1.4; color: #fff; max-width: 12em; }
-.years-note { margin: 16px 0 0; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
+.story-band { display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: 48px; align-items: center; }
+.years { margin: 0; display: flex; align-items: baseline; gap: 16px; }
+.years-num { font: 400 clamp(4.5rem, 3rem + 6vw, 7.5rem)/0.9 var(--font-head); color: var(--green-dark); font-variant-numeric: lining-nums; }
+.years-label { font-size: 1.05rem; line-height: 1.4; color: var(--ink); max-width: 11em; }
 
-.mini-line { list-style: none; margin: 0 0 30px; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; }
-.mini-line::before { content: ""; position: absolute; left: 0; right: 0; top: 30px; height: 1px; background: var(--line-night); }
-.mini-line li { position: relative; padding-top: 48px; padding-right: 12px; font-size: 0.86rem; line-height: 1.4; color: rgba(255, 255, 255, 0.78); }
+.mini-line { list-style: none; margin: 0 0 26px; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; }
+.mini-line::before { content: ""; position: absolute; left: 0; right: 0; top: 30px; height: 2px; background: rgba(26, 112, 120, 0.18); }
+.mini-line li { position: relative; padding: 48px 12px 0 0; font-size: 0.86rem; line-height: 1.4; color: var(--ink-soft); }
 .mini-line li::before {
   content: "";
   position: absolute;
   top: 25px; left: 0;
-  width: 11px; height: 11px;
+  width: 12px; height: 12px;
   border-radius: 50%;
   background: var(--gold);
-  box-shadow: 0 0 0 4px var(--night);
+  box-shadow: 0 0 0 4px var(--green-light);
 }
-.mini-line li.is-open::before { background: var(--night); border: 1.5px dashed var(--gold); }
-.mini-line b { position: absolute; top: 0; left: 0; font: 400 1.3rem/1 var(--font-display); color: #fff; }
-.mini-line li.is-open b { color: var(--gold); }
-@media (max-width: 900px) { .story-band { grid-template-columns: 1fr; } }
+.mini-line b { position: absolute; top: 0; left: 0; font: 400 1.3rem/1 var(--font-head); color: var(--green-dark); }
+@media (max-width: 900px) { .story-band { grid-template-columns: 1fr; gap: 28px; } }
 @media (max-width: 560px) {
-  .mini-line { grid-template-columns: 1fr; gap: 0; }
-  .mini-line::before { left: 5px; right: auto; top: 0; bottom: 0; width: 1px; height: auto; }
-  .mini-line li { padding: 0 0 18px 32px; }
+  .mini-line { grid-template-columns: 1fr; }
+  .mini-line::before { left: 5px; right: auto; top: 0; bottom: 0; width: 2px; height: auto; }
+  .mini-line li { padding: 0 0 16px 30px; }
   .mini-line li::before { top: 4px; }
-  .mini-line b { position: static; display: block; margin-bottom: 4px; }
+  .mini-line b { position: static; display: block; margin-bottom: 2px; }
 }
 
-/* Giving. */
-.give { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
-.give blockquote { margin: 0; }
-.give blockquote p { font: 400 var(--step-3)/1.3 var(--font-display); color: var(--green-ink); margin: 0 0 14px; }
-.give cite { font-style: normal; font-size: 0.9rem; color: var(--gold-text); font-weight: 600; }
-.give-card { background: var(--paper); border: 1px solid #e7dbc0; border-radius: var(--radius); padding: 28px; }
-.give-card h3 { font-size: var(--step-2); margin-bottom: 8px; }
-.give-card p { color: var(--ink-soft); font-size: 0.95rem; }
-.give-card .btn { width: 100%; }
-.give-card small { display: block; margin-top: 12px; color: var(--ink-soft); font-size: 0.82rem; }
-@media (max-width: 820px) { .give { grid-template-columns: 1fr; } }
+/* Giving: the gold panel. Dark type on gold, because white on this gold
+   fails contrast. */
+.donate-hero {
+  background: linear-gradient(135deg, #e3c37d, var(--gold) 55%, #c9a04c);
+  border-radius: var(--radius);
+  padding: 44px 32px;
+  text-align: center;
+}
+.donate-hero h2 { color: var(--green-ink); }
+.donate-hero p { color: var(--ink); max-width: 620px; margin: 0 auto 22px; }
+.donate-hero :focus-visible { outline-color: var(--green-ink); }
 
 /* Visit. */
-.visit { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(40px, 6vw, 96px); align-items: center; }
-.visit address { font-style: normal; font: 400 var(--step-2)/1.35 var(--font-display); color: var(--green-ink); margin-bottom: 18px; }
-.visit-jumuah { padding: 14px 18px; background: var(--sand); border-radius: var(--radius); margin-bottom: 24px; }
-.visit-jumuah p { margin: 0; }
-@media (max-width: 820px) { .visit { grid-template-columns: 1fr; } .visit .arch-frame { max-width: 320px; } }
+.visit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.visit-photo { margin: 0; }
+.visit-photo img { width: 100%; max-width: 680px; border-radius: var(--radius); box-shadow: var(--shadow); }
+.visit address { font: normal 400 1.3rem/1.4 var(--font-head); color: var(--green-dark); margin-bottom: 16px; }
+.visit-jumuah { padding: 12px 16px; background: var(--white); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; margin-bottom: 22px; }
+.visit-jumuah p { margin: 0; color: var(--ink); }
+@media (max-width: 820px) { .visit { grid-template-columns: 1fr; gap: 28px; } }
 
 /* ==========================================================================
-   Prayer times. The card's top is cut into an arch, like a mihrab.
+   Prayer times, rendered from assets/prayer-times.json
    ========================================================================== */
 
 .prayer-card {
   position: relative;
-  background: var(--paper);
-  color: var(--ink);
-  padding: 58px clamp(20px, 3vw, 32px) 26px;
-  -webkit-mask: var(--arch-top) top / 100% 56px no-repeat, linear-gradient(#000, #000) bottom / 100% calc(100% - 55px) no-repeat;
-  mask: var(--arch-top) top / 100% 56px no-repeat, linear-gradient(#000, #000) bottom / 100% calc(100% - 55px) no-repeat;
+  z-index: 2;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 30px;
 }
-.prayer-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
-.prayer-card-head h2 { font-size: 1.35rem; margin: 0; color: var(--green-ink); }
-.prayer-card-head a { font-size: 0.86rem; font-weight: 600; }
-.on-night .prayer-card a:not(.btn) { color: var(--green-ink); text-decoration-color: var(--green); }
-.on-night .prayer-card a:not(.btn):hover { color: var(--green-dark); }
+@media (max-width: 700px) { .prayer-card { padding: 22px 18px 20px; } }
+.prayer-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.prayer-card-head h2 { margin: 0; font-size: 1.35rem; }
+.prayer-card-head > a:not(.btn) { font-size: 0.88rem; font-weight: 600; }
 
 .prayer-dates {
   display: flex;
@@ -751,111 +720,109 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   justify-content: space-between;
   align-items: baseline;
   gap: 2px 16px;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: var(--ink-soft);
 }
 .prayer-greg { font-weight: 600; color: var(--ink); }
-.prayer-now b { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--green-ink); }
-.prayer-hijri { margin: 2px 0 0; font-size: 0.95rem; color: var(--gold-text); }
+.prayer-now b { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--green-dark); }
+.prayer-hijri { margin: 4px 0 0; font-size: 0.95rem; color: var(--gold-text); }
 
 .prayer-next {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: end;
-  gap: 4px 16px;
+  gap: 2px 16px;
   margin: 16px 0 6px;
-  padding: 16px 18px;
-  background: var(--night);
-  color: var(--on-night);
-  border-radius: var(--radius);
+  padding: 14px 18px;
+  background: var(--green-light);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 8px 8px 0;
 }
-.prayer-next-label { grid-column: 1 / -1; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
-.prayer-next-name { font: 400 1.9rem/1 var(--font-display); color: #fff; }
-.prayer-next-when { text-align: right; font-size: 0.86rem; line-height: 1.35; }
-.prayer-next-when b { display: block; font: 600 1.6rem/1.1 var(--font-body); color: #fff; font-variant-numeric: tabular-nums; }
-.prayer-next-count { grid-column: 1 / -1; font-size: 0.86rem; color: rgba(255, 255, 255, 0.75); font-variant-numeric: tabular-nums; }
+.prayer-next-label { grid-column: 1 / -1; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-text); }
+.prayer-next-name { font: 400 1.8rem/1.1 var(--font-head); color: var(--green-dark); }
+.prayer-next-when { text-align: right; font-size: 0.86rem; line-height: 1.35; color: var(--ink-soft); }
+.prayer-next-when b { display: block; font: 700 1.5rem/1.1 var(--font-body); color: var(--ink); font-variant-numeric: tabular-nums; }
+.prayer-next-count { grid-column: 1 / -1; font-size: 0.86rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 
 .prayer-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
 .prayer-table thead th {
-  padding: 12px 8px 8px;
+  padding: 14px 8px 10px;
   text-align: right;
-  font: 700 0.7rem/1 var(--font-body);
-  letter-spacing: 0.14em;
+  font: 600 0.75rem/1 var(--font-body);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
 }
 .prayer-table thead th:first-child { text-align: left; }
-.prayer-table tbody th { text-align: left; padding: 11px 8px; font: 600 1rem/1.2 var(--font-body); color: var(--green-ink); }
-.prayer-table td { text-align: right; padding: 11px 8px; font-size: 1.05rem; color: var(--ink-soft); }
+.prayer-table tbody th { text-align: left; padding: 13px 8px; font: 600 1.02rem/1.2 var(--font-body); color: var(--green-dark); }
+.prayer-table td { text-align: right; padding: 13px 8px; font-size: 1.08rem; color: var(--ink-soft); }
 .prayer-table td + td { color: var(--ink); font-weight: 600; }
-.prayer-table tbody tr + tr > * { border-top: 1px solid var(--line); }
-.prayer-table tr.is-next > * { background: var(--mist); }
-.prayer-table tr.is-next th { box-shadow: inset 3px 0 0 var(--gold); }
+.prayer-table tbody tr + tr > * { border-top: 1px solid var(--border); }
+.prayer-table tr.is-next > * { background: var(--green-light); }
+.prayer-table tr.is-next th { box-shadow: inset 3px 0 0 var(--green-text); }
 .prayer-table tr.is-jumuah th { color: var(--gold-text); }
-.prayer-table tr.is-passed th, .prayer-table tr.is-passed td { color: #7b8886; font-weight: 400; }
+.prayer-table tr.is-passed th, .prayer-table tr.is-passed td { color: var(--ink-soft); font-weight: 400; }
 .next-tag {
   display: inline-block;
   margin-left: 8px;
   padding: 2px 8px;
   border-radius: 999px;
   background: var(--green-dark);
-  color: #fff;
-  font: 700 0.64rem/1.5 var(--font-body);
-  letter-spacing: 0.08em;
+  color: var(--white);
+  font: 700 0.66rem/1.5 var(--font-body);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   vertical-align: 2px;
 }
 
 .prayer-note, .prayer-upnext p, .prayer-jumuah {
   margin: 14px 0 0;
-  padding: 11px 14px;
-  border-radius: var(--radius);
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
   font-size: 0.92rem;
   color: var(--ink);
 }
-.prayer-jumuah { background: var(--sand); }
-.prayer-upnext p { background: var(--mist); margin: 0; }
+.prayer-jumuah { background: var(--gold-light); border-left: 3px solid var(--gold); }
+.prayer-upnext p { background: var(--green-light); border-left: 3px solid var(--green); margin: 0; }
 .prayer-upnext:not(:empty) { margin-top: 14px; }
-.prayer-source { margin: 14px 0 0; font-size: 0.82rem; text-align: right; }
+.prayer-source { margin: 16px 0 0; font-size: 0.82rem; text-align: right; }
 .prayer-source a { color: var(--ink-soft); }
 .prayer-loading, .prayer-fallback { color: var(--ink-soft); font-size: 0.95rem; margin: 8px 0 0; }
-.on-night .prayer-fallback { color: var(--on-night); }
 
 @media (max-width: 420px) {
   .prayer-table tbody th, .prayer-table td { padding-inline: 4px; }
-  .prayer-next-name { font-size: 1.6rem; }
+  .prayer-next-name { font-size: 1.5rem; }
 }
 
 /* The prayer times page. */
-.prayer-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
-.prayer-layout .prayer-card { box-shadow: none; border: 1px solid var(--line); -webkit-mask: none; mask: none; border-radius: var(--radius); padding-top: 26px; }
-.prayer-aside h2 { font-size: var(--step-2); }
-.prayer-aside dl { margin: 0; display: grid; gap: 18px; }
+.prayer-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); gap: 48px; align-items: start; }
+.prayer-aside h2 { font-size: 1.4rem; }
+.prayer-aside dl { margin: 0; display: grid; gap: 16px; }
 .prayer-aside dt { font-weight: 700; color: var(--ink); }
-.prayer-aside dd { margin: 4px 0 0; color: var(--ink-soft); }
-@media (max-width: 860px) { .prayer-layout { grid-template-columns: 1fr; } }
+.prayer-aside dd { margin: 2px 0 0; color: var(--ink-soft); }
+@media (max-width: 860px) { .prayer-layout { grid-template-columns: 1fr; gap: 32px; } }
 
-.week-wrap { position: relative; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
+.week-wrap { position: relative; overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--white); }
 .week-table { width: 100%; min-width: 680px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-.week-table th, .week-table td { padding: 12px 10px; text-align: center; border-bottom: 1px solid var(--line); }
-.week-table thead th { vertical-align: bottom; font-weight: 600; font-size: 0.9rem; color: var(--ink); background: var(--paper); }
-.week-table thead th span { display: block; font: 400 1.35rem/1.1 var(--font-display); color: var(--green-ink); }
+.week-table th, .week-table td { padding: 12px 10px; text-align: center; border-bottom: 1px solid var(--border); }
+.week-table thead th { vertical-align: bottom; font-weight: 600; font-size: 0.9rem; color: var(--ink); background: var(--white); }
+.week-table thead th span { display: block; font: 400 1.3rem/1.1 var(--font-head); color: var(--green-dark); }
 .week-table tbody th {
   position: sticky;
   left: 0;
   z-index: 1;
   text-align: left;
-  background: var(--paper);
+  background: var(--white);
   font-weight: 600;
-  color: var(--green-ink);
-  box-shadow: 1px 0 0 var(--line);
+  color: var(--green-dark);
+  box-shadow: 1px 0 0 var(--border);
 }
 .week-table td { font-size: 0.98rem; }
 .week-table td small { display: block; font-size: 0.78rem; color: var(--ink-soft); }
 .week-table td b { font-weight: 600; color: var(--ink); }
-.week-table .is-today { background: var(--mist); }
-.week-table thead .is-today { box-shadow: inset 0 3px 0 var(--gold); background: var(--mist); }
+.week-table .is-today { background: var(--green-light); }
+.week-table thead .is-today { box-shadow: inset 0 3px 0 var(--gold); background: var(--green-light); }
 .week-table tbody tr:last-child > * { border-bottom: 0; }
 .week-key { font-size: 0.86rem; color: var(--ink-soft); margin-top: 12px; }
 
@@ -864,45 +831,46 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
    ========================================================================== */
 
 .event-year {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  font-size: var(--step-3);
-  margin: 56px 0 8px;
-  color: var(--green-ink);
+  font-size: 1.6rem;
+  color: var(--green-dark);
+  margin: 44px 0 6px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--green-light);
 }
-.event-year::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 .events > .event-year:first-child { margin-top: 0; }
 .event-year--next { color: var(--gold-text); }
 
 .event-list { list-style: none; margin: 0; padding: 0; }
 .event {
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr) 120px;
-  gap: 28px;
-  padding: 26px 0;
-  border-bottom: 1px solid var(--line);
+  grid-template-columns: 170px minmax(0, 1fr) 120px;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
 }
 .event:last-child { border-bottom: 0; }
-.event-when { display: flex; flex-direction: column; gap: 2px; }
-.event-date { font-weight: 600; color: var(--green-ink); }
+.event-when { display: flex; flex-direction: column; gap: 2px; padding-top: 2px; }
+.event-date { font-weight: 600; color: var(--green-dark); }
 .event-time { font-size: 0.86rem; color: var(--ink-soft); }
 .event-kind {
   display: inline-block;
   margin-bottom: 8px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--green-light);
+  color: var(--green-ink);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--gold-text);
 }
-.event-body h3 { font-size: 1.4rem; margin: 0 0 8px; }
-.event-body p { margin: 0; color: var(--ink-soft); max-width: 62ch; }
-.event-with { display: block; margin-top: 10px; font-size: 0.86rem; color: var(--green-ink); }
-.event-poster { display: block; align-self: start; border-radius: 3px; overflow: hidden; border: 1px solid var(--line); transition: transform 0.2s ease, box-shadow 0.2s ease; }
-.event-poster:hover { transform: rotate(-1.5deg) translateY(-2px); box-shadow: var(--shadow); }
+.event-body h3 { font-size: 1.2rem; margin: 0 0 8px; }
+.event-body p { margin: 0; max-width: 62ch; }
+.event-with { display: block; margin-top: 8px; font-size: 0.86rem; color: var(--gold-text); }
+.event-poster { display: block; align-self: start; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.event-poster:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 .event-poster img { width: 100%; }
-.event:not(:has(.event-poster)) { grid-template-columns: 180px minmax(0, 1fr); }
+.event:not(:has(.event-poster)) { grid-template-columns: 170px minmax(0, 1fr); }
 @media (max-width: 760px) {
   .event, .event:not(:has(.event-poster)) { grid-template-columns: minmax(0, 1fr) 88px; gap: 8px 18px; }
   .event-when { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; gap: 4px 12px; }
@@ -910,26 +878,37 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   .event:not(:has(.event-poster)) .event-body { grid-column: 1 / -1; }
 }
 
-.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 28px 22px; }
-.video-card { display: block; color: inherit; text-decoration: none; }
-.video-card:hover { color: inherit; }
-.video-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--night); overflow: hidden; border-radius: var(--radius); }
-.video-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-.video-card:hover .video-thumb img, .talk-feature:hover .video-thumb img { transform: scale(1.03); }
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 22px; }
+.video-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.video-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+.video-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--green-ink); overflow: hidden; }
+.video-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.talk-feature .video-thumb { border-radius: var(--radius); }
 /* Play badge drawn in CSS, so no icon file or third-party request is needed. */
 .video-thumb::after {
   content: "";
   position: absolute;
   left: 50%; top: 50%;
-  width: 54px; height: 54px;
-  margin: -27px 0 0 -27px;
+  width: 52px; height: 52px;
+  margin: -26px 0 0 -26px;
   border-radius: 50%;
-  background: rgba(11, 44, 48, 0.78) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7v10l8-5z' fill='%23d4ae61'/%3E%3C/svg%3E") center / 26px no-repeat;
+  background: rgba(26, 112, 120, 0.85) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7v10l8-5z' fill='%23ffffff'/%3E%3C/svg%3E") center / 26px no-repeat;
 }
-.video-meta h3 { font: 600 0.98rem/1.4 var(--font-body); color: var(--ink); margin: 12px 0 4px; }
-.video-card:hover h3 { color: var(--green-ink); text-decoration: underline; text-decoration-color: var(--green); }
-.video-date { font-size: 0.82rem; color: var(--ink-soft); }
-.events-empty, .video-empty { color: var(--ink-soft); background: var(--mist); border-radius: var(--radius); padding: 20px 22px; margin: 0; }
+.video-meta { padding: 14px 16px 16px; }
+.video-meta h3 { font: 600 0.95rem/1.4 var(--font-body); color: var(--ink); margin: 0 0 6px; }
+.video-card:hover h3 { color: var(--green-dark); }
+.video-date { font-size: 0.8rem; color: var(--ink-soft); }
+.events-empty, .video-empty { color: var(--ink-soft); background: var(--green-light); border-radius: var(--radius); padding: 20px 22px; margin: 0; }
+.section--mist .video-empty { background: var(--white); }
 
 /* ==========================================================================
    Our Story: the timeline
@@ -937,23 +916,19 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
    questions are drawn as unfinished pages, dashed, asking to be filled in.
    ========================================================================== */
 
-.story-stats { display: flex; flex-wrap: wrap; gap: 14px 40px; margin: 28px 0 0; padding: 0; list-style: none; }
-.story-stats li { display: flex; flex-direction: column; font-size: 0.86rem; color: rgba(255, 255, 255, 0.72); }
-.story-stats b { font: 400 2rem/1.1 var(--font-display); color: var(--gold); }
-
-.tl-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 44px; }
+.tl-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 44px; }
 .tl-filter {
   min-height: 44px;
-  padding: 8px 16px;
-  border: 1px solid var(--line);
+  padding: 8px 18px;
+  border: 1.5px solid var(--border);
   border-radius: 999px;
-  background: var(--paper);
+  background: var(--white);
   color: var(--ink);
   font: 600 0.9rem/1 var(--font-body);
   cursor: pointer;
 }
-.tl-filter:hover { border-color: var(--green-ink); }
-.tl-filter[aria-pressed="true"] { background: var(--night); border-color: var(--night); color: #fff; }
+.tl-filter:hover { border-color: var(--green-dark); }
+.tl-filter[aria-pressed="true"] { background: var(--green-dark); border-color: var(--green-dark); color: var(--white); }
 
 .timeline {
   --progress: 0;
@@ -961,7 +936,7 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   list-style: none;
   margin: 0 auto;
   padding: 0;
-  max-width: 980px;
+  max-width: 960px;
   perspective: 1400px;
 }
 .timeline::before, .timeline::after {
@@ -972,11 +947,11 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   width: 2px;
   margin-left: -1px;
 }
-.timeline::before { bottom: 0; background: var(--line); }
+.timeline::before { bottom: 0; background: var(--border); }
 .timeline::after { height: calc(var(--progress) * 100%); background: linear-gradient(var(--gold), var(--gold-deep)); }
 
-.tl-item { position: relative; width: 50%; padding: 0 52px 48px 0; }
-.tl-item.is-right { margin-left: 50%; padding: 0 0 48px 52px; }
+.tl-item { position: relative; width: 50%; padding: 0 48px 44px 0; }
+.tl-item.is-right { margin-left: 50%; padding: 0 0 44px 48px; }
 /* Opposite sides interleave, so the page is not half empty. Safe because every
    item is taller than the overlap, so a card never meets the one above it on
    its own side. */
@@ -986,58 +961,62 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
 .tl-item::after {
   content: "";
   position: absolute;
-  top: 10px;
+  top: 8px;
   right: -9px;
   z-index: 1;
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--page);
-  border: 2px solid var(--line);
+  background: var(--bg);
+  border: 2px solid var(--border);
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 .tl-item.is-right::after { right: auto; left: -9px; }
 .tl-item.is-reached::after { border-color: var(--gold-deep); background: var(--gold); }
 .tl-item.is-unknown::after { border-style: dashed; }
 
-.tl-year { display: block; font: 400 clamp(2.2rem, 1.6rem + 2vw, 3.2rem)/1 var(--font-display); color: var(--green-ink); margin-bottom: 14px; font-variant-numeric: lining-nums; }
+.tl-year { display: block; font: 400 clamp(2rem, 1.6rem + 1.6vw, 2.8rem)/1 var(--font-head); color: var(--green-dark); margin-bottom: 12px; font-variant-numeric: lining-nums; }
 .tl-item:not(.is-right) .tl-year { text-align: right; }
 .tl-item.is-unknown .tl-year { color: var(--gold-text); }
 .tl-strand {
   display: inline-block;
   margin-bottom: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--green-light);
+  color: var(--green-ink);
   font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--green-text);
 }
 
 /* Readable first: the resting state is fully visible with no transform. The
    script opts in to animation by adding .is-animated only once it knows it can
    finish the reveal. See CLAUDE.md for why this matters. */
 .tl-card {
-  background: var(--paper);
-  border: 1px solid var(--line);
+  background: var(--white);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 22px 24px;
   box-shadow: var(--shadow);
   transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
-.tl-card h3 { font-size: 1.45rem; margin: 0 0 8px; }
-.tl-card p { margin: 0; color: var(--ink-soft); }
-.tl-source { display: block; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 0.8rem; color: var(--ink-soft); }
+.tl-card h3 { font-size: 1.3rem; margin: 0 0 8px; }
+.tl-card p { margin: 0; }
+.tl-source { display: block; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--ink-soft); }
 .tl-source::before { content: "Source: "; font-weight: 700; color: var(--ink); }
 
 .tl-item.is-unknown .tl-card {
-  background: repeating-linear-gradient(0deg, transparent 0 31px, rgba(176, 141, 63, 0.14) 31px 32px), var(--sand);
+  background: var(--gold-light);
   border: 1.5px dashed var(--gold-deep);
   box-shadow: none;
 }
-.tl-askhead { display: block; margin-top: 16px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-text); }
+.tl-item.is-unknown .tl-strand { background: var(--white); color: var(--gold-text); }
+.tl-askhead { display: block; margin-top: 16px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-text); }
 .tl-asks { margin: 8px 0 0; padding-left: 1.1em; }
 .tl-asks li { color: var(--ink); margin-bottom: 4px; font-size: 0.95rem; }
-.tl-remember { margin-top: 16px; min-height: 44px; padding: 9px 16px; font-size: 0.9rem; }
+.tl-remember { margin-top: 16px; min-height: 44px; padding: 8px 18px; font-size: 0.9rem; }
 
 /* Cards wait tilted back in depth and settle forward as they are reached. They
    are never transparent: a card the observer misses (a full-page capture, a
@@ -1054,8 +1033,8 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
 @media (max-width: 760px) {
   .timeline { perspective: none; }
   .timeline::before, .timeline::after { left: 9px; }
-  .tl-item, .tl-item.is-right, .tl-item:not([hidden]) ~ .tl-item:not([hidden]) { width: 100%; margin: 0; padding: 0 0 36px 44px; }
-  .tl-item::after, .tl-item.is-right::after { left: 0; right: auto; top: 8px; }
+  .tl-item, .tl-item.is-right, .tl-item:not([hidden]) ~ .tl-item:not([hidden]) { width: 100%; margin: 0; padding: 0 0 32px 40px; }
+  .tl-item::after, .tl-item.is-right::after { left: 0; right: auto; top: 6px; }
   .tl-item:not(.is-right) .tl-year { text-align: left; }
   .timeline.is-animated .tl-card, .timeline.is-animated .tl-item.is-right .tl-card { transform: translateY(18px); }
   .timeline.is-animated .tl-item.is-visible .tl-card { transform: none; }
@@ -1068,193 +1047,211 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
    About, contact, prose
    ========================================================================== */
 
-.split { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
-@media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+.about-split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.about-split--top { align-items: start; }
+@media (max-width: 860px) { .about-split { grid-template-columns: 1fr; gap: 32px; } }
 
-.prose { max-width: 68ch; }
-.prose h2 { font-size: var(--step-2); margin: 40px 0 12px; }
+.img-frame { border-radius: var(--radius); overflow: hidden; aspect-ratio: 4 / 3; background: var(--green-light); box-shadow: var(--shadow); }
+.img-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+
+.split { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: 56px; align-items: start; }
+@media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 36px; } }
+
+.prose { max-width: 720px; }
+.prose h2 { font-size: 1.3rem; margin: 36px 0 10px; }
 .prose h2:first-child { margin-top: 0; }
-.prose p, .prose li { color: var(--ink-soft); }
-.prose strong { color: var(--ink); }
-.prose ul { padding-left: 1.2em; margin: 0 0 1em; }
-.prose li { margin-bottom: 8px; }
+.prose ul { padding-left: 20px; margin: 0 0 1em; }
+.prose li { color: var(--ink-soft); margin-bottom: 8px; }
 
 /* A panel of facts quoted from the Charity Commission register. */
-.register { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 26px 20px; }
+.register { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px 26px 20px; }
 .register h2 { font-size: 1.3rem; margin-bottom: 4px; }
-.register > p { font-size: 0.86rem; color: var(--ink-soft); }
-.register dl { margin: 16px 0 0; }
+.register > p { font-size: 0.86rem; }
+.register dl { margin: 16px 0; }
 .register dt { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-text); }
-.register dd { margin: 2px 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: var(--ink); }
+.register dd { margin: 2px 0 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--ink); }
 .register dd:last-of-type { border-bottom: 0; padding-bottom: 0; }
 
-.photo-figure { margin: 0; max-width: 680px; }
-.photo-figure img { width: 100%; border-radius: var(--radius); }
-.photo-figure figcaption { margin-top: 10px; font-size: 0.88rem; color: var(--ink-soft); }
+/* Photographs with a caption. Capped at 680px: the source photographs are
+   phone pictures around 900px wide, and stretching one across the container
+   both dominates the page and makes it visibly soft. */
+.photo-figure { margin: 40px auto 0; max-width: 680px; }
+.photo-figure img { width: 100%; border-radius: var(--radius); border: 1px solid var(--border); }
+.photo-figure figcaption { margin-top: 10px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; }
 
-.people { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
-.people li { padding: 22px 24px 22px 0; border-bottom: 1px solid var(--line); }
-.people li + li { padding-left: 24px; border-left: 1px solid var(--line); }
-.people b { display: block; font: 400 1.3rem/1.3 var(--font-display); color: var(--green-ink); }
-.people span { font-size: 0.9rem; color: var(--ink-soft); }
-@media (max-width: 760px) {
-  .people { grid-template-columns: 1fr; }
-  .people li + li { padding-left: 0; border-left: 0; }
-}
-
-.contact-ways { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-.contact-ways li { border-bottom: 1px solid var(--line); }
+.contact-ways { list-style: none; margin: 0; padding: 0; }
+.contact-ways li { border-bottom: 1px solid var(--border); }
+.contact-ways li:last-child { border-bottom: 0; }
 .contact-ways a {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) auto;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 18px;
-  padding: 20px 4px;
+  gap: 16px;
+  padding: 16px 6px;
   color: var(--ink);
   text-decoration: none;
+  border-radius: 8px;
 }
-.contact-ways a:hover { background: var(--mist); }
-.contact-ways a::after { content: "\2192"; color: var(--green-ink); font-size: 1.2rem; transition: transform 0.2s ease; }
+.contact-ways a:hover { background: var(--green-light); }
+.contact-ways a::after { content: "\2192"; color: var(--green-dark); font-size: 1.2rem; transition: transform 0.2s ease; }
 .contact-ways a:hover::after { transform: translateX(4px); }
-.contact-ways .icon { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--night); color: var(--gold); }
+.contact-ways .icon { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--green-light); color: var(--green-dark); }
 .contact-ways .icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.contact-ways b { display: block; font: 400 1.3rem/1.2 var(--font-display); color: var(--green-ink); }
+.contact-ways b { display: block; font: 400 1.2rem/1.3 var(--font-head); color: var(--green-dark); }
 .contact-ways span span { font-size: 0.92rem; color: var(--ink-soft); }
 
-.map-frame { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); aspect-ratio: 4 / 3; background: var(--mist); }
+.map-frame { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); aspect-ratio: 4 / 3; background: var(--green-light); }
 .map-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
 
 /* ==========================================================================
    Donate. The amounts are live GoCardless links: see CLAUDE.md before editing.
    ========================================================================== */
 
-.donate-hero { text-align: center; padding-block: clamp(40px, 6vw, 72px) clamp(120px, 14vw, 170px); }
-.donate-hero img { width: 92px; margin: 0 auto 22px; }
-.donate-hero h1 { margin-bottom: 12px; }
-.donate-hero .lede { margin-inline: auto; }
-.donate-hero blockquote { margin: 26px auto 0; max-width: 34em; }
-.donate-hero blockquote p { font: 400 var(--step-1)/1.45 var(--font-display); color: #fff; margin: 0 0 8px; }
-.donate-hero cite { font-style: normal; font-size: 0.86rem; color: var(--gold); }
+.donate-clone { padding: 56px 20px 80px; }
+.donate-clone-inner { max-width: 560px; margin: 0 auto; text-align: center; }
+.donate-clone-logo { height: 70px; width: auto; margin: 0 auto 24px; }
+.donate-clone-inner h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 12px; }
+.donate-clone-lead { font-size: 1.05rem; margin-bottom: 28px; }
+.donate-clone-quote {
+  margin: 0 0 32px;
+  padding: 22px 24px;
+  background: var(--green-light);
+  border-radius: var(--radius);
+  font: italic 400 1.1rem/1.5 var(--font-head);
+  color: var(--green-dark);
+}
+.donate-clone-quote cite { display: block; margin-top: 10px; font: normal 0.8rem/1.4 var(--font-body); color: var(--ink-soft); }
 
-.donate-main { max-width: 600px; margin: clamp(-150px, -12vw, -100px) auto 0; padding-inline: var(--gutter); padding-bottom: 72px; position: relative; }
-.donate-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(20px, 4vw, 32px); }
-.donate-tabs { display: flex; gap: 6px; background: var(--mist); border-radius: 6px; padding: 5px; margin-bottom: 20px; }
+.donate-clone-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+.donate-clone-tabs { display: flex; gap: 8px; background: var(--green-light); border-radius: 999px; padding: 4px; margin-bottom: 18px; }
 .donate-clone-tab {
   flex: 1;
-  min-height: 46px;
+  min-height: 44px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 999px;
   background: transparent;
+  padding: 10px 16px;
+  font: 600 0.9rem/1 var(--font-body);
   color: var(--ink-soft);
-  font: 600 0.95rem/1 var(--font-body);
   cursor: pointer;
 }
-.donate-clone-tab.active { background: var(--night); color: #fff; }
-.donate-clone-sub { font-size: 0.94rem; color: var(--ink-soft); margin-bottom: 18px; text-align: center; }
+.donate-clone-tab.active { background: var(--green-dark); color: var(--white); }
+.donate-clone-sub { font-size: 0.9rem; margin-bottom: 18px; }
 
-.amount-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.amount-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 4px; }
 .amount-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 58px;
-  border: 1.5px solid var(--line);
-  border-radius: 4px;
-  background: var(--paper);
-  color: var(--green-ink);
-  font: 400 1.35rem/1 var(--font-display);
+  display: block;
+  text-align: center;
+  padding: 14px 8px;
+  border-radius: 10px;
+  background: var(--green-light);
+  color: var(--green-dark);
+  font-weight: 700;
+  font-size: 1.05rem;
   text-decoration: none;
-  font-variant-numeric: lining-nums;
-  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  border: 2px solid transparent;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
-.amount-btn:hover { border-color: var(--green-ink); color: var(--green-ink); }
-.amount-btn.selected { background: var(--green-dark); border-color: var(--green-dark); color: #fff; }
+.amount-btn:hover { background: var(--white); border-color: var(--green); transform: translateY(-1px); }
+.amount-btn.selected {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+  color: var(--white);
+  box-shadow: 0 4px 12px rgba(23, 128, 138, 0.3);
+}
+@media (max-width: 700px) { .amount-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* The confirm button spells out exactly what is about to happen. */
 .donate-cta {
   display: flex;
   width: 100%;
-  margin-top: 18px;
+  margin-top: 20px;
   min-height: 56px;
-  font-size: 1.05rem;
-  background: var(--gold);
+  padding: 16px 20px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
   color: var(--ink);
+  font-size: 1.08rem;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(176, 141, 63, 0.35);
 }
-.donate-cta:hover { background: #e0bd74; color: var(--ink); }
-.donate-cta.is-empty { background: var(--mist); color: var(--ink-soft); cursor: default; transform: none; }
-.donate-clone-fineprint { font-size: 0.82rem; color: var(--ink-soft); text-align: center; margin: 12px 0 0; }
+.donate-cta:hover { color: var(--ink); }
+.donate-cta:active { transform: scale(0.985); }
+.donate-cta.is-empty { background: var(--border); color: var(--ink-soft); box-shadow: none; cursor: default; font-weight: 600; transform: none; }
+.donate-clone-fineprint { font-size: 0.8rem; margin: 14px 0 0; }
 
-.donate-clone-alt { text-align: center; color: var(--ink-soft); margin: 28px 0; }
-.donate-clone-trust { display: grid; gap: 16px; padding: 26px 0; border-block: 1px solid var(--line); margin-bottom: 36px; }
-.donate-clone-trust p { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
-.donate-clone-trust strong { color: var(--ink); }
-.donate-clone-visit { text-align: center; }
-.donate-clone-visit h2 { font-size: var(--step-2); }
-.donate-clone-visit p { margin-bottom: 4px; color: var(--ink-soft); }
-.donate-clone-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
-@media (max-width: 460px) { .amount-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.donate-clone-alt { font-size: 0.92rem; margin-bottom: 32px; line-height: 1.7; }
+.donate-clone-trust { text-align: left; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 24px 0; margin-bottom: 40px; }
+.donate-clone-trust p { font-size: 0.88rem; margin-bottom: 12px; }
+.donate-clone-trust p:last-child { margin-bottom: 0; }
+.donate-clone-trust strong { color: var(--green-dark); }
+.donate-clone-visit h2 { margin-bottom: 10px; }
+.donate-clone-visit p { margin-bottom: 4px; }
+.donate-clone-links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.donate-clone-links .btn { padding: 10px 18px; font-size: 0.88rem; }
 
 /* Post-payment thank-you banner, injected by js/main.js */
-.thanks-banner { background: var(--green-dark); color: #fff; text-align: center; padding: 16px 20px; font-size: 0.95rem; }
-.thanks-banner strong { display: block; font: 400 1.2rem/1.3 var(--font-display); margin-bottom: 2px; }
+.thanks-banner { background: linear-gradient(135deg, var(--green-text), var(--green-dark)); color: var(--white); text-align: center; padding: 16px 20px; line-height: 1.5; font-size: 0.95rem; }
+.thanks-banner strong { display: block; color: var(--white); font: 400 1.15rem/1.3 var(--font-head); margin-bottom: 2px; }
 
 /* ==========================================================================
    Madrasah Al Furqan and the parent portal
    ========================================================================== */
 
-.furqan-hero-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
-.furqan-hero-grid .furqan-arch { max-width: 300px; }
+/* The madrasah's heading band: the same shape as the masjid's teal one, in
+   the madrasah's own colour. */
+.page-hero.furqan-hero { background: linear-gradient(135deg, var(--furqan-deep), var(--furqan) 70%); text-align: left; }
+.furqan-hero p { margin: 0 0 1em; max-width: 600px; }
+.furqan-hero .crumbs { margin: 0 0 10px; }
+.furqan-hero .hero-ar { color: var(--gold); margin: 6px 0 2px; }
+.furqan-hero-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); gap: 48px; align-items: center; }
+.furqan-hero-grid .furqan-arch { max-width: 260px; }
 .umbrella {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin: 0 0 18px;
   padding: 6px 14px 6px 6px;
-  border: 1px solid var(--line-night);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 999px;
   font-size: 0.84rem;
-  color: var(--on-night);
 }
-.umbrella img { width: 30px; height: 30px; border-radius: 50%; background: #fff; object-fit: contain; padding: 2px; }
+.umbrella img { width: 30px; height: 30px; border-radius: 50%; background: var(--white); object-fit: contain; padding: 2px; }
 @media (max-width: 760px) { .furqan-hero-grid { grid-template-columns: 1fr; } .furqan-hero-grid .furqan-arch { display: none; } }
 
-.one-roof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
-.one-roof > div { padding: 24px 24px 0 0; }
-.one-roof > div + div { padding-left: 24px; border-left: 1px solid var(--line); }
-.one-roof b { display: block; font: 400 1.3rem/1.3 var(--font-display); color: var(--green-ink); margin-bottom: 6px; }
-.one-roof p { color: var(--ink-soft); margin: 0; }
-@media (max-width: 760px) {
-  .one-roof { grid-template-columns: 1fr; }
-  .one-roof > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); margin-top: 24px; }
-}
+.one-roof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.one-roof > div { background: var(--white); border: 1px solid var(--border); border-top: 4px solid var(--furqan); border-radius: var(--radius); padding: 22px 24px; }
+.one-roof b { display: block; font: 400 1.25rem/1.3 var(--font-head); color: var(--furqan); margin-bottom: 6px; }
+.one-roof p { margin: 0; }
+@media (max-width: 760px) { .one-roof { grid-template-columns: 1fr; } }
 
 /* Registration is a real sequence, so these steps are numbered. */
-.steps { list-style: none; margin: 0; padding: 0; counter-reset: step; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
-.steps li { counter-increment: step; position: relative; padding-top: 58px; }
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: step; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.steps li { counter-increment: step; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
 .steps li::before {
   content: counter(step);
-  position: absolute;
-  top: 0; left: 0;
-  width: 44px; height: 44px;
   display: grid;
   place-items: center;
+  width: 44px; height: 44px;
+  margin-bottom: 14px;
   border-radius: 50%;
-  border: 1.5px solid var(--gold-deep);
-  font: 400 1.3rem/1 var(--font-display);
-  color: var(--gold-text);
+  background: var(--green-light);
+  font: 400 1.3rem/1 var(--font-head);
+  color: var(--green-dark);
 }
-.steps b { display: block; font-size: 1.05rem; margin-bottom: 4px; }
-.steps p { margin: 0; color: var(--ink-soft); }
+.steps b { display: block; font-size: 1.05rem; margin-bottom: 4px; color: var(--ink); }
+.steps p { margin: 0; }
 @media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
 
-.notice {
-  padding: 22px 24px;
-  border-radius: var(--radius);
-  background: var(--sand);
-  border: 1px solid #e7dbc0;
-}
-.notice h3 { font-size: 1.25rem; margin-bottom: 6px; }
-.notice p { color: var(--ink); }
+.notice { padding: 22px 24px; border-radius: var(--radius); background: var(--white); border: 1px solid var(--border); }
+.notice h3 { margin-bottom: 6px; }
 .notice p:last-child { margin-bottom: 0; }
 
 /* "To be confirmed": the label every placeholder carries, so nobody mistakes a
@@ -1265,7 +1262,7 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   padding: 2px 9px;
   border: 1.5px dashed var(--gold-deep);
   border-radius: 999px;
-  background: var(--sand);
+  background: var(--gold-light);
   color: var(--gold-text);
   font: 700 0.68rem/1.5 var(--font-body);
   letter-spacing: 0.08em;
@@ -1281,41 +1278,33 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   padding: 16px 18px;
   border: 1.5px dashed var(--gold-deep);
   border-radius: var(--radius);
-  background: var(--paper);
+  background: var(--white);
 }
 .draft-note .tbc { flex-shrink: 0; margin-top: 2px; }
 .draft-note p { margin: 0; color: var(--ink); }
 @media (max-width: 560px) { .draft-note { flex-direction: column; gap: 8px; } }
 
 /* Madrasah at a glance */
-.furqan-facts { list-style: none; margin: 0 0 28px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
-.furqan-facts li { padding: 16px 18px 0 0; color: var(--ink-soft); font-size: 0.94rem; }
-.furqan-facts li + li { padding-left: 18px; border-left: 1px solid var(--line); }
-.furqan-facts b { display: block; font: 400 1.25rem/1.3 var(--font-display); color: var(--furqan); margin-bottom: 4px; }
-@media (max-width: 820px) {
-  .furqan-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 18px; }
-  .furqan-facts li:nth-child(3) { padding-left: 0; border-left: 0; }
-}
-@media (max-width: 460px) {
-  .furqan-facts { grid-template-columns: 1fr; }
-  .furqan-facts li, .furqan-facts li + li { padding: 14px 0 0; border-left: 0; }
-}
+.furqan-facts { list-style: none; margin: 0 0 28px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.furqan-facts li { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; color: var(--ink-soft); font-size: 0.94rem; }
+.furqan-facts b { display: block; font: 400 1.2rem/1.3 var(--font-head); color: var(--furqan); margin-bottom: 2px; }
+@media (max-width: 820px) { .furqan-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .furqan-facts { grid-template-columns: 1fr; } }
 
 .groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 28px; }
-.group-card { padding: 22px 24px; background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--furqan); border-radius: var(--radius); }
-.group-card h3 { margin: 0; font-size: var(--step-2); color: var(--furqan); }
+.group-card { padding: 22px 24px; background: var(--white); border: 1px solid var(--border); border-top: 4px solid var(--furqan); border-radius: var(--radius); }
+.group-card h3 { margin: 0; font-size: 1.4rem; color: var(--furqan); }
 .group-ages { margin: 2px 0 10px; font-weight: 700; color: var(--ink); }
-.group-card p:not(.group-ages) { color: var(--ink-soft); }
 @media (max-width: 640px) { .groups { grid-template-columns: 1fr; } }
 
-.timetable-wrap { position: relative; overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); }
+.timetable-wrap { position: relative; overflow-x: auto; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); }
 .timetable { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-.timetable caption { text-align: left; padding: 14px 16px 6px; font: 400 1.2rem/1.3 var(--font-display); color: var(--green-ink); }
-.timetable th, .timetable td { padding: 12px 16px; text-align: left; border-top: 1px solid var(--line); }
+.timetable caption { text-align: left; padding: 14px 16px 6px; font: 400 1.2rem/1.3 var(--font-head); color: var(--green-dark); }
+.timetable th, .timetable td { padding: 12px 16px; text-align: left; border-top: 1px solid var(--border); }
 .timetable thead th { font-weight: 600; color: var(--ink); }
 .timetable thead small { display: block; font-weight: 400; font-size: 0.82rem; color: var(--ink-soft); }
-.timetable tbody th { font-weight: 600; color: var(--green-ink); white-space: nowrap; }
-.timetable tr.is-today > * { background: var(--mist); }
+.timetable tbody th { font-weight: 600; color: var(--green-dark); white-space: nowrap; }
+.timetable tr.is-today > * { background: var(--green-light); }
 .timetable tr.is-today th { box-shadow: inset 3px 0 0 var(--gold); }
 .timetable tr.is-closed td { color: var(--ink-soft); font-style: italic; }
 @media (max-width: 480px) {
@@ -1326,16 +1315,16 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
 }
 
 .terms-year { font-weight: 700; color: var(--ink); }
-.terms { list-style: none; margin: 0 0 16px; padding: 0; border-top: 1px solid var(--line); }
-.terms li { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 2px 18px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-.terms b { font: 400 1.2rem/1.3 var(--font-display); color: var(--furqan); grid-row: span 2; }
+.terms { list-style: none; margin: 0 0 16px; padding: 0; border-top: 1px solid var(--border); }
+.terms li { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 2px 18px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.terms b { font: 400 1.2rem/1.3 var(--font-head); color: var(--furqan); grid-row: span 2; }
 .terms small { color: var(--ink-soft); font-size: 0.86rem; }
 @media (max-width: 480px) { .terms li { grid-template-columns: 1fr; } .terms b { grid-row: auto; } }
 
-.resource-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-.resource-list li { border-bottom: 1px solid var(--line); }
+.resource-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
+.resource-list li { border-bottom: 1px solid var(--border); }
 .resource-list a { display: block; padding: 16px 0; text-decoration: none; color: var(--ink); }
-.resource-list b { display: block; color: var(--green-ink); }
+.resource-list b { display: block; color: var(--green-dark); }
 .resource-list span { font-size: 0.9rem; color: var(--ink-soft); }
 .resource-list li.is-soon { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 0; }
 .resource-list li.is-soon b { color: var(--ink); }
@@ -1343,17 +1332,17 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
 /* Parent portal: the madrasah uses Teach 'n Go. This page is the front door to
    it - one action for new families, one for enrolled ones - and says plainly
    when the portal is not open yet. */
-.portal-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+.portal-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); gap: 48px; align-items: start; }
 @media (max-width: 900px) { .portal-layout { grid-template-columns: 1fr; } }
 .portal-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 @media (max-width: 640px) { .portal-actions { grid-template-columns: 1fr; } }
-.portal-action { display: flex; flex-direction: column; gap: 10px; padding: 24px; background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--furqan); border-radius: var(--radius); box-shadow: var(--shadow); }
-.portal-action h2 { font-size: var(--step-2); margin: 0; color: var(--furqan); }
-.portal-action p { margin: 0; color: var(--ink-soft); }
+.portal-action { display: flex; flex-direction: column; gap: 10px; padding: 24px; background: var(--white); border: 1px solid var(--border); border-top: 4px solid var(--furqan); border-radius: var(--radius); box-shadow: var(--shadow); }
+.portal-action h2 { font-size: 1.4rem; margin: 0; color: var(--furqan); }
+.portal-action p { margin: 0; }
 .portal-action .btn { margin-top: auto; align-self: flex-start; }
-.portal-action .btn[aria-disabled="true"] { background: var(--mist); color: var(--ink-soft); cursor: not-allowed; transform: none; }
+.portal-action .btn[aria-disabled="true"] { background: var(--green-light); color: var(--ink-soft); cursor: not-allowed; transform: none; }
 .portal-meanwhile { margin-top: 28px; }
-.portal-aside h2 { font-size: var(--step-2); }
+.portal-aside h2 { font-size: 1.35rem; }
 .portal-aside p, .portal-aside li { color: var(--ink-soft); font-size: 0.95rem; }
 .portal-aside ul { padding-left: 1.1em; }
 
@@ -1370,12 +1359,7 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
 :root[data-furqan="navy"] {
   --furqan: #003060;        /* sampled from the navy logo */
   --furqan-deep: #001f3f;
-  --furqan-mid: #002a52;
 }
-.furqan-hero { background: var(--furqan-deep); }
-.furqan-hero.pattern::before { background: var(--gold); opacity: 0.07; }
-.furqan-hero .furqan-arch { background: var(--furqan-mid); }
-.furqan-band .furqan-arch { background: var(--furqan-deep); }
 
 .colour-preview {
   position: fixed;
@@ -1386,8 +1370,8 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   align-items: center;
   gap: 6px;
   padding: 6px 6px 6px 14px;
-  background: var(--paper);
-  border: 1px solid var(--line);
+  background: var(--white);
+  border: 1px solid var(--border);
   border-radius: 999px;
   box-shadow: var(--shadow);
   font-size: 0.84rem;
@@ -1398,12 +1382,12 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   padding: 6px 14px;
   border: 1.5px solid transparent;
   border-radius: 999px;
-  background: var(--mist);
+  background: var(--green-light);
   color: var(--ink);
   font: 600 0.86rem/1 var(--font-body);
   cursor: pointer;
 }
-.colour-preview button[aria-pressed="true"] { background: var(--furqan); color: #fff; }
+.colour-preview button[aria-pressed="true"] { background: var(--furqan); color: var(--white); }
 @media (max-width: 480px) { .colour-preview { left: 16px; right: 16px; justify-content: center; } }
 .colour-preview button span { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 50%; vertical-align: 0; }
 
@@ -1412,7 +1396,7 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
    ========================================================================== */
 
 .lost { text-align: center; max-width: 640px; margin: 0 auto; }
-.lost .hero-ar { font-size: clamp(3rem, 2rem + 5vw, 5rem); }
+.lost .hero-ar { color: var(--green-text); font-size: clamp(3rem, 2rem + 5vw, 5rem); }
 .lost .btn-row { justify-content: center; margin-top: 28px; }
 
 /* ==========================================================================
@@ -1426,5 +1410,5 @@ a:hover { color: var(--green-dark); text-decoration-color: currentColor; }
   .timeline.is-animated .tl-card,
   .timeline.is-animated .tl-item.is-right .tl-card,
   .timeline.is-animated .tl-item.is-visible .tl-card { transform: none; opacity: 1; }
-  .btn:hover, .event-poster:hover { transform: none; }
+  .btn:hover, .event-poster:hover, .video-card:hover, .amount-btn:hover { transform: none; }
 }
