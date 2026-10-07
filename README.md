@@ -3,7 +3,7 @@
 The website for **Attarbiya Masjid & Kowneyn Community Centre**, Nechells, Birmingham.
 Registered charity **1142204**.
 
-Live preview: https://9ali-oop.github.io/masjidattarbiya-website/
+Live: https://masjidattarbiya.org
 
 ## What this is
 
