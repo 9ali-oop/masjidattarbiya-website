@@ -498,8 +498,9 @@ its `INTEGRATION.md` keeps the history of how the payment links were verified.
 - **`404.html` uses root-relative paths** (`/css/...`), unlike every other page, because GitHub
   Pages serves it at whatever missing address was asked for, however deep. `check_links.py`
   allows that for `404.html` only.
-- **Still to do by hand, by whoever holds the accounts:** tick "Enforce HTTPS" under the repo's
-  Settings > Pages once GitHub has issued the certificate, re-test a real one-off and monthly
+- **HTTPS was in place straight away:** `http://` and `www.` both forward to
+  `https://masjidattarbiya.org`, checked on the day.
+- **Still to do by hand, by whoever holds the accounts:** re-test a real one-off and monthly
   donation end to end, and ask the trustees to change the charity's website on the Charity
   Commission register from the old `kowneyn.org` to masjidattarbiya.org (the strongest defence
   against fake donation pages).
