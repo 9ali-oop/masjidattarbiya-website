@@ -1,5 +1,51 @@
 {
-  "note": "Al Furqan Madrasah, rendered by madrasah.html. Written by hand, and the same rule as the rest of the site applies: publish only what the madrasah has confirmed. While 'classes' is empty the page says plainly that times are being confirmed and invites parents to ask. Class entry: {\"name\": \"Qur'an reading\", \"ages\": \"Ages 6 to 10\", \"when\": \"Tuesday and Wednesday, 17:00 to 19:00\", \"summary\": \"One sentence on what the class covers.\"}. Resource entry: {\"title\": \"...\", \"url\": \"assets/furqan/file.pdf or https://...\", \"description\": \"...\"}. Resources listed here are public; ones only for registered parents go in the portal's own resources table instead.",
-  "classes": [],
-  "resources": []
+  "note": "Madrasah Al Furqan, rendered by madrasah.html. Written by hand. PLACEHOLDERS: as of 7 October 2026 only two things here come from the madrasah: classes run six days a week with no classes on Friday, and there are two age groups, 6 and over and 12 and over. Every time, term date, summary and the places line is a placeholder, agreed so the page could be designed and reviewed. Anything marked \"placeholder\": true shows a 'To be confirmed' label on the page. When the madrasah confirms an item, correct it and delete its placeholder flag. When nothing is left to confirm, set \"provisional\" to false and the page drops its draft notice. scripts/check_madrasah.py lists whatever is still a placeholder.",
+  "provisional": true,
+  "groups": [
+    {
+      "id": "juniors",
+      "name": "Juniors",
+      "ages": "Ages 6 to 11",
+      "summary": "Qaidah and Qur'an reading with tajweed, everyday duas, how to pray, and the basics of Islamic studies.",
+      "placeholder": true
+    },
+    {
+      "id": "seniors",
+      "name": "Seniors",
+      "ages": "Ages 12 and over",
+      "summary": "Qur'an recitation and memorisation, fiqh, seerah and aqeedah, taught at a level suited to teenagers.",
+      "placeholder": true
+    }
+  ],
+  "timetable": [
+    { "day": "Monday",    "juniors": "18:00 to 20:00", "seniors": "18:00 to 20:00", "placeholder": true },
+    { "day": "Tuesday",   "juniors": "18:00 to 20:00", "seniors": "18:00 to 20:00", "placeholder": true },
+    { "day": "Wednesday", "juniors": "18:00 to 20:00", "seniors": "18:00 to 20:00", "placeholder": true },
+    { "day": "Thursday",  "juniors": "18:00 to 20:00", "seniors": "18:00 to 20:00", "placeholder": true },
+    { "day": "Friday",    "closed": "No classes on Friday" },
+    { "day": "Saturday",  "juniors": "10:00 to 13:00", "seniors": "15:00 to 18:00", "placeholder": true },
+    { "day": "Sunday",    "juniors": "10:00 to 13:00", "seniors": "14:00 to 16:00", "placeholder": true }
+  ],
+  "terms": {
+    "year": "2026 to 2027",
+    "placeholder": true,
+    "list": [
+      { "name": "Autumn term", "start": "2026-09-07", "end": "2026-12-18", "break": "Half term 26 to 30 October" },
+      { "name": "Spring term", "start": "2027-01-04", "end": "2027-03-26", "break": "Half term 15 to 19 February" },
+      { "name": "Summer term", "start": "2027-04-12", "end": "2027-07-16", "break": "Half term 31 May to 4 June" }
+    ],
+    "footnote": "The madrasah closes for both Eids. Eid dates depend on the moon, so they are announced nearer the time."
+  },
+  "places": {
+    "text": "Places are available in both groups.",
+    "placeholder": true
+  },
+  "fees": {
+    "text": "To be confirmed. Ask us on WhatsApp in the meantime."
+  },
+  "resources": [
+    { "title": "Qaidah practice sheets", "description": "Letters and joining practice for Juniors to use at home.", "placeholder": true },
+    { "title": "Duas to learn this term", "description": "The duas each group is working on, with transliteration.", "placeholder": true },
+    { "title": "Term letter for parents", "description": "Dates, expectations and how to reach the teachers.", "placeholder": true }
+  ]
 }

@@ -1,19 +1,20 @@
 {
-  "note": "The masjid's own story, rendered by history.html. Same rule as events.json: a milestone is only published as fact with a 'source' saying how we know it. Entries with \"status\": \"unknown\" are deliberate gaps - questions for the people who were there - and they render as open questions rather than facts. When one is answered, give it a year, a source, set status to confirmed and delete its 'asks' list. 'strand' is one of: charity, building, learning, community.",
-  "checked": "2026-09-30",
+  "note": "The masjid's own story, rendered by history.html. Same rule as events.json: a milestone is only published as fact with a 'source' saying how we know it. Entries with \"status\": \"unknown\" are deliberate gaps - questions for the people who were there - and they render as open questions rather than facts. When one is answered, give it a year, a source, set status to confirmed and delete its 'asks' list. Every 'source' must be something a reader could check: the Charity Commission register or the charity's filed accounts, Companies House, HM Land Registry, the masjid's own posts. 'strand' is one of: charity, building, learning, community.",
+  "checked": "2026-10-07",
   "milestones": [
     {
       "id": "before",
       "year": "?",
       "strand": "building",
-      "title": "Before the masjid",
+      "title": "Before the club",
       "status": "unknown",
-      "body": "Some remember the building on Revesby Walk as a pub. An earlier version of this website called it a former sports and social club. Both cannot be right, and nothing we can check settles it.",
+      "body": "How long the club was on Revesby Walk, and what the building was before it, is not written down anywhere we can check. Many people remember a pub on the street: that was the Ashted Hamlet, which stood on Revesby Walk from 1966 to 1997 and was later demolished. It was a different building from the masjid.",
       "asks": [
-        "Was it a pub, a social club, or both at different times?",
-        "What was it called, and when did it close?",
-        "Was the old building converted, or knocked down and rebuilt?"
-      ]
+        "When was the building built, and who for?",
+        "Was the club ever called the East Birmingham Constitutional Club, the 'Conservative club' at the top of Revesby Walk?",
+        "Do you have photographs of the club, inside or out?"
+      ],
+      "source": "Ashted Hamlet: closedpubs.co.uk and the Birmingham History Forum. The 'Conservative club' at the top of Revesby Walk: a 2005 post on the Birmingham History Forum."
     },
     {
       "id": "trust-2006",
@@ -25,16 +26,13 @@
       "source": "Charity Commission register, charity 1142204: governing document and previous names."
     },
     {
-      "id": "bordesley-green",
-      "year": "?",
-      "strand": "community",
-      "title": "The Bordesley Green years",
-      "status": "unknown",
-      "body": "The charity's governing document names the community in Bordesley Green, in east Birmingham, as the people it was set up to serve. Where it met, and how it came to Nechells, is not written down anywhere we can find.",
-      "asks": [
-        "Where did the community meet in Bordesley Green?",
-        "When, and why, did it move to Nechells?"
-      ]
+      "id": "the-club",
+      "year": "2007",
+      "strand": "building",
+      "title": "The Vauxhall Sports and Social Club",
+      "status": "confirmed",
+      "body": "Before it was a masjid, 2 Revesby Walk was a social club. A community interest company for the Vauxhall Sports and Social Club was registered at this address from October 2007 until it was dissolved in June 2010.",
+      "source": "Companies House, company 06409217. The masjid's earlier website also describes the building as the former home of the Vauxhall Sports and Social Club."
     },
     {
       "id": "registered-2011",
@@ -46,17 +44,43 @@
       "source": "Charity Commission register, registration history."
     },
     {
-      "id": "revesby-walk",
-      "year": "?",
-      "strand": "building",
-      "title": "Coming to Revesby Walk",
-      "status": "unknown",
-      "body": "The moment the community began using the building. This is the turning point of the whole story. An earlier version of this website gave the year as 2021, but nothing we can check confirms it.",
+      "id": "garrison-lane",
+      "year": "To 2022",
+      "strand": "community",
+      "title": "The Garrison Lane years",
+      "status": "confirmed",
+      "body": "The charity's governing document names the community in Bordesley Green as the people it serves. Its accounts give its principal office as The Garrison Centre, 106 Garrison Lane, in Bordesley, up to the year ending March 2022. From the following year it is 2 Revesby Walk.",
       "asks": [
-        "What year did the community start using the building?",
-        "Who made it happen, and how was it paid for?",
-        "What state was the building in at the start?"
-      ]
+        "What happened at Garrison Lane: prayers, classes, or both?",
+        "Who remembers the move to Nechells?"
+      ],
+      "source": "The charity's annual accounts, 2021/22 and 2022/23, filed with the Charity Commission."
+    },
+    {
+      "id": "revesby-walk",
+      "year": "2019",
+      "strand": "building",
+      "title": "2 Revesby Walk becomes ours",
+      "status": "confirmed",
+      "body": "In June 2019 the building at 2 Revesby Walk changes hands, and from then on the charity's accounts list land and buildings of exactly the price that was paid. This is the turning point of the whole story.",
+      "asks": [
+        "Who made it happen, and how was the money raised?",
+        "What state was the building in when we got the keys?"
+      ],
+      "source": "HM Land Registry price paid record for 2 Revesby Walk, 14 June 2019, and the charity's balance sheets from 2020/21 onwards."
+    },
+    {
+      "id": "fit-out",
+      "year": "2020",
+      "strand": "building",
+      "title": "Becoming a masjid",
+      "status": "confirmed",
+      "body": "Turning a club into a place of worship: the prayer hall and its carpet, the wudu area, and the marble wall around the mihrab and minbar. The charity's accounts record substantial spending on repairs and renewals to the building in each of the three years from April 2020 to March 2023.",
+      "asks": [
+        "What was built or refitted, and in what order?",
+        "Are there photographs from during the work?"
+      ],
+      "source": "The charity's annual accounts, 2020/21 to 2022/23, filed with the Charity Commission."
     },
     {
       "id": "first-prayer",
@@ -69,19 +93,6 @@
         "When was the first prayer held here?",
         "When was the first Jumu'ah?",
         "Who led it, and how many people came?"
-      ]
-    },
-    {
-      "id": "fit-out",
-      "year": "?",
-      "strand": "building",
-      "title": "Becoming a masjid",
-      "status": "unknown",
-      "body": "Turning a building into a place of worship: the prayer hall and its carpet, the wudu area, and the marble wall around the mihrab and minbar.",
-      "asks": [
-        "Which years did the main works happen?",
-        "What was built or refitted, and in what order?",
-        "Are there photographs from during the work?"
       ]
     },
     {

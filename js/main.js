@@ -19,6 +19,51 @@ function getJSON(url) {
   });
 }
 
+/* Brown or navy: the madrasah's two colour options, previewable side by side.
+   Add ?furqan=navy or ?furqan=brown to any address; the choice is kept for the
+   visit and a small switch appears. Without the parameter nothing happens and
+   the default (brown) shows. Remove this once the trustees have chosen. */
+(function () {
+  var KEY = "furqan-colour";
+  var choice = new URLSearchParams(window.location.search).get("furqan");
+  try {
+    if (choice) window.sessionStorage.setItem(KEY, choice);
+    else choice = window.sessionStorage.getItem(KEY);
+  } catch (e) { /* private window: preview just this page */ }
+  if (choice !== "navy" && choice !== "brown") return;
+
+  var root = document.documentElement;
+  function apply(c) {
+    if (c === "navy") root.setAttribute("data-furqan", "navy");
+    else root.removeAttribute("data-furqan");
+  }
+  apply(choice);
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var bar = document.createElement("div");
+    bar.className = "colour-preview";
+    bar.setAttribute("role", "group");
+    bar.setAttribute("aria-label", "Preview the madrasah colour");
+    bar.innerHTML = "<span>Preview</span>" +
+      '<button type="button" data-c="brown"><span style="background:#6e3b2f"></span>Brown</button>' +
+      '<button type="button" data-c="navy"><span style="background:#1f3566"></span>Navy</button>';
+    var buttons = bar.querySelectorAll("button");
+    function mark() {
+      buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-c") === choice)); });
+    }
+    buttons.forEach(function (b) {
+      b.addEventListener("click", function () {
+        choice = b.getAttribute("data-c");
+        try { window.sessionStorage.setItem(KEY, choice); } catch (e) { /* fine */ }
+        apply(choice);
+        mark();
+      });
+    });
+    mark();
+    document.body.appendChild(bar);
+  });
+})();
+
 var MONTHS = ["January", "February", "March", "April", "May", "June",
               "July", "August", "September", "October", "November", "December"];
 
@@ -796,32 +841,108 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 
 /* ---------------------------------------------------------------------------
-   Madrasah Al Furqan: classes and resources.
+   Madrasah Al Furqan: groups, timetable, term dates and resources.
 
-   Both come from assets/madrasah.json, written by hand. The page already says
-   honestly what is not yet published, so with an empty file, or no JavaScript,
-   nothing changes; entries only replace that message once they exist.
+   All from assets/madrasah.json, written by hand. Anything still marked
+   "placeholder" carries a visible "To be confirmed" label, and while the file
+   says "provisional" the page keeps its draft notice. With no JavaScript, or if
+   the file fails to load, the page's own plain message stands.
    --------------------------------------------------------------------------- */
 (function () {
   var classEl = document.getElementById("madrasah-classes");
+  var termsEl = document.getElementById("madrasah-terms");
   var resEl = document.getElementById("madrasah-resources");
-  if (!classEl && !resEl) return;
+  var draftEl = document.getElementById("madrasah-draft");
+  if (!classEl && !termsEl && !resEl) return;
+
+  var TBC = '<span class="tbc">To be confirmed</span>';
+
+  function tbc(item) { return item && item.placeholder ? TBC : ""; }
+
+  function longDate(iso) {
+    var p = iso.split("-").map(Number);
+    return new Date(Date.UTC(p[0], p[1] - 1, p[2])).toLocaleDateString("en-GB",
+      { timeZone: "UTC", weekday: "short", day: "numeric", month: "long", year: "numeric" });
+  }
+
+  /** Today's weekday in Birmingham, so the timetable can mark it. */
+  function londonWeekday() {
+    return new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", weekday: "long" }).format(new Date());
+  }
+
+  function renderClasses(d) {
+    var groups = d.groups || [];
+    var rows = d.timetable || [];
+    if (!groups.length || !rows.length) return;
+    var today = londonWeekday();
+
+    var facts =
+      '<ul class="furqan-facts">' +
+        "<li><b>Six days a week</b>No classes on Friday</li>" +
+        "<li><b>Two groups</b>" + groups.map(function (g) { return esc(g.ages); }).join(", ") + "</li>" +
+        (d.places ? "<li><b>Places</b>" + esc(d.places.text) + " " + tbc(d.places) + "</li>" : "") +
+        (d.fees ? "<li><b>Fees</b>" + esc(d.fees.text) + " " + tbc(d.fees) + "</li>" : "") +
+      "</ul>";
+
+    var cards = '<div class="groups">' + groups.map(function (g) {
+      return '<article class="group-card">' +
+        '<h3>' + esc(g.name) + "</h3>" +
+        '<p class="group-ages">' + esc(g.ages) + "</p>" +
+        "<p>" + esc(g.summary) + "</p>" + tbc(g) +
+      "</article>";
+    }).join("") + "</div>";
+
+    var anyPlaceholder = rows.some(function (r) { return r.placeholder; });
+    var table =
+      '<div class="timetable-wrap" tabindex="0" role="region" aria-label="Madrasah timetable">' +
+      '<table class="timetable"><caption>Weekly timetable' + (anyPlaceholder ? " " + TBC : "") + "</caption>" +
+      '<thead><tr><th scope="col">Day</th>' + groups.map(function (g) {
+        return '<th scope="col">' + esc(g.name) + "<small>" + esc(g.ages) + "</small></th>";
+      }).join("") + "</tr></thead><tbody>" +
+      rows.map(function (r) {
+        var cls = [];
+        if (r.day === today) cls.push("is-today");
+        if (r.closed) cls.push("is-closed");
+        var head = '<th scope="row">' + esc(r.day) +
+          (r.day === today ? ' <span class="next-tag">Today</span>' : "") + "</th>";
+        var cells = r.closed
+          ? '<td colspan="' + groups.length + '">' + esc(r.closed) + "</td>"
+          : groups.map(function (g) { return "<td>" + (r[g.id] ? esc(r[g.id]) : "&mdash;") + "</td>"; }).join("");
+        return "<tr" + (cls.length ? ' class="' + cls.join(" ") + '"' : "") + ">" + head + cells + "</tr>";
+      }).join("") +
+      "</tbody></table></div>";
+
+    classEl.innerHTML = facts + cards + table;
+  }
+
+  function renderTerms(t) {
+    if (!t || !t.list || !t.list.length) return;
+    termsEl.innerHTML =
+      '<p class="terms-year">' + esc(t.year) + " " + tbc(t) + "</p>" +
+      '<ol class="terms">' + t.list.map(function (term) {
+        return "<li><b>" + esc(term.name) + "</b>" +
+          "<span>" + esc(longDate(term.start)) + " to " + esc(longDate(term.end)) + "</span>" +
+          (term["break"] ? "<small>" + esc(term["break"]) + "</small>" : "") + "</li>";
+      }).join("") + "</ol>" +
+      (t.footnote ? '<p class="muted">' + esc(t.footnote) + "</p>" : "");
+  }
+
+  function renderResources(list) {
+    if (!list.length) return;
+    resEl.innerHTML = '<ul class="resource-list">' + list.map(function (r) {
+      var inner = "<b>" + esc(r.title) + "</b>" + (r.description ? "<span>" + esc(r.description) + "</span>" : "");
+      // A placeholder has nothing to open yet, so it is not a link.
+      if (!r.url) return '<li class="is-soon"><div>' + inner + '</div><span class="tbc">Coming soon</span></li>';
+      return '<li><a href="' + esc(r.url) + '"' + (/^https?:/.test(r.url) ? ' target="_blank" rel="noopener"' : "") +
+        ">" + inner + "</a></li>";
+    }).join("") + "</ul>";
+  }
 
   getJSON("assets/madrasah.json").then(function (d) {
-    var classes = (d && d.classes) || [];
-    var resources = (d && d.resources) || [];
-    if (classEl && classes.length) {
-      classEl.innerHTML = '<ul class="class-list">' + classes.map(function (c) {
-        return '<li class="class-item"><h3>' + esc(c.name) + "</h3>" +
-          '<span class="class-when">' + esc(c.when) + "</span>" +
-          "<p>" + esc([c.ages, c.summary].filter(Boolean).join(". ")) + "</p></li>";
-      }).join("") + "</ul>";
-    }
-    if (resEl && resources.length) {
-      resEl.innerHTML = '<ul class="resource-list">' + resources.map(function (r) {
-        return '<li><a href="' + esc(r.url) + '"' + (/^https?:/.test(r.url) ? ' target="_blank" rel="noopener"' : "") +
-          "><b>" + esc(r.title) + "</b>" + (r.description ? "<span>" + esc(r.description) + "</span>" : "") + "</a></li>";
-      }).join("") + "</ul>";
-    }
+    d = d || {};
+    if (draftEl) draftEl.hidden = d.provisional === false;
+    if (classEl) renderClasses(d);
+    if (termsEl) renderTerms(d.terms);
+    if (resEl) renderResources(d.resources || []);
   }).catch(function () { /* the page's own message stands */ });
 })();

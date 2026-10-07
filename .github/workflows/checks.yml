@@ -30,5 +30,5 @@ jobs:
       - name: Events and recordings are valid
         run: python scripts/check_events.py
 
-      - name: Parent portal settings hold no secret key
-        run: python scripts/check_portal.py
+      - name: Madrasah details are well formed (lists what is still a placeholder)
+        run: python scripts/check_madrasah.py

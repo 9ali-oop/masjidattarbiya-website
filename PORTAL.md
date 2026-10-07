@@ -1,75 +1,64 @@
 # Madrasah Al Furqan parent portal
 
-`portal.html` lets a parent sign in with a one-time code emailed to them, give their own
-details once, then register their children with the madrasah and keep those details up to
-date. Madrasah staff see every registration, set its status and download them all as a
-spreadsheet.
+**Decision (October 2026): the madrasah will use [Teach 'n Go](https://www.teachngo.com/).**
+`portal.html` on this site is the front door to it: one button for new families
+(the registration form) and one for enrolled families (log in). Everything else -
+the register, classes, attendance, messages to parents, fees - happens inside Teach 'n Go,
+on the web and in its app.
 
-**Status: built, tested, not switched on.** While `js/portal-config.js` is empty the page says
-the portal opens soon and points parents to WhatsApp and the phone. Nothing is collected.
-The plan is to gather feedback from the madrasah's teachers and a few parents first.
+**Status: not open yet.** The page says "Opening soon" and points parents to WhatsApp and
+the phone. Nothing is collected through this website.
 
-## How it fits together
+## Why Teach 'n Go
 
-| Piece | What it does |
+Chosen for the people who will actually use it every week: the teachers and the parents.
+
+| | |
 |---|---|
-| `portal.html` | The page. Madrasah header, the portal panel, and a plain-English "what we ask for and why". |
-| `js/portal.js` | The whole portal: sign-in, family details, children, resources, staff view. Talks to Supabase's REST API directly, so there is no library and no build step. |
-| `js/portal-config.js` | The project URL and **public** key. Empty until the portal is switched on. |
-| `supabase/schema.sql` | Every table and every permission. Run once in the Supabase SQL editor. |
-| `scripts/check_portal.py` | Runs in CI. Fails the build if a secret key is ever pasted into the config. |
-| `.github/workflows/portal-keepalive.yml` | One request a day so a free Supabase project is never paused. Does nothing until configured. |
+| **Ease of use** | Rated 4.7 out of 5 on Capterra UK across 91 reviews, and 4.8 for ease of use - the highest-scoring part. |
+| **Proven locally** | Green Lane Masjid's madrasah, the biggest in Birmingham, runs its enrolment on it, so some of our parents will already have seen it. |
+| **For parents** | A parent portal and a mobile app: attendance, messages, invoices and payments in one place. |
+| **For teachers** | Registers on a phone, class lists, and announcements to whole classes. |
+| **Registration** | A public online enrolment form that this site links to. New registrations arrive as leads the madrasah accepts into a class. |
+| **Data** | Run by Teach 'n Go Ireland Limited in Dublin, under UK and EU data protection law. |
+| **Cost** | From €69 a month for up to 100 live students, billed in euros. A 14-day free trial, no card needed. |
 
-**All security lives in the database**, in the row-level security rules at the bottom of
-`schema.sql`. The key in `portal-config.js` is public by design. The rules are what stop one
-parent from ever seeing another family. They were tested against a real Postgres database
-before this was committed:
+**Its weak spots, so nobody is surprised later:**
 
-- a parent sees and edits only their own details and children
-- a parent cannot approve their own registration, move a child to another family, or make
-  themselves staff
-- the parent's email is always taken from their sign-in account, never from the form
-- staff see every family and can set statuses and add resources
-- an anonymous visitor can read nothing at all
+- It is built for all kinds of schools, not madrasahs. There is no ready-made Qaidah or hifdh
+  progress tracker; teachers would use its notes or grading fields.
+- Fees are paid by card (through Stripe) or PayPal. UK Direct Debit is not offered.
+- It is priced in euros, so the monthly cost in pounds moves a little.
 
-If you ever change a policy, re-test with two parent accounts and one staff account.
-
-## Before switching it on
-
-These are decisions for the trustees, not code:
-
-1. **Who is staff.** Name the people who may see every child's details. Keep the list short.
-2. **How long data is kept.** For example: while the child attends, then deleted a year after
-   they leave. Write it into the portal section of `privacy.html`, replacing the "not open
-   yet" paragraph.
-3. **The privacy notice.** Read the portal section of `privacy.html` and confirm it matches
-   what the madrasah will actually do.
-4. **ICO registration.** Check whether the charity needs to pay the data protection fee
-   (small charities are often exempt, but the check takes five minutes on ico.org.uk).
-5. **Who owns the Supabase account.** It should be a masjid email address that more than one
-   trustee can reach, not a volunteer's personal account.
+**The runner-up was [e-Maktab](https://e-maktab.co.uk/)**: UK-made for maktabs, cheaper
+(published at £15 to £60 a month by student numbers) and collects fees by Direct Debit. Worth
+a second look if the cost or Direct Debit matters more than the polish of the app. Newer
+madrasah-specific tools (IlmFlow and others) were too new to trust with children's records.
 
 ## Switching it on
 
-1. Create a free project at supabase.com, signed in with the masjid's account. Choose the
-   **London (eu-west-2)** region: the privacy notice promises UK or EU storage.
-2. **SQL Editor > New query**, paste all of `supabase/schema.sql`, **Run**.
-3. **Authentication > Sign In / Providers > Email**: leave email enabled. Under **Emails >
-   Magic Link**, make sure the template includes `{{ .Token }}` so parents receive a code as
-   well as a link.
-4. **Authentication > Emails > SMTP Settings**: Supabase's built-in email only reaches the
-   project's own team, so parents would never get their code. Connect the masjid's Google
-   Workspace (`smtp.gmail.com`, an app password for info@masjidatarbiya.org) or any SMTP
-   service.
-5. **Authentication > URL Configuration**: set the Site URL to the live site and add
-   `https://masjidattarbiya.org/portal.html` (and the github.io preview URL while testing) to
-   the redirect URLs.
-6. **Project Settings > API**: copy the Project URL and the **anon / publishable** key into
-   `js/portal-config.js`. Never the service_role or secret key: CI will refuse it.
-7. Sign in on the portal once as each staff member, then add them in the SQL editor:
-   `insert into public.staff (user_id, name) values ('<their user id>', 'Their name');`
-   (the id is under **Authentication > Users**).
-8. Test with a spare email as a parent before telling families.
+1. **Start the free trial** at teachngo.com, signed up with a masjid email address that more
+   than one trustee can reach, never a volunteer's personal account.
+2. **Set up the school**: the two groups (Juniors, ages 6 to 11; Seniors, 12 and over), the
+   days and times, the teachers. Use the confirmed timetable, not the placeholders on the
+   website (see `assets/madrasah.json`).
+3. **Create the enrolment form** (Teach 'n Go calls registrations "leads"). Ask only for what
+   the privacy notice lists: parent name, phone, email, emergency contact; child's name, date
+   of birth, school, Qur'an reading level, and anything needed to keep them safe.
+4. **Sign Teach 'n Go's data processing agreement**, and decide who on the madrasah's side can
+   see what, and how long records are kept after a child leaves.
+5. **Update this website** - three edits, all in `portal.html` and `privacy.html`:
+   - in `portal.html`, give the "Register a child" button the enrolment form's address as its
+     `href`, and the "Log in" button `https://app.teachngo.com/login`; remove
+     `role="link" aria-disabled="true"` and "(opening soon)" from both; delete the
+     `#portal-soon` note;
+   - in `privacy.html`, replace the "The portal is not open yet" paragraph with the retention
+     period and who can see registrations.
+6. **Test it as a parent** with a spare email before telling families.
 
-Staff can also read, filter and export registrations directly in the Supabase **Table
-Editor**, and add parent-only resources as rows in the `resources` table.
+## What happened to the self-built portal
+
+Before Teach 'n Go was chosen, a portal was built for this site on Supabase: one-time email
+codes, parent and staff views, and row-level security tested against a real database. It was
+removed when the decision was made, so that parents never meet two systems. It is in git
+history at commit `42ed7b3` if it is ever wanted again.

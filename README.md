@@ -18,7 +18,7 @@ a file, commit, and GitHub Pages publishes it within a minute or two.
 | **Prayer Times** | Today plus the week ahead, updated automatically |
 | **Events** | What the masjid has run, with the original posters, plus talks from YouTube |
 | **Madrasah Al Furqan** | The masjid's madrasah, with its own header and a way back to the masjid |
-| **Parent portal** | Registration for the madrasah. Built and tested, not switched on yet: see `PORTAL.md` |
+| **Parent portal** | The front door to Teach 'n Go, the madrasah's system. Opening soon: see `PORTAL.md` |
 | **Donate** | One-off and monthly giving through GoCardless |
 | **Contact** | Phone, WhatsApp, email and a map |
 
@@ -43,7 +43,7 @@ python scripts/check_links.py           # no broken links, balanced tags, one h1
 python scripts/check_facts.py           # contact details consistent, no hardcoded prayer times
 python scripts/check_data.py            # prayer times valid, in order, and still current
 python scripts/check_events.py          # events evidenced, dates sane, no contact details in copy
-python scripts/check_portal.py          # the portal config never holds a secret database key
+python scripts/check_madrasah.py        # madrasah data well formed; lists placeholders still to confirm
 ```
 
 They also run automatically on every push.

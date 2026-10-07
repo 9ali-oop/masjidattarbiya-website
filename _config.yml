@@ -7,7 +7,6 @@
 exclude:
   - scripts/
   - partials/
-  - supabase/
   - CLAUDE.md
   - README.md
   - PORTAL.md

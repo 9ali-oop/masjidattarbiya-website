@@ -42,6 +42,11 @@ register. Confirm with the trustees before relying on either.
    teacher names or facilities. If a fact is not in the table above or confirmed by the masjid,
    it does not go on the site. An earlier draft of this site published invented service
    descriptions and guessed opening hours; that is what most of the cleanup was about.
+   **The one agreed exception** is the madrasah's timetable, term dates, group descriptions,
+   places and resources (`assets/madrasah.json`), which the masjid asked for as placeholders in
+   October 2026 so the page could be designed and reviewed. Every one of them is marked
+   `"placeholder": true` and carries a visible "To be confirmed" label on the page. Never add an
+   unlabelled placeholder, and never use the exception anywhere else.
 2. **Never hardcode prayer times.** They go stale within a day and that is precisely what made
    the masjid's previous website a problem. See "Prayer times" below for how they actually work.
 3. **Never break the donation flow.** See "Donations" below.
@@ -101,7 +106,7 @@ python scripts/check_links.py           # no broken links or root-relative paths
 python scripts/check_facts.py           # contact details consistent, no hardcoded prayer times
 python scripts/check_data.py            # prayer times data valid, in order, and still current
 python scripts/check_events.py          # events evidenced, posters local, no contact details in copy
-python scripts/check_portal.py          # the portal config never holds a secret database key
+python scripts/check_madrasah.py        # madrasah data well formed; lists what is still a placeholder
 ```
 
 `check_data.py` matters most of the four: `assets/prayer-times.json` is the only file that changes
@@ -249,31 +254,47 @@ their questions and an "I remember this" button that opens WhatsApp with a messa
 started. People correct a draft far faster than they answer "tell me our history". Fill one
 in, give it a `source`, set `status` to `confirmed` and delete its `asks` list.
 
-**What is evidenced**, all from the Charity Commission register (checked 30 September 2026)
-unless noted:
+**What is evidenced.** Researched properly on 7 October 2026 from official records. Read this
+before redoing it.
 
-- Declaration of Trust dated 3 September 2006, as the Somali Education and Cultural Centre.
-- The governing document's area of benefit is **Bordesley Green**, not Nechells - so the charity
-  started somewhere else and moved. When and why is an open question on the page.
-- Registered 2 June 2011, number 1142204.
-- Governing document amended 5 March 2021. **The registered name today is Kowneyn Education and
-  Cultural Centre.** An earlier draft said the 2021 amendment renamed the charity "Attarbiya
-  Masjid and Kowneyn Community Centre"; the register does not support that, so it was removed.
+- Declaration of Trust dated 3 September 2006, as the Somali Education and Cultural Centre
+  (Charity Commission register). Registered 2 June 2011, number 1142204. Governing document
+  amended 5 March 2021. **The registered name today is Kowneyn Education and Cultural Centre**;
+  an earlier draft wrongly said 2021 renamed it "Attarbiya Masjid and Kowneyn Community Centre".
+- The governing document's area of benefit is **Bordesley Green**. The charity's own accounts
+  (downloadable from the register) give its principal office as **The Garrison Centre, 106
+  Garrison Lane, B9** up to 2021/22, and 2 Revesby Walk from 2022/23.
+- **The building was the Vauxhall Sports and Social Club, not a pub.** Companies House has a
+  "Vauxhall Sports and Social Club Community Interest Company" (06409217) with its registered
+  office at 2 Revesby Walk, incorporated October 2007, dissolved June 2010. The masjid's own
+  earlier website (kowneyn.org) says the same.
+- **The pub was a different building.** The Ashted Hamlet stood on Revesby Walk from 1966 to
+  1997 and was demolished around 2007, replaced by a community resource centre
+  (closedpubs.co.uk, Birmingham History Forum). That is where the "it used to be a pub" memory
+  comes from. A 2005 forum post also places the East Birmingham Constitutional Club ("the
+  Conservative club") "at the top of Revesby Walk"; whether that was the same building as the
+  Vauxhall club is an open question on the page, not a fact.
+- **June 2019: the charity acquired 2 Revesby Walk.** HM Land Registry's price paid data records
+  a sale of 2 Revesby Walk on 14 June 2019, and every balance sheet from 2020/21 lists "land and
+  buildings" at exactly that price. The site does not publish the price.
+- The accounts show heavy spending on "premises repairs and renewals" in each year from
+  2020/21 to 2022/23: the conversion into a masjid.
 - Registered activities: after-school club and supplementary education. Policies on file include
   safeguarding, complaints, and bullying and harassment. Not recognised by HMRC for Gift Aid, so
   never mention Gift Aid on the donate page.
 - The Winter Conference of December 2023 (poster), the Instagram and YouTube accounts in March
   2024, the summer Qur'an Intensive of 2025 (Instagram).
 
-**Two stories about the building contradict each other.** The earlier About page said it was a
-"former sports and social club" the community moved into in 2021; the history draft said it was a
-pub. Neither is evidenced, so both are now presented as an open question and neither is stated
-as fact anywhere. The register also says the charity "does not own and/or lease land or
-property" - worth understanding before the page says anything about buying the building.
+**Three loose ends for the trustees, found along the way, none of them published:**
 
-**Do not publish the pub's name until someone confirms it.** closedpubs.co.uk lists an *Ashted
-Hamlet* on Revesby Walk (1966-1997), but the Birmingham History Forum says that pub was
-*demolished* around 2007-08 and replaced. Unresolved.
+1. The register's governance page says the charity "does not own and/or lease land or
+   property", which contradicts its own accounts. The next annual return should correct it.
+2. The accounts call the building "freehold"; Land Registry records the 2019 sale as leasehold.
+3. A separate company, Kowneyn Community CIC (15241519, incorporated 27 October 2023), is
+   registered at 2 Revesby Walk. The site does not mention it; worth knowing it exists.
+
+The accounts also show the building was partly funded by loans from members, still being
+repaid. That is the community's business, not the website's.
 
 **The animation fails visible, by construction.** An early version started cards at `opacity: 0`
 and relied on `IntersectionObserver` to reveal them, which rendered invisible cards whenever the
@@ -288,33 +309,45 @@ their terms, and embedding it live would break the site's no-third-parties promi
 
 ## Madrasah Al Furqan
 
-`madrasah.html` is the madrasah's home, and `portal.html` its parent portal. Both use
-`partials/madrasah-header.html`: the madrasah's wordmark with the masjid's logo beside it, a top
-bar leading back to the masjid, and a rule in the madrasah's brown. The footer is the masjid's.
+`madrasah.html` is the madrasah's home, and `portal.html` the front door to its parent portal.
+Both use `partials/madrasah-header.html`: the madrasah's wordmark with the masjid's logo beside
+it, a top bar leading back to the masjid, and a rule in the madrasah's colour. The footer is the
+masjid's.
 
 **It must always read as part of the masjid**, never as a partner or a separate charity. That
 was an explicit request. The page says so in words ("Under one roof") as well as in the design.
 
 - **The name** is Madrasah Al Furqan (مدرسة الفرقان), taken from its logo. Use "Al Furqan" as
   the short form.
-- **The logo.** The madrasah's logo (a brown version with "MADRASAH AL FURQAN" underneath, and a
-  bold navy Arabic-only version) was shared in chat but is not yet in the repo. Until it is, the
-  wordmark is set in type (`.furqan-wordmark`: Reem Kufi plus spaced Inter capitals) in
-  `--furqan`, a brown judged by eye. When the files arrive, put them in `assets/furqan/`,
-  replace the `.furqan-wordmark` spans in the madrasah header, `index.html` and `madrasah.html`
-  with an `<img>` (alt "Madrasah Al Furqan"), and set `--furqan` to the exact colour.
-- **Classes and resources** come from `assets/madrasah.json`, written by hand. While `classes` is
-  empty the page says plainly that times are being confirmed and invites parents to ask. Do not
-  fill it with guesses: days (Tue/Wed/Sat/Sun were once mentioned), ages and times all need the
-  madrasah's confirmation.
+- **Confirmed by the masjid:** classes six days a week, **no classes on Friday**, Saturday runs
+  most of the day, and two age groups, **6 and over** and **12 and over**.
+- **Everything else on the page is a placeholder** (see Rule 1): the times, the term dates, the
+  group descriptions, "places available" and the resources list. They live in
+  `assets/madrasah.json`, each with `"placeholder": true`, and each shows a "To be confirmed"
+  label. While `"provisional"` is true the page also shows a draft notice. When the madrasah
+  confirms an item, correct it and delete its flag; `check_madrasah.py` lists what is left and
+  fails if the file claims to be final while placeholders remain. Fees are deliberately "to be
+  confirmed" with no placeholder figure.
+- **The logo.** The madrasah has two logos, a brown one with "MADRASAH AL FURQAN" underneath
+  and a bold navy Arabic-only one. They have not reached the repo yet (the volunteer has them on
+  their own computer). Until they do, the wordmark is set in type (`.furqan-wordmark`: Reem Kufi
+  plus spaced Inter capitals). When the files arrive, put them in `assets/furqan/`, replace the
+  `.furqan-wordmark` spans in the madrasah header, `index.html` and `madrasah.html` with an
+  `<img>` (alt "Madrasah Al Furqan"), and set the colour tokens to the logo's exact values.
+- **Brown or navy is undecided.** Both palettes exist (`--furqan`, `--furqan-deep`,
+  `--furqan-mid`; brown on `:root`, navy on `:root[data-furqan="navy"]`). Brown shows by
+  default. Add `?furqan=navy` or `?furqan=brown` to any page address to preview: a switch
+  appears and the choice sticks for the visit. Once the trustees choose, delete the other
+  palette, the switch (top of `js/main.js`) and the `.colour-preview` styles.
 
 ### The parent portal
 
-Built, tested end to end, and **deliberately not switched on** - the plan is to gather feedback
-from the teachers and a few parents first. Everything about it, including the decisions the
-trustees must make before it opens, is in **`PORTAL.md`**. In short: Supabase (free, London
-region), email one-time codes (no passwords), all permissions in row-level security in
-`supabase/schema.sql`, and `js/portal-config.js` empty until launch.
+**The madrasah will use Teach 'n Go** (chosen October 2026: best rated for ease of use, and
+already used by Green Lane's madrasah). `portal.html` is just the front door: a "Register a
+child" button for the enrolment form and a "Log in" button, both shown as "opening soon" until
+the account exists. The reasoning, the runner-up (e-Maktab) and the switch-on steps are in
+**`PORTAL.md`**. A self-built Supabase portal existed briefly and was removed in favour of Teach
+'n Go so that parents never meet two systems; it is in git history at `42ed7b3`.
 
 ## Design
 
@@ -336,7 +369,8 @@ The palette and type are sampled from the masjid's logo and shared with the dona
 | `--gold-deep` | `#b08d3f` | deeper gold |
 | `--gold-text` | `#7a5c1f` | the only gold safe as text on white (6.22:1) |
 | `--night` | `#0b2c30` | the dark bands: heroes, prayer panels, footer |
-| `--furqan` | `#6e3b2f` | Madrasah Al Furqan's brown, from its logo (by eye - replace with the exact value) |
+| `--furqan` | `#6e3b2f` brown, or `#1f3566` navy | Madrasah Al Furqan's colour, judged by eye from its two logos; brown is the default until the trustees choose |
+| `--furqan-deep` | `#3b2420` / `#142240` | the madrasah's dark bands (its hero, its arch on the homepage) |
 
 The dark bands are why the redesign can use the real brand colours: bright teal and gold both
 fail WCAG AA as text on white, but pass comfortably on `--night`.
@@ -353,8 +387,9 @@ characters - macrons in transliteration, say - add `latin-ext` to the family's e
 in that script and re-run it.
 
 The result is that **no third party is contacted on any page except the Google map on the
-contact page** (and, once it is switched on, the portal's own database on `portal.html`). That
-is worth protecting: the privacy notice says so in as many words.
+contact page**. The parent portal does not change that: `portal.html` only links to Teach 'n
+Go, and nothing loads from them until a parent chooses to go there. That is worth protecting:
+the privacy notice says so in as many words.
 
 ## Accessibility, don't regress it
 
@@ -398,9 +433,9 @@ the masjid's own account into `staging/`, with images. Do not go back to scrapin
 has 24 posts; the 3 the API does not return are the collaborations posted under Al Kissaii, which
 would need their own token.
 
-**Madrasah details.** `madrasah.html` exists and is honest about what is missing. It is waiting
-on real details for `assets/madrasah.json`: which classes run on which days, term dates, ages,
-whether places are open. And on the logo files (see "Madrasah Al Furqan").
+**Madrasah details.** `madrasah.html` is built, with labelled placeholders. It is waiting on the
+real times, term dates, group descriptions, places and fees for `assets/madrasah.json`, on the
+logo files, and on the trustees' choice of brown or navy (see "Madrasah Al Furqan").
 
 **Photos of people.** Running the masjid's accounts covers content the masjid published. It does
 not cover individual likenesses, and much of the available material shows teenagers. Group shots
@@ -412,8 +447,8 @@ parental consent - the masjid runs children's classes, so that standard applies 
 `services.html` and `registration.html` were removed from the launch scope because their content
 was invented or, in the case of registration, collected children's personal data through an
 embedded Google Form with no privacy notice. They remain in git history (see the first commit).
-`madrasah.html` has since been rebuilt from verified facts only, and registration now belongs to
-the parent portal, which is not switched on (see `PORTAL.md`).
+`madrasah.html` has since been rebuilt, and registration will go through Teach 'n Go, which is
+not switched on yet (see `PORTAL.md`).
 
 ## Deploying
 
