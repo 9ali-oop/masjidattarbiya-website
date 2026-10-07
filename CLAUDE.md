@@ -18,13 +18,15 @@ below. Never invent a value that is not on this list.
 | Madrasah | **Madrasah Al Furqan** (مدرسة الفرقان), the masjid's own madrasah - not a separate organisation |
 | Address | 2 Revesby Walk, Nechells, Birmingham B7 4LG |
 | Charity number | 1142204 |
-| Phone | 07908 854187 (`tel:+447908854187`, `wa.me/447908854187`) |
+| Phone | 07908 854187 (`tel:+447908854187`, `wa.me/447908854187`), confirmed by the masjid 7 October 2026 |
 | Email | info@masjidatarbiya.org (note: **one** 't', and that is correct - see below) |
 | Website | masjidattarbiya.org (note: **two** t's) |
 | Prayer times | https://masjidbox.com/prayer-times/masjid-attarbiya |
 | Facebook | https://www.facebook.com/p/Attarbiya-Masjid-Kowneyn-Community-Center-100088731259188/ |
 | Instagram | https://www.instagram.com/masjid.attarbiya/ |
 | YouTube | https://www.youtube.com/@MasjidAttarbiyaBirmingham |
+| Sisters | A sisters' prayer area with its own entrance: facing the masjid, sisters' entrance on the left, brothers' on the right (confirmed 7 October 2026) |
+| Jumu'ah | One Jumu'ah each Friday; khutbah usually in Arabic and English, sometimes English only (confirmed 7 October 2026) |
 
 **The email really does have one 't'.** `masjidatarbiya.org` has live Google Workspace mail
 records, so that address works; our website domain `masjidattarbiya.org` has no mail records at
@@ -32,9 +34,9 @@ all. The two simply have different histories. Do not "correct" the email to matc
 (If you ever want `info@masjidattarbiya.org` to work as well, Cloudflare Email Routing forwards
 it free.)
 
-**Open question:** the masjid's own signage shows a phone number beginning `07929`, which matches
-neither the number above nor an older leaflet. The number above comes from the Charity Commission
-register. Confirm with the trustees before relying on either.
+**The phone number is settled.** The masjid's signage shows a number beginning `07929`, but the
+masjid confirmed on 7 October 2026 that 07908 854187 (the number on the Charity Commission
+register) is the one to publish.
 
 ## Rules
 
@@ -129,7 +131,8 @@ leaves it out. The amounts and links live in the `LINKS` object in its script. T
 made in the move: fonts served from this site instead of Google, the icons and logo read from
 `assets/`, the logo links to the homepage, metadata for the new address, `id="main"`, and the
 donate button no longer opens a new tab (see below). Keep its look as it is unless the masjid
-asks otherwise.
+asks otherwise. (Known and accepted: the gold hadith text in its quote box measures 3.1:1 on
+white, under AA; it is the original design, kept on purpose.)
 
 The donation page links directly to **GoCardless payment templates**. Treat these as live
 financial infrastructure:
@@ -193,7 +196,10 @@ Where the current entries came from, so nobody has to re-derive it:
    donate page and indexed by search engines, it becomes a fraud risk. `check_events.py` blocks
    bank details, phone numbers and email addresses in event copy.
 
-### Recorded talks
+### Recordings from YouTube
+
+The site calls these "recordings", not "talks": the channel carries recitations and prayers
+(a Tahajjud recording, for one) as well as lectures, and labelling a prayer a talk was wrong.
 
 `assets/youtube.json` and `assets/youtube/*.jpg` are refreshed nightly by
 `scripts/fetch_youtube.py` (`.github/workflows/youtube.yml`, 03:40 UTC). **This needs no API key,
@@ -340,14 +346,17 @@ was an explicit request. The page says so in words ("Under one roof") as well as
   confirmed" with no placeholder figure.
 - **The logos** are in `assets/furqan/`: `madrasah-al-furqan-brown.png` (Arabic with "MADRASAH
   AL FURQAN" underneath) and `madrasah-al-furqan-navy.png` (bold, Arabic only). They were cut out
-  of screenshots onto transparent backgrounds, and are small (175 and 507 pixels wide), so the
-  CSS never shows them much larger than that. If the madrasah has the original artwork (an SVG
-  or a large PNG), replace these two files with it at the same names. They are used as CSS
-  masks (`.furqan-logo-brown`, `.furqan-logo-navy`), so one file gives every colour: the
-  logo's own colour on white, gold where it sits on a dark background. Under the navy logo the English name is
-  set in type, because that logo has none. Mask widths are fixed in pixels on purpose: the
-  logo sits in a shrink-to-fit box where a percentage width resolves to nothing and the logo
-  silently disappears.
+  of screenshots onto transparent backgrounds, and are small (175 and 507 pixels wide), which
+  made them blurry on phones. **The CSS now uses `.svg` files traced from those PNGs** (potrace,
+  8x and 4x upscaled, then smoothed), which stay sharp at any size; the PNGs are kept as the
+  source. If the madrasah has the original artwork (a real SVG or a large PNG), replace the SVGs
+  with it at the same names, which is still worth asking for. They are used as CSS masks
+  (`.furqan-logo-brown`, `.furqan-logo-navy`), so one file gives every colour. Under the navy
+  logo the English name is set in type, because that logo has none. Mask widths are fixed in
+  pixels on purpose: the logo sits in a shrink-to-fit box where a percentage width resolves to
+  nothing and the logo silently disappears. The arch's padding is in pixels for a similar
+  reason: percentage padding resolves against the grid column, not the arch, and once pushed
+  the logo off centre.
 - **Brown or navy is undecided.** Both palettes exist (`--furqan` and `--furqan-deep`; brown on `:root`, navy on `:root[data-furqan="navy"]`). Brown shows by
   default. Add `?furqan=navy` or `?furqan=brown` to any page address to preview: a switch
   appears and the choice sticks for the visit. Once the trustees choose, delete the other

@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="css/fonts.css" />
-<link rel="stylesheet" href="css/style.css?v=20261007b" />
+<link rel="stylesheet" href="css/style.css?v=20261007c" />
 </head>
 <body>
 
@@ -47,59 +47,59 @@
 
 <main id="main">
 
-<section class="page-hero furqan-hero">
+<section class="page-hero">
   <div class="container">
     <p class="crumbs"><a href="madrasah.html">Madrasah Al Furqan</a> / Parent portal</p>
-    <h1>Parent portal</h1>
+    <h1>Parent Portal</h1>
     <p class="lede">Register your child with Madrasah Al Furqan, and once they are enrolled, follow their attendance, messages from the teachers and fees in one place.</p>
   </div>
 </section>
 
 <section class="section">
-  <div class="container portal-layout">
-    <div>
-      <!-- OPENING SOON. When the madrasah's Teach 'n Go account is ready, follow
-           PORTAL.md: put the real addresses in the two buttons below, remove
-           aria-disabled and the "Opening soon" labels, and delete the note. -->
-      <div class="draft-note" id="portal-soon" role="note">
-        <span class="tbc">Opening soon</span>
-        <p><strong>The parent portal is being set up.</strong> Until it opens, you can register your child, or ask about places, by WhatsApp or phone.</p>
-      </div>
-
-      <div class="portal-actions">
-        <section class="portal-action" id="register" aria-labelledby="register-title">
-          <h2 id="register-title">New to the madrasah?</h2>
-          <p>Register your child with one short online form. The madrasah will then be in touch about a place.</p>
-          <a class="btn btn-gold" role="link" aria-disabled="true">Register a child (opening soon)</a>
-        </section>
-        <section class="portal-action" aria-labelledby="login-title">
-          <h2 id="login-title">Already enrolled?</h2>
-          <p>Log in to see attendance, messages from the teachers and fees. There is an app for iPhone and Android too.</p>
-          <a class="btn btn-teal" role="link" aria-disabled="true">Log in (opening soon)</a>
-        </section>
-      </div>
-
-      <div class="portal-meanwhile">
-        <p><strong>In the meantime</strong></p>
-        <div class="btn-row">
-          <a href="https://wa.me/447908854187?text=Salaam%2C%20I%20would%20like%20to%20register%20my%20child%20with%20Madrasah%20Al%20Furqan." target="_blank" rel="noopener" class="btn btn-teal">Register by WhatsApp</a>
-          <a href="tel:+447908854187" class="btn btn-line">Call 07908 854187</a>
-        </div>
-      </div>
+  <div class="container">
+    <!-- OPENING SOON. When the madrasah's Teach 'n Go account is ready, follow
+         PORTAL.md: put the real addresses in the two main buttons below, remove
+         aria-disabled and the "Opening soon" labels, and delete the note. -->
+    <div class="draft-note portal-note" id="portal-soon" role="note">
+      <span class="tbc">Opening soon</span>
+      <p><strong>The online portal is being set up.</strong> Until it opens, the WhatsApp and phone buttons below do the same job: the madrasah will register your child and answer any questions.</p>
     </div>
 
-    <aside class="portal-aside">
+    <div class="portal-actions">
+      <section class="portal-action" id="register" aria-labelledby="register-title">
+        <span class="portal-step" aria-hidden="true">1</span>
+        <h2 id="register-title">New to the madrasah?</h2>
+        <p>Register your child. The madrasah will be in touch about a place in the right group.</p>
+        <a class="btn btn-teal" role="link" aria-disabled="true">Register online (opening soon)</a>
+        <a href="https://wa.me/447908854187?text=Salaam%2C%20I%20would%20like%20to%20register%20my%20child%20with%20Madrasah%20Al%20Furqan." target="_blank" rel="noopener" class="btn btn-line">Register by WhatsApp</a>
+      </section>
+      <section class="portal-action" aria-labelledby="login-title">
+        <span class="portal-step" aria-hidden="true">2</span>
+        <h2 id="login-title">Already enrolled?</h2>
+        <p>Log in to see attendance, messages from the teachers and fees. There is an app for iPhone and Android too.</p>
+        <a class="btn btn-teal" role="link" aria-disabled="true">Log in (opening soon)</a>
+        <a href="tel:+447908854187" class="btn btn-line">Call 07908 854187</a>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container portal-layout">
+    <div>
       <h2>What we ask for, and why</h2>
       <p>Only what the madrasah needs to teach your child and keep them safe:</p>
-      <ul>
+      <ul class="portal-list">
         <li>your name, phone number and an emergency contact</li>
         <li>your child's name, date of birth, school and Qur'an reading level</li>
         <li>anything we need to know to keep them safe, if there is anything</li>
       </ul>
+    </div>
+    <div>
+      <h2>Who looks after your details</h2>
       <p>The portal is run for the madrasah by Teach 'n Go, a school management service based in Ireland, under UK and EU data protection law. Only you and the madrasah's staff can see your family's details. Read the full <a href="privacy.html#portal">privacy notice</a>.</p>
-      <h2 style="margin-top:32px;">Need help?</h2>
       <p>If anything here does not work for you, the masjid can register your child by phone or WhatsApp instead.</p>
-    </aside>
+    </div>
   </div>
 </section>
 
@@ -124,7 +124,7 @@
           <li><a href="about.html">About us</a></li>
           <li><a href="history.html">Our story</a></li>
           <li><a href="prayer-times.html">Prayer times</a></li>
-          <li><a href="events.html">Events and talks</a></li>
+          <li><a href="events.html">Events and recordings</a></li>
           <li><a href="donate.html">Donate</a></li>
         </ul>
       </div>
@@ -153,6 +153,6 @@
   </div>
 </footer>
 
-<script src="js/main.js?v=20261007b"></script>
+<script src="js/main.js?v=20261007c"></script>
 </body>
 </html>
