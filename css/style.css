@@ -462,6 +462,11 @@ strong { color: var(--ink); }
 .page-hero .crumbs { font-size: 0.85rem; margin-bottom: 10px; }
 .crumbs a { color: var(--white); }
 
+/* Buttons and a status line inside a heading band. */
+.page-hero .hero-actions { justify-content: center; margin-top: 22px; }
+.page-hero .hero-status { margin: 18px auto 0; font-size: 0.92rem; }
+.page-hero .hero-status .tbc { margin-right: 6px; vertical-align: 1px; }
+
 /* Our Story carries two figures under its heading. */
 .story-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 48px; margin: 24px 0 0; padding: 0; list-style: none; }
 .story-stats li { display: flex; flex-direction: column; font-size: 0.86rem; color: rgba(255, 255, 255, 0.9); }
@@ -566,6 +571,34 @@ strong { color: var(--ink); }
 }
 .avatar-placeholder svg { width: 56%; height: 56%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .section-alt .card--person .avatar-placeholder { background: var(--green-light); }
+
+/* New here? Three plain cards after today's prayer times: where to go in, what
+   happens on Friday, how to reach us. All of it confirmed by the masjid. */
+.newhere .card h3 { display: flex; align-items: center; gap: 10px; }
+.newhere .card h3 .icon { width: 40px; height: 40px; margin: 0; }
+.newhere .card p:last-of-type { margin-bottom: 12px; }
+.newhere .card .more { font-size: 0.94rem; }
+
+/* Notices: short, dated announcements from assets/notices.json (an Eid prayer
+   time, a changed iqamah, a closure). Shown only while current; the container
+   stays empty otherwise and takes no space. */
+.notices:empty { display: none; }
+.notices { display: grid; gap: 12px; margin: 28px 0 0; }
+.notice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 16px;
+  padding: 16px 18px;
+  background: var(--gold-light);
+  border: 1px solid #ead9b3;
+  border-left: 4px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.notice-kind { grid-row: span 2; font: 700 0.7rem/1.4 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-text); padding-top: 4px; }
+.notice h3 { font: 600 1.05rem/1.35 var(--font-body); color: var(--ink); margin: 0; }
+.notice p { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
+.notice p a { font-weight: 600; }
+@media (max-width: 560px) { .notice { grid-template-columns: 1fr; } .notice-kind { grid-row: auto; } }
 
 /* The madrasah, introduced from the masjid's homepage: its logo inside the
    arch of the masjid's windows. */
@@ -828,6 +861,26 @@ strong { color: var(--ink); }
 .week-table thead .is-today { box-shadow: inset 0 3px 0 var(--gold); background: var(--green-light); }
 .week-table tbody tr:last-child > * { border-bottom: 0; }
 .week-key { font-size: 0.86rem; color: var(--ink-soft); margin-top: 12px; }
+.week-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 18px; }
+.print-only { display: none; }
+
+/* Printing the week: just the masjid's name, the table and where the times
+   come from, on one sheet, for the fridge or the noticeboard. */
+@media print {
+  .site-header, .site-footer, .page-hero, .prayer-layout, .week-actions, .week-key, .colour-preview, .thanks-banner, .skip-link, .notices { display: none !important; }
+  .print-only { display: block; margin: 0 0 12px; }
+  .print-only .print-title { font: 400 20pt/1.2 var(--font-head); margin: 0 0 4px; color: #000; }
+  .print-only p { margin: 0; color: #000; font-size: 10pt; }
+  body { background: #fff; color: #000; }
+  .section { padding: 0; }
+  .section-intro { display: none; }
+  .week-wrap { border: 0; overflow: visible; }
+  .week-table { min-width: 0; width: 100%; font-size: 10pt; }
+  .week-table th, .week-table td { padding: 6px 4px; border-bottom: 1px solid #999; }
+  .week-table thead th span { font-size: 12pt; }
+  .week-table .is-today, .week-table thead .is-today { background: #eee; box-shadow: none; }
+  a[href]::after { content: ""; }
+}
 
 /* ==========================================================================
    Events and recorded talks
@@ -1241,15 +1294,15 @@ strong { color: var(--ink); }
 .resource-list li.is-soon b { color: var(--ink); }
 
 /* Parent portal: the madrasah uses Teach 'n Go. This page is the front door to
-   it, one card per job (register, or log in), each with a working WhatsApp or
-   phone button beside the online one while the portal is not open yet. It uses
-   the masjid's teal rather than the madrasah's brown, at the masjid's request,
-   so it reads as part of the masjid's site. */
-.portal-note { max-width: 760px; margin-inline: auto; }
+   it, laid out as a guided path for a parent on a phone: what happens in three
+   steps, then one card per job (register, or log in), then the questions
+   parents ask. Nothing that does not work yet is drawn as a button: the online
+   form and login appear as a status line until the portal opens. The page uses
+   the masjid's teal rather than the madrasah's brown, at the masjid's request. */
+.portal-steps { max-width: 980px; margin-inline: auto; }
 .portal-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; max-width: 900px; margin: 0 auto; }
 @media (max-width: 640px) { .portal-actions { grid-template-columns: 1fr; } }
 .portal-action {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1260,25 +1313,62 @@ strong { color: var(--ink); }
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
-.portal-step {
-  width: 36px; height: 36px;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: var(--green-light);
-  color: var(--green-dark);
-  font: 400 1.15rem/1 var(--font-head);
-  margin-bottom: 4px;
-}
 .portal-action h2 { font-size: 1.5rem; margin: 0; }
-.portal-action p { margin: 0 0 8px; }
+.portal-action > p { margin: 0 0 6px; }
 .portal-action .btn { width: 100%; }
-.portal-action .btn + .btn { margin-top: 2px; }
-.portal-action .btn[aria-disabled="true"] { background: var(--green-light); color: var(--ink-soft); cursor: not-allowed; transform: none; margin-top: auto; }
-.portal-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 56px; align-items: start; }
-@media (max-width: 860px) { .portal-layout { grid-template-columns: 1fr; gap: 28px; } }
-.portal-layout h2 { font-size: 1.4rem; }
-.portal-list { margin: 0; padding-left: 1.1em; color: var(--ink-soft); }
-.portal-list li { margin-bottom: 6px; }
+.portal-action .btn-row { flex-direction: column; gap: 10px; margin-top: auto; }
+/* "Online form: opening soon" - a statement, not a dead button. */
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--green-light);
+  color: var(--ink);
+  font-size: 0.92rem;
+}
+.status-line .tbc { flex-shrink: 0; }
+
+.portal-faq-layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); gap: 40px 56px; align-items: start; }
+@media (max-width: 860px) { .portal-faq-layout { grid-template-columns: 1fr; gap: 28px; } }
+.portal-need { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 26px; }
+.portal-need h2 { font-size: 1.3rem; }
+.portal-need ul { margin: 0 0 14px; padding-left: 1.1em; color: var(--ink-soft); }
+.portal-need li { margin-bottom: 6px; }
+.portal-need p { margin: 0; font-size: 0.92rem; }
+
+/* Questions and answers: native details/summary, so they work with no script,
+   open with Enter or Space, and read as a list to a screen reader. */
+.faq { border-top: 1px solid var(--border); }
+.faq details { border-bottom: 1px solid var(--border); }
+.faq summary {
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+  padding: 16px 44px 16px 0;
+  font-weight: 600;
+  color: var(--green-dark);
+  min-height: 44px;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "";
+  position: absolute;
+  right: 14px; top: 50%;
+  width: 10px; height: 10px;
+  border-right: 2px solid var(--green-dark);
+  border-bottom: 2px solid var(--green-dark);
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 0.2s ease;
+}
+.faq details[open] summary::after { transform: translateY(-30%) rotate(-135deg); }
+.faq summary:hover { color: var(--green-ink); }
+.faq .faq-body { padding: 0 0 18px; }
+.faq .faq-body p, .faq .faq-body li { color: var(--ink-soft); }
+.faq .faq-body p:last-child { margin-bottom: 0; }
+.faq .faq-body ul { margin: 0 0 1em; padding-left: 1.1em; }
 
 /* ==========================================================================
    The madrasah's colour, and the brown / navy preview.

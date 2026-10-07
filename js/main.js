@@ -19,6 +19,36 @@ function getJSON(url) {
   });
 }
 
+/* Notices: short, dated announcements kept in assets/notices.json and shown
+   on the homepage and the prayer times page while they are current. Each has
+   a "from" and "until" date (inclusive, Europe/London), so an Eid prayer time
+   or a changed iqamah disappears by itself the day after. */
+(function () {
+  var boxes = document.querySelectorAll(".notices");
+  if (!boxes.length) return;
+  var today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  getJSON("assets/notices.json").then(function (d) {
+    var live = ((d && d.notices) || []).filter(function (n) {
+      return n.title && (!n.from || n.from <= today) && (!n.until || n.until >= today);
+    }).slice(0, 3);
+    if (!live.length) return;
+    var html = live.map(function (n) {
+      return '<div class="notice" role="note"><span class="notice-kind">' + esc(n.kind || "Notice") + "</span>" +
+        "<h3>" + esc(n.title) + "</h3>" +
+        (n.text || n.link ? "<p>" + esc(n.text || "") +
+          (n.link ? (n.text ? " " : "") + '<a href="' + esc(n.link) + '">' + esc(n.link_text || "More") + "</a>" : "") + "</p>" : "") +
+      "</div>";
+    }).join("");
+    boxes.forEach(function (b) { b.innerHTML = html; });
+  }).catch(function () { /* no notices file, or a broken one: show nothing */ });
+})();
+
+/* Print buttons: anything with data-print prints the page. */
+document.querySelectorAll("[data-print]").forEach(function (b) {
+  b.addEventListener("click", function () { window.print(); });
+});
+
 /* Brown or navy: the madrasah's two colour options, previewable side by side.
    Add ?furqan=navy or ?furqan=brown to any address; the choice is kept for the
    visit and a small switch appears. Without the parameter nothing happens and
