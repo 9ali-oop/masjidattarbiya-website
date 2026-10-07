@@ -23,7 +23,10 @@ import glob
 import re
 import sys
 
-MASJID_PAGES = ["index.html", "about.html", "prayer-times.html", "events.html", "history.html", "donate.html",
+# donate.html is deliberately not here: it is the original donation page, moved in
+# unchanged, with its own header, footer, styles and script, so that donations keep
+# working whatever happens to the rest of the site.
+MASJID_PAGES = ["index.html", "about.html", "prayer-times.html", "events.html", "history.html",
                 "contact.html", "privacy.html"]
 MADRASAH_PAGES = ["madrasah.html", "portal.html"]
 PAGES = MASJID_PAGES + MADRASAH_PAGES
