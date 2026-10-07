@@ -340,24 +340,24 @@ strong { color: var(--ink); }
 .brand-furqan-parent img { height: 34px; width: auto; }
 
 /* The madrasah's logos, from assets/furqan/. Each is used as a mask, so one
-   file serves every colour: the logo's own colour on white, gold on the dark
-   bands. Brown shows by default; the navy logo (Arabic only, so the English
-   name is set beneath it) shows when the navy palette is chosen. The source
-   files are small, so the widths stay close to their real size. */
+   file serves every colour. Brown shows by default; the navy logo (Arabic
+   only, so the English name is set beneath it) shows when the navy palette is
+   chosen. The masks are SVGs traced from the small PNG originals, so they stay
+   sharp on high-density screens where the PNGs went blurry. */
 .furqan-logo { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; color: var(--furqan); line-height: 1; }
 .furqan-logo-brown, .furqan-logo-navy { display: block; background: currentColor; }
 .furqan-logo-brown {
   width: 170px;
   aspect-ratio: 175 / 59;
-  -webkit-mask: url("../assets/furqan/madrasah-al-furqan-brown.png") center / contain no-repeat;
-  mask: url("../assets/furqan/madrasah-al-furqan-brown.png") center / contain no-repeat;
+  -webkit-mask: url("../assets/furqan/madrasah-al-furqan-brown.svg") center / contain no-repeat;
+  mask: url("../assets/furqan/madrasah-al-furqan-brown.svg") center / contain no-repeat;
 }
 .furqan-logo-navy {
   display: none;
   width: 160px;
   aspect-ratio: 507 / 104;
-  -webkit-mask: url("../assets/furqan/madrasah-al-furqan-navy.png") center / contain no-repeat;
-  mask: url("../assets/furqan/madrasah-al-furqan-navy.png") center / contain no-repeat;
+  -webkit-mask: url("../assets/furqan/madrasah-al-furqan-navy.svg") center / contain no-repeat;
+  mask: url("../assets/furqan/madrasah-al-furqan-navy.svg") center / contain no-repeat;
 }
 .furqan-logo-en { display: none; font: 600 0.58rem/1 var(--font-body); letter-spacing: 0.22em; text-transform: uppercase; }
 :root[data-furqan="navy"] .furqan-logo-brown { display: none; }
@@ -582,7 +582,10 @@ strong { color: var(--ink); }
   place-items: center;
   align-content: center;
   gap: 10px;
-  padding: 28% 10% 12%;
+  /* Pixels, not percentages: percentage padding resolves against the grid
+     column the arch sits in, not the arch, so on a mid-width screen it grew
+     past the arch's own width and pushed the logo off centre and downward. */
+  padding: 44px 20px 20px;
   text-align: center;
 }
 .furqan-arch .furqan-logo { gap: 10px; }
@@ -1238,21 +1241,44 @@ strong { color: var(--ink); }
 .resource-list li.is-soon b { color: var(--ink); }
 
 /* Parent portal: the madrasah uses Teach 'n Go. This page is the front door to
-   it - one action for new families, one for enrolled ones - and says plainly
-   when the portal is not open yet. */
-.portal-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); gap: 48px; align-items: start; }
-@media (max-width: 900px) { .portal-layout { grid-template-columns: 1fr; } }
-.portal-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+   it, one card per job (register, or log in), each with a working WhatsApp or
+   phone button beside the online one while the portal is not open yet. It uses
+   the masjid's teal rather than the madrasah's brown, at the masjid's request,
+   so it reads as part of the masjid's site. */
+.portal-note { max-width: 760px; margin-inline: auto; }
+.portal-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; max-width: 900px; margin: 0 auto; }
 @media (max-width: 640px) { .portal-actions { grid-template-columns: 1fr; } }
-.portal-action { display: flex; flex-direction: column; gap: 10px; padding: 24px; background: var(--white); border: 1px solid var(--border); border-top: 4px solid var(--furqan); border-radius: var(--radius); box-shadow: var(--shadow); }
-.portal-action h2 { font-size: 1.4rem; margin: 0; color: var(--furqan); }
-.portal-action p { margin: 0; }
-.portal-action .btn { margin-top: auto; align-self: flex-start; }
-.portal-action .btn[aria-disabled="true"] { background: var(--green-light); color: var(--ink-soft); cursor: not-allowed; transform: none; }
-.portal-meanwhile { margin-top: 28px; }
-.portal-aside h2 { font-size: 1.35rem; }
-.portal-aside p, .portal-aside li { color: var(--ink-soft); font-size: 0.95rem; }
-.portal-aside ul { padding-left: 1.1em; }
+.portal-action {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 28px 26px 26px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--green-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.portal-step {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--green-light);
+  color: var(--green-dark);
+  font: 400 1.15rem/1 var(--font-head);
+  margin-bottom: 4px;
+}
+.portal-action h2 { font-size: 1.5rem; margin: 0; }
+.portal-action p { margin: 0 0 8px; }
+.portal-action .btn { width: 100%; }
+.portal-action .btn + .btn { margin-top: 2px; }
+.portal-action .btn[aria-disabled="true"] { background: var(--green-light); color: var(--ink-soft); cursor: not-allowed; transform: none; margin-top: auto; }
+.portal-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 56px; align-items: start; }
+@media (max-width: 860px) { .portal-layout { grid-template-columns: 1fr; gap: 28px; } }
+.portal-layout h2 { font-size: 1.4rem; }
+.portal-list { margin: 0; padding-left: 1.1em; color: var(--ink-soft); }
+.portal-list li { margin-bottom: 6px; }
 
 /* ==========================================================================
    The madrasah's colour, and the brown / navy preview.

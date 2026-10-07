@@ -288,13 +288,21 @@ document.addEventListener("DOMContentLoaded", function () {
       (d.iqamah && d.iqamah.jumuah ? ", iqamah " + d.iqamah.jumuah : "");
   }
 
+  // "in 2 hr 14 min" when there is over an hour to go; under an hour the
+  // seconds show too, and the callers repaint every second, so the line is
+  // visibly alive rather than looking stuck between minute changes.
   function countdown(fromSeconds, hm, plusDay) {
     var target = toMinutes(hm) * 60 + (plusDay ? 86400 : 0);
-    var mins = Math.max(0, Math.round((target - fromSeconds) / 60));
-    if (mins < 1) return "now";
-    var h = Math.floor(mins / 60), m = mins % 60, out = [];
-    if (h) out.push(h + " hr");
+    var left = Math.max(0, target - fromSeconds);
+    if (left < 1) return "now";
+    var h = Math.floor(left / 3600), m = Math.floor((left % 3600) / 60), sec = left % 60, out = [];
+    if (h) {
+      out.push(h + " hr");
+      if (Math.round((left % 3600) / 60)) out.push(Math.round((left % 3600) / 60) + " min");
+      return "in " + out.join(" ");
+    }
     if (m) out.push(m + " min");
+    out.push(sec + " s");
     return "in " + out.join(" ");
   }
 
@@ -363,7 +371,12 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(function () {
       var t = londonNow();
       if (t.date !== day.date) { window.location.reload(); return; }
-      if (t.minutes !== lastMinute) { lastMinute = t.minutes; paint(t); }
+      if (t.minutes !== lastMinute) { lastMinute = t.minutes; paint(t); return; }
+      var clock = document.getElementById("prayer-clock");
+      if (clock) clock.textContent = t.clock.slice(0, 5);
+      var count = todayEl.querySelector(".prayer-next-count");
+      var n = whatsNext(data, day, t);
+      if (count && n) count.textContent = countdown(t.seconds, standsAt(n.day, n.key), n.tomorrow);
     }, 1000);
   }
 
@@ -416,7 +429,7 @@ document.addEventListener("DOMContentLoaded", function () {
         countdown(now.seconds, at, n.tomorrow) + "</a>";
     }
     paint();
-    setInterval(paint, 20000);
+    setInterval(paint, 1000);
   }
 
   function renderJumuah(data) {
