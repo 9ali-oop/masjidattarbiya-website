@@ -334,12 +334,11 @@ was an explicit request. The page says so in words ("Under one roof") as well as
   CSS never shows them much larger than that. If the madrasah has the original artwork (an SVG
   or a large PNG), replace these two files with it at the same names. They are used as CSS
   masks (`.furqan-logo-brown`, `.furqan-logo-navy`), so one file gives every colour: the
-  logo's own colour on white, gold on the dark bands. Under the navy logo the English name is
+  logo's own colour on white, gold where it sits on a dark background. Under the navy logo the English name is
   set in type, because that logo has none. Mask widths are fixed in pixels on purpose: the
   logo sits in a shrink-to-fit box where a percentage width resolves to nothing and the logo
   silently disappears.
-- **Brown or navy is undecided.** Both palettes exist (`--furqan`, `--furqan-deep`,
-  `--furqan-mid`; brown on `:root`, navy on `:root[data-furqan="navy"]`). Brown shows by
+- **Brown or navy is undecided.** Both palettes exist (`--furqan` and `--furqan-deep`; brown on `:root`, navy on `:root[data-furqan="navy"]`). Brown shows by
   default. Add `?furqan=navy` or `?furqan=brown` to any page address to preview: a switch
   appears and the choice sticks for the visit. Once the trustees choose, delete the other
   palette, the switch (top of `js/main.js`) and the `.colour-preview` styles.
@@ -355,29 +354,45 @@ the account exists. The reasoning, the runner-up (e-Maktab) and the switch-on st
 
 ## Design
 
-**Concept: arches and rows.** Photographs and key panels sit inside the pointed arch of the
-windows in the masjid's logo; today's prayer card is cut into a mihrab arch; sections are
-divided by a row of small arches (`.saff`), like the prayer rows on the prayer-hall carpet; night
-bands carry a faint eight-pointed star lattice. The name is the thesis: *tarbiya* means raising
-someone well, and the homepage says so.
+**Light and simple, on purpose.** In October 2026 the site was briefly redesigned around dark
+"night" bands, rows of small arches and a star lattice. The masjid preferred the original look
+and asked for it back, so the site now uses the original style with the new pages restyled to
+match. **Do not reintroduce dark bands or heavy decoration without asking first.** What the
+masjid liked, in its own words: the building's photograph at the top, and a light background,
+"not dark green".
+
+- **Homepage:** the building photograph at the top with the name over it, and today's prayer
+  times in a white card overlapping it. Below that, light sections alternating with pale teal
+  (`.section-alt`), a gold "donate" panel, and the visit details.
+- **Inner pages:** a teal heading band (`.page-hero`), centred, with a breadcrumb and the page's
+  name in Arabic above its English title.
+- **Header and footer:** a slim teal top bar (next prayer, the madrasah, parent login) above a
+  white header, and a teal footer with the logo on a white chip.
+- **Buttons are pills.** Cards are white with a hairline border and a soft shadow.
+- **The madrasah** keeps its own colour for its heading band and card accents, and its logo
+  sits inside the pointed arch of the masjid's windows (white, on the homepage and the
+  madrasah's heading band). That arch is the one decorative shape the site keeps.
 
 The palette and type are sampled from the masjid's logo and shared with the donation page.
 
 | Token | Value | Use |
 |---|---|---|
-| `--green` | `#42bac5` | fills and borders on light - **not text on white**; fine as text on `--night` |
+| `--green` | `#42bac5` | fills and borders - **never text on a light background** |
 | `--green-text` | `#17808a` | large teal text on white (4.68:1) |
-| `--green-dark` | `#1a7078` | solid teal buttons |
-| `--green-ink` | `#0e4a50` | headings and links on light surfaces |
-| `--gold` | `#d4ae61` | fills; safe as text **only on `--night`** |
+| `--green-dark` | `#1a7078` | headings, links, solid buttons, the top bar and footer |
+| `--green-ink` | `#0e4a50` | darkest teal |
+| `--green-light` | `#e9f7f9` | pale teal sections and panels |
+| `--gold` | `#d4ae61` | fills and gold buttons (with dark text) |
 | `--gold-deep` | `#b08d3f` | deeper gold |
 | `--gold-text` | `#7a5c1f` | the only gold safe as text on white (6.22:1) |
-| `--night` | `#0b2c30` | the dark bands: heroes, prayer panels, footer |
+| `--gold-light` | `#f8f0e0` | cream panels; also small gold-tinted text on the teal bands (5:1) |
 | `--furqan` | `#52322e` brown, or `#003060` navy | Madrasah Al Furqan's colour, sampled from its two logo files; brown is the default until the trustees choose |
-| `--furqan-deep` | `#33201d` / `#001f3f` | the madrasah's dark bands (its hero, its arch on the homepage) |
+| `--furqan-deep` | `#33201d` / `#001f3f` | the dark end of the madrasah's heading band |
 
-The dark bands are why the redesign can use the real brand colours: bright teal and gold both
-fail WCAG AA as text on white, but pass comfortably on `--night`.
+**Contrast traps, all hit once already:** white text fails on `--green` and on `--gold`, so the
+teal heading band keeps its gradient between `--green-dark` and `--green-text` wherever text can
+sit (the bright teal is only a glow in the corner), and the gold donate panel uses dark text.
+Gold text on the teal bands fails too: use `--gold-light` there.
 
 Headings use **Marcellus**, body uses **Inter**, and Arabic display lettering uses **Reem Kufi**
 (its geometric Kufi echoes the logo's Arabic). Running Arabic text, such as the hijri date, is
