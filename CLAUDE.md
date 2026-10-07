@@ -125,7 +125,7 @@ The donation page links directly to **GoCardless payment templates**. Treat thes
 financial infrastructure:
 
 - Never edit, add or remove a `pay.gocardless.com/BRT...` link without checking the verified
-  link map in `INTEGRATION.md` in the donation repo, and opening the page to confirm the amount
+  link map in `INTEGRATION.md` in the old donation repo (`9ali-oop/masjid-attarbiya`), and opening the page to confirm the amount
   and type (one-off vs recurring) it actually shows a donor.
 - There are exactly **nine tiers on each tab**: £5, £10, £20, £50, £100, £250, £500, £1,000,
   £2,000. The old £1 and £2 tiers were retired by the masjid's management and must not return.
@@ -471,8 +471,9 @@ not switched on yet (see `PORTAL.md`).
 
 ## Deploying
 
-Pushing to `main` publishes automatically via GitHub Pages.
-Preview: https://9ali-oop.github.io/masjidattarbiya-website/
+Pushing to `main` publishes automatically via GitHub Pages, at **https://masjidattarbiya.org**
+(the `CNAME` file claims the domain; do not delete it). The old github.io address now forwards
+there.
 
 **When you change `css/style.css` or `js/main.js`, bump the `?v=` on every page** (it is the
 date, e.g. `css/style.css?v=20261007`; one `sed` does all eleven pages). GitHub Pages lets
@@ -480,13 +481,25 @@ browsers keep those files for ten minutes, so without it a visitor gets the new 
 old stylesheet, which happened once and left the homepage banner unstyled. `check_links.py`
 fails if the pages disagree on the version.
 
-**Note on link previews before cutover:** every page's `og:image`, `og:url` and `canonical` point
-at `https://masjidattarbiya.org/...`, which is the intended final home but is currently served by
-the donation-page repo. So sharing the github.io preview link will *not* show a preview card yet.
-That is expected; the tags become correct the moment the domain moves. Do not "fix" them by
-pointing at github.io unless you also remember to change them back at cutover.
+### The domain move (7 October 2026)
 
-The custom domain masjidattarbiya.org currently points at the **separate donation-page repo**.
-It moves here only once this site is clearly better than what is already live. When it does,
-follow the cutover checklist in `INTEGRATION.md` in that repo - in particular, the 22 GoCardless
-redirect URLs must be updated in the same pass or donors will land on a dead page after paying.
+masjidattarbiya.org used to serve a one-page donation site from the separate repo
+`9ali-oop/masjid-attarbiya`. On 7 October 2026 the domain moved here and that page became
+`donate.html`. The old repo now only forwards to `https://masjidattarbiya.org/donate.html`;
+its `INTEGRATION.md` keeps the history of how the payment links were verified.
+
+- **Donors are still thanked after paying.** All 22 GoCardless templates return donors to
+  `https://masjidattarbiya.org/?thanks=oneoff` or `?thanks=monthly`, the homepage, and
+  `js/main.js` shows the thank-you banner on whichever page carries `?thanks=`. So nothing in
+  GoCardless had to change. **Never remove that handler from `js/main.js`, and never make the
+  homepage redirect without carrying `?thanks=` along.** Pointing the templates at
+  `/donate.html?thanks=...` instead is optional; it needs a GoCardless API token, created and
+  used by the account owner and revoked straight after (see `INTEGRATION.md` in the old repo).
+- **`404.html` uses root-relative paths** (`/css/...`), unlike every other page, because GitHub
+  Pages serves it at whatever missing address was asked for, however deep. `check_links.py`
+  allows that for `404.html` only.
+- **Still to do by hand, by whoever holds the accounts:** tick "Enforce HTTPS" under the repo's
+  Settings > Pages once GitHub has issued the certificate, re-test a real one-off and monthly
+  donation end to end, and ask the trustees to change the charity's website on the Charity
+  Commission register from the old `kowneyn.org` to masjidattarbiya.org (the strongest defence
+  against fake donation pages).
