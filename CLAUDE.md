@@ -99,11 +99,15 @@ once: three pages kept an old footer carrying a stale "site rebuilt" note and ha
 
 The fix is a single source of truth plus a checker:
 
-- `partials/header.html` and `partials/footer.html` are canonical.
-- `partials/madrasah-header.html` is the header for the madrasah's pages (`madrasah.html`,
-  `portal.html`). They share the masjid's footer on purpose - same charity.
+- `partials/header.html` and `partials/footer.html` are canonical, and **every page carries
+  them**, the madrasah's pages and the donate page included. The madrasah's pages once had a
+  header of their own; the masjid found the switch between two headers and two palettes
+  confusing, so since 7 October 2026 there is one header everywhere and the madrasah pages add
+  a slim sub-navigation strip (`.subnav`, written into `madrasah.html` and `portal.html`)
+  under it, with the madrasah's logo and its sections.
 - `python scripts/sync_chrome.py` stamps them into every page, setting the active nav link
-  (with `aria-current="page"`). New pages must be added to its page lists.
+  (with `aria-current="page"`; `ACTIVE_AS` maps `portal.html` to the "Madrasah" item). New
+  pages must be added to its page list.
 - `python scripts/sync_chrome.py --check` reports drift without changing anything.
 
 **Edit the partials, then run the sync. Never edit a header or footer inside a page.**
@@ -135,15 +139,16 @@ keep, because a CMS writes markdown and markdown needs building into pages.
 ## Donations
 
 **`donate.html` is the original donation page**, the one that was live on masjidattarbiya.org,
-moved here on 7 October 2026 with its own design intact. It is **self-contained on purpose**: its
-own styles, script, header and footer, and none of the site's shared chrome, `css/style.css` or
-`js/main.js`, so a mistake anywhere else on the site cannot break donations. `sync_chrome.py`
-leaves it out. The amounts and links live in the `LINKS` object in its script. The only changes
-made in the move: fonts served from this site instead of Google, the icons and logo read from
-`assets/`, the logo links to the homepage, metadata for the new address, `id="main"`, and the
-donate button no longer opens a new tab (see below). Keep its look as it is unless the masjid
-asks otherwise. (Known and accepted: the gold hadith text in its quote box measures 3.1:1 on
-white, under AA; it is the original design, kept on purpose.)
+moved here on 7 October 2026 with its design intact: the big heading, the hadith box, the
+amount card, the trust notes and the visit card are the original markup, and the amounts and
+links live in the `LINKS` object in its own inline script. Since the same day it sits inside the
+site's **shared header and footer** (stamped by `sync_chrome.py` like every other page), so a
+donor has the same menu as everyone else. Its styles are scoped under `.donate-page`, so they
+cannot leak into the header or footer and the site's stylesheet cannot restyle the card. The
+`?thanks=` banner is shown by `js/main.js`, as on every page; the page's own copy of that
+script was removed so a donor is never thanked twice. Keep the card's look as it is unless the
+masjid asks otherwise. (Known and accepted: the gold hadith text in its quote box measures
+3.1:1 on white, under AA; it is the original design, kept on purpose.)
 
 The donation page links directly to **GoCardless payment templates**. Treat these as live
 financial infrastructure:
@@ -348,9 +353,11 @@ their terms, and embedding it live would break the site's no-third-parties promi
 ## Madrasah Al Furqan
 
 `madrasah.html` is the madrasah's home, and `portal.html` the front door to its parent portal.
-Both use `partials/madrasah-header.html`: the madrasah's wordmark with the masjid's logo beside
-it, a top bar leading back to the masjid, and a rule in the madrasah's colour. The footer is the
-masjid's.
+Both carry the site's shared header and footer, plus the madrasah's sub-navigation strip (its
+logo, which links to `madrasah.html`, and its sections). **Their pages use the masjid's teal
+like every other page**; the madrasah's own colour appears only in its logo. An earlier version
+gave the madrasah brown heading bands and its own header, and the masjid found the jump from
+teal to brown and back confusing.
 
 **It must always read as part of the masjid**, never as a partner or a separate charity. That
 was an explicit request. The page says so in words ("Under one roof") as well as in the design.
@@ -379,10 +386,11 @@ was an explicit request. The page says so in words ("Under one roof") as well as
   nothing and the logo silently disappears. The arch's padding is in pixels for a similar
   reason: percentage padding resolves against the grid column, not the arch, and once pushed
   the logo off centre.
-- **Brown or navy is undecided.** Both palettes exist (`--furqan` and `--furqan-deep`; brown on `:root`, navy on `:root[data-furqan="navy"]`). Brown shows by
-  default. Add `?furqan=navy` or `?furqan=brown` to any page address to preview: a switch
-  appears and the choice sticks for the visit. Once the trustees choose, delete the other
-  palette, the switch (top of `js/main.js`) and the `.colour-preview` styles.
+- **Brown or navy is undecided.** The choice now affects only the logo: `--furqan` colours the
+  logo mask (brown on `:root`, navy on `:root[data-furqan="navy"]`). Add `?furqan=navy` or
+  `?furqan=brown` to any page address to preview: a switch appears and the choice sticks for
+  the visit. Once the trustees choose, delete the other logo, the switch (top of `js/main.js`)
+  and the `.colour-preview` styles.
 
 ### The parent portal
 
@@ -418,9 +426,13 @@ masjid liked, in its own words: the building's photograph at the top, and a ligh
 - **Header and footer:** a slim teal top bar (next prayer, the madrasah, parent login) above a
   white header, and a teal footer with the logo on a white chip.
 - **Buttons are pills.** Cards are white with a hairline border and a soft shadow.
-- **The madrasah** keeps its own colour for its heading band and card accents, and its logo
-  sits inside the pointed arch of the masjid's windows (white, on the homepage and the
-  madrasah's heading band). That arch is the one decorative shape the site keeps.
+- **The madrasah** uses the same teal; its logo (the only place its brown appears) sits inside
+  the pointed arch of the masjid's windows, white, on the homepage and the madrasah's heading
+  band, and links to the madrasah's page. Every logo on the site links to its home: the
+  masjid's in the header and footer to `index.html`, the madrasah's to `madrasah.html`.
+- **A faint lattice** of eight-pointed stars (`--lattice`, 7% white) lies over the teal heading
+  bands and the footer, and nowhere text is read on a light background. It is the one
+  pattern the site has; keep it that faint.
 
 The palette and type are sampled from the masjid's logo and shared with the donation page.
 
@@ -435,8 +447,7 @@ The palette and type are sampled from the masjid's logo and shared with the dona
 | `--gold-deep` | `#b08d3f` | deeper gold |
 | `--gold-text` | `#7a5c1f` | the only gold safe as text on white (6.22:1) |
 | `--gold-light` | `#f8f0e0` | cream panels; also small gold-tinted text on the teal bands (5:1) |
-| `--furqan` | `#52322e` brown, or `#003060` navy | Madrasah Al Furqan's colour, sampled from its two logo files; brown is the default until the trustees choose |
-| `--furqan-deep` | `#33201d` / `#001f3f` | the dark end of the madrasah's heading band |
+| `--furqan` | `#52322e` brown, or `#003060` navy | Madrasah Al Furqan's logo colour, sampled from its two logo files; brown is the default until the trustees choose. Used for the logo only |
 
 **Contrast traps, all hit once already:** white text fails on `--green` and on `--gold`, so the
 teal heading band keeps its gradient between `--green-dark` and `--green-text` wherever text can

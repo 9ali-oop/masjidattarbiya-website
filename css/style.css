@@ -21,10 +21,10 @@
   --gold-text: #7a5c1f;    /* the only gold safe as text on white (6.22:1) */
   --gold-light: #f8f0e0;   /* cream panel; also gold-tinted text on teal (5:1) */
 
-  /* Madrasah Al Furqan's own colour, sampled from its brown logo. Brown is
-     the default until the trustees choose; navy is defined further down. */
+  /* Madrasah Al Furqan's logo colour, sampled from its brown logo. It colours
+     the logo only: the madrasah's pages use the masjid's teal like every other
+     page, so the site reads as one. Navy is defined further down. */
   --furqan: #52322e;
-  --furqan-deep: #33201d;
 
   --ink: #1c2321;
   --ink-soft: #4b5a55;
@@ -39,6 +39,9 @@
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-head: "Marcellus", Georgia, "Times New Roman", serif;
   --font-arabic: "Reem Kufi", "Geeza Pro", "Noto Kufi Arabic", "Segoe UI", Tahoma, sans-serif;
+
+  /* A tile of eight-pointed stars, laid faintly over the teal bands. */
+  --lattice: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1'%3E%3Cpath d='M36 4l9 23 23 9-23 9-9 23-9-23-23-9 23-9z'/%3E%3Cpath d='M0 0l13 13M72 0L59 13M0 72l13-13M72 72L59 59'/%3E%3C/g%3E%3C/svg%3E");
 
   /* The pointed arch of the windows in the logo, used as a mask. */
   --arch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 125' preserveAspectRatio='none'%3E%3Cpath d='M0 125V50C0 24 25 9 50 0c25 9 50 24 50 50v75z'/%3E%3C/svg%3E");
@@ -329,16 +332,6 @@ strong { color: var(--ink); }
   .header-donate { padding: 8px 18px; min-height: 44px; }
 }
 
-/* The madrasah's header: same structure as the masjid's, the madrasah's own
-   wordmark, and the masjid's logo beside it, so it is plain that the madrasah
-   belongs to the masjid. A rule in the madrasah's colour marks the section. */
-.site-header--furqan { border-bottom: 3px solid var(--furqan); }
-.site-header--furqan .topbar a.topbar-back { color: var(--gold-light); font-weight: 600; }
-.site-header--furqan .topbar-note { text-align: center; color: rgba(255, 255, 255, 0.9); }
-.brand-furqan { gap: 16px; }
-.brand-furqan-parent { padding-left: 16px; border-left: 1px solid var(--border); }
-.brand-furqan-parent img { height: 34px; width: auto; }
-
 /* The madrasah's logos, from assets/furqan/. Each is used as a mask, so one
    file serves every colour. Brown shows by default; the navy logo (Arabic
    only, so the English name is set beneath it) shows when the navy palette is
@@ -367,11 +360,41 @@ strong { color: var(--ink); }
   .furqan-logo-brown, .furqan-logo-navy { forced-color-adjust: none; background: CanvasText; }
 }
 @media (max-width: 640px) {
-  .site-header--furqan .topbar-note { display: none; }
-  .site-header--furqan .topbar-inner { justify-content: space-between; }
-  .brand-furqan-parent { display: none; }
   .furqan-logo-brown { width: 140px; }
   .furqan-logo-navy { width: 132px; }
+}
+
+/* The madrasah's sub-navigation: a slim strip under the site header on its two
+   pages, with its logo and the sections of the madrasah. On a phone it scrolls
+   sideways inside its own box. */
+.subnav { background: var(--white); border-bottom: 1px solid var(--border); }
+.subnav-inner { display: flex; align-items: center; gap: 22px; min-height: 56px; }
+.subnav-brand { display: inline-flex; align-items: center; flex-shrink: 0; padding: 8px 0; text-decoration: none; }
+.subnav-brand .furqan-logo-brown { width: 118px; }
+.subnav-brand .furqan-logo-navy { width: 110px; }
+.subnav-brand .furqan-logo-en { font-size: 0.5rem; }
+.subnav ul { list-style: none; margin: 0 0 0 auto; padding: 0; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.subnav ul::-webkit-scrollbar { display: none; }
+.subnav li { flex-shrink: 0; }
+.subnav ul a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.subnav ul a:hover { background: var(--green-light); color: var(--green-dark); }
+.subnav ul a[aria-current="page"] { background: var(--green-dark); color: var(--white); }
+@media (max-width: 760px) {
+  .subnav-inner { gap: 14px; min-height: 52px; }
+  .subnav ul { margin-left: 0; }
+}
+@media (max-width: 480px) {
+  .subnav-brand { display: none; }
 }
 
 /* ==========================================================================
@@ -379,6 +402,8 @@ strong { color: var(--ink); }
    ========================================================================== */
 
 .site-footer {
+  position: relative;
+  isolation: isolate;
   background: var(--green-dark);
   color: var(--white);
   padding: 56px 0 24px;
@@ -448,12 +473,25 @@ strong { color: var(--ink); }
    ========================================================================== */
 
 .page-hero {
+  position: relative;
+  isolation: isolate;
   background:
     radial-gradient(circle at 100% 0%, rgba(66, 186, 197, 0.55), transparent 32%),
     linear-gradient(135deg, var(--green-dark) 0%, var(--green-text) 60%);
   color: var(--white);
   padding: 56px 0;
   text-align: center;
+}
+/* A faint lattice of eight-pointed stars over the teal bands and the footer:
+   enough to feel like a masjid, not enough to touch the text. */
+.page-hero::before, .site-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--lattice) center / 72px 72px repeat;
+  opacity: 0.07;
+  pointer-events: none;
 }
 .page-hero h1 { color: var(--white); margin-bottom: 8px; }
 .page-hero p { color: var(--white); margin: 0 auto; max-width: 640px; }
@@ -622,6 +660,9 @@ strong { color: var(--ink); }
   text-align: center;
 }
 .furqan-arch .furqan-logo { gap: 10px; }
+.furqan-arch-link { display: inline-flex; text-decoration: none; border-radius: 6px; padding: 6px; }
+.furqan-arch-link:focus-visible { outline-offset: 6px; }
+.footer-logo-chip:focus-visible { outline-color: var(--white); }
 /* Fixed widths: the logo sits in a shrink-to-fit box, so a percentage here
    would resolve to nothing and the logo would vanish. */
 .furqan-arch .furqan-logo-brown { width: 175px; }
@@ -1170,29 +1211,18 @@ strong { color: var(--ink); }
    Madrasah Al Furqan and the parent portal
    ========================================================================== */
 
-/* The madrasah's heading band: the same shape as the masjid's teal one, in
-   the madrasah's own colour. */
-.page-hero.furqan-hero { background: linear-gradient(135deg, var(--furqan-deep), var(--furqan) 70%); text-align: left; }
-.furqan-hero p { margin: 0 0 1em; max-width: 600px; }
-.furqan-hero .crumbs { margin: 0 0 10px; }
-.furqan-hero .hero-ar { color: var(--gold); margin: 6px 0 2px; }
-.furqan-hero-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); gap: 48px; align-items: center; }
+/* The madrasah's heading band is the same teal band as every other page, with
+   its logo in a white arch beside the text. Brown appears only in the logo. */
+.furqan-hero-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); gap: 48px; align-items: center; text-align: left; }
+.furqan-hero-grid .page-hero-ar, .furqan-hero-grid .crumbs, .furqan-hero-grid p { margin-left: 0; }
+.furqan-hero-grid .lede { max-width: 600px; }
+.furqan-hero-grid .hero-actions { justify-content: flex-start; }
 .furqan-hero-grid .furqan-arch { max-width: 260px; }
-.umbrella {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 14px 6px 6px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 999px;
-  font-size: 0.84rem;
-}
-.umbrella img { width: 30px; height: 30px; border-radius: 50%; background: var(--white); object-fit: contain; padding: 2px; }
 @media (max-width: 760px) { .furqan-hero-grid { grid-template-columns: 1fr; } .furqan-hero-grid .furqan-arch { display: none; } }
 
 .one-roof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
-.one-roof > div { background: var(--white); border: 1px solid var(--border); border-top: 4px solid var(--furqan); border-radius: var(--radius); padding: 22px 24px; }
-.one-roof b { display: block; font: 400 1.25rem/1.3 var(--font-head); color: var(--furqan); margin-bottom: 6px; }
+.one-roof > div { background: var(--white); border: 1px solid var(--border); border-top: 4px solid var(--green-dark); border-radius: var(--radius); padding: 22px 24px; }
+.one-roof b { display: block; font: 400 1.25rem/1.3 var(--font-head); color: var(--green-dark); margin-bottom: 6px; }
 .one-roof p { margin: 0; }
 @media (max-width: 760px) { .one-roof { grid-template-columns: 1fr; } }
 
@@ -1251,13 +1281,13 @@ strong { color: var(--ink); }
 /* Madrasah at a glance */
 .furqan-facts { list-style: none; margin: 0 0 28px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .furqan-facts li { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; color: var(--ink-soft); font-size: 0.94rem; }
-.furqan-facts b { display: block; font: 400 1.2rem/1.3 var(--font-head); color: var(--furqan); margin-bottom: 2px; }
+.furqan-facts b { display: block; font: 400 1.2rem/1.3 var(--font-head); color: var(--green-dark); margin-bottom: 2px; }
 @media (max-width: 820px) { .furqan-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 420px) { .furqan-facts { grid-template-columns: 1fr; } }
 
 .groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 28px; }
-.group-card { padding: 22px 24px; background: var(--white); border: 1px solid var(--border); border-top: 4px solid var(--furqan); border-radius: var(--radius); }
-.group-card h3 { margin: 0; font-size: 1.4rem; color: var(--furqan); }
+.group-card { padding: 22px 24px; background: var(--white); border: 1px solid var(--border); border-top: 4px solid var(--green-dark); border-radius: var(--radius); }
+.group-card h3 { margin: 0; font-size: 1.4rem; }
 .group-ages { margin: 2px 0 10px; font-weight: 700; color: var(--ink); }
 @media (max-width: 640px) { .groups { grid-template-columns: 1fr; } }
 
@@ -1281,7 +1311,7 @@ strong { color: var(--ink); }
 .terms-year { font-weight: 700; color: var(--ink); }
 .terms { list-style: none; margin: 0 0 16px; padding: 0; border-top: 1px solid var(--border); }
 .terms li { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 2px 18px; padding: 14px 0; border-bottom: 1px solid var(--border); }
-.terms b { font: 400 1.2rem/1.3 var(--font-head); color: var(--furqan); grid-row: span 2; }
+.terms b { font: 400 1.2rem/1.3 var(--font-head); color: var(--green-dark); grid-row: span 2; }
 .terms small { color: var(--ink-soft); font-size: 0.86rem; }
 @media (max-width: 480px) { .terms li { grid-template-columns: 1fr; } .terms b { grid-row: auto; } }
 
@@ -1382,7 +1412,6 @@ strong { color: var(--ink); }
    ========================================================================== */
 :root[data-furqan="navy"] {
   --furqan: #003060;        /* sampled from the navy logo */
-  --furqan-deep: #001f3f;
 }
 
 .colour-preview {

@@ -7,10 +7,10 @@ others - which has already happened once, leaving three pages with a stale foote
 This script stamps the header and footer partials into every page, marking the
 current page's nav link as active.
 
-The Al Furqan madrasah pages carry their own header (partials/madrasah-header.html)
-so parents know they are in the madrasah's part of the site, with a way back to
-the masjid. They share the masjid's footer on purpose: the madrasah is part of the
-same charity, not a separate organisation, and the footer says so.
+Every page carries the same header and footer, the madrasah's and the donate page
+included: one menu everywhere is what makes a small site easy to follow. The
+madrasah pages add a sub-navigation strip of their own below the header (that is
+page content, written into madrasah.html and portal.html, not a partial).
 
     python scripts/sync_chrome.py          apply the partials to every page
     python scripts/sync_chrome.py --check  report drift and exit 1 (used in CI)
@@ -23,14 +23,12 @@ import glob
 import re
 import sys
 
-# donate.html is deliberately not here: it is the original donation page, moved in
-# unchanged, with its own header, footer, styles and script, so that donations keep
-# working whatever happens to the rest of the site.
 MASJID_PAGES = ["index.html", "about.html", "prayer-times.html", "events.html", "history.html",
-                "contact.html", "privacy.html"]
-MADRASAH_PAGES = ["madrasah.html", "portal.html"]
-PAGES = MASJID_PAGES + MADRASAH_PAGES
-# A prefix, so the madrasah's header (class "site-header site-header--furqan") matches too.
+                "madrasah.html", "portal.html", "donate.html", "contact.html", "privacy.html"]
+# Pages whose nav highlight is another page's item: the portal sits under "Madrasah".
+ACTIVE_AS = {"portal.html": "madrasah"}
+PAGES = MASJID_PAGES
+# A prefix, in case a page ever carries extra classes on its header.
 HEADER_START, HEADER_END = '<header class="site-header', "</header>"
 FOOTER_START, FOOTER_END = '<footer class="site-footer">', "</footer>"
 
@@ -51,10 +49,9 @@ def block(text, start, end):
 
 
 def header_for(page):
-    """The right header for this page, with this page's nav link marked active."""
-    partial = "partials/madrasah-header.html" if page in MADRASAH_PAGES else "partials/header.html"
-    html = read(partial).rstrip("\n")
-    slug = page[:-5]  # strip ".html"
+    """The shared header, with this page's nav link marked active."""
+    html = read("partials/header.html").rstrip("\n")
+    slug = ACTIVE_AS.get(page, page[:-5])  # strip ".html"
     return re.sub(
         r'<a href="([^"]+)" data-nav="' + re.escape(slug) + r'"',
         r'<a href="\1" class="active" aria-current="page" data-nav="' + slug + '"',
