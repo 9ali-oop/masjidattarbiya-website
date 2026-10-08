@@ -23,8 +23,8 @@ DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 BLOCKED = [
     (re.compile(r"\b\d{2}-\d{2}-\d{2}\b"), "looks like a sort code"),
     (re.compile(r"\b\d{8}\b"), "looks like an account number"),
-    (re.compile(r"(?:\+44|\b0)\s?\d[\d\s]{8,}"), "looks like a phone number - link to contact.html instead"),
-    (re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"), "email address - link to contact.html instead"),
+    (re.compile(r"(?:\+44|\b0)\s?\d[\d\s]{8,}"), "looks like a phone number - link to the contact page instead"),
+    (re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"), "email address - link to the contact page instead"),
 ]
 
 for i, n in enumerate(notices):

@@ -29,10 +29,10 @@ Plus a privacy notice and a 404 page.
 Nothing to install to edit the site. To preview it locally:
 
 ```bash
-python -m http.server 8000
+python scripts/serve.py
 ```
 
-Then open http://localhost:8000.
+Then open http://127.0.0.1:8765.
 
 Before you commit, run the six checks. They take a second and they catch the mistakes this
 project has actually made:
@@ -50,8 +50,8 @@ They also run automatically on every push.
 
 ## Two things to know before editing
 
-**The header and footer are copied into every page.** Edit `partials/header.html`,
-`partials/madrasah-header.html` or `partials/footer.html`, then run
+**The header and footer are copied into every page.** Edit `partials/header.html` or
+`partials/footer.html`, then run
 `python scripts/sync_chrome.py`. Never edit them inside a page.
 
 **Prayer times are never typed by hand.** A scheduled job reads the masjid's own Masjidbox

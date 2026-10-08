@@ -144,7 +144,10 @@ amount card, the trust notes and the visit card are the original markup, and the
 links live in the `LINKS` object in its own inline script. Since the same day it sits inside the
 site's **shared header and footer** (stamped by `sync_chrome.py` like every other page), so a
 donor has the same menu as everyone else. Its styles are scoped under `.donate-page`, so they
-cannot leak into the header or footer and the site's stylesheet cannot restyle the card. The
+cannot leak into the header or footer and the site's stylesheet cannot restyle the card. One
+trap, hit once: `<main>` carries both classes, `wrap` and `donate-page`, so the column rule
+is `.donate-page.wrap` with no space; with a space it matches nothing and the page runs edge
+to edge. The
 `?thanks=` banner is shown by `js/main.js`, as on every page; the page's own copy of that
 script was removed so a donor is never thanked twice. Keep the card's look as it is unless the
 masjid asks otherwise. (Known and accepted: the gold hadith text in its quote box measures
@@ -433,6 +436,16 @@ masjid liked, in its own words: the building's photograph at the top, and a ligh
 - **A faint lattice** of eight-pointed stars (`--lattice`, 7% white) lies over the teal heading
   bands and the footer, and nowhere text is read on a light background. It is the one
   pattern the site has; keep it that faint.
+- **Lists and photographs, not rows of icon cards.** On 8 October 2026 the masjid said the
+  homepage's three-card panels (an icon in a circle, a heading, three lines, an arrow link,
+  an eyebrow label over every centred heading) looked like every templated site, and it was
+  right. The homepage and the About page now set prose beside a photograph, the three strands
+  (`.strands`), the visiting facts (`.facts`) and the trustees (`.people`) as plain lists
+  with hairlines, and the contact page a list without icons. `.card` is for real things
+  only: a class, an event, a step. Links say what they link to and are underlined, with no
+  arrow. An eyebrow label stays only where it says something the heading does not (the
+  hero's "Nechells, Birmingham", "Part of Attarbiya Masjid", "Under one roof", "Also run by
+  the masjid"). Do not bring the icon-card rows back.
 
 The palette and type are sampled from the masjid's logo and shared with the donation page.
 
@@ -493,6 +506,25 @@ screen heights.
 Prefer landscape crops. Text sits better beside them and they do not push the rest of the page
 off the screen.
 
+**Where the photo shoot's pictures go.** Tayseer shoots on Saturday 10 or Sunday 11 October
+2026 (he confirms which on Friday after Jumu'ah); the shot list is in the "Photo shoot plan"
+doc. Save the chosen pictures in `assets/photos/` as JPEG (sRGB, quality about 80, long side
+as below), named for the subject, and swap them into these slots. Alt text describes what is
+in the picture. Anyone recognisable needs their agreement first, and a child a parent's.
+
+| Picture | File (long side) | Slot |
+|---|---|---|
+| Exterior, straight on, sign readable, landscape | `exterior.jpg` (1920px) | Homepage hero background (`.hero-photo` in `index.html`); also crop to 1200x630 for `assets/og-card.jpg` |
+| Entrance at an angle, door open | `entrance.jpg` (1360px) | Homepage Visiting figure and the About page `.img-frame`; retire `masjid-entrance-cleaned.jpg` |
+| Prayer hall from the back corner, lights on | `prayer-hall.jpg` (1360px) | Homepage About figure, About page figure, prayer times page; retire the stopgap |
+| Mihrab and minbar close up | `mihrab.jpg` (1360px) | Our Story page, with the 2019 to 2023 conversion milestones |
+| Sisters' entrance and prayer area | `sisters.jpg` (1360px) | Contact page beside the entrances note; homepage Visiting if better than the main entrance |
+| Madrasah classroom, set up, no children | `classroom.jpg` (1360px) | `madrasah.html` heading band and the classes section; `portal.html` |
+| The sign lit at night | `sign-night.jpg` (1360px) | Our Story "Now" and the events page heading band |
+| Drone view of the building and street | `aerial.jpg` (1920px) | Our Story page top (the building strand) |
+| Portraits of trustees and teachers, with consent | `people/<first-last>.jpg` (800px square) | About page trustees list becomes portrait rows; madrasah staff once names are confirmed |
+| Short clips (drone flyover, prayer hall walk-through) | `assets/video/<name>.mp4` + `.jpg` poster (1280x720, H.264, no audio, 8 to 15 s, under 4MB) | Self-hosted `<video muted playsinline loop>` on Our Story and the madrasah page, never autoplaying under `prefers-reduced-motion`. Full-length video goes on the YouTube channel and is linked from the recordings list, never embedded: no third parties |
+
 ## Parked, waiting on content
 
 Nothing here is blocked by code. Each needs material from the masjid first.
@@ -540,6 +572,15 @@ date, e.g. `css/style.css?v=20261007`; one `sed` does all eleven pages). GitHub 
 browsers keep those files for ten minutes, so without it a visitor gets the new page with the
 old stylesheet, which happened once and left the homepage banner unstyled. `check_links.py`
 fails if the pages disagree on the version.
+
+**Addresses are clean: `/donate`, not `/donate.html`** (since 8 October 2026). GitHub Pages
+serves `donate.html` at both, so every internal link, the canonical tag, `og:url` and the
+sitemap use the clean form, the homepage is `/`, and `check_links.py` fails on any link that
+still ends in `.html`. Never a trailing slash: `/madrasah/` is a 404 on GitHub Pages. Links
+shared before the change still work, and the old donation repo's forward to `/donate.html`
+is fine as it is. **To preview locally use `python scripts/serve.py`**, which resolves clean
+addresses like the real host; Python's own `http.server` does not, so with it every internal
+link 404s and the 404 page never shows.
 
 ### The domain move (7 October 2026)
 
