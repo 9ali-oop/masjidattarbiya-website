@@ -454,7 +454,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var n = whatsNext(data, day, now);
       if (!n) return;
       var at = standsAt(n.day, n.key);
-      barEl.innerHTML = '<a href="prayer-times.html"><span class="gold">Next</span> <b>' + LABELS[n.key] +
+      barEl.innerHTML = '<a href="prayer-times"><span class="gold">Next</span> <b>' + LABELS[n.key] +
         "</b>" + (n.tomorrow ? " tomorrow" : "") + ' <b class="tabular">' + at + "</b> &middot; " +
         countdown(now.seconds, at, n.tomorrow) + "</a>";
     }
