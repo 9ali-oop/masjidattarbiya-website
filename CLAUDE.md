@@ -138,20 +138,19 @@ keep, because a CMS writes markdown and markdown needs building into pages.
 
 ## Donations
 
-**`donate.html` is the original donation page**, the one that was live on masjidattarbiya.org,
-moved here on 7 October 2026 with its design intact: the big heading, the hadith box, the
-amount card, the trust notes and the visit card are the original markup, and the amounts and
-links live in the `LINKS` object in its own inline script. Since the same day it sits inside the
-site's **shared header and footer** (stamped by `sync_chrome.py` like every other page), so a
-donor has the same menu as everyone else. Its styles are scoped under `.donate-page`, so they
-cannot leak into the header or footer and the site's stylesheet cannot restyle the card. One
-trap, hit once: `<main>` carries both classes, `wrap` and `donate-page`, so the column rule
-is `.donate-page.wrap` with no space; with a space it matches nothing and the page runs edge
-to edge. The
-`?thanks=` banner is shown by `js/main.js`, as on every page; the page's own copy of that
-script was removed so a donor is never thanked twice. Keep the card's look as it is unless the
-masjid asks otherwise. (Known and accepted: the gold hadith text in its quote box measures
-3.1:1 on white, under AA; it is the original design, kept on purpose.)
+**`donate.html` is a page of the site with the original amount card at its heart.** The page
+came from the one-page donation site that was live on masjidattarbiya.org until 7 October
+2026. On 8 October the masjid said it looked like a different site, so it now has the teal
+heading band, a lede, and the site's own lists: the hadith as a plain quote, and "Giving
+safely" (the charity number and the registered name a donor sees at checkout, GoCardless,
+this is the only donation page) as a `.facts` list beside the card. The Visit card went; the
+footer carries the address. **The amount card is still the original**: its tabs, amounts,
+button and secure note are the original markup, its styles are scoped under `.donate-page`
+(which now wraps only the card, so the site's stylesheet cannot restyle the card and the
+card's colours cannot leak out), and the amounts and links live in the `LINKS` object in the
+page's inline script. The `?thanks=` banner is shown by `js/main.js`, as on every page; the
+page has no copy of that script, so a donor is never thanked twice. The quote is set in
+`--gold-text`, which passes AA; the old 3.1:1 gold box is gone.
 
 The donation page links directly to **GoCardless payment templates**. Treat these as live
 financial infrastructure:

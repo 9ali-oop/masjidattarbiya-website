@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <!--
-  The masjid's donation page, moved here from 9ali-oop/masjid-attarbiya when
-  masjidattarbiya.org came to this site (7 October 2026). Its design is the
-  original's; since 7 October it sits inside the site's shared header and
-  footer (stamped by sync_chrome.py) so that every page has the same menu.
-  Everything between them, and the GoCardless links in LINKS below, is the
-  original page. Its styles are scoped under .donate-page so they cannot leak
-  into the header or footer, and the site's styles cannot restyle the card.
-  Read the Donations section of CLAUDE.md before touching a payment link.
+  The masjid's donation page. It came here from 9ali-oop/masjid-attarbiya when
+  masjidattarbiya.org moved to this site (7 October 2026). On 8 October the
+  masjid asked for it to be a page of this site rather than a transplanted
+  landing page, so it now has the teal heading band and the site's lists; the
+  amount card (tabs, amounts, button) is still the original, with its styles
+  scoped under .donate-page, and the GoCardless links in LINKS below are
+  untouched. Read the Donations section of CLAUDE.md before touching a link.
 -->
 <html lang="en-GB">
 <head>
@@ -31,7 +30,9 @@
 <link rel="stylesheet" href="css/style.css?v=20261008">
 
 <style>
-  /* Scoped under .donate-page: see the note at the top of this file. */
+  /* The amount card keeps the original donation page's look. Its colours are
+     its own, scoped under .donate-page so the site's stylesheet cannot restyle
+     the card and the card cannot leak into the rest of the page. */
   .donate-page {
     --teal: #42BAC5;
     --teal-deep: #17808A;
@@ -44,53 +45,16 @@
     --card: #FFFFFF;
     --line: #DCEDEE;
     --radius: 16px;
+    max-width: 560px;
   }
-  .donate-page * { margin: 0; padding: 0; box-sizing: border-box; }
-  
-  .donate-page {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: var(--ink);
-    line-height: 1.55;
-    padding-bottom: 56px;
-  }
-  .donate-page h1, .donate-page h2, .donate-page .brand-font { font-family: 'Marcellus', 'Inter', serif; font-weight: 400; }
-
-  
-
-  .donate-page.wrap { max-width: 640px; margin: 0 auto; padding: 0 20px; }
-
-  
-  
-  
-
-  /* Hero */
-  .donate-page .hero { text-align: center; padding: 30px 0 6px; }
-  .donate-page .hero h1 { font-size: clamp(1.7rem, 6vw, 2.3rem); color: var(--teal-ink); letter-spacing: 0.5px; }
-  .donate-page .hero p.sub { color: var(--muted); margin-top: 8px; font-size: 0.98rem; }
-  .donate-page .hadith {
-    margin: 20px auto 0;
-    max-width: 520px;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-left: 4px solid var(--gold);
-    border-radius: 12px;
-    padding: 14px 18px;
-    font-size: 0.92rem;
-    color: var(--muted);
-    text-align: left;
-  }
-  .donate-page .hadith strong { color: var(--gold-deep); font-weight: 600; }
-
-  /* Donation card */
   .donate-page .donate-card {
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: var(--radius);
     box-shadow: 0 8px 28px rgba(14, 74, 80, 0.08);
     padding: 22px 20px 24px;
-    margin: 26px 0 10px;
+    margin: 0;
   }
-
   .donate-page .tabs {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -112,7 +76,6 @@
   }
   .donate-page .tabs button.active { background: var(--teal-deep); color: #fff; box-shadow: 0 2px 8px rgba(23,128,138,0.35); }
   .donate-page .tab-note { text-align: center; font-size: 0.82rem; color: var(--muted); min-height: 1.4em; margin: 8px 0 14px; }
-
   .donate-page .amounts {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -136,7 +99,6 @@
     box-shadow: 0 4px 12px rgba(23,128,138,0.3);
     transform: translateY(-1px);
   }
-
   .donate-page .cta {
     display: block;
     width: 100%;
@@ -160,81 +122,24 @@
     align-items: center;
     justify-content: center;
     gap: 7px;
-    margin-top: 13px;
+    margin: 13px 0 0;
     font-size: 0.82rem;
     color: var(--muted);
   }
   .donate-page .secure-note svg { flex: 0 0 auto; }
+  .donate-page .donate-other { margin: 18px 4px 0; font-size: 0.95rem; }
 
-  /* Custom amount */
-  .donate-page .custom-box {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    margin: 14px 0;
-    font-size: 0.92rem;
-    color: var(--muted);
-    text-align: center;
+  /* The rest of the page is the site's own: the card beside the quote and the
+     giving-safely facts on a wide screen, stacked on a phone. */
+  .donate-layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 40px 56px; align-items: start; }
+  .donate-aside h2 { font-size: 1.4rem; margin: 0 0 6px; }
+  .donate-quote { margin: 0 0 32px; padding: 4px 0 4px 18px; border-left: 3px solid var(--gold); }
+  .donate-quote p { font-family: var(--font-head); font-size: 1.2rem; line-height: 1.5; color: var(--gold-text); margin: 0 0 6px; }
+  .donate-quote footer { font-size: 0.9rem; color: var(--ink-soft); }
+  @media (max-width: 860px) {
+    .donate-layout { grid-template-columns: 1fr; gap: 36px; }
+    .donate-page { max-width: none; }
   }
-  .donate-page .custom-box a { color: var(--teal-deep); font-weight: 600; text-decoration: none; }
-
-  /* Trust */
-  .donate-page .trust {
-    display: grid;
-    gap: 10px;
-    margin: 24px 0;
-  }
-  .donate-page .trust-item {
-    display: flex;
-    gap: 13px;
-    align-items: flex-start;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-  .donate-page .trust-item svg { flex: 0 0 auto; margin-top: 2px; }
-  .donate-page .trust-item strong { color: var(--ink); display: block; font-size: 0.94rem; margin-bottom: 2px; }
-  .donate-page .trust-item a { color: var(--teal-deep); font-weight: 600; text-decoration: none; }
-
-  /* Visit / contact */
-  .donate-page .section-title {
-    text-align: center;
-    color: var(--teal-ink);
-    font-size: 1.45rem;
-    margin: 34px 0 16px;
-  }
-  .donate-page .contact-card {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 20px;
-    text-align: center;
-  }
-  .donate-page .contact-card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 4px; }
-  .donate-page .contact-card .addr { color: var(--ink); font-weight: 600; font-size: 1rem; margin-bottom: 12px; }
-  .donate-page .contact-links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; }
-  .donate-page .pill-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 11px 18px;
-    border-radius: 999px;
-    border: 1.5px solid var(--teal);
-    color: var(--teal-deep);
-    font: 600 0.9rem 'Inter', sans-serif;
-    text-decoration: none;
-    background: #fff;
-    transition: all 0.12s ease;
-  }
-  .donate-page .pill-link:hover { background: var(--teal-deep); border-color: var(--teal-deep); color: #fff; }
-
-  
-  
-  
 </style>
 </head>
 <body>
@@ -270,82 +175,62 @@
   </div>
 </header>
 
-<main class="wrap donate-page" id="main">
+<main id="main">
 
-  <section class="hero">
-    <h1>Support Your Masjid</h1>
-    <p class="sub">Every donation, big or small, keeps Attarbiya Masjid &amp; Kowneyn Community Centre serving the community.</p>
-    <div class="hadith">
-      <strong>“Whoever builds a mosque for Allah, Allah will build for him a house like it in Paradise.”</strong><br>
-      - Prophet Muhammad ﷺ (Sahih Muslim)
-    </div>
-  </section>
-
-  <section class="donate-card" aria-label="Donation options">
-    <div class="tabs" role="tablist">
-      <button id="tab-monthly" class="active" role="tab" aria-selected="true">Monthly ♥</button>
-      <button id="tab-oneoff" role="tab" aria-selected="false">One-off</button>
-    </div>
-    <p class="tab-note" id="tabNote">A small monthly gift is an ongoing sadaqah jariyah</p>
-
-    <div class="amounts" id="amounts"></div>
-
-    <a id="donateBtn" class="cta disabled" href="#" rel="noopener">Select an amount</a>
-
-    <p class="secure-note">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      Secure Direct Debit powered by GoCardless - you can cancel anytime
-    </p>
-  </section>
-
-  <div class="custom-box">
-    Want to give a different amount, or donate by bank transfer?<br>
-    Message us on <a href="https://wa.me/447908854187">WhatsApp</a> or call <a href="tel:+447908854187">07908 854187</a> - we'll sort it in minutes.
+<section class="page-hero">
+  <div class="container">
+    <p class="crumbs"><a href="/">Home</a> / Donate</p>
+    <p class="page-hero-ar ar" lang="ar">تبرع</p>
+    <h1>Donate</h1>
+    <p class="lede">Every donation, big or small, keeps Attarbiya Masjid and Kowneyn Community Centre serving the community. Give once, or set up a monthly Direct Debit from &pound;5 as an ongoing sadaqah jariyah.</p>
   </div>
+</section>
 
-  <section class="trust">
-    <div class="trust-item">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#17808A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-      <div>
-        <strong>Registered UK Charity - No. 1142204</strong>
-        Verify us on the official <a href="https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/5016701/contact-information" target="_blank" rel="noopener">Charity Commission register</a>.
-      </div>
-    </div>
-    <div class="trust-item">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#17808A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      <div>
-        <strong>Payments handled by GoCardless</strong>
-        Your bank details go directly to GoCardless, an FCA-authorised UK payments provider. This page never sees or stores them.
-      </div>
-    </div>
-    <div class="trust-item">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#17808A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-      <div>
-        <strong>This is our official donation page</strong>
-        Only trust donation links shared from the masjid directly. If in doubt, call us on <a href="tel:+447908854187">07908 854187</a>.
-      </div>
-    </div>
-  </section>
+<section class="section">
+  <div class="container donate-layout">
+    <div class="donate-page">
+      <section class="donate-card" aria-label="Donation options">
+        <div class="tabs" role="tablist">
+          <button id="tab-monthly" class="active" role="tab" aria-selected="true">Monthly ♥</button>
+          <button id="tab-oneoff" role="tab" aria-selected="false">One-off</button>
+        </div>
+        <p class="tab-note" id="tabNote">A small monthly gift is an ongoing sadaqah jariyah</p>
 
-  <h2 class="section-title">Visit Us</h2>
-  <section class="contact-card">
-    <p class="addr">2 Revesby Walk, Nechells, Birmingham B7 4LG</p>
-    <p>07908 854187 &nbsp;·&nbsp; info@masjidatarbiya.org</p>
-    <div class="contact-links">
-      <a class="pill-link" href="https://maps.google.com/?q=2+Revesby+Walk,+Birmingham+B7+4LG" target="_blank" rel="noopener">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Directions
-      </a>
-      <a class="pill-link" href="https://masjidbox.com/prayer-times/masjid-attarbiya" target="_blank" rel="noopener">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        Prayer Times
-      </a>
-      <a class="pill-link" href="https://wa.me/447908854187" target="_blank" rel="noopener">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        WhatsApp
-      </a>
+        <div class="amounts" id="amounts"></div>
+
+        <a id="donateBtn" class="cta disabled" href="#" rel="noopener" aria-disabled="true">Select an amount</a>
+
+        <p class="secure-note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Secure Direct Debit powered by GoCardless - you can cancel anytime
+        </p>
+      </section>
+      <p class="donate-other muted">Want to give a different amount, or donate by bank transfer? Message us on <a href="https://wa.me/447908854187">WhatsApp</a> or call <a href="tel:+447908854187">07908 854187</a>.</p>
     </div>
-  </section>
+
+    <aside class="donate-aside">
+      <blockquote class="donate-quote">
+        <p>&ldquo;Whoever builds a mosque for Allah, Allah will build for him a house like it in Paradise.&rdquo;</p>
+        <footer>Prophet Muhammad &#xFDFA;, Sahih Muslim</footer>
+      </blockquote>
+      <h2>Giving safely</h2>
+      <dl class="facts">
+        <div>
+          <dt>The charity</dt>
+          <dd>Attarbiya Masjid is registered charity 1142204. Its registered name, Kowneyn Education and Cultural Centre, is the one you will see at the checkout. <a href="https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/5016701/contact-information" target="_blank" rel="noopener">Check the register</a>.</dd>
+        </div>
+        <div>
+          <dt>Payments</dt>
+          <dd>Your bank details go to GoCardless, an FCA-authorised UK payments provider. This site never sees or stores them. A monthly Direct Debit can be cancelled at any time.</dd>
+        </div>
+        <div>
+          <dt>This page</dt>
+          <dd>This is the masjid's only donation page. Trust only links shared by the masjid itself. If in doubt, call <a href="tel:+447908854187">07908 854187</a>.</dd>
+        </div>
+      </dl>
+    </aside>
+  </div>
+</section>
 
 </main>
 
@@ -453,12 +338,14 @@
   function updateCta() {
     if (amount && LINKS[mode][amount]) {
       btn.classList.remove("disabled");
+      btn.removeAttribute("aria-disabled");
       btn.href = LINKS[mode][amount];
       btn.textContent = mode === "monthly"
         ? "Donate £" + amount.toLocaleString("en-GB") + " every month"
         : "Donate £" + amount.toLocaleString("en-GB") + " now";
     } else {
       btn.classList.add("disabled");
+      btn.setAttribute("aria-disabled", "true");
       btn.href = "#";
       btn.textContent = "Select an amount";
     }
