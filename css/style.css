@@ -1189,6 +1189,39 @@ strong { color: var(--ink); }
 .contact-ways b { display: block; font: 400 1.2rem/1.3 var(--font-head); color: var(--green-dark); }
 .contact-ways span span { font-size: 0.92rem; color: var(--ink-soft); }
 
+/* The contact form. It posts to Formspree (CLAUDE.md, "Contact form"), and
+   nothing leaves the page until the visitor presses Send. */
+.contact-form-wrap { max-width: 680px; }
+.contact-form-wrap h2 { margin-bottom: 0.3em; }
+.contact-form { margin-top: 24px; }
+.field { margin-bottom: 18px; }
+.field label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+.field .optional { font-weight: 400; color: var(--ink-soft); }
+.field input, .field textarea {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 14px;
+  font: 400 1rem/1.4 var(--font-body);
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.field textarea { min-height: 150px; resize: vertical; }
+.field input:focus-visible, .field textarea:focus-visible { outline: 3px solid var(--green-text); outline-offset: 1px; border-color: var(--green-text); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+@media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } }
+.gotcha { display: none; }
+.form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.form-note { font-size: 0.88rem; color: var(--ink-soft); }
+.form-status { margin: 18px 0 0; font-weight: 600; color: var(--ink); }
+.form-status:empty { display: none; }
+.form-status.is-ok { color: var(--green-dark); }
+.form-status.is-error { color: #9b2f1f; }
+.form-sent { display: none; margin-top: 18px; padding: 14px 16px; background: var(--white); border-left: 4px solid var(--gold); border-radius: 0 8px 8px 0; }
+.form-sent:target { display: block; }
+
 .map-frame { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); aspect-ratio: 4 / 3; background: var(--green-light); }
 .map-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
 
