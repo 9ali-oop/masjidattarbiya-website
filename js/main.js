@@ -915,3 +915,50 @@ document.addEventListener("DOMContentLoaded", function () {
     if (resEl) renderResources(d.resources || []);
   }).catch(function () { /* the page's own message stands */ });
 })();
+
+/* ---------------------------------------------------------------------------
+   The contact form posts to Formspree. With script it sends in the background
+   and shows the result in place; without, the browser posts the form and
+   Formspree shows its own thank-you page. Nothing is sent until the visitor
+   presses Send. See CLAUDE.md, "Contact form".
+   -------------------------------------------------------------------------- */
+(function () {
+  var form = document.getElementById("contact-form");
+  if (!form || !window.fetch || !window.FormData) return;
+  var status = document.getElementById("contact-status");
+  var button = document.getElementById("contact-send");
+
+  function say(text, kind) {
+    status.textContent = text;
+    status.className = "form-status" + (kind ? " is-" + kind : "");
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    button.disabled = true;
+    say("Sending\u2026");
+    fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (data) {
+          if (r.ok) {
+            form.reset();
+            form.hidden = true;
+            say("Thank you, your message has been sent. We will reply by email.", "ok");
+            status.focus();
+            return;
+          }
+          var detail = data && data.errors && data.errors.length
+            ? data.errors.map(function (x) { return x.message; }).join(" ") : "";
+          say("Sorry, the message could not be sent" + (detail ? " (" + detail + ")" : "") +
+              ". Please try again, or email info@masjidatarbiya.org.", "error");
+          button.disabled = false;
+        });
+      })
+      .catch(function () {
+        // No network, or the request was blocked: let the browser post the
+        // form itself, which lands on Formspree's own thank-you page.
+        button.disabled = false;
+        form.submit();
+      });
+  });
+})();

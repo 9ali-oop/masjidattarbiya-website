@@ -22,6 +22,7 @@ below. Never invent a value that is not on this list.
 | Email | info@masjidatarbiya.org (note: **one** 't', and that is correct - see below) |
 | Website | masjidattarbiya.org (note: **two** t's) |
 | Prayer times | https://masjidbox.com/prayer-times/masjid-attarbiya |
+| Contact form | Formspree form `xqpzjjee` (`https://formspree.io/f/xqpzjjee`), delivering to info@masjidatarbiya.org; the masjid holds the Formspree login |
 | Facebook | https://www.facebook.com/p/Attarbiya-Masjid-Kowneyn-Community-Center-100088731259188/ |
 | Instagram | https://www.instagram.com/masjid.attarbiya/ |
 | YouTube | https://www.youtube.com/@MasjidAttarbiyaBirmingham |
@@ -165,6 +166,33 @@ financial infrastructure:
 - **Do not add `target="_blank"`** to payment links. GoCardless returns the donor to this site
   with `?thanks=oneoff` or `?thanks=monthly`, and `js/main.js` shows a thank-you banner. Opening
   checkout in a new tab strands that redirect.
+
+## Contact form
+
+`contact.html` carries a form (name, email, optional phone, message) that posts to the
+masjid's **Formspree** form, `https://formspree.io/f/xqpzjjee`, which emails each message to
+the masjid's inbox. Formspree is the only thing on the site that a visitor's own words are
+sent to, and nothing goes to it until they press Send; the privacy notice says so under "If
+you contact us". Things to keep as they are:
+
+- `js/main.js` sends the form in the background (`Accept: application/json`) and shows the
+  result in place, hiding the form on success. Without script, or if the request fails, the
+  browser posts the form itself and Formspree shows its own thank-you page. If the masjid
+  wants visitors back on our page instead, set the form's "Thank You" redirect in Formspree
+  to `https://masjidattarbiya.org/contact#sent`: the page shows the `#sent` message via
+  `:target`.
+- **reCAPTCHA must stay off** for this form (Formspree: form Settings > Spam protection).
+  With it on, background sending is rejected and every visitor falls through to Formspree's
+  page. Spam is caught by the hidden `_gotcha` honeypot (hidden by the `.gotcha` class, never
+  removed) and Formspree's own filtering.
+- The `email` field is the Reply-To, so the masjid can answer from its inbox; the hidden
+  `subject` field sets the email's subject line.
+- **The form ID is public** (it is in the HTML) and is not a secret. The Formspree account
+  login is the masjid's and never goes in the repo, a commit or a chat message. The free plan
+  allows 50 messages a month, keeps 30 days of history in Formspree's inbox, and notifies up
+  to two addresses; if the masjid outgrows that, it is a paid plan, not a code change.
+- `check_facts.py` still polices contact details on the page; the form's own copy must not
+  carry a phone number or email beyond the masjid's.
 
 ## Notices
 
@@ -478,7 +506,7 @@ characters - macrons in transliteration, say - add `latin-ext` to the family's e
 in that script and re-run it.
 
 The result is that **no third party is contacted on any page except the Google map on the
-contact page**. The parent portal does not change that: `portal.html` only links to Teach 'n
+contact page, and Formspree when a visitor presses Send on the contact form**. The parent portal does not change that: `portal.html` only links to Teach 'n
 Go, and nothing loads from them until a parent chooses to go there. That is worth protecting:
 the privacy notice says so in as many words.
 

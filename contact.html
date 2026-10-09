@@ -23,7 +23,7 @@
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="css/fonts.css" />
-<link rel="stylesheet" href="css/style.css?v=20261008" />
+<link rel="stylesheet" href="css/style.css?v=20261009" />
 </head>
 <body>
 
@@ -65,7 +65,7 @@
     <p class="crumbs"><a href="/">Home</a> / Contact</p>
     <p class="page-hero-ar ar" lang="ar">تواصل معنا</p>
     <h1>Get in touch</h1>
-    <p class="lede">The quickest way to reach the masjid is WhatsApp or a phone call. For anything urgent, please call rather than email.</p>
+    <p class="lede">The quickest way to reach the masjid is WhatsApp or a phone call. For anything urgent, please call rather than email or <a href="#message">the form below</a>.</p>
   </div>
 </section>
 
@@ -109,6 +109,43 @@
         ></iframe>
       </div>
       <p class="muted" style="margin-top:12px; font-size:0.86rem;">The map is provided by Google, so Google receives your IP address when this page loads. No other page on the masjid's site loads it. See our <a href="privacy">privacy notice</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="message">
+  <div class="container">
+    <div class="contact-form-wrap">
+      <h2>Send us a message</h2>
+      <p>For anything that is not urgent, write to us here and we will reply by email. Parents with a question about the madrasah can also use the <a href="portal">parent portal</a>.</p>
+      <form class="contact-form" id="contact-form" action="https://formspree.io/f/xqpzjjee" method="POST">
+        <div class="field">
+          <label for="cf-name">Your name</label>
+          <input id="cf-name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="cf-email">Email</label>
+            <input id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required>
+          </div>
+          <div class="field">
+            <label for="cf-phone">Phone <span class="optional">(optional)</span></label>
+            <input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel">
+          </div>
+        </div>
+        <div class="field">
+          <label for="cf-message">Message</label>
+          <textarea id="cf-message" name="message" rows="6" required></textarea>
+        </div>
+        <input type="hidden" name="subject" value="Message from the masjid website">
+        <label class="gotcha" aria-hidden="true">Leave this field empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-teal" id="contact-send">Send message</button>
+          <span class="form-note">Delivered by Formspree. See our <a href="privacy#contact">privacy notice</a>.</span>
+        </div>
+      </form>
+      <p class="form-status" id="contact-status" role="status" aria-live="polite" tabindex="-1"></p>
+      <p id="sent" class="form-sent">Thank you, your message has been sent. We will reply by email.</p>
     </div>
   </div>
 </section>
@@ -163,6 +200,6 @@
   </div>
 </footer>
 
-<script src="js/main.js?v=20261008"></script>
+<script src="js/main.js?v=20261009"></script>
 </body>
 </html>
