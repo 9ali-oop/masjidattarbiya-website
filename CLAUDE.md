@@ -533,9 +533,10 @@ screen heights.
 Prefer landscape crops. Text sits better beside them and they do not push the rest of the page
 off the screen.
 
-**Where the photo shoot's pictures go.** Tayseer shoots on Saturday 10 or Sunday 11 October
-2026 (he confirms which on Friday after Jumu'ah); the shot list is in the "Photo shoot plan"
-doc. Save the chosen pictures in `assets/photos/` as JPEG (sRGB, quality about 80, long side
+**Where the photo shoot's pictures go.** Tayseer shoots on Saturday 10 October 2026
+(confirmed 9 October): 11:30 to about 13:45 while the madrasah is in and the hall is empty,
+and 18:00 to about 20:15 for the lit sign, the youth team and Isha. The shot list and the
+day's timings are in the "Photo shoot plan" doc. Children appear from behind only, no faces. Save the chosen pictures in `assets/photos/` as JPEG (sRGB, quality about 80, long side
 as below), named for the subject, and swap them into these slots. Alt text describes what is
 in the picture. Anyone recognisable needs their agreement first, and a child a parent's.
 
