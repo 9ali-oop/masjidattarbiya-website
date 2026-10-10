@@ -26,6 +26,8 @@ below. Never invent a value that is not on this list.
 | Facebook | https://www.facebook.com/p/Attarbiya-Masjid-Kowneyn-Community-Center-100088731259188/ |
 | Instagram | https://www.instagram.com/masjid.attarbiya/ |
 | YouTube | https://www.youtube.com/@MasjidAttarbiyaBirmingham |
+| Madrasah timetable | Five groups, six days a week, no classes on Friday. Group 1 Saturday 10:00 to 13:00 and Monday and Wednesday 17:00 to 19:00; Group 2 Sunday 10:00 to 13:00 and Tuesday and Thursday 17:00 to 19:00; Group 3 Saturday and Sunday 14:00 to 17:00; Group 4 (older boys and men) Monday and Wednesday 19:00 to 21:00; Group 5 (women) Sunday 14:00 to 18:00. Children learn the Qaidah, then the Qur'an, and tarbiyah. Confirmed by Malim Husain, the madrasah's management, 9 October 2026 |
+| Weekly class | Riyadh al-Salihin with Sheikh Abdullahi Harshi, every Saturday and Sunday between Maghrib and Isha, brothers only (confirmed by Ali, 10 October 2026) |
 | Sisters | A sisters' prayer area with its own entrance: facing the masjid, sisters' entrance on the left, brothers' on the right (confirmed 7 October 2026) |
 | Jumu'ah | One Jumu'ah each Friday; khutbah usually in Arabic and English, sometimes English only (confirmed 7 October 2026) |
 
@@ -37,7 +39,11 @@ it free.)
 
 **The phone number is settled.** The masjid's signage shows a number beginning `07929`, but the
 masjid confirmed on 7 October 2026 that 07908 854187 (the number on the Charity Commission
-register) is the one to publish.
+register) is the one to publish. The 07929 number on the sign is Malim Husain's, the madrasah's
+management. On 9 October 2026 he sent the three maalims' names and mobiles for the site (Husain,
+Aden, Shaafici); Ali holds them, they are not in this repo, and they go on the madrasah page only
+once each maalim has agreed to be named. Until the facts table carries a number,
+`check_facts.py` blocks it.
 
 ## Rules
 
@@ -215,6 +221,12 @@ also shows the three most recent events and the newest talks from the same files
 would contact a third party), never use a poster that shows a phone number or bank details
 (the Qur'an Intensive poster was cropped to remove a volunteer's mobile), and prefer posters
 to photographs of people. `check_events.py` enforces the location and the alt text.
+
+**Regular classes live in the markup of `events.html`, under "Every week", not in `events.json`,**
+which is for dated events. The first is Riyadh al-Salihin (facts table). Its book cover is the
+site's own inline SVG, the Arabic title in Reem Kufi on teal: publishers' cover scans are
+copyrighted, and the site loads nothing from third parties. The homepage's "What's on" and the
+prayer times aside carry a one-line mention that links to `events#weekly`.
 
 **`assets/events.json` is written by hand and reviewed before it is published.** That is
 deliberate and should stay that way. Everything on it carries an `evidence` field saying how we
@@ -394,12 +406,12 @@ was an explicit request. The page says so in words ("Under one roof") as well as
 
 - **The name** is Madrasah Al Furqan (مدرسة الفرقان), taken from its logo. Use "Al Furqan" as
   the short form.
-- **Confirmed by the masjid:** classes six days a week, **no classes on Friday**, Saturday runs
-  most of the day, and two age groups, **6 and over** and **12 and over**.
-- **Everything else on the page is a placeholder** (see Rule 1): the times, the term dates, the
-  group descriptions, "places available" and the resources list. They live in
-  `assets/madrasah.json`, each with `"placeholder": true`, and each shows a "To be confirmed"
-  label. While `"provisional"` is true the page also shows a draft notice. When the madrasah
+- **Confirmed by the madrasah (9 October 2026, Malim Husain):** five groups, six days a week,
+  **no classes on Friday**; the timetable in the facts table above. Children learn the Qaidah,
+  then the Qur'an, and tarbiyah. The minimum age of 6 was confirmed on 7 October.
+- **Still placeholders** (see Rule 1): which ages go in Groups 1 to 3 (`"who_placeholder"` on
+  the group), the term dates, "places", fees and the resources list. They live in
+  `assets/madrasah.json`, each flagged, and each shows a "To be confirmed" label. While `"provisional"` is true the page also shows a draft notice. When the madrasah
   confirms an item, correct it and delete its flag; `check_madrasah.py` lists what is left and
   fails if the file claims to be final while placeholders remain. Fees are deliberately "to be
   confirmed" with no placeholder figure.
@@ -430,7 +442,7 @@ then a `details`/`summary` FAQ ("Questions parents ask") and a "Have these ready
 online form and login are **status lines, not disabled buttons**, until Teach 'n Go opens: a
 greyed button that does nothing gets tapped repeatedly and blamed on the phone. The page uses
 the masjid's teal, at the masjid's request, so it reads as part of the masjid's site. The
-FAQ's unconfirmed answers (times, fees) carry the "To be confirmed" chip.
+FAQ's one unconfirmed answer (fees) carries the "To be confirmed" chip.
 
 **The madrasah will use Teach 'n Go** (chosen October 2026: best rated for ease of use, and
 already used by Green Lane's madrasah). `portal.html` is just the front door: a "Register a
@@ -572,9 +584,10 @@ the masjid's own account into `staging/`, with images. Do not go back to scrapin
 has 24 posts; the 3 the API does not return are the collaborations posted under Al Kissaii, which
 would need their own token.
 
-**Madrasah details.** `madrasah.html` is built, with labelled placeholders. It is waiting on the
-real times, term dates, group descriptions, places and fees for `assets/madrasah.json`, on the
-trustees' choice of brown or navy (see "Madrasah Al Furqan").
+**Madrasah details.** `madrasah.html` has the real groups and times since 9 October 2026. It is
+still waiting on the age split of the children's groups, term dates, places and fees for
+`assets/madrasah.json`, on the maalims' agreement to be named, and on the trustees' choice of
+brown or navy (see "Madrasah Al Furqan").
 
 **Photos of people.** Running the masjid's accounts covers content the masjid published. It does
 not cover individual likenesses, and much of the available material shows teenagers. Group shots

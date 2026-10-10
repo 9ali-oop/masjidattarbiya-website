@@ -5,7 +5,8 @@ page could be designed and reviewed before the madrasah confirmed its details.
 The page labels each one "To be confirmed". This check keeps that honest:
 
   - it fails if the file is malformed, a date does not parse, a term ends before
-    it starts, a timetable row names a group that does not exist, or the file
+    it starts, a group has no sessions, a timetable row names a group that does
+    not exist, or the file
     claims to be final ("provisional": false) while placeholders remain;
   - it fails if contact details are typed into the copy (the site has one phone
     number and one email, in the footer);
@@ -52,11 +53,17 @@ except (OSError, ValueError) as e:
 groups = data.get("groups") or []
 ids = [g.get("id") for g in groups]
 for g in groups:
-    for field in ("id", "name", "ages", "summary"):
+    for field in ("id", "name", "who"):
         if not g.get(field):
             problems.append(f"group {g.get('id') or '?'}: missing '{field}'")
+    if not g.get("sessions"):
+        problems.append(f"group {g.get('id') or '?'}: no sessions")
+    if g.get("who_placeholder"):
+        placeholders.append(f"group '{g.get('name')}': who it is for")
     if g.get("placeholder"):
         placeholders.append(f"group '{g.get('name')}': description")
+if not data.get("curriculum"):
+    problems.append("missing 'curriculum': what the children learn")
 
 rows = data.get("timetable") or []
 for r in rows:

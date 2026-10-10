@@ -844,20 +844,25 @@ document.addEventListener("DOMContentLoaded", function () {
     var rows = d.timetable || [];
     if (!groups.length || !rows.length) return;
     var today = londonWeekday();
+    var whos = groups.map(function (g) { return g.who; }).filter(function (w, i, a) { return w && a.indexOf(w) === i; })
+      .map(function (w, i) { return i ? w.charAt(0).toLowerCase() + w.slice(1) : w; });
 
     var facts =
       '<ul class="furqan-facts">' +
         "<li><b>Six days a week</b>No classes on Friday</li>" +
-        "<li><b>Two groups</b>" + groups.map(function (g) { return esc(g.ages); }).join(", ") + "</li>" +
+        "<li><b>" + groups.length + " groups</b>" + esc(whos.join(", ")) + "</li>" +
         (d.places ? "<li><b>Places</b>" + esc(d.places.text) + " " + tbc(d.places) + "</li>" : "") +
         (d.fees ? "<li><b>Fees</b>" + esc(d.fees.text) + " " + tbc(d.fees) + "</li>" : "") +
       "</ul>";
 
+    var curriculum = d.curriculum ? '<p class="curriculum">' + esc(d.curriculum) + "</p>" : "";
+
     var cards = '<div class="groups">' + groups.map(function (g) {
       return '<article class="group-card">' +
-        '<h3>' + esc(g.name) + "</h3>" +
-        '<p class="group-ages">' + esc(g.ages) + "</p>" +
-        "<p>" + esc(g.summary) + "</p>" + tbc(g) +
+        "<h3>" + esc(g.name) + "</h3>" +
+        '<p class="group-ages">' + esc(g.who) + (g.who_placeholder ? " " + TBC : "") + "</p>" +
+        '<ul class="group-sessions">' + (g.sessions || []).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ul>" +
+        tbc(g) +
       "</article>";
     }).join("") + "</div>";
 
@@ -866,7 +871,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="timetable-wrap" tabindex="0" role="region" aria-label="Madrasah timetable">' +
       '<table class="timetable"><caption>Weekly timetable' + (anyPlaceholder ? " " + TBC : "") + "</caption>" +
       '<thead><tr><th scope="col">Day</th>' + groups.map(function (g) {
-        return '<th scope="col">' + esc(g.name) + "<small>" + esc(g.ages) + "</small></th>";
+        return '<th scope="col">' + esc(g.name) + "<small>" + esc(g.who) + "</small></th>";
       }).join("") + "</tr></thead><tbody>" +
       rows.map(function (r) {
         var cls = [];
@@ -881,7 +886,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }).join("") +
       "</tbody></table></div>";
 
-    classEl.innerHTML = facts + cards + table;
+    classEl.innerHTML = facts + curriculum + cards + table;
   }
 
   function renderTerms(t) {
