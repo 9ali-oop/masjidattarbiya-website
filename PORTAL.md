@@ -39,9 +39,9 @@ madrasah-specific tools (IlmFlow and others) were too new to trust with children
 
 1. **Start the free trial** at teachngo.com, signed up with a masjid email address that more
    than one trustee can reach, never a volunteer's personal account.
-2. **Set up the school**: the two groups (Juniors, ages 6 to 11; Seniors, 12 and over), the
-   days and times, the teachers. Use the confirmed timetable, not the placeholders on the
-   website (see `assets/madrasah.json`).
+2. **Set up the school**: the five groups and their days and times from `assets/madrasah.json`
+   (three children's groups, older boys and men, women; confirmed by the madrasah on
+   9 October 2026), and the teachers.
 3. **Create the enrolment form** (Teach 'n Go calls registrations "leads"). Ask only for what
    the privacy notice lists: parent name, phone, email, emergency contact; child's name, date
    of birth, school, Qur'an reading level, and anything needed to keep them safe.

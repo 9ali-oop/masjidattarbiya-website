@@ -1,51 +1,137 @@
 {
-  "note": "Madrasah Al Furqan, rendered by madrasah.html. Written by hand. PLACEHOLDERS: as of 7 October 2026 only two things here come from the madrasah: classes run six days a week with no classes on Friday, and there are two age groups, 6 and over and 12 and over. Every time, term date, summary and the places line is a placeholder, agreed so the page could be designed and reviewed. Anything marked \"placeholder\": true shows a 'To be confirmed' label on the page. When the madrasah confirms an item, correct it and delete its placeholder flag. When nothing is left to confirm, set \"provisional\" to false and the page drops its draft notice. scripts/check_madrasah.py lists whatever is still a placeholder.",
+  "note": "Madrasah Al Furqan, rendered by madrasah.html. Written by hand. The groups and their times were confirmed by the madrasah's management (Malim Husain) on 9 October 2026: five groups, six days a week, no classes on Friday. Still placeholders, each marked \"placeholder\": true (or \"who_placeholder\" on a group) and shown with a 'To be confirmed' label: which ages go in Groups 1 to 3, the term dates, places, fees and the resources list. When the madrasah confirms an item, correct it and delete its flag. When nothing is left to confirm, set \"provisional\" to false and the page drops its draft notice. scripts/check_madrasah.py lists whatever is still a placeholder.",
   "provisional": true,
+  "confirmed": "Groups and times confirmed by the madrasah on 9 October 2026.",
+  "curriculum": "Children start with the Qaidah, learning to read Arabic and then the Qur'an, and go on to Qur'an kareem and tarbiyah, Islamic studies.",
   "groups": [
     {
-      "id": "juniors",
-      "name": "Juniors",
-      "ages": "Ages 6 to 11",
-      "summary": "Qaidah and Qur'an reading with tajweed, everyday duas, how to pray, and the basics of Islamic studies.",
-      "placeholder": true
+      "id": "g1",
+      "name": "Group 1",
+      "who": "Children",
+      "who_placeholder": true,
+      "sessions": [
+        "Saturday 10:00 to 13:00",
+        "Monday and Wednesday 17:00 to 19:00"
+      ]
     },
     {
-      "id": "seniors",
-      "name": "Seniors",
-      "ages": "Ages 12 and over",
-      "summary": "Qur'an recitation and memorisation, fiqh, seerah and aqeedah, taught at a level suited to teenagers.",
-      "placeholder": true
+      "id": "g2",
+      "name": "Group 2",
+      "who": "Children",
+      "who_placeholder": true,
+      "sessions": [
+        "Sunday 10:00 to 13:00",
+        "Tuesday and Thursday 17:00 to 19:00"
+      ]
+    },
+    {
+      "id": "g3",
+      "name": "Group 3",
+      "who": "Children",
+      "who_placeholder": true,
+      "sessions": [
+        "Saturday and Sunday 14:00 to 17:00"
+      ]
+    },
+    {
+      "id": "g4",
+      "name": "Group 4",
+      "who": "Older boys and men",
+      "sessions": [
+        "Monday and Wednesday 19:00 to 21:00"
+      ]
+    },
+    {
+      "id": "g5",
+      "name": "Group 5",
+      "who": "Women",
+      "sessions": [
+        "Sunday 14:00 to 18:00"
+      ]
     }
   ],
   "timetable": [
-    { "day": "Monday",    "juniors": "18:00 to 20:00", "seniors": "18:00 to 20:00", "placeholder": true },
-    { "day": "Tuesday",   "juniors": "18:00 to 20:00", "seniors": "18:00 to 20:00", "placeholder": true },
-    { "day": "Wednesday", "juniors": "18:00 to 20:00", "seniors": "18:00 to 20:00", "placeholder": true },
-    { "day": "Thursday",  "juniors": "18:00 to 20:00", "seniors": "18:00 to 20:00", "placeholder": true },
-    { "day": "Friday",    "closed": "No classes on Friday" },
-    { "day": "Saturday",  "juniors": "10:00 to 13:00", "seniors": "15:00 to 18:00", "placeholder": true },
-    { "day": "Sunday",    "juniors": "10:00 to 13:00", "seniors": "14:00 to 16:00", "placeholder": true }
+    {
+      "day": "Monday",
+      "g1": "17:00 to 19:00",
+      "g4": "19:00 to 21:00"
+    },
+    {
+      "day": "Tuesday",
+      "g2": "17:00 to 19:00"
+    },
+    {
+      "day": "Wednesday",
+      "g1": "17:00 to 19:00",
+      "g4": "19:00 to 21:00"
+    },
+    {
+      "day": "Thursday",
+      "g2": "17:00 to 19:00"
+    },
+    {
+      "day": "Friday",
+      "closed": "No classes on Friday"
+    },
+    {
+      "day": "Saturday",
+      "g1": "10:00 to 13:00",
+      "g3": "14:00 to 17:00"
+    },
+    {
+      "day": "Sunday",
+      "g2": "10:00 to 13:00",
+      "g3": "14:00 to 17:00",
+      "g5": "14:00 to 18:00"
+    }
   ],
   "terms": {
     "year": "2026 to 2027",
     "placeholder": true,
     "list": [
-      { "name": "Autumn term", "start": "2026-09-07", "end": "2026-12-18", "break": "Half term 26 to 30 October" },
-      { "name": "Spring term", "start": "2027-01-04", "end": "2027-03-26", "break": "Half term 15 to 19 February" },
-      { "name": "Summer term", "start": "2027-04-12", "end": "2027-07-16", "break": "Half term 31 May to 4 June" }
+      {
+        "name": "Autumn term",
+        "start": "2026-09-07",
+        "end": "2026-12-18",
+        "break": "Half term 26 to 30 October"
+      },
+      {
+        "name": "Spring term",
+        "start": "2027-01-04",
+        "end": "2027-03-26",
+        "break": "Half term 15 to 19 February"
+      },
+      {
+        "name": "Summer term",
+        "start": "2027-04-12",
+        "end": "2027-07-16",
+        "break": "Half term 31 May to 4 June"
+      }
     ],
     "footnote": "The madrasah closes for both Eids. Eid dates depend on the moon, so they are announced nearer the time."
   },
   "places": {
-    "text": "Places are available in both groups.",
+    "text": "Ask us which groups have places.",
     "placeholder": true
   },
   "fees": {
     "text": "To be confirmed. Ask us on WhatsApp in the meantime."
   },
   "resources": [
-    { "title": "Qaidah practice sheets", "description": "Letters and joining practice for Juniors to use at home.", "placeholder": true },
-    { "title": "Duas to learn this term", "description": "The duas each group is working on, with transliteration.", "placeholder": true },
-    { "title": "Term letter for parents", "description": "Dates, expectations and how to reach the teachers.", "placeholder": true }
+    {
+      "title": "Qaidah practice sheets",
+      "description": "Letters and joining practice to use at home.",
+      "placeholder": true
+    },
+    {
+      "title": "Duas to learn this term",
+      "description": "The duas each group is working on, with transliteration.",
+      "placeholder": true
+    },
+    {
+      "title": "Term letter for parents",
+      "description": "Dates, expectations and how to reach the teachers.",
+      "placeholder": true
+    }
   ]
 }
