@@ -1222,10 +1222,12 @@ strong { color: var(--ink); }
 .form-sent { display: none; margin-top: 18px; padding: 14px 16px; background: var(--white); border-left: 4px solid var(--gold); border-radius: 0 8px 8px 0; }
 .form-sent:target { display: block; }
 
-/* The weekly class on the events page: the book cover (the site's own SVG) beside the details. */
+/* The weekly class on the events page: the book cover beside the details. */
 .weekly-class { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 28px; align-items: center; max-width: 760px; }
 .book-cover { margin: 0; }
-.book-cover svg { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: var(--shadow); }
+.book-cover img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: var(--shadow); }
+.book-cover figcaption { margin-top: 6px; font-size: 0.74rem; line-height: 1.35; color: var(--ink-soft); }
+.book-cover figcaption a { color: var(--ink-soft); }
 .weekly-when { margin: 0 0 4px; font: 400 1.1rem/1.3 var(--font-head); color: var(--green-dark); }
 .weekly-body h3 { font-size: 1.5rem; margin: 0 0 8px; }
 .weekly-body p:last-child { margin-bottom: 0; }

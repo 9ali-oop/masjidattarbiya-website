@@ -223,9 +223,12 @@ would contact a third party), never use a poster that shows a phone number or ba
 to photographs of people. `check_events.py` enforces the location and the alt text.
 
 **Regular classes live in the markup of `events.html`, under "Every week", not in `events.json`,**
-which is for dated events. The first is Riyadh al-Salihin (facts table). Its book cover is the
-site's own inline SVG, the Arabic title in Reem Kufi on teal: publishers' cover scans are
-copyrighted, and the site loads nothing from third parties. The homepage's "What's on" and the
+which is for dated events. The first is Riyadh al-Salihin (facts table). Its book cover,
+`assets/riyadh-al-salihin.jpg`, is a Wikimedia Commons photograph of the Dar Ibn Kathir edition
+by the Commons user أبو آسر, licensed CC BY-SA 4.0, stored here at its native 490px rather than
+hotlinked (the site loads nothing from third parties); the page carries the credit and the
+licence link, which the licence requires, so never drop that caption. Wikimedia rate-limited
+this session's downloads (HTTP 429); the file came through the images.weserv.nl proxy. The homepage's "What's on" and the
 prayer times aside carry a one-line mention that links to `events#weekly`.
 
 **`assets/events.json` is written by hand and reviewed before it is published.** That is
