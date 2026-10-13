@@ -673,13 +673,17 @@ document.addEventListener("DOMContentLoaded", function () {
 /* ---------------------------------------------------------------------------
    Our Story timeline.
 
-   Renders assets/history.json. Entries marked "unknown" are deliberate gaps:
-   they render as open questions rather than being quietly left out, because the
-   point of the page is partly to get them answered. Each carries a button that
-   opens WhatsApp with a message already started.
+   Renders assets/history.json as chapters ("chapters" in the file; each
+   milestone names its "chapter"). Entries marked "unknown" are deliberate
+   gaps: they render as open questions rather than being quietly left out,
+   because the point of the page is partly to get them answered. Each carries
+   a button that opens WhatsApp with a message already started.
 
-   The spine fills with gold as the reader scrolls. The card animation is opt-in
-   and fails visible: see CLAUDE.md for the history of that decision.
+   The motion, all of it optional: a ribbon of years under the heading band, a
+   rail (or a slim bar on a phone) whose year rolls over as the reader passes
+   each milestone, chapter introductions that light up word by word, cards that
+   settle forward, a spine that fills with gold. Everything is readable before
+   any of it runs, and stays readable if it never does: see CLAUDE.md.
    --------------------------------------------------------------------------- */
 (function () {
   var el = document.getElementById("timeline");
@@ -687,14 +691,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var STRANDS = { charity: "The charity", building: "The building", learning: "Learning", community: "Community" };
   var WHATSAPP = "https://wa.me/447908854187?text=";
+  var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 1.6l3 4.2 5.2-.7-.7 5.2 4.2 3-4.2 3 .7 5.2-5.2-.7-3 4.2-3-4.2-5.2.7.7-5.2-4.2-3 4.2-3-.7-5.2 5.2.7z"/></svg>';
+  var reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+  /** The year as the rail shows it: four digits where there are some. */
+  function railYear(m) {
+    if (m.status === "unknown") return "?";
+    var y = String(m.year).match(/\d{4}/);
+    if (y) return y[0];
+    return m.year === "Today" ? "Now" : String(m.year);
+  }
+
+  function img(src, alt, w, h) {
+    return '<img src="' + esc(src) + '" alt="' + esc(alt || "") + '"' +
+      (w && h ? ' width="' + w + '" height="' + h + '"' : "") + ' loading="lazy" decoding="async">';
+  }
 
   function card(m) {
     var unknown = m.status === "unknown";
     var asks = (m.asks || []).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
     var msg = "Salaam, about “" + m.title + "” on the masjid's Our Story page: ";
-    return '<li class="tl-item' + (unknown ? " is-unknown" : "") + '" data-strand="' + esc(m.strand || "") + '">' +
+    return '<li class="tl-item' + (unknown ? " is-unknown" : "") + '" id="m-' + esc(m.id) + '" data-strand="' + esc(m.strand || "") +
+        '" data-year="' + esc(railYear(m)) + '">' +
       '<span class="tl-year">' + (unknown ? '<span aria-hidden="true">?</span><span class="visually-hidden">Year not yet known</span>' : esc(m.year)) + "</span>" +
       '<div class="tl-card">' +
+        (m.image ? '<figure class="tl-media">' + img(m.image, m.image_alt, m.image_width, m.image_height) + "</figure>" : "") +
         (STRANDS[m.strand] ? '<span class="tl-strand">' + STRANDS[m.strand] + "</span>" : "") +
         "<h3>" + esc(m.title) + "</h3>" +
         "<p>" + esc(m.body) + "</p>" +
@@ -706,19 +727,214 @@ document.addEventListener("DOMContentLoaded", function () {
     "</li>";
   }
 
+  function chapter(c, items) {
+    return '<section class="chapter" id="' + esc(c.id) + '" data-chapter="' + esc(c.id) + '"' +
+        (c.title ? ' aria-labelledby="ch-' + esc(c.id) + '"' : "") + ">" +
+      (c.title ?
+        '<header class="chapter-head">' +
+          '<span class="chapter-star">' + STAR + "</span>" +
+          (c.ar ? '<span class="chapter-watermark ar" lang="ar" aria-hidden="true">' + esc(c.ar) + "</span>" : "") +
+          (c.number ? '<span class="chapter-num">' + esc(c.number) + "</span>" : "") +
+          '<h2 id="ch-' + esc(c.id) + '">' + esc(c.title) + "</h2>" +
+          (c.years ? '<p class="chapter-years">' + esc(c.years) + "</p>" : "") +
+          (c.intro ? '<p class="chapter-intro">' + esc(c.intro) + "</p>" : "") +
+          (c.image ? '<figure class="chapter-figure">' + img(c.image, c.image_alt, c.image_width, c.image_height) + "</figure>" : "") +
+        "</header>" : "") +
+      '<ol class="timeline">' + items.map(card).join("") + "</ol>" +
+    "</section>";
+  }
+
+  /** Chapters in the file's order; anything without a known chapter still shows, at the end. */
+  function group(d) {
+    var chapters = (d.chapters || []).filter(function (c) { return c && c.id; });
+    var byId = {}, out = [], loose = [];
+    chapters.forEach(function (c) { byId[c.id] = { c: c, items: [] }; out.push(byId[c.id]); });
+    d.milestones.forEach(function (m) { (byId[m.chapter] ? byId[m.chapter].items : loose).push(m); });
+    if (loose.length) out.push({ c: { id: "more" }, items: loose });
+    return out.filter(function (g) { return g.items.length; });
+  }
+
+  function build(groups) {
+    var nav = groups.filter(function (g) { return g.c.title; }).map(function (g) {
+      return '<li data-chapter="' + esc(g.c.id) + '"><a href="#' + esc(g.c.id) + '"><b>' + esc(g.c.title) + "</b>" +
+        (g.c.years ? "<span>" + esc(g.c.years) + "</span>" : "") + "</a></li>";
+    }).join("");
+    el.innerHTML =
+      '<div class="story-rail">' +
+        '<div aria-hidden="true">' +
+          '<span class="rail-num"></span><span class="rail-ar ar" lang="ar"></span><span class="rail-title"></span>' +
+          '<span class="rail-year"></span><span class="rail-count"></span><span class="rail-bar"><i></i></span>' +
+        "</div>" +
+        (nav ? '<nav class="rail-nav" aria-label="Chapters of the story"><ol>' + nav + "</ol></nav>" : "") +
+      "</div>" +
+      '<div class="story-body">' +
+        '<div class="story-bar" aria-hidden="true"><span class="bar-ar ar" lang="ar"></span><span class="bar-title"></span><span class="bar-year"></span></div>' +
+        '<div class="story-chapters">' + groups.map(function (g) { return chapter(g.c, g.items); }).join("") + "</div>" +
+      "</div>";
+  }
+
+  /* --- small helpers ------------------------------------------------------ */
+
+  function all(sel, root) { return Array.prototype.slice.call((root || el).querySelectorAll(sel)); }
+  function clamp(v) { return Math.min(1, Math.max(0, v)); }
+  function chapterData(groups, id) {
+    for (var i = 0; i < groups.length; i++) if (groups[i].c.id === id) return groups[i].c;
+    return {};
+  }
+
+  /** Roll the rail's year over: the old one leaves, the new one arrives. */
+  function roll(box, text, back) {
+    var cur = box.querySelector("span:not(.is-out)");
+    if (cur && cur.textContent === text) return;
+    if (reduced || !cur) { box.innerHTML = "<span>" + esc(text) + "</span>"; return; }
+    box.classList.toggle("is-back", !!back);
+    var next = document.createElement("span");
+    next.className = "is-in";
+    next.textContent = text;
+    box.appendChild(next);
+    cur.classList.add("is-out");
+    void next.offsetWidth; // start the new year from below before letting it rise
+    next.className = "";
+    setTimeout(function () { if (cur.parentNode) cur.parentNode.removeChild(cur); }, 700);
+  }
+
+  function countUp(b, to) {
+    if (reduced || !window.requestAnimationFrame) { b.textContent = to; return; }
+    var t0 = null;
+    function step(t) {
+      if (t0 === null) t0 = t;
+      var k = Math.min(1, (t - t0) / 1300);
+      b.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
+    setTimeout(function () { b.textContent = to; }, 2000); // a background tab never runs the frames
+  }
+
   function stats(ms) {
     var box = document.getElementById("story-stats");
     if (!box) return;
     var known = ms.filter(function (m) { return m.status !== "unknown"; }).length;
     box.insertAdjacentHTML("beforeend",
-      "<li><b>" + known + "</b>Milestones on record</li>" +
-      "<li><b>" + (ms.length - known) + "</b>Still to be remembered</li>");
+      '<li><b data-to="' + known + '">' + known + "</b>Milestones on record</li>" +
+      '<li><b data-to="' + (ms.length - known) + '">' + (ms.length - known) + "</b>Still to be remembered</li>");
+    all("b[data-to]", box).forEach(function (b) { countUp(b, +b.getAttribute("data-to")); });
   }
 
-  /** Alternate sides among the items that are showing. */
-  function arrange() {
-    var shown = el.querySelectorAll(".tl-item:not([hidden])");
-    Array.prototype.forEach.call(shown, function (item, i) { item.classList.toggle("is-right", i % 2 === 1); });
+  function ribbon(groups) {
+    var box = document.getElementById("story-ribbon");
+    if (!box) return;
+    var run = "";
+    groups.forEach(function (g) {
+      g.items.forEach(function (m) {
+        if (m.status === "unknown") return;
+        run += "<span><b>" + esc(m.year) + "</b>" + esc(m.title) + '</span><span class="sep">✦</span>';
+      });
+    });
+    if (!run) return;
+    box.innerHTML = '<div class="story-ribbon-track">' + run + run + "</div>";
+    box.hidden = false;
+  }
+
+  /** Split each chapter introduction into words, so they can light up in turn. */
+  function splitIntros() {
+    if (reduced) return;
+    all(".chapter-intro").forEach(function (p) {
+      p.innerHTML = p.textContent.split(/(\s+)/).map(function (w) {
+        return /^\s*$/.test(w) ? w : '<span class="w">' + esc(w) + "</span>";
+      }).join("");
+      p.classList.add("is-split");
+    });
+  }
+
+  /* --- following the reader ---------------------------------------------- */
+
+  var groups = [], current = null, rail = {}, ticking = false;
+
+  function visibleItems() { return all(".tl-item:not([hidden])"); }
+
+  function setCurrent(item, items) {
+    if (!item || item === current) return;
+    var back = current && items.indexOf(item) < items.indexOf(current);
+    if (current) current.classList.remove("is-current");
+    current = item;
+    item.classList.add("is-current");
+    var ch = item.closest(".chapter");
+    var c = chapterData(groups, ch ? ch.getAttribute("data-chapter") : "");
+    var year = item.getAttribute("data-year") || "";
+    rail.num.textContent = c.number || "";
+    rail.ar.textContent = c.ar || "";
+    rail.title.textContent = c.title || "";
+    rail.count.textContent = "Milestone " + (items.indexOf(item) + 1) + " of " + items.length;
+    rail.barAr.textContent = c.ar || "";
+    rail.barTitle.textContent = c.title || "";
+    rail.barYear.textContent = year;
+    roll(rail.year, year, back);
+    all(".rail-nav a").forEach(function (a) {
+      if (a.getAttribute("href") === "#" + (c.id || "")) a.setAttribute("aria-current", "true");
+      else a.removeAttribute("aria-current");
+    });
+  }
+
+  function lightWords() {
+    var vh = window.innerHeight;
+    all(".chapter-intro.is-split").forEach(function (p) {
+      var words = p.querySelectorAll(".w");
+      var r = p.getBoundingClientRect();
+      // Starts as the paragraph comes up past 90% of the screen, done by 45%.
+      var t = clamp((vh * 0.9 - r.top) / (vh * 0.45 + r.height * 0.5));
+      var lit = Math.round(t * words.length);
+      if (+p.getAttribute("data-lit") === lit) return;
+      p.setAttribute("data-lit", lit);
+      for (var i = 0; i < words.length; i++) words[i].classList.toggle("is-lit", i < lit);
+    });
+  }
+
+  function progress() {
+    ticking = false;
+    var line = window.innerHeight * 0.55;
+    var body = el.querySelector(".story-chapters");
+    var r = body.getBoundingClientRect();
+    el.style.setProperty("--progress", (r.height ? clamp((line - r.top) / r.height) : 0).toFixed(4));
+    var items = visibleItems(), last = null;
+    items.forEach(function (item) {
+      var reached = item.getBoundingClientRect().top + 18 < line;
+      if (reached) {
+        last = item;
+        if (!item.classList.contains("is-reached")) {
+          item.classList.add("is-reached");
+          if (!reduced) {
+            item.classList.add("is-pulse");
+            setTimeout(function () { item.classList.remove("is-pulse"); }, 1200);
+          }
+        }
+      } else {
+        item.classList.remove("is-reached");
+      }
+    });
+    var lastChapter = null;
+    all(".chapter:not([hidden])").forEach(function (ch) {
+      var reached = ch.getBoundingClientRect().top + 30 < line;
+      ch.classList.toggle("is-reached", reached);
+      if (reached) lastChapter = ch;
+    });
+    // Reading a chapter's opening, before its first milestone: the rail
+    // already shows the chapter the reader is in, and the year it starts with.
+    if (lastChapter && (!last || !lastChapter.contains(last))) {
+      last = lastChapter.querySelector(".tl-item:not([hidden])") || last;
+    }
+    setCurrent(last || items[0], items);
+    lightWords();
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(progress); }
+  }
+
+  /** Where the bar and rail pin: just under the part of the header that stays. */
+  function stickTop() {
+    var header = document.querySelector(".site-header"), bar = document.querySelector(".topbar");
+    var h = header ? header.offsetHeight - (bar ? bar.offsetHeight : 0) : 0;
+    el.style.setProperty("--stick-top", Math.max(0, h) + "px");
   }
 
   function filters() {
@@ -727,40 +943,30 @@ document.addEventListener("DOMContentLoaded", function () {
       b.addEventListener("click", function () {
         var strand = b.getAttribute("data-strand");
         buttons.forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
-        el.querySelectorAll(".tl-item").forEach(function (item) {
+        all(".tl-item").forEach(function (item) {
           var match = strand === "all" ||
             (strand === "unknown" ? item.classList.contains("is-unknown") : item.getAttribute("data-strand") === strand);
           item.hidden = !match;
           // Filtering must never leave a card waiting for an animation.
           if (match) item.classList.add("is-visible");
         });
-        arrange();
+        all(".chapter").forEach(function (ch) {
+          var empty = !ch.querySelector(".tl-item:not([hidden])");
+          ch.hidden = empty;
+          var li = el.querySelector('.rail-nav li[data-chapter="' + ch.getAttribute("data-chapter") + '"]');
+          if (li) li.hidden = empty;
+          if (!empty) all(".chapter-figure", ch).forEach(function (f) { f.classList.add("is-visible"); });
+        });
+        current = null;
         progress();
       });
     });
   }
 
-  /** Fill the spine to the reading line, and light each marker as it passes. */
-  var ticking = false;
-  function progress() {
-    ticking = false;
-    var line = window.innerHeight * 0.6;
-    var r = el.getBoundingClientRect();
-    var p = r.height ? Math.min(1, Math.max(0, (line - r.top) / r.height)) : 0;
-    el.style.setProperty("--progress", p.toFixed(4));
-    el.querySelectorAll(".tl-item:not([hidden])").forEach(function (item) {
-      item.classList.toggle("is-reached", item.getBoundingClientRect().top + 18 < line);
-    });
-  }
-  function onScroll() {
-    if (!ticking) { ticking = true; window.requestAnimationFrame(progress); }
-  }
-
-  function reveal(items) {
+  function reveal() {
     // The cards are already readable at this point: the animation only starts
     // once we know we can finish it. Anything that stops us - no observer,
     // reduced motion - simply leaves the timeline as it is, fully visible.
-    var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced || !("IntersectionObserver" in window)) return;
 
     el.classList.add("is-animated");
@@ -772,40 +978,52 @@ document.addEventListener("DOMContentLoaded", function () {
         io.unobserve(entry.target);
       });
     }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
-    items.forEach(function (i) { io.observe(i); });
-
-    // Printing, or saving the page, shows everything settled.
-    window.addEventListener("beforeprint", function () { el.classList.add("is-settled"); });
+    all(".tl-item, .chapter-figure").forEach(function (i) { io.observe(i); });
 
     // Belt and braces. If the observer has revealed nothing after a few seconds
     // - a background tab, a browser quirk - show everything rather than leaving
-    // a reader looking at an empty page.
+    // a reader looking at a page that is waiting for something.
     setTimeout(function () {
       if (!el.querySelector(".tl-item.is-visible")) {
-        // Snap, do not fade: a background tab pauses transitions, so fading back
-        // would leave the cards stuck at invisible.
+        // Snap, do not fade: a background tab pauses transitions.
         el.classList.add("is-settled");
         el.classList.remove("is-animated");
       }
     }, 3000);
   }
 
+  // Printing, or saving the page, shows everything settled.
+  window.addEventListener("beforeprint", function () { el.classList.add("is-settled"); });
+
   getJSON("assets/history.json")
     .then(function (d) {
       var ms = (d && d.milestones) || [];
       if (!ms.length) throw new Error("empty");
-      el.innerHTML = ms.map(card).join("");
-      arrange();
+      groups = group(d);
+      build(groups);
+      rail = {
+        num: el.querySelector(".rail-num"), ar: el.querySelector(".rail-ar"), title: el.querySelector(".rail-title"),
+        year: el.querySelector(".rail-year"), count: el.querySelector(".rail-count"),
+        barAr: el.querySelector(".bar-ar"), barTitle: el.querySelector(".bar-title"), barYear: el.querySelector(".bar-year")
+      };
       stats(ms);
+      ribbon(groups);
+      splitIntros();
       filters();
-      reveal(Array.prototype.slice.call(el.querySelectorAll(".tl-item")));
+      reveal();
+      stickTop();
       progress();
       window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onScroll);
+      window.addEventListener("resize", function () { stickTop(); onScroll(); });
+      // A link to a milestone or chapter (history#m-madrasah) lands on it once it exists.
+      if (location.hash.length > 1) {
+        var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (target) target.scrollIntoView();
+      }
     })
     .catch(function () {
-      el.innerHTML = '<li class="tl-item"><div class="tl-card">' +
-        "<p>The timeline could not be loaded. Please try again.</p></div></li>";
+      el.innerHTML = '<div class="tl-card"><p>The timeline could not be loaded. ' +
+        'Please try again in a moment.</p></div>';
     });
 })();
 

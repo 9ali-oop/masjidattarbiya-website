@@ -1,21 +1,40 @@
 {
-  "note": "The masjid's own story, rendered by history.html. Same rule as events.json: a milestone is only published as fact with a 'source' saying how we know it. Entries with \"status\": \"unknown\" are deliberate gaps - questions for the people who were there - and they render as open questions rather than facts. When one is answered, give it a year, a source, set status to confirmed and delete its 'asks' list. Every 'source' must be something that can be checked: the Charity Commission register or the charity's filed accounts, Companies House, HM Land Registry, the masjid's own posts, or the masjid's own archive (its letters, notices, programmes and letterheads from 2004 onwards, kept privately by the masjid). Nothing from the archive's personal records, accounts, leases, rents or fundraising figures is published: see 'Our Story' in CLAUDE.md. 'strand' is one of: charity, building, learning, community.",
+  "note": "The masjid's own story, rendered by history.html. Same rule as events.json: a milestone is only published as fact with a 'source' saying how we know it. Entries with \"status\": \"unknown\" are deliberate gaps - questions for the people who were there - and they render as open questions rather than facts. When one is answered, give it a year, a source, set status to confirmed and delete its 'asks' list. Every 'source' must be something that can be checked: the Charity Commission register or the charity's filed accounts, Companies House, HM Land Registry, the masjid's own posts, or the masjid's own archive (its letters, notices, programmes and letterheads from 2004 onwards, kept privately by the masjid). Nothing from the archive's personal records, accounts, leases, rents or fundraising figures is published: see 'Our Story' in CLAUDE.md. 'chapter' places a milestone in one of the chapters listed in 'chapters', in file order. Optional 'image', 'image_alt', 'image_width' and 'image_height' show a photograph in the card; never a photo of an identifiable child. 'strand' is one of: charity, building, learning, community.",
   "checked": "2026-10-13",
-  "milestones": [
+  "chapters": [
     {
-      "id": "before",
-      "year": "?",
-      "strand": "building",
-      "title": "Before the club",
-      "status": "unknown",
-      "body": "How long the club was on Revesby Walk, and what the building was before it, is not written down anywhere we can check. Many people remember a pub on the street: that was the Ashted Hamlet, which stood on Revesby Walk from 1966 to 1997 and was later demolished. It was a different building from the masjid.",
-      "asks": [
-        "When was the building built, and who for?",
-        "Was the club ever called the East Birmingham Constitutional Club, the 'Conservative club' at the top of Revesby Walk?",
-        "Do you have photographs of the club, inside or out?"
-      ],
-      "source": "Ashted Hamlet: closedpubs.co.uk and the Birmingham History Forum. The 'Conservative club' at the top of Revesby Walk: a 2005 post on the Birmingham History Forum."
+      "id": "garrison",
+      "number": "Chapter one",
+      "ar": "الجذور",
+      "ar_en": "the roots",
+      "title": "Garrison Lane",
+      "years": "2004 to 2022",
+      "intro": "The story starts in Bordesley Green, at the Garrison Centre on Garrison Lane: first a madrasah, then a charity, then a masjid named after it."
     },
+    {
+      "id": "revesby",
+      "number": "Chapter two",
+      "ar": "الدار",
+      "ar_en": "the house",
+      "title": "Revesby Walk",
+      "years": "2019 to today",
+      "intro": "Before it was ours, 2 Revesby Walk was a social club. In 2019 the charity took it on, and over the next three years turned it into a masjid.",
+      "image": "assets/masjid-entrance-cleaned.jpg",
+      "image_width": 1200,
+      "image_height": 1141,
+      "image_alt": "The entrance of Attarbiya Masjid at 2 Revesby Walk, Nechells"
+    },
+    {
+      "id": "today",
+      "number": "Chapter three",
+      "ar": "اليوم",
+      "ar_en": "today",
+      "title": "Today",
+      "years": "2023 onwards",
+      "intro": "The five daily prayers and Jumu'ah, Madrasah Al Furqan's five groups, conferences and courses, and a record the masjid now keeps in public."
+    }
+  ],
+  "milestones": [
     {
       "id": "madrasah",
       "year": "2004",
@@ -27,7 +46,8 @@
         "Where did Al Furqan teach before it moved to Garrison Lane, and when did it begin?",
         "Who taught the first classes?"
       ],
-      "source": "SOS Education Organisation's description of the Garrison Centre, and the madrasah's own notices from 2006. Both are in the masjid's archive."
+      "source": "SOS Education Organisation's description of the Garrison Centre, and the madrasah's own notices from 2006. Both are in the masjid's archive.",
+      "chapter": "garrison"
     },
     {
       "id": "trust-2006",
@@ -36,7 +56,8 @@
       "title": "The charity is founded",
       "status": "confirmed",
       "body": "A Declaration of Trust dated 3 September 2006 sets up the charity as the Somali Education and Cultural Centre. Its first purpose is the advancement of Islam, alongside education, the relief of poverty and sickness, and recreation for the community.",
-      "source": "Charity Commission register, charity 1142204: governing document and previous names."
+      "source": "Charity Commission register, charity 1142204: governing document and previous names.",
+      "chapter": "garrison"
     },
     {
       "id": "masjid-2007",
@@ -49,16 +70,8 @@
         "Who led the first prayers at Garrison Lane?",
         "Is January 2007 right? If you remember the first Jumu'ah there, tell us."
       ],
-      "source": "SOS Education Organisation's description of the Garrison Centre, and the charity's own letterhead, which gives its name in Arabic. Both are in the masjid's archive."
-    },
-    {
-      "id": "the-club",
-      "year": "2007",
-      "strand": "building",
-      "title": "The Vauxhall Sports and Social Club",
-      "status": "confirmed",
-      "body": "Before it was a masjid, 2 Revesby Walk was a social club. A community interest company for the Vauxhall Sports and Social Club was registered at this address from October 2007 until it was dissolved in June 2010.",
-      "source": "Companies House, company 06409217. The masjid's earlier website also describes the building as the former home of the Vauxhall Sports and Social Club."
+      "source": "SOS Education Organisation's description of the Garrison Centre, and the charity's own letterhead, which gives its name in Arabic. Both are in the masjid's archive.",
+      "chapter": "garrison"
     },
     {
       "id": "youth-2011",
@@ -67,7 +80,8 @@
       "title": "The first youth conference",
       "status": "confirmed",
       "body": "On 16 April 2011 the masjid and Al Furqan hold their first youth conference at the Garrison Centre: Islamic lectures in English, with two guest speakers from London.",
-      "source": "The conference's own programme, in the masjid's archive."
+      "source": "The conference's own programme, in the masjid's archive.",
+      "chapter": "garrison"
     },
     {
       "id": "registered-2011",
@@ -76,7 +90,8 @@
       "title": "A registered charity",
       "status": "confirmed",
       "body": "On 2 June 2011 the Charity Commission registers the charity, with the number it still carries: 1142204.",
-      "source": "Charity Commission register, registration history."
+      "source": "Charity Commission register, registration history.",
+      "chapter": "garrison"
     },
     {
       "id": "one-school-2012",
@@ -85,7 +100,8 @@
       "title": "One school",
       "status": "confirmed",
       "body": "From 1 July 2012 the masjid's own school, Daru Tarbiya, and Al Furqan become one school with one administration. Parents were told on 24 June. Al Furqan has been the masjid's madrasah ever since.",
-      "source": "The notice to parents of 24 June 2012, in the masjid's archive."
+      "source": "The notice to parents of 24 June 2012, in the masjid's archive.",
+      "chapter": "garrison"
     },
     {
       "id": "ramadan-2012",
@@ -94,7 +110,8 @@
       "title": "Ramadan at Garrison Lane",
       "status": "confirmed",
       "body": "The masjid's Ramadan programme: tafsir of the Qur'an every day, iftar together, tarawih and i'tikaf. On 18 August 2012 the community was invited to 106 Garrison Lane to celebrate the completion of the tafsir, and the completion in 2013 was filmed.",
-      "source": "The masjid's Ramadan programme, its invitation to the completion of the tafsir in 2012, and a film of the 2013 completion. All are in the masjid's archive."
+      "source": "The masjid's Ramadan programme, its invitation to the completion of the tafsir in 2012, and a film of the 2013 completion. All are in the masjid's archive.",
+      "chapter": "garrison"
     },
     {
       "id": "kownayn-2014",
@@ -106,7 +123,8 @@
       "asks": [
         "When did the charity choose the name Kowneyn, and what does it mean to the people who chose it?"
       ],
-      "source": "The centre's logo and letterhead, June 2014, in the masjid's archive. The registered name: the Charity Commission register."
+      "source": "The centre's logo and letterhead, June 2014, in the masjid's archive. The registered name: the Charity Commission register.",
+      "chapter": "garrison"
     },
     {
       "id": "garrison-lane",
@@ -119,7 +137,33 @@
         "Who remembers the move to Nechells, and the last prayer at Garrison Lane?",
         "Do you have photographs of the Garrison Centre, inside or out?"
       ],
-      "source": "The charity's annual accounts, 2021/22 and 2022/23, filed with the Charity Commission. The 2007 licence, the masjid's appeals and its letters from 2012 to 2014, in the masjid's archive."
+      "source": "The charity's annual accounts, 2021/22 and 2022/23, filed with the Charity Commission. The 2007 licence, the masjid's appeals and its letters from 2012 to 2014, in the masjid's archive.",
+      "chapter": "garrison"
+    },
+    {
+      "id": "before",
+      "year": "?",
+      "strand": "building",
+      "title": "Before the club",
+      "status": "unknown",
+      "body": "How long the club was on Revesby Walk, and what the building was before it, is not written down anywhere we can check. Many people remember a pub on the street: that was the Ashted Hamlet, which stood on Revesby Walk from 1966 to 1997 and was later demolished. It was a different building from the masjid.",
+      "asks": [
+        "When was the building built, and who for?",
+        "Was the club ever called the East Birmingham Constitutional Club, the 'Conservative club' at the top of Revesby Walk?",
+        "Do you have photographs of the club, inside or out?"
+      ],
+      "source": "Ashted Hamlet: closedpubs.co.uk and the Birmingham History Forum. The 'Conservative club' at the top of Revesby Walk: a 2005 post on the Birmingham History Forum.",
+      "chapter": "revesby"
+    },
+    {
+      "id": "the-club",
+      "year": "2007",
+      "strand": "building",
+      "title": "The Vauxhall Sports and Social Club",
+      "status": "confirmed",
+      "body": "Before it was a masjid, 2 Revesby Walk was a social club. A community interest company for the Vauxhall Sports and Social Club was registered at this address from October 2007 until it was dissolved in June 2010.",
+      "source": "Companies House, company 06409217. The masjid's earlier website also describes the building as the former home of the Vauxhall Sports and Social Club.",
+      "chapter": "revesby"
     },
     {
       "id": "revesby-walk",
@@ -132,7 +176,8 @@
         "Who made it happen, and how was the money raised?",
         "What state was the building in when we got the keys?"
       ],
-      "source": "HM Land Registry price paid record for 2 Revesby Walk, 14 June 2019, and the charity's balance sheets from 2020/21 onwards."
+      "source": "HM Land Registry price paid record for 2 Revesby Walk, 14 June 2019, and the charity's balance sheets from 2020/21 onwards.",
+      "chapter": "revesby"
     },
     {
       "id": "fit-out",
@@ -145,7 +190,12 @@
         "What was built or refitted, and in what order?",
         "Are there photographs from during the work?"
       ],
-      "source": "The charity's annual accounts, 2020/21 to 2022/23, filed with the Charity Commission."
+      "source": "The charity's annual accounts, 2020/21 to 2022/23, filed with the Charity Commission.",
+      "chapter": "revesby",
+      "image": "assets/prayer-hall.jpg",
+      "image_width": 900,
+      "image_height": 544,
+      "image_alt": "The prayer hall today, with the marble wall around the mihrab and minbar"
     },
     {
       "id": "first-prayer",
@@ -158,7 +208,8 @@
         "When was the first prayer held here?",
         "When was the first Jumu'ah?",
         "Who led it, and how many people came?"
-      ]
+      ],
+      "chapter": "revesby"
     },
     {
       "id": "governing-2021",
@@ -167,7 +218,8 @@
       "title": "A new chapter on paper",
       "status": "confirmed",
       "body": "The charity's Declaration of Trust is amended on 5 March 2021. Today it is registered as Kowneyn Education and Cultural Centre, and its earlier names on the register include Somali Education and Cultural Centre. The community knows it as Attarbiya Masjid.",
-      "source": "Charity Commission register: governing document amended 5 March 2021; registered name and previous names."
+      "source": "Charity Commission register: governing document amended 5 March 2021; registered name and previous names.",
+      "chapter": "revesby"
     },
     {
       "id": "winter-2023",
@@ -176,7 +228,8 @@
       "title": "The first Winter Conference on record",
       "status": "confirmed",
       "body": "Three days on the lives of the Sahabah, from 29 to 31 December 2023, with talks after Jumu'ah, Asr, Maghrib and Isha. A second, a one-day seminar, followed in January 2025.",
-      "source": "The masjid's own conference poster and timetable. See the events page."
+      "source": "The masjid's own conference poster and timetable. See the events page.",
+      "chapter": "today"
     },
     {
       "id": "online-2024",
@@ -185,7 +238,8 @@
       "title": "The masjid goes online",
       "status": "confirmed",
       "body": "The masjid starts publishing its own record. The first Instagram post, welcoming people to the masjid's official page, is on 18 March 2024, and the YouTube channel follows on 21 March. Almost everything on our events page is evidenced by these two accounts.",
-      "source": "First post date from the masjid's Instagram account; channel creation date from YouTube's own feed."
+      "source": "First post date from the masjid's Instagram account; channel creation date from YouTube's own feed.",
+      "chapter": "today"
     },
     {
       "id": "al-kissaii",
@@ -196,7 +250,8 @@
       "body": "The masjid's programme for teenagers and older children, which runs the youth nights.",
       "asks": [
         "What year did Al Kissaii start, and who started it?"
-      ]
+      ],
+      "chapter": "today"
     },
     {
       "id": "intensive-2025",
@@ -205,7 +260,8 @@
       "title": "A summer of Qur'an",
       "status": "confirmed",
       "body": "A Qur'an Intensive Course for under-16s runs from 21 July to 24 August 2025, Monday to Thursday: hifdh, the fiqh of salah, basic Arabic reading and Islamic studies.",
-      "source": "The masjid's Instagram, 13 July 2025. See the events page."
+      "source": "The masjid's Instagram, 13 July 2025. See the events page.",
+      "chapter": "today"
     },
     {
       "id": "today",
@@ -214,7 +270,8 @@
       "title": "Five prayers, every day",
       "status": "confirmed",
       "body": "Daily prayers and Jumu'ah, the Al Furqan madrasah, lessons and conferences, youth nights and Eid. The timetable is published live on this site and the programme is on the events page.",
-      "source": "Prayer times come from the masjid's own Masjidbox timetable; events are evidenced one by one on the events page."
+      "source": "Prayer times come from the masjid's own Masjidbox timetable; events are evidenced one by one on the events page.",
+      "chapter": "today"
     }
   ]
 }
