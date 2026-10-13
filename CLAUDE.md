@@ -384,6 +384,35 @@ before redoing it.
 The accounts also show the building was partly funded by loans from members, still being
 repaid. That is the community's business, not the website's.
 
+**The masjid's own archive (13 October 2026).** The vicarage gave the masjid an external
+drive: 133GB of backups from the Garrison Lane years, 2004 to 2024. Ali holds the copy
+on his own computer (`Documents\Attarbiya archive\`, with a catalogue and a private
+`findings.md`). **None of it is in this repo, and none of it ever goes in**: it holds pupil
+registers, fee and donor lists, bank details, other people's private papers and hundreds
+of photos of identifiable children. What it established, now on Our Story:
+
+- **The madrasah came first.** Madrasah Al Furqan moved into the Garrison Centre, 106
+  Garrison Lane, Bordesley Green B9 4BS, in December 2004 with about 50 children.
+- **The masjid opened there in January 2007** as Masjid Dar al-Tarbiya (SOS Education
+  Organisation's description of the centre; the masjid's own 2012 appeal leaves the year
+  blank, so the page asks whether it is right).
+- **Where "Attarbiya" comes from:** the charity's letterhead gives its Arabic name as
+  دار التربية والثقافة الصومالية, Dar al-Tarbiya wal-Thaqafa al-Somaliya.
+- From April 2007 the charity used the Garrison Centre under a licence from SOS Education
+  Organisation, which held the lease from Birmingham City Council.
+- First youth conference 16 April 2011; **Al Furqan and the masjid's own school became one
+  school on 1 July 2012**; Ramadan tafsir, iftar, tarawih and i'tikaf; Eid prayers in
+  Garrison Lane park; "Al-Kownayn Centre" (Masjid Dar-Attarbiyah & Madrassa Al-Furqan) by
+  June 2014, the earliest use of the Kowneyn name found.
+
+**Never published from the archive:** rents, lease terms and negotiations, the takeover and
+purchase figures, fundraising amounts and appeal targets (they would reveal the 2019
+price), loans, pupil numbers claimed in appeals (800, 900, "largest in Europe"), and the
+Garrison Centre building's age (the archive contradicts itself). An archive source is cited
+on the page as "in the masjid's archive", never by file path. One 2014 letterhead misprints
+the charity number as 11442204; never copy a number from the archive. Photos from it need
+the same consent as any other, and children appear only from behind.
+
 **The animation fails visible, by construction.** An early version started cards at `opacity: 0`
 and relied on `IntersectionObserver` to reveal them, which rendered invisible cards whenever the
 observer did not fire (and still did, for off-screen cards, in full-page captures). Now cards
