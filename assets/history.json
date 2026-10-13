@@ -1,5 +1,5 @@
 {
-  "note": "The masjid's own story, rendered by history.html. Same rule as events.json: a milestone is only published as fact with a 'source' saying how we know it. Entries with \"status\": \"unknown\" are deliberate gaps - questions for the people who were there - and they render as open questions rather than facts. When one is answered, give it a year, a source, set status to confirmed and delete its 'asks' list. Every 'source' must be something that can be checked: the Charity Commission register or the charity's filed accounts, Companies House, HM Land Registry, the masjid's own posts, or the masjid's own archive (its letters, notices, programmes and letterheads from 2004 onwards, kept privately by the masjid). Nothing from the archive's personal records, accounts, leases, rents or fundraising figures is published: see 'Our Story' in CLAUDE.md. 'chapter' places a milestone in one of the chapters listed in 'chapters', in file order. Optional 'image', 'image_alt', 'image_width' and 'image_height' show a photograph in the card; never a photo of an identifiable child. 'strand' is one of: charity, building, learning, community.",
+  "note": "The masjid's own story, rendered by history.html. Same rule as events.json: a milestone is only published as fact with a 'source' saying how we know it. Entries with \"status\": \"unknown\" are deliberate gaps - questions for the people who were there - and they render as open questions rather than facts. When one is answered, give it a year, a source, set status to confirmed and delete its 'asks' list. Every 'source' must be something that can be checked: the Charity Commission register or the charity's filed accounts, Companies House, HM Land Registry, the masjid's own posts, or the masjid's own archive (its letters, notices, programmes and letterheads from 2004 onwards, kept privately by the masjid). Nothing from the archive's personal records, accounts, leases, rents or fundraising figures is published: see 'Our Story' in CLAUDE.md. 'chapter' places a milestone in one of the chapters listed in 'chapters', in file order. Optional 'image', 'image_alt', 'image_width' and 'image_height' show a photograph in the card (or under a chapter's opening), 'image_caption' says where and when it was taken, and 'image_fit': 'contain' shows a logo whole on a plain panel instead of cropping it. Never a photo of an identifiable child. 'strand' is one of: charity, building, learning, community.",
   "checked": "2026-10-13",
   "chapters": [
     {
@@ -9,7 +9,12 @@
       "ar_en": "the roots",
       "title": "Garrison Lane",
       "years": "2004 to 2022",
-      "intro": "The story starts in Bordesley Green, at the Garrison Centre on Garrison Lane: first a madrasah, then a charity, then a masjid named after it."
+      "intro": "The story starts in Bordesley Green, at the Garrison Centre on Garrison Lane: first a madrasah, then a charity, then a masjid named after it.",
+      "image": "assets/history/garrison-centre.jpg",
+      "image_width": 1360,
+      "image_height": 983,
+      "image_alt": "The Garrison Centre on Garrison Lane: red-brick Victorian buildings with tall arched windows, a chimney and a red gate, under a blue sky",
+      "image_caption": "The Garrison Centre, 106 Garrison Lane. From the masjid's archive."
     },
     {
       "id": "revesby",
@@ -22,7 +27,8 @@
       "image": "assets/masjid-entrance-cleaned.jpg",
       "image_width": 1200,
       "image_height": 1141,
-      "image_alt": "The entrance of Attarbiya Masjid at 2 Revesby Walk, Nechells"
+      "image_alt": "The entrance of Attarbiya Masjid at 2 Revesby Walk, Nechells",
+      "image_caption": "2 Revesby Walk today."
     },
     {
       "id": "today",
@@ -47,7 +53,13 @@
         "Who taught the first classes?"
       ],
       "source": "SOS Education Organisation's description of the Garrison Centre, and the madrasah's own notices from 2006. Both are in the masjid's archive.",
-      "chapter": "garrison"
+      "chapter": "garrison",
+      "image": "assets/history/al-furqan-logo-early.jpg",
+      "image_width": 600,
+      "image_height": 477,
+      "image_fit": "contain",
+      "image_alt": "An earlier logo of Madrasah Al Furqan: an open Qur'an on a wooden stand inside a yellow circle, with the name in Arabic beneath",
+      "image_caption": "An earlier Al Furqan logo, from the madrasah's own files."
     },
     {
       "id": "trust-2006",
@@ -71,7 +83,12 @@
         "Is January 2007 right? If you remember the first Jumu'ah there, tell us."
       ],
       "source": "SOS Education Organisation's description of the Garrison Centre, and the charity's own letterhead, which gives its name in Arabic. Both are in the masjid's archive.",
-      "chapter": "garrison"
+      "chapter": "garrison",
+      "image": "assets/history/garrison-prayer-hall-2012.jpg",
+      "image_width": 1100,
+      "image_height": 825,
+      "image_alt": "The prayer hall at Garrison Lane: a wooden mihrab and minbar above green prayer carpet",
+      "image_caption": "The prayer hall at Garrison Lane, November 2012."
     },
     {
       "id": "youth-2011",
@@ -101,7 +118,12 @@
       "status": "confirmed",
       "body": "From 1 July 2012 the masjid's own school, Daru Tarbiya, and Al Furqan become one school with one administration. Parents were told on 24 June. Al Furqan has been the masjid's madrasah ever since.",
       "source": "The notice to parents of 24 June 2012, in the masjid's archive.",
-      "chapter": "garrison"
+      "chapter": "garrison",
+      "image": "assets/history/garrison-corridor-2012.jpg",
+      "image_width": 1100,
+      "image_height": 825,
+      "image_alt": "A long corridor at the Garrison Centre with shoes lined up along both walls",
+      "image_caption": "Shoes along a corridor at the Garrison Centre, November 2012."
     },
     {
       "id": "ramadan-2012",
@@ -124,7 +146,13 @@
         "When did the charity choose the name Kowneyn, and what does it mean to the people who chose it?"
       ],
       "source": "The centre's logo and letterhead, June 2014, in the masjid's archive. The registered name: the Charity Commission register.",
-      "chapter": "garrison"
+      "chapter": "garrison",
+      "image": "assets/history/al-kownayn-logo-2014.jpg",
+      "image_width": 570,
+      "image_height": 424,
+      "image_fit": "contain",
+      "image_alt": "The Al-Kownayn Centre logo: a masjid and an open book in a blue oval, ringed by the words Masjid Dar-Attarbiyah and Madrassa Al-Furqan in English and Arabic",
+      "image_caption": "The Al-Kownayn Centre's logo, June 2014."
     },
     {
       "id": "garrison-lane",
@@ -138,7 +166,12 @@
         "Do you have photographs of the Garrison Centre, inside or out?"
       ],
       "source": "The charity's annual accounts, 2021/22 and 2022/23, filed with the Charity Commission. The 2007 licence, the masjid's appeals and its letters from 2012 to 2014, in the masjid's archive.",
-      "chapter": "garrison"
+      "chapter": "garrison",
+      "image": "assets/history/garrison-centre-2014.jpg",
+      "image_width": 1280,
+      "image_height": 720,
+      "image_alt": "The main building of the Garrison Centre on a grey day: twin gables with round windows, tall arched windows and purple doors",
+      "image_caption": "The Garrison Centre's main building, January 2014, from a film of the centre."
     },
     {
       "id": "before",
