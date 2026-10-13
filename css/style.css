@@ -913,6 +913,7 @@ strong { color: var(--ink); }
 /* Printing the week: just the masjid's name, the table and where the times
    come from, on one sheet, for the fridge or the noticeboard. */
 @media print {
+  .story-ribbon, .story-rail, .story-bar, .tl-filters, .tl-remember, .chapter-watermark,
   .site-header, .site-footer, .page-hero, .prayer-layout, .week-actions, .week-key, .colour-preview, .thanks-banner, .skip-link, .notices { display: none !important; }
   .print-only { display: block; margin: 0 0 12px; }
   .print-only .print-title { font: 400 20pt/1.2 var(--font-head); margin: 0 0 4px; color: #000; }
@@ -926,6 +927,8 @@ strong { color: var(--ink); }
   .week-table thead th span { font-size: 12pt; }
   .week-table .is-today, .week-table thead .is-today { background: #eee; box-shadow: none; }
   a[href]::after { content: ""; }
+  .chapter-intro .w { color: inherit !important; }
+  .tl-card, .chapter-figure img { transform: none !important; }
 }
 
 /* ==========================================================================
@@ -1014,11 +1017,34 @@ strong { color: var(--ink); }
 
 /* ==========================================================================
    Our Story: the timeline
-   A spine down the middle that fills with gold as the reader scrolls. Open
-   questions are drawn as unfinished pages, dashed, asking to be filled in.
+   Three chapters, each opening with a large serif title over a faint Arabic
+   word. On a wide screen a rail on the left keeps the chapter and a large year
+   that rolls over as the reader scrolls; on a phone that becomes a slim bar.
+   A spine runs down the milestones and fills with gold. Open questions are
+   drawn as unfinished pages, dashed, asking to be filled in.
+
+   Everything is readable before, and without, any of the motion: the script
+   only adds it once it knows it can finish. See CLAUDE.md.
    ========================================================================== */
 
-.tl-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 44px; }
+/* The ribbon under the heading band: the years, drifting slowly by. Purely
+   decorative (aria-hidden), and still under reduced motion. */
+.story-ribbon {
+  overflow: hidden;
+  background: var(--gold-light);
+  border-top: 1px solid rgba(26, 112, 120, 0.28);
+  border-bottom: 1px solid rgba(26, 112, 120, 0.28);
+}
+.story-ribbon-track { display: flex; width: max-content; animation: story-ribbon 110s linear infinite; }
+.story-ribbon:hover .story-ribbon-track { animation-play-state: paused; }
+.story-ribbon span { white-space: nowrap; padding: 13px 0; font: 400 1.05rem/1 var(--font-head); color: var(--green-ink); }
+.story-ribbon b { font-weight: 400; color: var(--gold-text); margin-right: 0.55em; }
+.story-ribbon .sep { margin: 0 1.3em; color: var(--gold-deep); }
+@keyframes story-ribbon { to { transform: translateX(-50%); } }
+
+.story-section { padding-top: 56px; }
+
+.tl-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 48px; }
 .tl-filter {
   min-height: 44px;
   padding: 8px 18px;
@@ -1028,57 +1054,164 @@ strong { color: var(--ink); }
   color: var(--ink);
   font: 600 0.9rem/1 var(--font-body);
   cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 .tl-filter:hover { border-color: var(--green-dark); }
 .tl-filter[aria-pressed="true"] { background: var(--green-dark); border-color: var(--green-dark); color: var(--white); }
 
-.timeline {
-  --progress: 0;
+.story { --progress: 0; display: grid; grid-template-columns: minmax(0, 1fr); max-width: 1080px; margin: 0 auto; }
+
+/* The rail (wide screens) */
+.story-rail { display: none; }
+.rail-num { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-text); }
+.rail-ar { display: block; margin-top: 10px; font: 500 2.4rem/1.25 var(--font-arabic); color: var(--green-dark); }
+.rail-title { display: block; font: 400 1.45rem/1.2 var(--font-head); color: var(--ink); }
+.rail-year {
   position: relative;
-  list-style: none;
-  margin: 0 auto;
-  padding: 0;
-  max-width: 960px;
-  perspective: 1400px;
+  display: block;
+  height: 1.12em;
+  overflow: hidden;
+  margin: 20px 0 4px;
+  font: 400 6.2rem/1.12 var(--font-head);
+  color: var(--green-dark);
+  font-variant-numeric: lining-nums;
 }
-.timeline::before, .timeline::after {
-  content: "";
+.rail-year span { position: absolute; left: 0; top: 0; transition: transform 0.65s cubic-bezier(0.2, 0.7, 0.3, 1), opacity 0.65s ease; }
+.rail-year span.is-out { transform: translateY(-100%); opacity: 0; }
+.rail-year span.is-in { transform: translateY(100%); opacity: 0; transition: none; }
+.rail-year.is-back span.is-out { transform: translateY(100%); }
+.rail-year.is-back span.is-in { transform: translateY(-100%); }
+.rail-count { display: block; font-size: 0.86rem; color: var(--ink-soft); }
+.rail-bar { display: block; height: 3px; margin: 10px 0 30px; border-radius: 3px; background: var(--border); overflow: hidden; }
+.rail-bar i { display: block; height: 100%; width: calc(var(--progress) * 100%); background: linear-gradient(90deg, var(--gold), var(--gold-deep)); }
+.rail-nav ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
+.rail-nav li[hidden] { display: none; }
+.rail-nav a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 56px;
+  padding: 8px 0 8px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.25s ease, box-shadow 0.25s ease;
+}
+.rail-nav a b { font: 400 1.08rem/1.25 var(--font-head); color: inherit; }
+.rail-nav a span { font-size: 0.8rem; }
+.rail-nav a:hover { color: var(--green-dark); }
+.rail-nav a[aria-current="true"] { color: var(--green-dark); box-shadow: inset 3px 0 0 var(--gold); }
+
+@media (min-width: 1000px) {
+  .story { grid-template-columns: 270px minmax(0, 1fr); gap: 0 72px; }
+  .story-rail { display: block; position: sticky; top: calc(var(--stick-top, 72px) + 28px); align-self: start; }
+}
+
+/* The bar (phones and tablets): the chapter and year, pinned under the header
+   while the reader is inside the story. */
+.story-bar {
+  position: sticky;
+  top: var(--stick-top, 64px);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  margin: 0 -20px 28px;
+  padding: 8px 20px;
+  background: rgba(251, 250, 247, 0.95);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92rem;
+}
+.story-bar::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: calc(var(--progress) * 100%); background: var(--gold); }
+.bar-ar { font: 500 1.15rem/1 var(--font-arabic); color: var(--green-dark); }
+.bar-title { font-family: var(--font-head); font-size: 1.02rem; color: var(--ink); }
+.bar-year { margin-left: auto; font: 400 1.35rem/1 var(--font-head); color: var(--green-dark); font-variant-numeric: lining-nums; }
+@supports (backdrop-filter: blur(4px)) { .story-bar { background: rgba(251, 250, 247, 0.86); backdrop-filter: blur(8px); } }
+@media (min-width: 1000px) { .story-bar { display: none; } }
+
+/* The spine */
+.story-chapters { position: relative; }
+.story-chapters::before, .story-chapters::after { content: ""; position: absolute; left: 11px; top: 0; width: 2px; }
+.story-chapters::before { bottom: 0; background: var(--border); }
+.story-chapters::after { height: calc(var(--progress) * 100%); background: linear-gradient(var(--gold), var(--gold-deep)); }
+
+/* Chapter openings */
+.chapter { position: relative; }
+.chapter, .tl-item { scroll-margin-top: calc(var(--stick-top, 64px) + 64px); }
+.chapter[hidden] { display: none; }
+.chapter + .chapter { margin-top: 36px; }
+.chapter-head { position: relative; padding: 18px 0 44px 52px; }
+.chapter-star { position: absolute; left: -2px; top: 22px; z-index: 1; width: 28px; height: 28px; color: var(--gold); transition: transform 0.6s ease; }
+.chapter-star svg { display: block; width: 100%; height: 100%; fill: currentColor; stroke: var(--bg); stroke-width: 1.5; }
+.chapter.is-reached .chapter-star { transform: rotate(45deg); }
+.chapter-watermark {
   position: absolute;
-  left: 50%;
-  top: 0;
-  width: 2px;
-  margin-left: -1px;
+  right: 0;
+  top: -8px;
+  font: 500 clamp(5rem, 3rem + 9vw, 10rem)/1 var(--font-arabic);
+  color: var(--green-dark);
+  opacity: 0.07;
+  pointer-events: none;
+  user-select: none;
 }
-.timeline::before { bottom: 0; background: var(--border); }
-.timeline::after { height: calc(var(--progress) * 100%); background: linear-gradient(var(--gold), var(--gold-deep)); }
+.chapter-num { position: relative; display: block; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-text); }
+.chapter-head h2 { position: relative; margin: 10px 0 6px; font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.4rem); line-height: 1.04; color: var(--green-ink); }
+.chapter-years { position: relative; margin: 0 0 20px; font: 400 1.15rem/1.3 var(--font-head); color: var(--ink-soft); }
+/* Set at 24px or more, so the faded colour of a word not yet reached (3.2:1)
+   still passes as large text. */
+.chapter-intro { position: relative; max-width: 30em; margin: 0; font: 400 clamp(1.5rem, 1.25rem + 0.8vw, 1.9rem)/1.42 var(--font-head); color: var(--ink); }
+.chapter-intro .w { transition: color 0.45s ease; }
+.chapter-intro.is-split .w { color: #6a9599; }
+.chapter-intro.is-split .w.is-lit { color: var(--ink); }
 
-.tl-item { position: relative; width: 50%; padding: 0 48px 44px 0; }
-.tl-item.is-right { margin-left: 50%; padding: 0 0 44px 48px; }
-/* Opposite sides interleave, so the page is not half empty. Safe because every
-   item is taller than the overlap, so a card never meets the one above it on
-   its own side. */
-.tl-item:not([hidden]) ~ .tl-item:not([hidden]) { margin-top: -96px; }
+/* Photographs with the gently curved edges of an open book */
+.chapter-figure, .tl-media { margin: 0; overflow: hidden; }
+.chapter-figure { position: relative; max-width: 680px; margin-top: 30px; }
+.chapter-figure img, .tl-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0Q50 7 100 0V100Q50 93 0 100Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0Q50 7 100 0V100Q50 93 0 100Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.chapter-figure img { aspect-ratio: 16 / 10; object-position: center 35%; transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.3, 1); }
+.tl-media { margin: -22px -24px 18px; border-radius: var(--radius) var(--radius) 0 0; }
+.tl-media img { aspect-ratio: 16 / 9; }
+
+/* Milestones */
+.timeline { list-style: none; margin: 0; padding: 0; perspective: 1400px; }
+.tl-item { position: relative; padding: 0 0 36px 52px; }
 .tl-item[hidden] { display: none; }
-
 .tl-item::after {
   content: "";
   position: absolute;
-  top: 8px;
-  right: -9px;
+  left: 2px;
+  top: 9px;
   z-index: 1;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: var(--bg);
   border: 2px solid var(--border);
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
-.tl-item.is-right::after { right: auto; left: -9px; }
 .tl-item.is-reached::after { border-color: var(--gold-deep); background: var(--gold); }
 .tl-item.is-unknown::after { border-style: dashed; }
+.tl-item.is-pulse::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  animation: tl-pulse 1.1s ease-out;
+}
+@keyframes tl-pulse { from { box-shadow: 0 0 0 0 rgba(212, 174, 97, 0.65); } to { box-shadow: 0 0 0 16px rgba(212, 174, 97, 0); } }
 
-.tl-year { display: block; font: 400 clamp(2rem, 1.6rem + 1.6vw, 2.8rem)/1 var(--font-head); color: var(--green-dark); margin-bottom: 12px; font-variant-numeric: lining-nums; }
-.tl-item:not(.is-right) .tl-year { text-align: right; }
+.tl-year { display: block; margin-bottom: 10px; font: 400 clamp(1.8rem, 1.5rem + 1vw, 2.4rem)/1 var(--font-head); color: var(--green-dark); font-variant-numeric: lining-nums; }
 .tl-item.is-unknown .tl-year { color: var(--gold-text); }
 .tl-strand {
   display: inline-block;
@@ -1093,19 +1226,19 @@ strong { color: var(--ink); }
   text-transform: uppercase;
 }
 
-/* Readable first: the resting state is fully visible with no transform. The
-   script opts in to animation by adding .is-animated only once it knows it can
-   finish the reveal. See CLAUDE.md for why this matters. */
 .tl-card {
+  max-width: 640px;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 22px 24px;
   box-shadow: var(--shadow);
-  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.3, 1);
+  transform-origin: left center;
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.3s ease;
 }
-.tl-card h3 { font-size: 1.3rem; margin: 0 0 8px; }
+.tl-card h3 { font-size: 1.35rem; margin: 0 0 8px; }
 .tl-card p { margin: 0; }
+.tl-item.is-current .tl-card { box-shadow: 0 10px 34px rgba(1, 88, 99, 0.16); }
 .tl-source { display: block; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--ink-soft); }
 .tl-source::before { content: "Source: "; font-weight: 700; color: var(--ink); }
 
@@ -1120,26 +1253,39 @@ strong { color: var(--ink); }
 .tl-asks li { color: var(--ink); margin-bottom: 4px; font-size: 0.95rem; }
 .tl-remember { margin-top: 16px; min-height: 44px; padding: 8px 18px; font-size: 0.9rem; }
 
-/* Cards wait tilted back in depth and settle forward as they are reached. They
-   are never transparent: a card the observer misses (a full-page capture, a
-   print, a quirk) is still fully readable, just leaning slightly. */
-.timeline.is-animated .tl-card { transform: translateZ(-90px) rotateY(8deg); will-change: transform; }
-.timeline.is-animated .tl-item.is-right .tl-card { transform: translateZ(-90px) rotateY(-8deg); }
-.timeline.is-animated .tl-item.is-visible .tl-card { transform: none; will-change: auto; }
+/* Cards wait leaning back in depth and settle forward as they are reached.
+   They are never transparent: a card the observer misses (a full-page capture,
+   a print, a quirk) is still fully readable, just leaning slightly. */
+.story.is-animated .tl-card { transform: translateZ(-90px) rotateY(9deg); will-change: transform; }
+.story.is-animated .tl-item.is-visible .tl-card { transform: none; will-change: auto; }
+.story.is-animated .chapter-figure img { transform: scale(1.07); }
+.story.is-animated .chapter-figure.is-visible img { transform: none; }
 
 /* The escape hatch: if nothing was ever revealed, snap everything readable
    with no transition, because a background tab will not run one. */
-.timeline.is-settled .tl-card,
-.timeline.is-settled .tl-item.is-right .tl-card { transform: none !important; opacity: 1 !important; transition: none !important; }
+.story.is-settled .tl-card,
+.story.is-settled .chapter-figure img { transform: none !important; transition: none !important; }
+.story.is-settled .chapter-intro.is-split .w { color: var(--ink); }
 
 @media (max-width: 760px) {
+  .story-section { padding-top: 32px; }
+  /* One row that swipes sideways, inside its own box, instead of three rows. */
+  .tl-filters {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    margin: 0 -20px 28px;
+    padding: 2px 20px 6px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tl-filters::-webkit-scrollbar { display: none; }
+  .tl-filter { flex: none; }
+  .chapter-head { padding: 14px 0 36px 44px; }
+  .tl-item { padding: 0 0 30px 44px; }
   .timeline { perspective: none; }
-  .timeline::before, .timeline::after { left: 9px; }
-  .tl-item, .tl-item.is-right, .tl-item:not([hidden]) ~ .tl-item:not([hidden]) { width: 100%; margin: 0; padding: 0 0 32px 40px; }
-  .tl-item::after, .tl-item.is-right::after { left: 0; right: auto; top: 6px; }
-  .tl-item:not(.is-right) .tl-year { text-align: left; }
-  .timeline.is-animated .tl-card, .timeline.is-animated .tl-item.is-right .tl-card { transform: translateY(18px); }
-  .timeline.is-animated .tl-item.is-visible .tl-card { transform: none; }
+  .story.is-animated .tl-card { transform: translateY(18px); }
+  .story.is-animated .tl-item.is-visible .tl-card { transform: none; }
 }
 
 .help-band { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: 32px 56px; align-items: center; }
@@ -1499,9 +1645,11 @@ strong { color: var(--ink); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-  .timeline, .timeline.is-animated { perspective: none; }
-  .timeline.is-animated .tl-card,
-  .timeline.is-animated .tl-item.is-right .tl-card,
-  .timeline.is-animated .tl-item.is-visible .tl-card { transform: none; opacity: 1; }
+  .timeline { perspective: none; }
+  .story.is-animated .tl-card,
+  .story.is-animated .chapter-figure img { transform: none; }
+  .story-ribbon-track { animation: none !important; }
+  .tl-item.is-pulse::before { animation: none !important; }
+  .chapter-star { transition: none; }
   .btn:hover, .event-poster:hover, .video-card:hover { transform: none; }
 }

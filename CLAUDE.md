@@ -337,6 +337,21 @@ Story", modelled on Green Lane Masjid's two-part history (the building, then the
 each milestone tagged by strand (`charity`, `building`, `learning`, `community`) and filter
 buttons for each, plus "Still unknown".
 
+**Three chapters** (13 October 2026, styled after Al-Maqari Al-Qur'aniyyah UK's site at
+Ali's request, but kept light): Garrison Lane (الجذور, the roots), Revesby Walk (الدار, the
+house) and Today (اليوم). They live in `chapters` in `history.json`, and each milestone names
+its `chapter`; one with no known chapter still shows, in a group at the end. Each chapter
+opens with a large serif title over a faint Arabic watermark and an introduction whose words
+light up as the reader reaches them. On a wide screen a sticky rail on the left carries the
+chapter, a large year that rolls over milestone by milestone, a progress bar and links to the
+chapters; under 1000px that becomes a slim bar pinned under the header. A ribbon of years
+drifts under the heading band (decorative, `aria-hidden`, still under reduced motion), the
+counts in the heading count up, and photographs (a chapter's `image`, or a milestone's) get
+gently curved top and bottom edges. Milestones and chapters can be linked to directly:
+`history#m-madrasah`, `history#revesby`. **No animation library**: GSAP and friends would load
+from a third party, which the privacy notice rules out; it is all a few dozen lines in
+`js/main.js`.
+
 **The gaps are the feature.** Unknown milestones render as dashed "unfinished page" cards with
 their questions and an "I remember this" button that opens WhatsApp with a message already
 started. People correct a draft far faster than they answer "tell me our history". Fill one
@@ -419,7 +434,9 @@ observer did not fire (and still did, for off-screen cards, in full-page capture
 are never transparent: with `.is-animated` they wait tilted back in depth and settle forward
 when reached, so a missed card is still readable. The 3 second `.is-settled` escape hatch and a
 `beforeprint` handler remain. The spine fills with gold as the reader scrolls (`--progress`).
-Keep that shape if you touch it.
+The same rule covers the newer motion: a chapter introduction's unlit words are `#6a9599`
+(3.2:1, so the introduction is set at 24px or more to pass as large text), and `.is-settled`,
+print and reduced motion all show every word lit. Keep that shape if you touch it.
 
 **Photographs:** use Street View history for research only. Publishing Google imagery breaks
 their terms, and embedding it live would break the site's no-third-parties promise.
