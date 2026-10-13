@@ -428,6 +428,16 @@ on the page as "in the masjid's archive", never by file path. One 2014 letterhea
 the charity number as 11442204; never copy a number from the archive. Photos from it need
 the same consent as any other, and children appear only from behind.
 
+**Archive pictures on the site** (`assets/history/`, resized, camera data stripped): the
+Garrison Centre outside (chapter one; the original has a damaged strip along the bottom,
+cropped off), its prayer hall and a corridor (November 2012), a still of the main building
+from the January 2014 film, the Al-Kownayn logo (2014) and an earlier Al Furqan logo, the
+logos shown whole (`image_fit: "contain"`). **Held back on purpose:** two class photos of
+children seen from behind (wait for a parent's written yes), a 2010 whiteboard lesson whose
+content is not right for the masjid's public site, a 2010 poster for an SOS Education
+Organisation event (not the masjid's, and it carries phone numbers), and pages of a
+2012 fire engineers' report (a third party's photographs).
+
 **The animation fails visible, by construction.** An early version started cards at `opacity: 0`
 and relied on `IntersectionObserver` to reveal them, which rendered invisible cards whenever the
 observer did not fire (and still did, for off-screen cards, in full-page captures). Now cards

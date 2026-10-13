@@ -707,6 +707,18 @@ document.addEventListener("DOMContentLoaded", function () {
       (w && h ? ' width="' + w + '" height="' + h + '"' : "") + ' loading="lazy" decoding="async">';
   }
 
+  /** A photograph (or, with image_fit "contain", a logo shown whole), with its caption. */
+  function figure(x, cls) {
+    if (!x.image) return "";
+    var logo = x.image_fit === "contain";
+    return '<figure class="' + cls + (logo ? " is-logo" : "") + '">' +
+      (logo ? '<span class="media-frame">' : "") +
+      img(x.image, x.image_alt, x.image_width, x.image_height) +
+      (logo ? "</span>" : "") +
+      (x.image_caption ? "<figcaption>" + esc(x.image_caption) + "</figcaption>" : "") +
+    "</figure>";
+  }
+
   function card(m) {
     var unknown = m.status === "unknown";
     var asks = (m.asks || []).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
@@ -715,7 +727,7 @@ document.addEventListener("DOMContentLoaded", function () {
         '" data-year="' + esc(railYear(m)) + '">' +
       '<span class="tl-year">' + (unknown ? '<span aria-hidden="true">?</span><span class="visually-hidden">Year not yet known</span>' : esc(m.year)) + "</span>" +
       '<div class="tl-card">' +
-        (m.image ? '<figure class="tl-media">' + img(m.image, m.image_alt, m.image_width, m.image_height) + "</figure>" : "") +
+        figure(m, "tl-media") +
         (STRANDS[m.strand] ? '<span class="tl-strand">' + STRANDS[m.strand] + "</span>" : "") +
         "<h3>" + esc(m.title) + "</h3>" +
         "<p>" + esc(m.body) + "</p>" +
@@ -738,7 +750,7 @@ document.addEventListener("DOMContentLoaded", function () {
           '<h2 id="ch-' + esc(c.id) + '">' + esc(c.title) + "</h2>" +
           (c.years ? '<p class="chapter-years">' + esc(c.years) + "</p>" : "") +
           (c.intro ? '<p class="chapter-intro">' + esc(c.intro) + "</p>" : "") +
-          (c.image ? '<figure class="chapter-figure">' + img(c.image, c.image_alt, c.image_width, c.image_height) + "</figure>" : "") +
+          figure(c, "chapter-figure") +
         "</header>" : "") +
       '<ol class="timeline">' + items.map(card).join("") + "</ol>" +
     "</section>";
