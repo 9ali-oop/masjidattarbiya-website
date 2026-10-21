@@ -24,11 +24,11 @@
       "title": "Revesby Walk",
       "years": "2019 to today",
       "intro": "Before it was ours, 2 Revesby Walk was a social club. In 2019 the charity took it on, and over the next three years turned it into a masjid.",
-      "image": "assets/masjid-entrance-cleaned.jpg",
-      "image_width": 1200,
-      "image_height": 1141,
-      "image_alt": "The entrance of Attarbiya Masjid at 2 Revesby Walk, Nechells",
-      "image_caption": "2 Revesby Walk today."
+      "image": "assets/photos/exterior-sm.jpg",
+      "image_width": 1360,
+      "image_height": 907,
+      "image_alt": "The masjid's red-brick building on Revesby Walk under a blue sky, its sign above the entrance canopy",
+      "image_caption": "2 Revesby Walk, October 2026."
     },
     {
       "id": "today",
@@ -37,7 +37,12 @@
       "ar_en": "today",
       "title": "Today",
       "years": "2023 onwards",
-      "intro": "The five daily prayers and Jumu'ah, Madrasah Al Furqan's five groups, conferences and courses, and a record the masjid now keeps in public."
+      "intro": "The five daily prayers and Jumu'ah, Madrasah Al Furqan's five groups, conferences and courses, and a record the masjid now keeps in public.",
+      "image": "assets/photos/entrance-night.jpg",
+      "image_width": 1360,
+      "image_height": 907,
+      "image_alt": "The masjid at dusk, its sign lit above the entrance",
+      "image_caption": "The masjid at dusk, October 2026."
     }
   ],
   "milestones": [
@@ -225,10 +230,11 @@
       ],
       "source": "The charity's annual accounts, 2020/21 to 2022/23, filed with the Charity Commission.",
       "chapter": "revesby",
-      "image": "assets/prayer-hall.jpg",
-      "image_width": 900,
-      "image_height": 544,
-      "image_alt": "The prayer hall today, with the marble wall around the mihrab and minbar"
+      "image": "assets/photos/mihrab.jpg",
+      "image_width": 1360,
+      "image_height": 907,
+      "image_alt": "The mihrab and minbar today, set in a white and gold marble wall above red carpet",
+      "image_caption": "The mihrab and minbar, October 2026."
     },
     {
       "id": "first-prayer",
@@ -304,7 +310,12 @@
       "status": "confirmed",
       "body": "Daily prayers and Jumu'ah, the Al Furqan madrasah, lessons and conferences, youth nights and Eid. The timetable is published live on this site and the programme is on the events page.",
       "source": "Prayer times come from the masjid's own Masjidbox timetable; events are evidenced one by one on the events page.",
-      "chapter": "today"
+      "chapter": "today",
+      "image": "assets/photos/congregation.jpg",
+      "image_width": 1360,
+      "image_height": 907,
+      "image_alt": "Brothers standing in rows for Dhuhr in the main prayer hall, seen from behind",
+      "image_caption": "Dhuhr in the main prayer hall, October 2026."
     }
   ]
 }
