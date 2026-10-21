@@ -696,6 +696,20 @@ browsers keep those files for ten minutes, so without it a visitor gets the new 
 old stylesheet, which happened once and left the homepage banner unstyled. `check_links.py`
 fails if the pages disagree on the version.
 
+**Maintenance mode: the public sees "being updated" (switched on 21 October 2026, at Ali's
+request, while the site is being worked on).** `js/gate.js`, loaded in the `<head>` of every
+page except `donate.html`, replaces the page with a short notice: the masjid's name, the live
+Masjidbox timetable, the donate page, WhatsApp, phone, email and address. Three things always
+get through, and must keep doing so: **the donate page** (it does not load the script), **a
+donor returning from GoCardless** (any address with `?thanks=` shows the real page and the
+thank-you banner), and **the masjid's own team**, after opening any page once with
+`?preview=<TOKEN>` (the token is in `js/gate.js`; `?preview=off` undoes it), who then see the
+full site with a small "Preview" label. It hides the site from ordinary visitors and nothing
+more: the pages are still public files and the token is readable in the script. **To open the
+site to everyone, set `ON = false` in `js/gate.js` and push.** Do not leave it on for weeks:
+search engines that render the page see the notice, and people who check prayer times here
+are sent to Masjidbox instead.
+
 **Addresses are clean: `/donate`, not `/donate.html`** (since 8 October 2026). GitHub Pages
 serves `donate.html` at both, so every internal link, the canonical tag, `og:url` and the
 sitemap use the clean form, the homepage is `/`, and `check_links.py` fails on any link that
