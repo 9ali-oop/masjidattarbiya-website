@@ -680,8 +680,7 @@ document.addEventListener("DOMContentLoaded", function () {
    because the point of the page is partly to get them answered. Each carries
    a button that opens WhatsApp with a message already started.
 
-   The motion, all of it optional: a ribbon of years under the heading band, a
-   rail (or a slim bar on a phone) whose year rolls over as the reader passes
+   The motion, all of it optional: a rail (or a slim bar on a phone) whose year rolls over as the reader passes
    each milestone, chapter introductions that light up word by word, cards that
    settle forward, a spine that fills with gold. Everything is readable before
    any of it runs, and stays readable if it never does: see CLAUDE.md.
@@ -818,21 +817,6 @@ document.addEventListener("DOMContentLoaded", function () {
     box.insertAdjacentHTML("beforeend",
       "<li><b>" + known + "</b>Milestones on record</li>" +
       "<li><b>" + (ms.length - known) + "</b>Still to be remembered</li>");
-  }
-
-  function ribbon(groups) {
-    var box = document.getElementById("story-ribbon");
-    if (!box) return;
-    var run = "";
-    groups.forEach(function (g) {
-      g.items.forEach(function (m) {
-        if (m.status === "unknown") return;
-        run += "<span><b>" + esc(m.year) + "</b>" + esc(m.title) + '</span><span class="sep">✦</span>';
-      });
-    });
-    if (!run) return;
-    box.innerHTML = '<div class="story-ribbon-track">' + run + run + "</div>";
-    box.hidden = false;
   }
 
   /** Split each chapter introduction into words, so they can light up in turn. */
@@ -1006,7 +990,6 @@ document.addEventListener("DOMContentLoaded", function () {
         barAr: el.querySelector(".bar-ar"), barTitle: el.querySelector(".bar-title"), barYear: el.querySelector(".bar-year")
       };
       stats(ms);
-      ribbon(groups);
       splitIntros();
       filters();
       reveal();
