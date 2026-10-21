@@ -27,8 +27,7 @@
       "image": "assets/photos/exterior-sm.jpg",
       "image_width": 1360,
       "image_height": 907,
-      "image_alt": "The masjid's red-brick building on Revesby Walk under a blue sky, its sign above the entrance canopy",
-      "image_caption": "2 Revesby Walk, October 2026."
+      "image_alt": "The masjid's red-brick building on Revesby Walk under a blue sky, its sign above the entrance canopy"
     },
     {
       "id": "today",
@@ -41,8 +40,7 @@
       "image": "assets/photos/entrance-night.jpg",
       "image_width": 1360,
       "image_height": 907,
-      "image_alt": "The masjid at dusk, its sign lit above the entrance",
-      "image_caption": "The masjid at dusk, October 2026."
+      "image_alt": "The masjid at dusk, its sign lit above the entrance"
     }
   ],
   "milestones": [
@@ -233,8 +231,7 @@
       "image": "assets/photos/mihrab.jpg",
       "image_width": 1360,
       "image_height": 907,
-      "image_alt": "The mihrab and minbar today, set in a white and gold marble wall above red carpet",
-      "image_caption": "The mihrab and minbar, October 2026."
+      "image_alt": "The mihrab and minbar today, set in a white and gold marble wall above red carpet"
     },
     {
       "id": "first-prayer",
@@ -314,8 +311,7 @@
       "image": "assets/photos/congregation.jpg",
       "image_width": 1360,
       "image_height": 907,
-      "image_alt": "Brothers standing in rows for Dhuhr in the main prayer hall, seen from behind",
-      "image_caption": "Dhuhr in the main prayer hall, October 2026."
+      "image_alt": "Brothers standing in rows for Dhuhr in the main prayer hall, seen from behind"
     }
   ]
 }

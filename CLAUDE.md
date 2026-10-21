@@ -346,8 +346,8 @@ its `chapter`; one with no known chapter still shows, in a group at the end. Eac
 opens with a large serif title over a faint Arabic watermark and an introduction whose words
 light up as the reader reaches them. On a wide screen a sticky rail on the left carries the
 chapter, a large year that rolls over milestone by milestone, a progress bar and links to the
-chapters; under 1000px that becomes a slim bar pinned under the header. A ribbon of years
-drifts under the heading band (decorative, `aria-hidden`, still under reduced motion), the
+chapters; under 1000px that becomes a slim bar pinned under the header. A ribbon of years that
+drifted under the heading band was removed at Ali's request (21 October 2026). The
 counts in the heading are stated plainly (a count-up animation was removed as a template
 cliché, 21 October 2026), and photographs (a chapter's `image`, or a milestone's) get
 gently curved top and bottom edges. Milestones and chapters can be linked to directly:
@@ -666,6 +666,18 @@ judder. `js/main.js` loads a clip only when it nears the screen, plays it only w
 and pauses it when it leaves or the tab is hidden; with reduced motion or Save-Data the
 video is never downloaded and the poster stands in. Full-length video belongs on the YouTube
 channel, linked, never embedded.
+
+**Captions only where the picture cannot speak for itself** (Ali, 21 October 2026). Lines
+such as "The prayer hall. The marble wall frames the mihrab and minbar" or "Revesby Walk at
+dusk. Facing the building, ..." describe what anyone can see, and read as written by an AI;
+no masjid's site does it. They were all removed. A caption stays only when it adds what the
+picture cannot show: a date and place on an archive photograph in Our Story, and the licence
+credit the Riyadh al-Salihin cover requires. Alt text is a different thing and stays.
+
+**Vary the frame.** Rounded corners and a soft shadow are fine, but on every picture they
+get plain. The homepage's Visiting photograph is square, unframed, as tall as the list beside
+it, and runs off the right-hand edge of the page (`.visit-section` clips it, so nothing
+scrolls sideways); on a phone it runs edge to edge.
 
 **Mosaics, not rows of equal tiles.** On 21 October 2026 Ali said the photographs all sat
 in the same frame and the site looked templated, "too AI". The homepage ("One Saturday in
