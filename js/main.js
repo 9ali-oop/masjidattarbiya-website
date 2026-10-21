@@ -1077,12 +1077,15 @@ function playQuietly(v) { var p = v.play(); if (p && p.catch) p.catch(function (
       el.setAttribute("muted", ""); el.setAttribute("playsinline", "");
       el.poster = a.getAttribute("href");
       el.src = clip;
-      el.setAttribute("aria-hidden", "true");
+      // Silent and looping, it stands in for a picture, so it says what it shows.
+      var sr = a.querySelector(".visually-hidden"), th = thumbOf(a);
+      el.setAttribute("role", "img");
+      el.setAttribute("aria-label", (sr && sr.textContent) || (th && th.getAttribute("alt")) || "");
     } else {
       el = document.createElement("img");
       el.src = a.getAttribute("href");
-      var t = thumbOf(a);
-      el.alt = (t && t.getAttribute("alt")) || "";
+      var t = thumbOf(a), label = a.querySelector(".visually-hidden");
+      el.alt = (t && t.getAttribute("alt")) || (label && label.textContent) || "";
     }
     el.className = "lb-media";
     return el;
@@ -1116,7 +1119,10 @@ function playQuietly(v) { var p = v.play(); if (p && p.catch) p.catch(function (
     stage.innerHTML = "";
     stage.appendChild(el);
     if (el.tagName === "VIDEO") playQuietly(el);
-    caption.textContent = a.getAttribute("data-caption") || el.alt || "";
+    // A caption only where one was written on purpose (a date, a credit): the
+    // alt text describes the picture for those who cannot see it, and is not
+    // repeated under it for those who can.
+    caption.textContent = a.getAttribute("data-caption") || "";
     count.textContent = set.length > 1 ? (index + 1) + " of " + set.length : "";
     [index - 1, index + 1].forEach(function (n) {
       var b = set[(n + set.length) % set.length];
