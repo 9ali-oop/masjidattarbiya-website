@@ -1008,8 +1008,7 @@ document.addEventListener("DOMContentLoaded", function () {
    only when it comes near the screen, plays only while on it, and pauses when
    it leaves or the tab is hidden. A reader who asks for reduced motion, or for
    less data, never downloads one: the poster stays, which is the same picture
-   standing still. Without script the poster is all anyone sees. The tour's
-   clips (video.tour-clip) are played by the tour itself, below.
+   standing still. Without script the poster is all anyone sees.
    --------------------------------------------------------------------------- */
 var QUIET = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) ||
   !!(navigator.connection && navigator.connection.saveData);
@@ -1198,157 +1197,88 @@ function playQuietly(v) { var p = v.play(); if (p && p.catch) p.catch(function (
 })();
 
 /* ---------------------------------------------------------------------------
-   The tour (tour.html).
+   Inside the masjid (homepage): the strip of photographs.
 
-   Each scene ([data-scene]) is several screens tall and holds a stage that
-   stays put while it is scrolled past. All this script does is work out how
-   far through each scene the reader is (0 to 1) and, from that, which shot is
-   showing, how far its slow push has gone, which panels and words are up, and
-   which clips should be playing. The look of every cut, dissolve and reveal
-   is in the stylesheet. A reader who asks for reduced motion never gets the
-   stage: the page stays a photo essay, the same pictures one after another.
+   It scrolls sideways by itself (a trackpad, a swipe, the arrow keys once it
+   has focus); the two buttons move it most of a screen at a time, for a
+   mouse. They appear only when there is more to see, and each one greys out
+   at its end.
    --------------------------------------------------------------------------- */
 (function () {
-  var tour = document.querySelector(".tour");
-  if (!tour || !window.requestAnimationFrame) return;
-  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  var root = document.documentElement;
-  var slice = function (l) { return Array.prototype.slice.call(l); };
-  var portrait = window.matchMedia("(max-aspect-ratio: 3/4)");
-  tour.classList.add("is-cinema");
+  var strip = document.querySelector(".strip");
+  var nav = document.querySelector(".strip-nav");
+  if (!strip || !nav) return;
+  var buttons = nav.querySelectorAll(".strip-btn");
+  var smooth = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
-  function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
-  function clamp(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
-
-  var scenes = slice(tour.querySelectorAll("[data-scene]")).map(function (el) {
-    var stage = el.querySelector(".stage, .stage-open");
-    var shots = slice(stage.children).filter(function (c) { return c.classList.contains("shot"); }).map(function (s) {
-      if (s.getAttribute("data-focus")) s.style.setProperty("--focus", s.getAttribute("data-focus"));
-      return {
-        el: s,
-        at: parseFloat(s.getAttribute("data-at")) || 0,
-        zoom: (s.getAttribute("data-zoom") || "1 1").split(" ").map(Number),
-        media: s.querySelector(":scope > picture > img, :scope > img, :scope > video"),
-        pull: s.hasAttribute("data-focus-pull"),
-        steps: (s.getAttribute("data-steps") || "").split(" ").filter(Boolean).map(Number),
-        panels: slice(s.querySelectorAll(".panel")).map(function (p) { return { el: p, at: parseFloat(p.getAttribute("data-at")) || 0 }; })
-      };
+  // aria-disabled rather than disabled: a disabled button loses the keyboard
+  // focus it has, and a reader at the end of the strip would be dropped.
+  function update() {
+    var max = strip.scrollWidth - strip.clientWidth;
+    nav.hidden = max < 8;
+    buttons[0].setAttribute("aria-disabled", String(strip.scrollLeft < 8));
+    buttons[1].setAttribute("aria-disabled", String(strip.scrollLeft > max - 8));
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (b.getAttribute("aria-disabled") === "true") return;
+      strip.scrollBy({ left: Number(b.getAttribute("data-dir")) * strip.clientWidth * 0.8, behavior: smooth ? "smooth" : "auto" });
     });
-    return {
-      el: el,
-      title: el.getAttribute("data-title"),
-      shots: shots,
-      texts: slice(el.querySelectorAll(".scene-text")).map(function (t) {
-        return { el: t, from: parseFloat(t.getAttribute("data-at")) || 0, to: t.hasAttribute("data-to") ? parseFloat(t.getAttribute("data-to")) : 2 };
-      }),
-      clips: slice(el.querySelectorAll("video.tour-clip")),
-      loaded: false
-    };
   });
-  if (!scenes.length) return;
-
-  // Where you are: the scenes down the side, and a bar of progress on a phone.
-  var rail = document.createElement("nav");
-  rail.className = "tour-rail";
-  rail.setAttribute("aria-label", "Scenes of the tour");
-  rail.innerHTML = "<ol>" + scenes.filter(function (s) { return s.title; }).map(function (s) {
-    return '<li><a href="#' + s.el.id + '"><span>' + s.title.replace(/[<>&]/g, "") + "</span></a></li>";
-  }).join("") + "</ol>";
-  var bar = document.createElement("div");
-  bar.className = "tour-progress";
-  bar.setAttribute("aria-hidden", "true");
-  tour.appendChild(rail);
-  tour.appendChild(bar);
-  scenes.forEach(function (s) { if (s.title) s.link = rail.querySelector('a[href="#' + s.el.id + '"]'); });
-
-  function load(sc) {
-    sc.loaded = true;
-    if (QUIET) return;
-    sc.clips.forEach(function (v) {
-      var tall = portrait.matches && v.getAttribute("data-src-p");
-      if (tall && v.getAttribute("data-poster-p")) v.poster = v.getAttribute("data-poster-p");
-      v.src = tall ? v.getAttribute("data-src-p") : v.getAttribute("data-src");
-      v.preload = "auto";
-    });
-  }
-
-  function setPlaying(v, on) {
-    if (QUIET || !v.getAttribute("src")) return;
-    if (on && !document.hidden) { if (v.paused) playQuietly(v); }
-    else if (!v.paused) v.pause();
-  }
-
-  var lastY = window.pageYOffset, ticking = false;
-
-  function frame() {
-    ticking = false;
-    var vh = window.innerHeight;
-    var current = null;
-    scenes.forEach(function (sc) {
-      var r = sc.el.getBoundingClientRect();
-      if (!sc.loaded && r.top < 2.5 * vh && r.bottom > -vh) load(sc);
-      var visible = r.bottom > 0 && r.top < vh;
-      if (sc.title && r.top <= vh * 0.5 && r.bottom > vh * 0.5) current = sc;
-      if (!visible) {
-        sc.clips.forEach(function (v) { setPlaying(v, false); });
-        return;
-      }
-      var p = clamp(-r.top / Math.max(1, r.height - vh));
-      var active = 0;
-      sc.shots.forEach(function (s, i) { if (p >= s.at) active = i; });
-      sc.shots.forEach(function (s, i) {
-        var on = i === active;
-        var end = i + 1 < sc.shots.length ? sc.shots[i + 1].at : 1;
-        var t = clamp((p - s.at) / Math.max(0.001, end - s.at));
-        s.el.classList.toggle("is-on", on);
-        if (s.media && (on || i === active - 1)) {
-          s.media.style.setProperty("--z", (s.zoom[0] + (s.zoom[1] - s.zoom[0]) * ease(t)).toFixed(4));
-          if (s.pull) s.media.style.setProperty("--blur", (on ? 9 * Math.max(0, 1 - t * 3.5) : 0).toFixed(2) + "px");
-        }
-        if (s.steps.length) {
-          var step = 0;
-          s.steps.forEach(function (at) { if (p >= at) step++; });
-          s.el.setAttribute("data-step", String(step));
-        }
-        s.panels.forEach(function (pn) { pn.el.classList.toggle("is-on", on && p >= pn.at); });
-        slice(s.el.querySelectorAll("video.tour-clip")).forEach(function (v) {
-          var pn = v.closest(".panel");
-          setPlaying(v, on && (!pn || pn.classList.contains("is-on")));
-        });
-      });
-      sc.texts.forEach(function (t) { t.el.classList.toggle("is-on", p >= t.from && p < t.to); });
-    });
-
-    var first = scenes[0].el.getBoundingClientRect();
-    var last = scenes[scenes.length - 1].el.getBoundingClientRect();
-    var inside = first.top <= 0 && last.bottom > vh * 0.5;
-    root.classList.toggle("in-scenes", inside && !!current);
-    root.style.setProperty("--tour-p", clamp(-first.top / Math.max(1, last.bottom - first.top - vh)).toFixed(4));
-    scenes.forEach(function (s) { if (s.link) s.link.classList.toggle("is-current", s === current); });
-
-    // The header steps aside on the way down through the scenes, and comes
-    // back as soon as the reader scrolls up or leaves them.
-    var y = window.pageYOffset;
-    var menuOpen = !!document.querySelector(".site-header.is-open");
-    if (inside && !menuOpen && y > lastY + 6) root.classList.add("tour-immersed");
-    else if (y < lastY - 6 || !inside || menuOpen) root.classList.remove("tour-immersed");
-    lastY = y;
-  }
-
-  function request() { if (!ticking) { ticking = true; window.requestAnimationFrame(frame); } }
-  window.addEventListener("scroll", request, { passive: true });
-  window.addEventListener("resize", request);
-  document.addEventListener("visibilitychange", request);
-
-  // A keyboard user who tabs to a link in words not yet showing is taken to
-  // the point in the scene where those words appear.
-  tour.addEventListener("focusin", function (e) {
-    var t = e.target.closest && e.target.closest(".scene-text");
-    if (!t || t.classList.contains("is-on")) return;
-    var sc = t.closest("[data-scene]");
-    var at = parseFloat(t.getAttribute("data-at")) || 0;
-    var top = sc.getBoundingClientRect().top + window.pageYOffset;
-    window.scrollTo(0, top + (sc.offsetHeight - window.innerHeight) * Math.min(1, at + 0.03));
+  // Tabbing to a picture brings all of it into view.
+  strip.addEventListener("focusin", function (e) {
+    var li = e.target.closest && e.target.closest("li");
+    if (li) li.scrollIntoView({ inline: "nearest", block: "nearest", behavior: smooth ? "smooth" : "auto" });
   });
-  frame();
+  strip.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  update();
+})();
+
+/* ---------------------------------------------------------------------------
+   The tour (tour.html): a walk round the masjid, stop by stop.
+
+   The list of stops marks the one being read (aria-current, shown in weight
+   and colour), so a reader always knows where they are in the building. That
+   is all this does: the page is complete without it.
+   --------------------------------------------------------------------------- */
+(function () {
+  var stops = Array.prototype.slice.call(document.querySelectorAll(".stop[id]"));
+  var links = Array.prototype.slice.call(document.querySelectorAll(".route a[href^='#']"));
+  if (!stops.length || !links.length || !("IntersectionObserver" in window)) return;
+  var current = null;
+
+  function mark(id) {
+    if (id === current) return;
+    current = id;
+    links.forEach(function (a) {
+      if (a.getAttribute("href") === "#" + id) a.setAttribute("aria-current", "location");
+      else a.removeAttribute("aria-current");
+    });
+  }
+
+  // A stop counts as being read once it reaches the upper part of the screen.
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) mark(e.target.id); });
+  }, { rootMargin: "-30% 0px -60% 0px" });
+  stops.forEach(function (s) { io.observe(s); });
+})();
+
+/* At the prayer hall: standing, bowing and prostrating, one at a time, by
+   pressing the position's name. Without script the three sit side by side. */
+(function () {
+  Array.prototype.slice.call(document.querySelectorAll(".positions")).forEach(function (box) {
+    var pick = box.querySelector(".positions-pick");
+    var figs = Array.prototype.slice.call(box.querySelectorAll(".frames--tri > figure"));
+    var btns = Array.prototype.slice.call(box.querySelectorAll(".positions-btn"));
+    if (!pick || !figs.length || figs.length !== btns.length) return;
+    function show(i) {
+      figs.forEach(function (f, j) { f.hidden = j !== i; });
+      btns.forEach(function (b, j) { b.setAttribute("aria-pressed", String(j === i)); });
+    }
+    btns.forEach(function (b, i) { b.addEventListener("click", function () { show(i); }); });
+    box.classList.add("is-picking");
+    pick.hidden = false;
+    show(0);
+  });
 })();

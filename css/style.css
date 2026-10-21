@@ -1629,19 +1629,6 @@ strong { color: var(--ink); }
   .mosaic.mosaic--row > li:first-child { grid-column: 1 / -1; }
 }
 
-/* The whole shoot, at the end of the tour: a denser mosaic, still varied. */
-.mosaic--all { grid-auto-rows: clamp(70px, 9vw, 120px); grid-auto-flow: dense; }
-.mosaic--all > li { grid-column: span 3; grid-row: span 2; }
-.mosaic--all > .w { grid-column: span 6; }
-.mosaic--all > .t { grid-row: span 3; }
-.mosaic--all > .s { grid-column: span 2; }
-@media (max-width: 760px) {
-  .mosaic--all { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 22vw; }
-  .mosaic--all > li { grid-column: span 2; grid-row: span 2; }
-  .mosaic--all > .w { grid-column: span 4; }
-  .mosaic--all > .s { grid-column: span 2; }
-}
-
 /* ---------- The viewer: any picture full screen ----------
    A native <dialog>, so focus is held inside it and Escape closes it. It
    opens by growing out of the picture that was pressed. */
@@ -1722,221 +1709,126 @@ html.lb-open { overflow: hidden; }
 
 /* ==========================================================================
    Take the tour (tour.html)
-   A walk through the building in scenes. Each scene is a few screens tall and
-   holds a stage that stays put while the reader scrolls past it; within it,
-   shots follow one another as a film's would: a wide shot pushing in, a hard
-   cut to the close-up, a dissolve, a split screen, the three positions of
-   prayer side by side. The script (js/main.js) only says how far through
-   each scene the reader is; the cuts, pushes and reveals are all here.
-   Without script, or for a reader who asks for reduced motion, there is no
-   stage: each scene is its words and its pictures, one after another.
+   A walk round the masjid, stop by stop, on the same light page as the rest
+   of the site. On a wide screen the list of stops stays beside them and marks
+   the one being read (in weight and colour: no bar, no progress). Each stop
+   is a heading, a fact or two where there is one, and its photographs, set
+   differently at each stop. Nothing moves but the few silent clips, which
+   behave like every clip on the site, and the prayer hall's three positions,
+   which change only when pressed.
    ========================================================================== */
-.tour { --scrim: rgba(7, 14, 13, 0.9); background: var(--bg); }
-.tour .scene { position: relative; }
-.shot, .panel { position: relative; overflow: hidden; background: #0d1413; margin: 0; }
-/* The picture fills its frame by position, not by a percentage height, which
-   a grid cell does not always pass down. */
-.shot > img, .shot > picture > img, .shot > video, .panel > img, .panel > picture > img, .panel > video {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.shot picture, .panel picture { display: contents; }
-.scene-text h2 { margin-bottom: 0.35em; }
-.scene-text p { max-width: 34em; }
-.scene-text .ar { display: block; margin-bottom: 2px; font-size: 1.5rem; color: var(--gold-text); }
-.scene-text .more { font-weight: 600; }
-
-/* The opening: the building, with the page's name over it. The same in both
-   modes, so its words are always over the picture. */
-.tour-open { position: relative; min-height: min(88vh, 860px); display: grid; align-items: end; color: var(--white); overflow: hidden; background: #0d1413; }
-.tour-open .shot { position: absolute; inset: 0; }
-.tour-open .shot::after,
-.is-cinema .stage::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(0deg, var(--scrim) 0%, rgba(7, 14, 13, 0.72) 26%, rgba(7, 14, 13, 0.2) 56%, rgba(7, 14, 13, 0) 72%);
-}
-/* Between captions the shadow under the words lifts, so a split screen or a
-   close-up is seen at full strength. */
-.is-cinema .stage::after { transition: opacity 0.6s ease; }
-.is-cinema .stage:not(:has(.scene-text.is-on))::after { opacity: 0.3; }
-.tour-open-text { position: relative; z-index: 3; max-width: var(--max-width); width: 100%; margin: 0 auto; padding: 0 20px clamp(48px, 10vh, 96px); }
-.tour-open-text .crumb { font-size: 0.85rem; margin-bottom: 18px; color: rgba(255, 255, 255, 0.82); }
-.tour-open-text .crumb a { color: var(--gold-light); }
-.tour-open-text .ar { font-size: clamp(2.4rem, 1.8rem + 3vw, 4rem); color: var(--gold); margin: 0; line-height: 1.2; }
-.tour-open-text h1 { color: var(--white); font-size: clamp(2.4rem, 1.6rem + 4vw, 4.6rem); line-height: 1.02; margin: 0 0 0.3em; max-width: 12em; }
-.tour-open-text p { color: rgba(255, 255, 255, 0.92); font-size: 1.1rem; max-width: 34em; }
-.tour-cue { display: none; }
-
-/* ---------- Without the stage: a photo essay ---------- */
-.tour:not(.is-cinema) .scene:not(.tour-open) { padding: 56px 0 8px; }
-.tour:not(.is-cinema) .stage {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 20px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-.tour:not(.is-cinema) .scene-text { grid-column: 1 / -1; order: -1; margin-bottom: 8px; }
-.tour:not(.is-cinema) .scene-text + .scene-text { display: none; }
-.tour:not(.is-cinema) .shot, .tour:not(.is-cinema) .panel { aspect-ratio: 3 / 2; border-radius: 6px; }
-.tour:not(.is-cinema) .stage > .shot:first-of-type { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
-.tour:not(.is-cinema) .stage > .shot:not(.cut-split):nth-of-type(2):last-of-type { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
-.tour:not(.is-cinema) .cut-split, .tour:not(.is-cinema) .tri { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; aspect-ratio: auto; background: none; }
-.tour:not(.is-cinema) .tri .panel { aspect-ratio: 3 / 4; }
-@media (max-width: 700px) {
-  .tour:not(.is-cinema) .stage { grid-template-columns: 1fr; }
-  .tour:not(.is-cinema) .cut-split, .tour:not(.is-cinema) .tri { grid-template-columns: 1fr 1fr; }
-  .tour:not(.is-cinema) .cut-split .panel:first-child { grid-column: 1 / -1; }
-}
-
-/* ---------- The stage ---------- */
-.is-cinema .scene { height: calc(var(--len, 2) * 100vh); height: calc(var(--len, 2) * 100svh); }
-.is-cinema .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: #0d1413; }
-.is-cinema .stage > .shot { position: absolute; inset: 0; opacity: 0; transition: opacity 0.9s ease; }
-.is-cinema .stage > .shot.is-on { opacity: 1; }
-.is-cinema .stage > .shot[data-cut].is-on { transition: none; }
-.is-cinema .shot > img, .is-cinema .shot > picture > img, .is-cinema .shot > video {
-  transform: scale(var(--z, 1));
-  transform-origin: var(--focus, 50% 50%);
-  will-change: transform;
-}
-/* A rack focus: the close-up arrives soft and sharpens. */
-.is-cinema .shot[data-focus-pull] > img, .is-cinema .shot[data-focus-pull] > picture > img, .is-cinema .shot[data-focus-pull] > video { filter: blur(var(--blur, 0px)); }
-
-.is-cinema .scene-text {
-  position: absolute;
-  z-index: 3;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 20px clamp(40px, 9vh, 88px);
-  color: var(--white);
-  opacity: 0;
-  translate: 0 28px;
-  transition: opacity 0.6s ease, translate 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
-  pointer-events: none;
-}
-.is-cinema .scene-text.is-on { opacity: 1; translate: 0 0; pointer-events: auto; }
-.is-cinema .scene-text h2 { color: var(--white); font-size: clamp(2rem, 1.4rem + 2.6vw, 3.4rem); line-height: 1.05; }
-.is-cinema .scene-text p { color: rgba(255, 255, 255, 0.92); font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem); text-shadow: 0 1px 14px rgba(0, 0, 0, 0.45); }
-.is-cinema .scene-text .ar { color: var(--gold); }
-.is-cinema .scene-text p.ar { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.3rem); margin-bottom: 4px; text-shadow: none; }
-.is-cinema .scene-text a { color: var(--gold-light); }
-.is-cinema .scene-text[data-pos="center"] { text-align: center; }
-.is-cinema .scene-text[data-pos="center"] p { margin-inline: auto; }
-
-/* Split screen (.cut-split): one big panel and two small, each cut in on its own beat. */
-.is-cinema .cut-split, .is-cinema .tri { display: grid; gap: 6px; padding: 6px; }
-.is-cinema .cut-split { grid-template-columns: 1.85fr 1fr; grid-template-rows: 1fr 1fr; }
-.is-cinema .cut-split .panel:first-child { grid-row: 1 / 3; }
-.is-cinema .cut-split .panel { clip-path: inset(0 0 100% 0); transition: clip-path 0.9s cubic-bezier(0.7, 0, 0.2, 1); }
-.is-cinema .cut-split .panel.is-on { clip-path: inset(0); }
-
-/* The three positions of prayer: one frame, then two, then three. */
-.is-cinema .tri { grid-template-columns: 1fr 0fr 0fr; column-gap: 0; transition: grid-template-columns 1.1s cubic-bezier(0.7, 0, 0.2, 1), column-gap 0.4s ease; }
-.is-cinema .tri[data-step="1"] { grid-template-columns: 1fr 1fr 0fr; column-gap: 6px; }
-.is-cinema .tri[data-step="2"] { grid-template-columns: 1fr 1fr 1fr; column-gap: 6px; }
-.is-cinema .tri .panel { min-width: 0; min-height: 0; }
-
-@media (max-aspect-ratio: 3/4) {
-  .is-cinema .cut-split { grid-template-columns: 1fr 1fr; grid-template-rows: 1.5fr 1fr; }
-  .is-cinema .cut-split .panel:first-child { grid-row: auto; grid-column: 1 / 3; }
-  .is-cinema .tri, .is-cinema .tri[data-step] { grid-template-columns: 1fr; column-gap: 0; transition: grid-template-rows 1.1s cubic-bezier(0.7, 0, 0.2, 1), row-gap 0.4s ease; }
-  .is-cinema .tri { grid-template-rows: 1fr 0fr 0fr; row-gap: 0; }
-  .is-cinema .tri[data-step="1"] { grid-template-rows: 1fr 1fr 0fr; row-gap: 6px; }
-  .is-cinema .tri[data-step="2"] { grid-template-rows: 1fr 1fr 1fr; row-gap: 6px; }
-}
-
-/* The opening keeps its picture and pushes in on the sign. */
-.is-cinema .tour-open { min-height: 0; height: calc(var(--len, 1.6) * 100vh); height: calc(var(--len, 1.6) * 100svh); display: block; overflow: visible; }
-.is-cinema .tour-open .stage-open { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; align-items: end; }
-.is-cinema .tour-cue {
-  display: block;
-  position: absolute;
-  z-index: 3;
-  right: max(20px, calc((100vw - var(--max-width)) / 2 + 20px));
-  bottom: clamp(40px, 9vh, 88px);
-  width: 1px;
-  height: 64px;
-  background: rgba(255, 255, 255, 0.35);
-  overflow: hidden;
-}
-.is-cinema .tour-cue::after { content: ""; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--gold); animation: cue 2.2s ease-in-out infinite; }
-@keyframes cue { to { top: 100%; } }
-
-/* Where you are: the scenes down the right on a wide screen, a thin bar of
-   progress across the top on a phone. Both only while inside the scenes. */
-.tour-rail { display: none; }
-.is-cinema .tour-rail {
-  display: block;
-  position: fixed;
-  z-index: 20;
-  right: max(12px, env(safe-area-inset-right, 0px));
-  top: 50%;
-  translate: 0 -50%;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.4s ease, visibility 0.4s;
-}
-.in-scenes .tour-rail { opacity: 1; visibility: visible; }
-.tour-rail ol { list-style: none; margin: 0; padding: 0; }
-.tour-rail a {
+.tour-section { padding-top: 48px; }
+.tour-layout { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 0 56px; align-items: start; }
+.route { position: sticky; top: 104px; }
+.route ol { list-style: none; margin: 0; padding: 0; counter-reset: stop; border-top: 1px solid var(--border); }
+.route li { counter-increment: stop; }
+.route a {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
+  gap: 12px;
   min-height: 44px;
-  color: rgba(255, 255, 255, 0.62);
-  font-size: 0.78rem;
-  font-weight: 600;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-soft);
+  font-size: 0.95rem;
   text-decoration: none;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
-.tour-rail a::after { content: ""; width: 16px; height: 2px; background: currentColor; transition: width 0.3s ease; box-shadow: 0 0 6px rgba(0, 0, 0, 0.5); }
-.tour-rail a span { opacity: 0; translate: 6px 0; transition: opacity 0.3s ease, translate 0.3s ease; }
-.tour-rail a:hover span, .tour-rail a:focus-visible span, .tour-rail a.is-current span { opacity: 1; translate: 0 0; }
-.tour-rail a.is-current { color: var(--gold-light); }
-.tour-rail a.is-current::after { width: 32px; }
-.tour-rail a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-.tour-progress { display: none; }
-@media (max-width: 900px), (max-height: 620px) {
-  .is-cinema .tour-rail { display: none; }
-  .is-cinema .tour-progress {
-    display: block;
-    position: fixed;
-    z-index: 60;
-    top: env(safe-area-inset-top, 0px);
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--gold);
-    transform-origin: 0 50%;
-    transform: scaleX(var(--tour-p, 0));
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .in-scenes .tour-progress { opacity: 1; }
+.route a::before { content: counter(stop); min-width: 1.1em; font: 400 1rem/1 var(--font-head); color: var(--gold-text); }
+.route a:hover { color: var(--green-dark); }
+.route a[aria-current] { color: var(--green-ink); font-weight: 700; }
+
+.stops { min-width: 0; }
+.stop { padding-bottom: 56px; scroll-margin-top: 96px; }
+.stop + .stop { padding-top: 48px; border-top: 1px solid var(--border); }
+.stop-head { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 14px; }
+.stop-num { font: 400 3rem/0.85 var(--font-head); color: var(--gold-text); }
+.stop-ar { margin: 0; font: 500 1.15rem/1.3 var(--font-arabic); color: var(--gold-text); }
+.stop-head h2 { margin: 0; font-size: clamp(1.7rem, 1.3rem + 1.4vw, 2.3rem); line-height: 1.1; }
+.stop > p { max-width: 38em; margin: 0 0 12px; }
+.stop > .stop-next { margin: 22px 0 0; }
+.stop-next a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+
+/* The photographs at each stop: a twelve-column grid, set differently each
+   time (one large with a small one dropped lower, a pair, a column of two),
+   square corners, no frame, no captions. */
+.frames { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; margin-top: 20px; align-items: start; }
+/* A picture fills its frame by sitting absolutely inside it: a percentage
+   height inside a grid cell does not always resolve. */
+.f { position: relative; margin: 0; overflow: hidden; background: var(--green-light); }
+.f a { position: absolute; inset: 0; display: block; cursor: zoom-in; }
+.f img, .f video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.f a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+.f-3 { grid-column: span 3; }
+.f-4 { grid-column: span 4; }
+.f-5 { grid-column: span 5; }
+.f-6 { grid-column: span 6; }
+.f-7 { grid-column: span 7; }
+.f-8 { grid-column: span 8; }
+.f-12 { grid-column: 1 / -1; }
+/* A smaller partner that takes the height of the row, so the edges meet. */
+.f-fill { align-self: stretch; aspect-ratio: auto; }
+.f-col { display: grid; gap: 8px; align-content: start; }
+.a-32 { aspect-ratio: 3 / 2; }
+.a-45 { aspect-ratio: 4 / 5; }
+.a-34 { aspect-ratio: 3 / 4; }
+.a-169 { aspect-ratio: 16 / 9; }
+.a-wide { aspect-ratio: 21 / 9; }
+.frames-note { margin: 10px 0 0; font-size: 0.85rem; color: var(--ink-soft); }
+
+/* At the prayer hall: standing, bowing and prostrating, one at a time when
+   pressed. Without script the three sit side by side. */
+.positions { margin-top: 28px; }
+.positions-pick { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.positions-pick[hidden] { display: none; }
+.positions-btn {
+  min-height: 44px;
+  padding: 8px 18px;
+  border: 1.5px solid var(--green-dark);
+  border-radius: 999px;
+  background: none;
+  color: var(--green-dark);
+  font: 600 0.92rem/1 var(--font-body);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.positions-btn[aria-pressed="true"] { background: var(--green-dark); color: var(--white); }
+.positions .frames--tri { margin-top: 0; }
+.positions.is-picking .frames--tri > .f { grid-column: 1 / -1; aspect-ratio: 21 / 10; }
+.positions.is-picking .frames--tri > .f[hidden] { display: none; }
+
+/* The end of the tour: the practical facts, then the photographs not shown
+   at a stop, as a plain contact sheet. */
+.tour-visit { max-width: 780px; }
+.tour-visit h2 { margin-bottom: 16px; }
+.tour-visit .btn-row { margin-top: 24px; }
+.contact-sheet { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; list-style: none; margin: 0; padding: 0; }
+.contact-sheet li { position: relative; aspect-ratio: 1; overflow: hidden; }
+.contact-sheet li:first-child { grid-column: span 2; aspect-ratio: 2 / 1; }
+.contact-sheet a { position: absolute; inset: 0; display: block; cursor: zoom-in; }
+.contact-sheet img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.contact-sheet a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+
+@media (max-width: 900px) {
+  .tour-layout { grid-template-columns: minmax(0, 1fr); }
+  .route { position: static; margin-bottom: 32px; }
+  .route ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; }
+}
+@media (max-width: 640px) {
+  .frames { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  /* On a phone: wide pictures full width, pairs side by side, and nothing left
+     alone in half a row. */
+  .frames > .f-3, .frames > .f-4, .frames > .f-5 { grid-column: span 1; }
+  .frames > .f-6, .frames > .f-7, .frames > .f-8, .frames > .f-12, .frames > .f-col { grid-column: 1 / -1; }
+  .frames:not(.frames--tri) > .f-4, .frames:not(.frames--tri) > .f-5 { grid-column: 1 / -1; aspect-ratio: 3 / 2; }
+  .frames > .f-6.a-45 { grid-column: span 1; }
+  .frames > .f-col { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .f-fill { align-self: auto; aspect-ratio: 3 / 2; }
+  .frames > .f-3.f-fill { aspect-ratio: 3 / 4; }
+  .positions .frames--tri { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stop-num { font-size: 2.4rem; }
+  .contact-sheet { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* While the reader moves down through the scenes, the header steps aside;
-   scrolling back up brings it back. */
-.tour-page .site-header { transition: transform 0.35s ease; }
-.tour-immersed .site-header { transform: translateY(-110%); }
-
-.tour-end { padding: 72px 0 32px; }
-.tour-end .visit { margin-bottom: 72px; }
-.tour-end h2 { margin-bottom: 10px; }
 /* ==========================================================================
    Motion
    ========================================================================== */
