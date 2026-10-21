@@ -668,6 +668,14 @@ strong { color: var(--ink); }
 .furqan-arch-link { display: inline-flex; text-decoration: none; border-radius: 6px; padding: 6px; }
 .furqan-arch-link:focus-visible { outline-offset: 6px; }
 .footer-logo-chip:focus-visible { outline-color: var(--white); }
+
+/* A first look at the madrasah: three small pictures, one wider than the
+   others, and no child's face. The rest are on the madrasah's own page. */
+.peek { display: grid; grid-template-columns: 1.5fr 1fr 1fr; grid-auto-rows: clamp(96px, 11vw, 132px); gap: 6px; list-style: none; margin: 28px 0 0; padding: 0; max-width: 560px; }
+.peek li { position: relative; }
+.peek a { position: absolute; inset: 0; display: block; cursor: zoom-in; }
+.peek img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.peek a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
 /* Fixed widths: the logo sits in a shrink-to-fit box, so a percentage here
    would resolve to nothing and the logo would vanish. */
 .furqan-arch .furqan-logo-brown { width: 175px; }
@@ -1536,10 +1544,57 @@ strong { color: var(--ink); }
    animation, so where a browser lacks it the tiles simply sit still. Every
    picture opens full size in the viewer (js/main.js), and is a plain link to
    the image without script. */
-.mosaic-section { padding: 72px 0 64px; }
-.mosaic-head { max-width: 40em; margin-bottom: 28px; }
-.mosaic-head h2 { margin-bottom: 8px; }
-.mosaic-head p { margin: 0; }
+/* Inside the masjid (homepage): one row of photographs that scrolls sideways,
+   at one height but in three shapes, so it reads as a strip of prints rather
+   than a row of equal tiles. Square corners, no frame, no labels; each opens
+   in the viewer. It starts in line with the page and runs off its right-hand
+   edge, and it is no taller than it needs to be: the homepage leads with the
+   masjid, not with its photographs. */
+.strip-section { padding: 64px 0 52px; }
+.strip-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+.strip-head h2 { margin-bottom: 6px; }
+.strip-head p { margin: 0; color: var(--ink-soft); }
+.strip-nav { display: flex; flex: none; gap: 8px; }
+.strip-nav[hidden] { display: none; }
+.strip-btn {
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--green-dark);
+  border-radius: 50%;
+  background: none;
+  color: var(--green-dark);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.strip-btn:hover:not([aria-disabled="true"]) { background: var(--green-dark); color: var(--white); }
+.strip-btn[aria-disabled="true"] { opacity: 0.35; cursor: default; }
+.strip {
+  --edge: max(20px, calc((100% - var(--max-width)) / 2 + 20px));
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--edge);
+  scrollbar-width: thin;
+}
+.strip:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+.strip-track { display: flex; gap: 6px; width: max-content; list-style: none; margin: 0; padding: 0 var(--edge) 10px; }
+.strip-track li { flex: none; height: 300px; aspect-ratio: 3 / 2; scroll-snap-align: start; }
+.strip-track li.is-p { aspect-ratio: 4 / 5; }
+.strip-track li.is-s { aspect-ratio: 1; }
+.strip-track li.is-w { aspect-ratio: 2 / 1; }
+.strip-track li { position: relative; }
+.strip-track a { position: absolute; inset: 0; display: block; cursor: zoom-in; }
+.strip-track img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.strip-track a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+.strip-more { margin-top: 10px; }
+.strip-more a { display: inline-flex; align-items: center; min-height: 44px; }
+@media (max-width: 760px) {
+  .strip-section { padding: 48px 0 40px; }
+  .strip-track li { height: 220px; }
+}
+
 .mosaic {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
