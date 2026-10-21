@@ -1533,7 +1533,11 @@ strong { color: var(--ink); }
    at all for a reader who asks for reduced motion or less data, who sees the
    still poster instead.
    ========================================================================== */
-.prayer-photo, .contact-photo { margin-top: 32px; }
+.contact-photo { margin-top: 32px; }
+/* Under today's times, the congregation at prayer: a wide, low strip at the
+   width of the page, unframed, so it reads as prayer rather than as a room. */
+.prayer-photo { margin: 40px 0 0; }
+.prayer-photo img { display: block; width: 100%; height: auto; }
 .portal-photo { margin-top: 36px; }
 .donate-photo { margin: 0 0 24px; max-width: none; }
 
