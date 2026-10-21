@@ -30,6 +30,8 @@ below. Never invent a value that is not on this list.
 | Weekly class | Riyadh al-Salihin with Sheikh Abdullahi Harshi, every Saturday and Sunday between Maghrib and Isha, brothers only (confirmed by Ali, 10 October 2026) |
 | Sisters | A sisters' prayer area with its own entrance: facing the masjid, sisters' entrance on the left, brothers' on the right (confirmed 7 October 2026) |
 | Jumu'ah | One Jumu'ah each Friday; khutbah usually in Arabic and English, sometimes English only (confirmed 7 October 2026) |
+| Opening | Open for Fajr and closed shortly after it; open again from Dhuhr until shortly after Isha. No fixed clock hours: they move with the prayer times (confirmed by Ali, 21 October 2026) |
+| Access | Step-free entrance. No car park of the masjid's own; parking on the streets nearby (confirmed by Ali, 21 October 2026) |
 
 **The email really does have one 't'.** `masjidatarbiya.org` has live Google Workspace mail
 records, so that address works; our website domain `masjidattarbiya.org` has no mail records at
@@ -139,7 +141,7 @@ quietly. It catches missing prayers, times out of order, a Jumu'ah copied from D
 has gone stale because the daily job stopped.
 
 This duplication is deliberate for now: a build step would add a toolchain that a volunteer
-cannot debug, and the site is still only ten pages. **Revisit when news or blog posts are added** -
+cannot debug, and the site is still only a dozen pages. **Revisit when news or blog posts are added** -
 that is the point at which a static site generator (Eleventy) plus a git-based CMS earns its
 keep, because a CMS writes markdown and markdown needs building into pages.
 
@@ -346,7 +348,8 @@ light up as the reader reaches them. On a wide screen a sticky rail on the left 
 chapter, a large year that rolls over milestone by milestone, a progress bar and links to the
 chapters; under 1000px that becomes a slim bar pinned under the header. A ribbon of years
 drifts under the heading band (decorative, `aria-hidden`, still under reduced motion), the
-counts in the heading count up, and photographs (a chapter's `image`, or a milestone's) get
+counts in the heading are stated plainly (a count-up animation was removed as a template
+cliché, 21 October 2026), and photographs (a chapter's `image`, or a milestone's) get
 gently curved top and bottom edges. Milestones and chapters can be linked to directly:
 `history#m-madrasah`, `history#revesby`. **No animation library**: GSAP and friends would load
 from a third party, which the privacy notice rules out; it is all a few dozen lines in
@@ -609,48 +612,92 @@ off the screen.
 rule (children only from behind, a parent's written yes first) no longer applies to the
 October 2026 shoot. The children were asked and wanted to take part, so their photos and clips
 are used, and **any parent who objects gets their child's picture removed straight away, no
-questions asked.** To remove one: delete the file from `assets/photos/` or `assets/video/`
-(and its `tiles/` crop or poster), remove every reference (`grep -rn <name> .`), commit, and
+questions asked.** To remove one: delete the file from `assets/photos/`, `assets/tour/` or `assets/video/`
+(with its `tour/g/` copy, `-p` portrait crop or poster), remove every reference (`grep -rn <name> .`), commit, and
 take it off the Google Business Profile too. The opt-out only works if parents know, so the
 madrasah should tell them once that the photos are on the site. Older archive photos of
 children are not covered (see "Our Story").
 
 **The photo shoot** was Saturday 10 October 2026 (Tayseer, Sony FX30): 62 edited photographs
-(6192x4128, about 20MB each) and 46 clips (4K, 2 to 8 seconds, with sound). The originals are
-Ali's to keep and are **not in this repo**. What went where, published 21 October:
+(6192x4128, about 20MB each) and 46 clips (4K, 25fps, 2 to 8 seconds, with sound). The camera
+data dates every frame: the madrasah classes from 12:08, the empty prayer hall about 12:40,
+**Dhuhr in congregation at 13:31** (so those pictures can be called Dhuhr), the large hall
+and the one-to-one reading from 13:51, the exterior at 14:08, dusk at 18:31. The originals
+are Ali's to keep and are **not in this repo**.
 
-| File in `assets/` | From | Where |
+**Which class is which, because it was once got wrong:** the **red-carpet class** (boys
+sitting round the walls and round their teacher, who wears a black jacket and cap and reads
+to them from a book; clips C9791 to C9811) is **Ali's colleague's**, and it was calm and
+attentive, so **it leads** wherever the madrasah is shown: the homepage mosaic, the
+madrasah page, About and the tour. The **blue-carpet large hall** (a teacher in a white
+headscarf with a microphone, children with their hands up; C9812 to C9824) is **Ali's own
+class**, which was lively that day, so it plays a supporting part and stays off the Google
+listing's film. Neither teacher is named anywhere until they agree (see the facts table).
+
+| In `assets/` | What | Where |
 |---|---|---|
-| `photos/exterior.jpg` (1920) | the building by day | Homepage hero; also `og-card.jpg` (1200x630) for link previews |
-| `photos/exterior-sm.jpg` | same, 1360 | Our Story "Revesby Walk" chapter, contact page |
-| `photos/entrance-night.jpg` | the entrance at dusk | Homepage Visiting, Our Story "Today" chapter |
-| `photos/prayer-hall.jpg` | the red prayer hall, empty | Homepage About |
-| `photos/mihrab.jpg`, `photos/minbar.jpg` | mihrab and minbar | About page; Our Story "Becoming a masjid" |
-| `photos/congregation.jpg`, `photos/ruku.jpg` | Dhuhr, from behind | Prayer times page, Our Story "Today"; donate page |
-| `photos/quran-reading.jpg`, `one-to-one.jpg`, `boys-class.jpg`, `reading-table.jpg` | the madrasah | Madrasah page "Inside the madrasah"; portal |
-| `photos/library.jpg`, `wudu.jpg`, `hall.jpg`, `madrasah-lesson.jpg`, `madrasah-hall.jpg`, `sisters-class.jpg`, `sisters-notes.jpg` | around the building | Kept for use; several appear in the homepage strip |
-| `photos/tiles/*.jpg` (640x800) | portrait crops | The homepage strip, "Inside the masjid" |
-| `video/*.mp4` + `.jpg` poster | 3 to 6 second silent loops | About ("What happens here"), madrasah page, homepage strip (`*-tile`, 4:5) |
+| `photos/*.jpg` (1360; `exterior.jpg` 1920) | the first selection | Homepage hero and About figure, About, prayer times, contact, portal, donate, Our Story |
+| `tour/<name>.jpg` (1920x1280) | 35 photographs, the whole selection | The tour's scenes and the viewer |
+| `tour/<name>-p.jpg` (900x1600) | portrait crops, made only for photos a scene shows full screen | The tour on a phone held upright (`<source media="(max-aspect-ratio: 3/4)">`) |
+| `tour/g/<name>.jpg` (960x640) | smaller copies | Mosaics, split screens, the tour's closing grid |
+| `video/<name>.mp4` + `.jpg` poster (1280x720) | silent loops | Mosaics, About, madrasah page, the tour |
+| `video/<name>-p.mp4` + `-p.jpg` (720x1280) | portrait cuts of the clips a scene shows full screen | The tour on a phone (`data-src-p`, `data-poster-p`) |
 
-**Three things blurred before anything was published, and they must stay blurred in any new
-crop:** the green information screens in the prayer hall (one cycles through the **masjid's
-bank account details**, another shows a day's prayer times, which must never look like
-current times), and the number plates of parked cars outside. Every hall photo was checked
-at full size for the screens. The sign outside carries 07929 242914, Malim Husain's number,
-not the masjid's; shots where it is readable are not used.
+The clips: `class-circle` (the red-carpet class, wide), `class-teacher` (the teacher reading,
+half speed), `class-teacher-close`, `class-listening` and `class-white` (boys listening, half
+speed), `sign` (the sign, half speed), `sisters-wide`, and from the first selection
+`madrasah-class` and `hands-up` (Ali's class), `sisters-teacher` and `sisters-notes`.
+
+**Things hidden before anything was published, and they must stay hidden in any new crop:**
+the green information screens in the prayer hall (one cycles through the **masjid's bank
+account details**, another shows a day's prayer times, which must never look like current
+times), the number plates of parked cars outside, and **07929 242914 on the sign**, Malim
+Husain's number, not the masjid's. The sign's close-ups (`tour/sign-day`, `tour/sign-night`,
+the `sign` clip) are cropped so the number is out of frame (and blurred under the crop as
+well); in the wide shots of the building it is a few pixels and unreadable. Every hall photo
+was checked at full size for the screens.
 
 **Clips are silent loops, never video with sound.** Each is cut to a few seconds, colour graded
-to match the edited photographs, 1280x720 (or 576x720 for the strip) H.264 with no audio track,
-and under 1MB. `js/main.js` loads one only when it nears the screen, plays it only while
-visible, and pauses it when it leaves or the tab is hidden; with reduced motion or Save-Data the
-video is never downloaded and the poster stands in. The footage of Ali's own class is not used
-as a clip (it was a lively day); the calm children's class in the large hall is. Full-length
-video belongs on the YouTube channel, linked, never embedded.
+to match the photographs (`eq=contrast=1.12:brightness=0.015:saturation=1.18:gamma=0.97`),
+H.264 with no audio track, crossfaded end to start so the loop has no jump, and about 300 to
+600KB. Some are slowed to half speed with motion interpolation (ffmpeg `minterpolate`), which
+reads as slow motion rather than as stutter; the camera shot 25fps, so plain half speed would
+judder. `js/main.js` loads a clip only when it nears the screen, plays it only while visible,
+and pauses it when it leaves or the tab is hidden; with reduced motion or Save-Data the
+video is never downloaded and the poster stands in. Full-length video belongs on the YouTube
+channel, linked, never embedded.
 
-**The homepage strip** ("Inside the masjid", `.gallery`) scrolls sideways with its top and
-bottom edges gently curved, after Al-Maqari Al-Qur'aniyyah UK's photo slider; its arrow buttons
-appear only with script and say when there is no further to go. Labels are white chips on the
-photos, kept clear of the curve.
+**Mosaics, not rows of equal tiles.** On 21 October 2026 Ali said the photographs all sat
+in the same frame and the site looked templated, "too AI". The homepage ("One Saturday in
+October"), the madrasah page and About now cut pictures like a photo essay (`.mosaic`): a
+big video beside a close-up, a tall portrait beside a narrow strip of book spines, a
+letterbox of the congregation that carries the way into the tour. Where the browser has
+scroll-driven animation each tile opens like an aperture and its picture pulls back from a
+close-up as it scrolls in; elsewhere they simply sit still. There are no labels on the
+pictures: the words are in the viewer.
+
+**The viewer.** Any link marked `data-lightbox="<set>"` opens full screen in a native
+`<dialog>` (`js/main.js`): the picture grows out of the one pressed and shrinks back into it,
+arrows, arrow keys or a swipe move through its set, Escape or a tap beside the picture
+closes it, and `data-video` plays a clip instead of the still. Without script each link
+opens the image itself.
+
+**The tour (`tour.html`, "Take the tour", linked from the homepage hero, the homepage mosaic
+and the footer).** Ten scenes, from the sign on Revesby Walk through wudu, the prayer hall,
+Dhuhr, the library, the madrasah (the red-carpet class at length), the large hall, one to
+one reading and the sisters' class, to dusk; then the visiting facts and every photograph in
+a mosaic. Each scene (`[data-scene]`, `style="--len:3"`, three screens tall) holds a sticky
+stage; shots (`figure.shot`, `data-at` from 0 to 1 through the scene) follow one another as
+in film: a slow push (`data-zoom="1 1.5"` towards `data-focus`), a hard cut (`data-cut`), a
+dissolve (the default), a rack focus (`data-focus-pull`), a split screen of one big panel and
+two small that cut in on their own beats (`.cut-split`, `.panel[data-at]`), and the three
+positions of prayer side by side (`.tri`, `data-steps`). The script only works out how far
+through each scene the reader is; every effect is CSS. The header steps aside while the
+reader scrolls down through the scenes and returns on the way up; a rail of scene names (a
+progress bar on a phone) shows where you are. **Under reduced motion, or without script,
+there is no stage**: the page is a photo essay of the same pictures, which is also what a
+search engine reads. To change a scene, edit its markup; keep every caption to what the
+picture shows or the facts table says.
 
 ## Parked, waiting on content
 
@@ -688,8 +735,9 @@ timetable. A private kit with every fix, a 683-character description built only 
 facts table, review replies, three posts, 24 photos and a logo sized for Google (screens and
 plates blurred) and a 24-second silent film is at
 https://claude.ai/artifact/PohQwVRJejWSAYgarKMTX9 (visible only to its owner). Hours stay
-"Open with no main hours" until the masjid settles the building's opening times: the same
-rule as the site, never a guessed hour. Owners cannot delete visitors' photos, only report
+"Open with no main hours": Ali confirmed the pattern on 21 October 2026 (open for Fajr,
+again from Dhuhr until shortly after Isha) but it moves with the prayer times, so it goes in
+the description and on the site's Visiting list, never as fixed clock hours. Owners cannot delete visitors' photos, only report
 them; setting the masjid's own cover is how a visitor's photo moves back.
 
 ## Not currently published
@@ -707,7 +755,7 @@ Pushing to `main` publishes automatically via GitHub Pages, at **https://masjida
 there.
 
 **When you change `css/style.css` or `js/main.js`, bump the `?v=` on every page** (it is the
-date, e.g. `css/style.css?v=20261007`; one `sed` does all eleven pages). GitHub Pages lets
+date, e.g. `css/style.css?v=20261007`; one `sed` does every page, `404.html` included). GitHub Pages lets
 browsers keep those files for ten minutes, so without it a visitor gets the new page with the
 old stylesheet, which happened once and left the homepage banner unstyled. `check_links.py`
 fails if the pages disagree on the version.
