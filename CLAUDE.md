@@ -676,6 +676,22 @@ not cover individual likenesses, and much of the available material shows teenag
 need a quick "can we put this on the website?" first, and anything involving children needs
 parental consent - the masjid runs children's classes, so that standard applies here anyway.
 
+## Google Business Profile
+
+The masjid's Google listing ("Attarbiya Masjid", Mosque, 4.8 from 59 reviews in October 2026)
+is managed from the account **info@masjidatarbiya.org**; Ali signs in to it. Nothing in this
+repo can edit it: changes are made by hand, signed in, from the "You manage this Business
+Profile" panel on Google Search. As audited on 21 October 2026 it showed **Malim Husain's
+mobile (07929 242914) instead of the masjid's 07908 854187**, "Closes 5 pm" hours, no
+description, visitor photos from 2023 at the front and a visitor-posted December 2023
+timetable. A private kit with every fix, a 683-character description built only from the
+facts table, review replies, three posts, 24 photos and a logo sized for Google (screens and
+plates blurred) and a 24-second silent film is at
+https://claude.ai/artifact/PohQwVRJejWSAYgarKMTX9 (visible only to its owner). Hours stay
+"Open with no main hours" until the masjid settles the building's opening times: the same
+rule as the site, never a guessed hour. Owners cannot delete visitors' photos, only report
+them; setting the masjid's own cover is how a visitor's photo moves back.
+
 ## Not currently published
 
 `services.html` and `registration.html` were removed from the launch scope because their content
