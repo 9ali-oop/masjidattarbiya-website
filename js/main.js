@@ -1197,3 +1197,76 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 })();
+
+/* ---------------------------------------------------------------------------
+   Silent loops and the photo strip.
+
+   A clip (video.loop-clip) is a few seconds, muted, with a poster. It loads
+   only when it comes near the screen, plays only while on it, and pauses when
+   it leaves or the tab is hidden. A reader who asks for reduced motion, or for
+   less data, never downloads one: the poster stays, which is the same picture
+   standing still. Without script the poster is all anyone sees.
+
+   The strip on the homepage (.gallery) scrolls sideways by itself (trackpad,
+   touch, arrow keys once focused); the two buttons are a convenience, shown
+   only when the script is running, and say when there is no further to go.
+   --------------------------------------------------------------------------- */
+(function () {
+  var reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var saveData = !!(navigator.connection && navigator.connection.saveData);
+
+  var clips = Array.prototype.slice.call(document.querySelectorAll("video.loop-clip[data-src]"));
+  if (clips.length && !reduced && !saveData && "IntersectionObserver" in window) {
+    var showing = [];
+    var play = function (v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target, i = showing.indexOf(v);
+        if (e.isIntersecting) {
+          if (!v.getAttribute("src")) { v.src = v.getAttribute("data-src"); }
+          if (i < 0) showing.push(v);
+          if (!document.hidden) play(v);
+        } else {
+          if (i >= 0) showing.splice(i, 1);
+          v.pause();
+        }
+      });
+    }, { rootMargin: "120px 0px", threshold: 0.15 });
+    clips.forEach(function (v) { io.observe(v); });
+    document.addEventListener("visibilitychange", function () {
+      showing.forEach(function (v) { if (document.hidden) v.pause(); else play(v); });
+    });
+  }
+
+  var strip = document.querySelector(".gallery");
+  var nav = document.querySelector(".gallery-nav");
+  if (!strip || !nav) return;
+  var buttons = nav.querySelectorAll(".gallery-btn");
+  nav.hidden = false;
+
+  function step() {
+    var item = strip.querySelector(".gallery-item");
+    if (!item) return strip.clientWidth * 0.8;
+    var w = item.getBoundingClientRect().width + 14;
+    return w * Math.max(1, Math.floor(strip.clientWidth / w) - 1);
+  }
+  function update() {
+    var max = strip.scrollWidth - strip.clientWidth;
+    buttons[0].setAttribute("aria-disabled", String(strip.scrollLeft <= 2));
+    buttons[1].setAttribute("aria-disabled", String(strip.scrollLeft >= max - 2));
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (b.getAttribute("aria-disabled") === "true") return;
+      strip.scrollBy({ left: step() * +b.getAttribute("data-dir"), behavior: reduced ? "auto" : "smooth" });
+    });
+  });
+  var ticking = false;
+  strip.addEventListener("scroll", function () {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () { ticking = false; update(); });
+  }, { passive: true });
+  window.addEventListener("resize", update);
+  update();
+})();

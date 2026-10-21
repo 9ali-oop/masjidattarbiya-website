@@ -425,8 +425,9 @@ purchase figures, fundraising amounts and appeal targets (they would reveal the 
 price), loans, pupil numbers claimed in appeals (800, 900, "largest in Europe"), and the
 Garrison Centre building's age (the archive contradicts itself). An archive source is cited
 on the page as "in the masjid's archive", never by file path. One 2014 letterhead misprints
-the charity number as 11442204; never copy a number from the archive. Photos from it need
-the same consent as any other, and children appear only from behind.
+the charity number as 11442204; never copy a number from the archive. Photos of children from
+the archive stay held back: the opt-out approach in "Photographs" covers the October 2026 shoot,
+where the children took part knowingly, not pictures taken years ago.
 
 **Archive pictures on the site** (`assets/history/`, resized, camera data stripped): the
 Garrison Centre outside (chapter one; the original has a damaged strip along the bottom,
@@ -604,39 +605,61 @@ screen heights.
 Prefer landscape crops. Text sits better beside them and they do not push the rest of the page
 off the screen.
 
-**Where the photo shoot's pictures go.** Tayseer shoots on Saturday 10 October 2026
-(confirmed 9 October): 11:30 to about 13:45 while the madrasah is in and the hall is empty,
-and 18:00 to about 20:15 for the lit sign, the youth team and Isha. The shot list and the
-day's timings are in the "Photo shoot plan" doc. Children appear from behind only, no faces. Save the chosen pictures in `assets/photos/` as JPEG (sRGB, quality about 80, long side
-as below), named for the subject, and swap them into these slots. Alt text describes what is
-in the picture. Anyone recognisable needs their agreement first, and a child a parent's.
+**Children in photographs (decided by Ali for the masjid, 21 October 2026).** The earlier
+rule (children only from behind, a parent's written yes first) no longer applies to the
+October 2026 shoot. The children were asked and wanted to take part, so their photos and clips
+are used, and **any parent who objects gets their child's picture removed straight away, no
+questions asked.** To remove one: delete the file from `assets/photos/` or `assets/video/`
+(and its `tiles/` crop or poster), remove every reference (`grep -rn <name> .`), commit, and
+take it off the Google Business Profile too. The opt-out only works if parents know, so the
+madrasah should tell them once that the photos are on the site. Older archive photos of
+children are not covered (see "Our Story").
 
-| Picture | File (long side) | Slot |
+**The photo shoot** was Saturday 10 October 2026 (Tayseer, Sony FX30): 62 edited photographs
+(6192x4128, about 20MB each) and 46 clips (4K, 2 to 8 seconds, with sound). The originals are
+Ali's to keep and are **not in this repo**. What went where, published 21 October:
+
+| File in `assets/` | From | Where |
 |---|---|---|
-| Exterior, straight on, sign readable, landscape | `exterior.jpg` (1920px) | Homepage hero background (`.hero-photo` in `index.html`); also crop to 1200x630 for `assets/og-card.jpg` |
-| Entrance at an angle, door open | `entrance.jpg` (1360px) | Homepage Visiting figure and the About page `.img-frame`; retire `masjid-entrance-cleaned.jpg` |
-| Prayer hall from the back corner, lights on | `prayer-hall.jpg` (1360px) | Homepage About figure, About page figure, prayer times page; retire the stopgap |
-| Mihrab and minbar close up | `mihrab.jpg` (1360px) | Our Story page, with the 2019 to 2023 conversion milestones |
-| Sisters' entrance and prayer area | `sisters.jpg` (1360px) | Contact page beside the entrances note; homepage Visiting if better than the main entrance |
-| Madrasah classroom, set up, no children | `classroom.jpg` (1360px) | `madrasah.html` heading band and the classes section; `portal.html` |
-| The sign lit at night | `sign-night.jpg` (1360px) | Our Story "Now" and the events page heading band |
-| Drone view of the building and street | `aerial.jpg` (1920px) | Our Story page top (the building strand) |
-| Portraits of trustees and teachers, with consent | `people/<first-last>.jpg` (800px square) | About page trustees list becomes portrait rows; madrasah staff once names are confirmed |
-| Short clips (drone flyover, prayer hall walk-through) | `assets/video/<name>.mp4` + `.jpg` poster (1280x720, H.264, no audio, 8 to 15 s, under 4MB) | Self-hosted `<video muted playsinline loop>` on Our Story and the madrasah page, never autoplaying under `prefers-reduced-motion`. Full-length video goes on the YouTube channel and is linked from the recordings list, never embedded: no third parties |
+| `photos/exterior.jpg` (1920) | the building by day | Homepage hero; also `og-card.jpg` (1200x630) for link previews |
+| `photos/exterior-sm.jpg` | same, 1360 | Our Story "Revesby Walk" chapter, contact page |
+| `photos/entrance-night.jpg` | the entrance at dusk | Homepage Visiting, Our Story "Today" chapter |
+| `photos/prayer-hall.jpg` | the red prayer hall, empty | Homepage About |
+| `photos/mihrab.jpg`, `photos/minbar.jpg` | mihrab and minbar | About page; Our Story "Becoming a masjid" |
+| `photos/congregation.jpg`, `photos/ruku.jpg` | Dhuhr, from behind | Prayer times page, Our Story "Today"; donate page |
+| `photos/quran-reading.jpg`, `one-to-one.jpg`, `boys-class.jpg`, `reading-table.jpg` | the madrasah | Madrasah page "Inside the madrasah"; portal |
+| `photos/library.jpg`, `wudu.jpg`, `hall.jpg`, `madrasah-lesson.jpg`, `madrasah-hall.jpg`, `sisters-class.jpg`, `sisters-notes.jpg` | around the building | Kept for use; several appear in the homepage strip |
+| `photos/tiles/*.jpg` (640x800) | portrait crops | The homepage strip, "Inside the masjid" |
+| `video/*.mp4` + `.jpg` poster | 3 to 6 second silent loops | About ("What happens here"), madrasah page, homepage strip (`*-tile`, 4:5) |
+
+**Three things blurred before anything was published, and they must stay blurred in any new
+crop:** the green information screens in the prayer hall (one cycles through the **masjid's
+bank account details**, another shows a day's prayer times, which must never look like
+current times), and the number plates of parked cars outside. Every hall photo was checked
+at full size for the screens. The sign outside carries 07929 242914, Malim Husain's number,
+not the masjid's; shots where it is readable are not used.
+
+**Clips are silent loops, never video with sound.** Each is cut to a few seconds, colour graded
+to match the edited photographs, 1280x720 (or 576x720 for the strip) H.264 with no audio track,
+and under 1MB. `js/main.js` loads one only when it nears the screen, plays it only while
+visible, and pauses it when it leaves or the tab is hidden; with reduced motion or Save-Data the
+video is never downloaded and the poster stands in. The footage of Ali's own class is not used
+as a clip (it was a lively day); the calm children's class in the large hall is. Full-length
+video belongs on the YouTube channel, linked, never embedded.
+
+**The homepage strip** ("Inside the masjid", `.gallery`) scrolls sideways with its top and
+bottom edges gently curved, after Al-Maqari Al-Qur'aniyyah UK's photo slider; its arrow buttons
+appear only with script and say when there is no further to go. Labels are white chips on the
+photos, kept clear of the curve.
 
 ## Parked, waiting on content
 
 Nothing here is blocked by code. Each needs material from the masjid first.
 
-**Photography.** The youth team are taking these; drop them in `assets/` and they get placed:
-1. Exterior, bright day, straight on from across Revesby Walk so the sign reads. Landscape.
-2. The entrance at an angle, door open.
-3. Prayer hall empty, from the back corner toward the mihrab, lights on. Landscape.
-4. The mihrab and minbar closer up - the marble wall is the most photogenic thing here.
-5. A madrasah classroom, empty, set up as if a class is about to start.
-
-Landscape, not cropped tight - text gets placed over these. `assets/prayer-hall.jpg` is a
-stopgap pulled from a WhatsApp export; replace it when a better one exists.
+**Photography.** Done: the October 2026 shoot is on the site (see "Photographs"). Still
+wanted, none of it urgent: the sisters' entrance from outside (for the contact page and
+Visiting), a madrasah classroom set up and empty, and a drone view of the building and street
+for Our Story. Portraits of trustees and teachers only with each person's agreement.
 
 **Instagram.** Solved - see "Instagram sync" above. The official API now pulls all 21 posts on
 the masjid's own account into `staging/`, with images. Do not go back to scraping. The account
