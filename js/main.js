@@ -194,7 +194,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Prayers that can be "next". Sunrise is not a prayer, and Dhuhr is skipped on
   // Fridays because the congregation prays Jumu'ah instead.
   var CONGREGATIONAL = ["fajr", "dhuhr", "jumuah", "asr", "maghrib", "isha"];
-  var DASH = "&mdash;";
+  // An empty cell: a plain hyphen to the eye, "none" to a screen reader.
+  var DASH = '<span aria-hidden="true">-</span><span class="visually-hidden">none</span>';
 
   /** Date and time in Birmingham, wherever the visitor happens to be. */
   function londonNow() {
@@ -913,7 +914,7 @@ document.addEventListener("DOMContentLoaded", function () {
           (r.day === today ? ' <span class="next-tag">Today</span>' : "") + "</th>";
         var cells = r.closed
           ? '<td colspan="' + groups.length + '">' + esc(r.closed) + "</td>"
-          : groups.map(function (g) { return "<td>" + (r[g.id] ? esc(r[g.id]) : "&mdash;") + "</td>"; }).join("");
+          : groups.map(function (g) { return "<td>" + (r[g.id] ? esc(r[g.id]) : '<span aria-hidden="true">-</span><span class="visually-hidden">No class</span>') + "</td>"; }).join("");
         return "<tr" + (cls.length ? ' class="' + cls.join(" ") + '"' : "") + ">" + head + cells + "</tr>";
       }).join("") +
       "</tbody></table></div>";
