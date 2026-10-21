@@ -732,8 +732,10 @@ Profile" panel on Google Search. As audited on 21 October 2026 it showed **Malim
 mobile (07929 242914) instead of the masjid's 07908 854187**, "Closes 5 pm" hours, no
 description, visitor photos from 2023 at the front and a visitor-posted December 2023
 timetable. A private kit with every fix, a 683-character description built only from the
-facts table, review replies, three posts, 24 photos and a logo sized for Google (screens and
-plates blurred) and a 24-second silent film is at
+facts table, review replies, three posts, 26 photos and a logo sized for Google (screens,
+plates and the sign's number hidden), a 23-second silent film led by the red-carpet class
+(Ali's own class is left out of it), and a ready-to-paste brief that lets Claude in Chrome
+make the text edits in Ali's signed-in browser, is at
 https://claude.ai/artifact/PohQwVRJejWSAYgarKMTX9 (visible only to its owner). Hours stay
 "Open with no main hours": Ali confirmed the pattern on 21 October 2026 (open for Fajr,
 again from Dhuhr until shortly after Isha) but it moves with the prayer times, so it goes in
