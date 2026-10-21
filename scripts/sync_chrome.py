@@ -23,10 +23,10 @@ import glob
 import re
 import sys
 
-MASJID_PAGES = ["index.html", "about.html", "prayer-times.html", "events.html", "history.html",
+MASJID_PAGES = ["index.html", "about.html", "tour.html", "prayer-times.html", "events.html", "history.html",
                 "madrasah.html", "portal.html", "donate.html", "contact.html", "privacy.html"]
 # Pages whose nav highlight is another page's item: the portal sits under "Madrasah".
-ACTIVE_AS = {"portal.html": "madrasah"}
+ACTIVE_AS = {"portal.html": "madrasah", "tour.html": "about"}
 PAGES = MASJID_PAGES
 # A prefix, in case a page ever carries extra classes on its header.
 HEADER_START, HEADER_END = '<header class="site-header', "</header>"

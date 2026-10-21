@@ -103,16 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
   var year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
-  // Years since the charity was founded, so the homepage never goes stale.
-  var since = document.getElementById("years-since");
-  if (since) {
-    var d = since.getAttribute("data-since").split("-").map(Number);
-    var now = new Date();
-    var years = now.getFullYear() - d[0];
-    if (now.getMonth() + 1 < d[1] || (now.getMonth() + 1 === d[1] && now.getDate() < d[2])) years -= 1;
-    since.textContent = years;
-  }
-
   // Mobile menu.
   var header = document.querySelector(".site-header");
   var toggle = document.querySelector(".nav-toggle");
@@ -578,6 +568,17 @@ document.addEventListener("DOMContentLoaded", function () {
     listEl.innerHTML = html;
   }
 
+  /* An event with no poster shows its date, as a leaf torn off a calendar. */
+  function dateLeaf(ev) {
+    var p = parts(ev.start);
+    var month = (MONTHS[p.m - 1] || "").slice(0, 3);
+    return '<span class="feed-thumb feed-leaf" aria-hidden="true">' +
+      (p.d !== null && ev.precision !== "month"
+        ? "<b>" + p.d + "</b><span>" + month + "</span>"
+        : "<b>" + month + "</b><span>" + p.y + "</span>") +
+      "</span>";
+  }
+
   function renderHomeEvents(events) {
     var s = split(events);
     var pick = s.upcoming.concat(s.past).slice(0, 3);
@@ -590,7 +591,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return '<li class="feed-item">' +
         (ev.image
           ? '<img class="feed-thumb" src="' + esc(ev.image) + '" alt="" loading="lazy" width="72" height="90" />'
-          : '<span class="feed-thumb feed-thumb--none" aria-hidden="true"></span>') +
+          : dateLeaf(ev)) +
         "<div><h4>" + esc(ev.title) + "</h4>" +
         '<p class="feed-meta"><b>' + (upcoming ? "Coming up" : esc(ev.kind)) + "</b> &middot; " +
         esc(formatWhen(ev)) + "</p></div></li>";
@@ -810,27 +811,13 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(function () { if (cur.parentNode) cur.parentNode.removeChild(cur); }, 700);
   }
 
-  function countUp(b, to) {
-    if (reduced || !window.requestAnimationFrame) { b.textContent = to; return; }
-    var t0 = null;
-    function step(t) {
-      if (t0 === null) t0 = t;
-      var k = Math.min(1, (t - t0) / 1300);
-      b.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
-      if (k < 1) window.requestAnimationFrame(step);
-    }
-    window.requestAnimationFrame(step);
-    setTimeout(function () { b.textContent = to; }, 2000); // a background tab never runs the frames
-  }
-
   function stats(ms) {
     var box = document.getElementById("story-stats");
     if (!box) return;
     var known = ms.filter(function (m) { return m.status !== "unknown"; }).length;
     box.insertAdjacentHTML("beforeend",
-      '<li><b data-to="' + known + '">' + known + "</b>Milestones on record</li>" +
-      '<li><b data-to="' + (ms.length - known) + '">' + (ms.length - known) + "</b>Still to be remembered</li>");
-    all("b[data-to]", box).forEach(function (b) { countUp(b, +b.getAttribute("data-to")); });
+      "<li><b>" + known + "</b>Milestones on record</li>" +
+      "<li><b>" + (ms.length - known) + "</b>Still to be remembered</li>");
   }
 
   function ribbon(groups) {
@@ -1198,75 +1185,355 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 })();
 
+
 /* ---------------------------------------------------------------------------
-   Silent loops and the photo strip.
+   Silent loops.
 
    A clip (video.loop-clip) is a few seconds, muted, with a poster. It loads
    only when it comes near the screen, plays only while on it, and pauses when
    it leaves or the tab is hidden. A reader who asks for reduced motion, or for
    less data, never downloads one: the poster stays, which is the same picture
-   standing still. Without script the poster is all anyone sees.
+   standing still. Without script the poster is all anyone sees. The tour's
+   clips (video.tour-clip) are played by the tour itself, below.
+   --------------------------------------------------------------------------- */
+var QUIET = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) ||
+  !!(navigator.connection && navigator.connection.saveData);
 
-   The strip on the homepage (.gallery) scrolls sideways by itself (trackpad,
-   touch, arrow keys once focused); the two buttons are a convenience, shown
-   only when the script is running, and say when there is no further to go.
+function playQuietly(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+
+(function () {
+  var clips = Array.prototype.slice.call(document.querySelectorAll("video.loop-clip[data-src]"));
+  if (!clips.length || QUIET || !("IntersectionObserver" in window)) return;
+  var showing = [];
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      var v = e.target, i = showing.indexOf(v);
+      if (e.isIntersecting) {
+        if (!v.getAttribute("src")) { v.src = v.getAttribute("data-src"); }
+        if (i < 0) showing.push(v);
+        if (!document.hidden) playQuietly(v);
+      } else {
+        if (i >= 0) showing.splice(i, 1);
+        v.pause();
+      }
+    });
+  }, { rootMargin: "120px 0px", threshold: 0.15 });
+  clips.forEach(function (v) { io.observe(v); });
+  document.addEventListener("visibilitychange", function () {
+    showing.forEach(function (v) { if (document.hidden) v.pause(); else playQuietly(v); });
+  });
+})();
+
+/* ---------------------------------------------------------------------------
+   The viewer: a picture full screen.
+
+   Any link marked data-lightbox="<set>" opens its picture here instead of on
+   its own. The picture grows out of the one that was pressed (and shrinks
+   back into it on closing); the arrow buttons, the arrow keys or a swipe move
+   through the rest of its set. A link with data-video plays that clip, silent,
+   in place of the still. Without script each link simply opens the image.
    --------------------------------------------------------------------------- */
 (function () {
-  var reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  var saveData = !!(navigator.connection && navigator.connection.saveData);
+  var links = Array.prototype.slice.call(document.querySelectorAll("a[data-lightbox]"));
+  if (!links.length || typeof HTMLDialogElement !== "function") return;
+  var still = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
-  var clips = Array.prototype.slice.call(document.querySelectorAll("video.loop-clip[data-src]"));
-  if (clips.length && !reduced && !saveData && "IntersectionObserver" in window) {
-    var showing = [];
-    var play = function (v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        var v = e.target, i = showing.indexOf(v);
-        if (e.isIntersecting) {
-          if (!v.getAttribute("src")) { v.src = v.getAttribute("data-src"); }
-          if (i < 0) showing.push(v);
-          if (!document.hidden) play(v);
-        } else {
-          if (i >= 0) showing.splice(i, 1);
-          v.pause();
-        }
-      });
-    }, { rootMargin: "120px 0px", threshold: 0.15 });
-    clips.forEach(function (v) { io.observe(v); });
-    document.addEventListener("visibilitychange", function () {
-      showing.forEach(function (v) { if (document.hidden) v.pause(); else play(v); });
+  var dlg = document.createElement("dialog");
+  dlg.className = "lightbox";
+  dlg.setAttribute("aria-label", "Photographs");
+  dlg.innerHTML =
+    '<div class="lb-stage"></div>' +
+    '<div class="lb-bar"><p class="lb-caption"></p><p class="lb-count"></p></div>' +
+    '<button type="button" class="lb-btn lb-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+    '<button type="button" class="lb-btn lb-prev" aria-label="Previous picture"><span aria-hidden="true">&larr;</span></button>' +
+    '<button type="button" class="lb-btn lb-next" aria-label="Next picture"><span aria-hidden="true">&rarr;</span></button>';
+  document.body.appendChild(dlg);
+  var stage = dlg.querySelector(".lb-stage");
+  var caption = dlg.querySelector(".lb-caption");
+  var count = dlg.querySelector(".lb-count");
+  var set = [], index = 0, opener = null, closing = false;
+
+  function thumbOf(a) { return a.querySelector("img, video"); }
+
+  function media(a) {
+    var el, clip = a.getAttribute("data-video");
+    if (clip && !QUIET) {
+      el = document.createElement("video");
+      el.muted = true; el.loop = true; el.playsInline = true;
+      el.setAttribute("muted", ""); el.setAttribute("playsinline", "");
+      el.poster = a.getAttribute("href");
+      el.src = clip;
+      el.setAttribute("aria-hidden", "true");
+    } else {
+      el = document.createElement("img");
+      el.src = a.getAttribute("href");
+      var t = thumbOf(a);
+      el.alt = (t && t.getAttribute("alt")) || "";
+    }
+    el.className = "lb-media";
+    return el;
+  }
+
+  /* From the thumbnail's box to the picture's own, as one transform: scaled
+     until it covers the thumbnail, centred on it, and clipped to its shape. */
+  function flip(el, from) {
+    var r = el.getBoundingClientRect();
+    if (!r.width || !r.height) return null;
+    var s = Math.max(from.width / r.width, from.height / r.height);
+    var tx = from.left + from.width / 2 - r.left - s * r.width / 2;
+    var ty = from.top + from.height / 2 - r.top - s * r.height / 2;
+    var ix = Math.max(0, (r.width - from.width / s) / 2), iy = Math.max(0, (r.height - from.height / s) / 2);
+    return [
+      { transform: "translate(" + tx + "px," + ty + "px) scale(" + s + ")", clipPath: "inset(" + iy + "px " + ix + "px)" },
+      { transform: "translate(0,0) scale(1)", clipPath: "inset(0px 0px)" }
+    ];
+  }
+
+  function whenSized(el, fn) {
+    var ready = el.tagName === "IMG" ? el.complete && el.naturalWidth : el.readyState >= 1;
+    if (ready) fn();
+    else el.addEventListener(el.tagName === "IMG" ? "load" : "loadedmetadata", fn, { once: true });
+  }
+
+  function show(i, from) {
+    index = (i + set.length) % set.length;
+    var a = set[index];
+    var el = media(a);
+    stage.innerHTML = "";
+    stage.appendChild(el);
+    if (el.tagName === "VIDEO") playQuietly(el);
+    caption.textContent = a.getAttribute("data-caption") || el.alt || "";
+    count.textContent = set.length > 1 ? (index + 1) + " of " + set.length : "";
+    [index - 1, index + 1].forEach(function (n) {
+      var b = set[(n + set.length) % set.length];
+      if (b && b !== a) { var im = new Image(); im.src = b.getAttribute("href"); }
     });
+    if (from && !still && el.animate) {
+      whenSized(el, function () {
+        var k = flip(el, from);
+        if (k) el.animate(k, { duration: 460, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" });
+      });
+    } else if (!still && el.animate) {
+      el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220 });
+    }
   }
 
-  var strip = document.querySelector(".gallery");
-  var nav = document.querySelector(".gallery-nav");
-  if (!strip || !nav) return;
-  var buttons = nav.querySelectorAll(".gallery-btn");
-  nav.hidden = false;
+  function open(a) {
+    set = links.filter(function (l) { return l.getAttribute("data-lightbox") === a.getAttribute("data-lightbox"); });
+    opener = a;
+    var t = thumbOf(a);
+    document.documentElement.classList.add("lb-open");
+    dlg.showModal();
+    show(set.indexOf(a), t ? t.getBoundingClientRect() : null);
+  }
 
-  function step() {
-    var item = strip.querySelector(".gallery-item");
-    if (!item) return strip.clientWidth * 0.8;
-    var w = item.getBoundingClientRect().width + 14;
-    return w * Math.max(1, Math.floor(strip.clientWidth / w) - 1);
+  function finish() {
+    closing = false;
+    dlg.getAnimations().forEach(function (an) { an.cancel(); });
+    stage.innerHTML = "";
+    if (dlg.open) dlg.close();
+    document.documentElement.classList.remove("lb-open");
+    if (opener) opener.focus({ preventScroll: true });
   }
-  function update() {
-    var max = strip.scrollWidth - strip.clientWidth;
-    buttons[0].setAttribute("aria-disabled", String(strip.scrollLeft <= 2));
-    buttons[1].setAttribute("aria-disabled", String(strip.scrollLeft >= max - 2));
+
+  function close() {
+    if (closing) return;
+    closing = true;
+    var el = stage.querySelector(".lb-media");
+    var a = set[index];
+    var t = a && thumbOf(a);
+    var box = t && t.getBoundingClientRect();
+    var onScreen = box && box.bottom > 0 && box.top < window.innerHeight;
+    var k = el && !still && el.animate && onScreen ? flip(el, box) : null;
+    if (k) {
+      opener = a;
+      el.animate(k.slice().reverse(), { duration: 360, easing: "cubic-bezier(0.4, 0, 0.6, 1)", fill: "forwards" }).onfinish = finish;
+      dlg.animate([{ backgroundColor: "rgba(11,17,16,1)" }, { backgroundColor: "rgba(11,17,16,0)" }], { duration: 360, fill: "forwards" });
+    } else {
+      finish();
+    }
   }
-  buttons.forEach(function (b) {
-    b.addEventListener("click", function () {
-      if (b.getAttribute("aria-disabled") === "true") return;
-      strip.scrollBy({ left: step() * +b.getAttribute("data-dir"), behavior: reduced ? "auto" : "smooth" });
+
+  links.forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button > 0) return;
+      e.preventDefault();
+      open(a);
     });
   });
-  var ticking = false;
-  strip.addEventListener("scroll", function () {
-    if (ticking) return;
-    ticking = true;
-    window.requestAnimationFrame(function () { ticking = false; update(); });
-  }, { passive: true });
-  window.addEventListener("resize", update);
-  update();
+  dlg.querySelector(".lb-close").addEventListener("click", close);
+  dlg.querySelector(".lb-prev").addEventListener("click", function () { show(index - 1); });
+  dlg.querySelector(".lb-next").addEventListener("click", function () { show(index + 1); });
+  dlg.addEventListener("cancel", function (e) { e.preventDefault(); close(); });
+  dlg.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") { e.preventDefault(); show(index + 1); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); show(index - 1); }
+  });
+
+  // A swipe sideways moves through the set; a tap beside the picture closes.
+  var x0 = null, y0 = 0;
+  stage.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; });
+  stage.addEventListener("pointerup", function (e) {
+    if (x0 === null) return;
+    var dx = e.clientX - x0, dy = e.clientY - y0;
+    x0 = null;
+    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) show(index + (dx < 0 ? 1 : -1));
+    else if (Math.abs(dx) < 8 && Math.abs(dy) < 8 && e.target === stage) close();
+  });
+})();
+
+/* ---------------------------------------------------------------------------
+   The tour (tour.html).
+
+   Each scene ([data-scene]) is several screens tall and holds a stage that
+   stays put while it is scrolled past. All this script does is work out how
+   far through each scene the reader is (0 to 1) and, from that, which shot is
+   showing, how far its slow push has gone, which panels and words are up, and
+   which clips should be playing. The look of every cut, dissolve and reveal
+   is in the stylesheet. A reader who asks for reduced motion never gets the
+   stage: the page stays a photo essay, the same pictures one after another.
+   --------------------------------------------------------------------------- */
+(function () {
+  var tour = document.querySelector(".tour");
+  if (!tour || !window.requestAnimationFrame) return;
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var root = document.documentElement;
+  var slice = function (l) { return Array.prototype.slice.call(l); };
+  var portrait = window.matchMedia("(max-aspect-ratio: 3/4)");
+  tour.classList.add("is-cinema");
+
+  function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+  function clamp(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
+
+  var scenes = slice(tour.querySelectorAll("[data-scene]")).map(function (el) {
+    var stage = el.querySelector(".stage, .stage-open");
+    var shots = slice(stage.children).filter(function (c) { return c.classList.contains("shot"); }).map(function (s) {
+      if (s.getAttribute("data-focus")) s.style.setProperty("--focus", s.getAttribute("data-focus"));
+      return {
+        el: s,
+        at: parseFloat(s.getAttribute("data-at")) || 0,
+        zoom: (s.getAttribute("data-zoom") || "1 1").split(" ").map(Number),
+        media: s.querySelector(":scope > picture > img, :scope > img, :scope > video"),
+        pull: s.hasAttribute("data-focus-pull"),
+        steps: (s.getAttribute("data-steps") || "").split(" ").filter(Boolean).map(Number),
+        panels: slice(s.querySelectorAll(".panel")).map(function (p) { return { el: p, at: parseFloat(p.getAttribute("data-at")) || 0 }; })
+      };
+    });
+    return {
+      el: el,
+      title: el.getAttribute("data-title"),
+      shots: shots,
+      texts: slice(el.querySelectorAll(".scene-text")).map(function (t) {
+        return { el: t, from: parseFloat(t.getAttribute("data-at")) || 0, to: t.hasAttribute("data-to") ? parseFloat(t.getAttribute("data-to")) : 2 };
+      }),
+      clips: slice(el.querySelectorAll("video.tour-clip")),
+      loaded: false
+    };
+  });
+  if (!scenes.length) return;
+
+  // Where you are: the scenes down the side, and a bar of progress on a phone.
+  var rail = document.createElement("nav");
+  rail.className = "tour-rail";
+  rail.setAttribute("aria-label", "Scenes of the tour");
+  rail.innerHTML = "<ol>" + scenes.filter(function (s) { return s.title; }).map(function (s) {
+    return '<li><a href="#' + s.el.id + '"><span>' + s.title.replace(/[<>&]/g, "") + "</span></a></li>";
+  }).join("") + "</ol>";
+  var bar = document.createElement("div");
+  bar.className = "tour-progress";
+  bar.setAttribute("aria-hidden", "true");
+  tour.appendChild(rail);
+  tour.appendChild(bar);
+  scenes.forEach(function (s) { if (s.title) s.link = rail.querySelector('a[href="#' + s.el.id + '"]'); });
+
+  function load(sc) {
+    sc.loaded = true;
+    if (QUIET) return;
+    sc.clips.forEach(function (v) {
+      var tall = portrait.matches && v.getAttribute("data-src-p");
+      if (tall && v.getAttribute("data-poster-p")) v.poster = v.getAttribute("data-poster-p");
+      v.src = tall ? v.getAttribute("data-src-p") : v.getAttribute("data-src");
+      v.preload = "auto";
+    });
+  }
+
+  function setPlaying(v, on) {
+    if (QUIET || !v.getAttribute("src")) return;
+    if (on && !document.hidden) { if (v.paused) playQuietly(v); }
+    else if (!v.paused) v.pause();
+  }
+
+  var lastY = window.pageYOffset, ticking = false;
+
+  function frame() {
+    ticking = false;
+    var vh = window.innerHeight;
+    var current = null;
+    scenes.forEach(function (sc) {
+      var r = sc.el.getBoundingClientRect();
+      if (!sc.loaded && r.top < 2.5 * vh && r.bottom > -vh) load(sc);
+      var visible = r.bottom > 0 && r.top < vh;
+      if (sc.title && r.top <= vh * 0.5 && r.bottom > vh * 0.5) current = sc;
+      if (!visible) {
+        sc.clips.forEach(function (v) { setPlaying(v, false); });
+        return;
+      }
+      var p = clamp(-r.top / Math.max(1, r.height - vh));
+      var active = 0;
+      sc.shots.forEach(function (s, i) { if (p >= s.at) active = i; });
+      sc.shots.forEach(function (s, i) {
+        var on = i === active;
+        var end = i + 1 < sc.shots.length ? sc.shots[i + 1].at : 1;
+        var t = clamp((p - s.at) / Math.max(0.001, end - s.at));
+        s.el.classList.toggle("is-on", on);
+        if (s.media && (on || i === active - 1)) {
+          s.media.style.setProperty("--z", (s.zoom[0] + (s.zoom[1] - s.zoom[0]) * ease(t)).toFixed(4));
+          if (s.pull) s.media.style.setProperty("--blur", (on ? 9 * Math.max(0, 1 - t * 3.5) : 0).toFixed(2) + "px");
+        }
+        if (s.steps.length) {
+          var step = 0;
+          s.steps.forEach(function (at) { if (p >= at) step++; });
+          s.el.setAttribute("data-step", String(step));
+        }
+        s.panels.forEach(function (pn) { pn.el.classList.toggle("is-on", on && p >= pn.at); });
+        slice(s.el.querySelectorAll("video.tour-clip")).forEach(function (v) {
+          var pn = v.closest(".panel");
+          setPlaying(v, on && (!pn || pn.classList.contains("is-on")));
+        });
+      });
+      sc.texts.forEach(function (t) { t.el.classList.toggle("is-on", p >= t.from && p < t.to); });
+    });
+
+    var first = scenes[0].el.getBoundingClientRect();
+    var last = scenes[scenes.length - 1].el.getBoundingClientRect();
+    var inside = first.top <= 0 && last.bottom > vh * 0.5;
+    root.classList.toggle("in-scenes", inside && !!current);
+    root.style.setProperty("--tour-p", clamp(-first.top / Math.max(1, last.bottom - first.top - vh)).toFixed(4));
+    scenes.forEach(function (s) { if (s.link) s.link.classList.toggle("is-current", s === current); });
+
+    // The header steps aside on the way down through the scenes, and comes
+    // back as soon as the reader scrolls up or leaves them.
+    var y = window.pageYOffset;
+    var menuOpen = !!document.querySelector(".site-header.is-open");
+    if (inside && !menuOpen && y > lastY + 6) root.classList.add("tour-immersed");
+    else if (y < lastY - 6 || !inside || menuOpen) root.classList.remove("tour-immersed");
+    lastY = y;
+  }
+
+  function request() { if (!ticking) { ticking = true; window.requestAnimationFrame(frame); } }
+  window.addEventListener("scroll", request, { passive: true });
+  window.addEventListener("resize", request);
+  document.addEventListener("visibilitychange", request);
+
+  // A keyboard user who tabs to a link in words not yet showing is taken to
+  // the point in the scene where those words appear.
+  tour.addEventListener("focusin", function (e) {
+    var t = e.target.closest && e.target.closest(".scene-text");
+    if (!t || t.classList.contains("is-on")) return;
+    var sc = t.closest("[data-scene]");
+    var at = parseFloat(t.getAttribute("data-at")) || 0;
+    var top = sc.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo(0, top + (sc.offsetHeight - window.innerHeight) * Math.min(1, at + 0.03));
+  });
+  frame();
 })();
