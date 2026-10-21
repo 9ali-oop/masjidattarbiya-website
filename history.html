@@ -23,8 +23,8 @@
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="css/fonts.css" />
-<link rel="stylesheet" href="css/style.css?v=20261021c" />
-<script src="js/gate.js?v=20261021c"></script>
+<link rel="stylesheet" href="css/style.css?v=20261021d" />
+<script src="js/gate.js?v=20261021d"></script>
 </head>
 <body>
 
@@ -77,22 +77,24 @@
 
 
 <section class="section story-section">
-  <div class="container">
-    <div class="tl-filters" role="group" aria-label="Show part of the story" id="tl-filters">
-      <button type="button" class="tl-filter" data-strand="all" aria-pressed="true">Everything</button>
-      <button type="button" class="tl-filter" data-strand="charity" aria-pressed="false">The charity</button>
-      <button type="button" class="tl-filter" data-strand="building" aria-pressed="false">The building</button>
-      <button type="button" class="tl-filter" data-strand="learning" aria-pressed="false">Learning</button>
-      <button type="button" class="tl-filter" data-strand="community" aria-pressed="false">Community</button>
-      <button type="button" class="tl-filter" data-strand="unknown" aria-pressed="false">Still unknown</button>
+  <div class="container story">
+    <div class="story-tools" hidden>
+      <nav class="story-contents" id="story-contents" aria-label="Chapters of the story"></nav>
+      <div class="tl-filters" role="group" aria-label="Show part of the story" id="tl-filters">
+        <span class="tl-filters-label" aria-hidden="true">Show</span>
+        <button type="button" class="tl-filter" data-strand="all" aria-pressed="true">Everything</button>
+        <button type="button" class="tl-filter" data-strand="charity" aria-pressed="false">The charity</button>
+        <button type="button" class="tl-filter" data-strand="building" aria-pressed="false">The building</button>
+        <button type="button" class="tl-filter" data-strand="learning" aria-pressed="false">Learning</button>
+        <button type="button" class="tl-filter" data-strand="community" aria-pressed="false">Community</button>
+        <button type="button" class="tl-filter" data-strand="unknown" aria-pressed="false">Still unknown</button>
+      </div>
     </div>
 
-    <div class="story" id="timeline">
+    <div id="timeline">
       <noscript>
-        <div class="tl-card">
-          <h2>This timeline needs JavaScript</h2>
-          <p>The milestones are kept in a plain file at <a href="assets/history.json">assets/history.json</a> if you would rather read them directly.</p>
-        </div>
+        <h2>This page needs JavaScript</h2>
+        <p>The story is kept in a plain file at <a href="assets/history.json">assets/history.json</a> if you would rather read it directly.</p>
       </noscript>
     </div>
   </div>
@@ -163,6 +165,6 @@
   </div>
 </footer>
 
-<script src="js/main.js?v=20261021c"></script>
+<script src="js/main.js?v=20261021d"></script>
 </body>
 </html>

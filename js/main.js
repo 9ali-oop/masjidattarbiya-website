@@ -194,7 +194,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Prayers that can be "next". Sunrise is not a prayer, and Dhuhr is skipped on
   // Fridays because the congregation prays Jumu'ah instead.
   var CONGREGATIONAL = ["fajr", "dhuhr", "jumuah", "asr", "maghrib", "isha"];
-  var DASH = "&mdash;";
+  // An empty cell: a plain hyphen to the eye, "none" to a screen reader.
+  var DASH = '<span aria-hidden="true">-</span><span class="visually-hidden">none</span>';
 
   /** Date and time in Birmingham, wherever the visitor happens to be. */
   function londonNow() {
@@ -672,87 +673,97 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 
 /* ---------------------------------------------------------------------------
-   Our Story timeline.
+   Our Story.
 
    Renders assets/history.json as chapters ("chapters" in the file; each
-   milestone names its "chapter"). Entries marked "unknown" are deliberate
-   gaps: they render as open questions rather than being quietly left out,
-   because the point of the page is partly to get them answered. Each carries
-   a button that opens WhatsApp with a message already started.
+   milestone names its "chapter"), in the order the file keeps them, which is
+   the order things happened: the page reads in one direction. Milestones that
+   share an "aside" and follow one another are set together under that line:
+   the building's own story, before it was ours, sits at its place in time.
 
-   The motion, all of it optional: a rail (or a slim bar on a phone) whose year rolls over as the reader passes
-   each milestone, chapter introductions that light up word by word, cards that
-   settle forward, a spine that fills with gold. Everything is readable before
-   any of it runs, and stays readable if it never does: see CLAUDE.md.
+   Entries marked "unknown" are deliberate gaps: they render as open questions
+   rather than being quietly left out, because the point of the page is partly
+   to get them answered. Each carries a button that opens WhatsApp with a
+   message already started. Nothing on the page moves: see CLAUDE.md.
    --------------------------------------------------------------------------- */
 (function () {
   var el = document.getElementById("timeline");
   if (!el) return;
 
-  var STRANDS = { charity: "The charity", building: "The building", learning: "Learning", community: "Community" };
   var WHATSAPP = "https://wa.me/447908854187?text=";
-  var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 1.6l3 4.2 5.2-.7-.7 5.2 4.2 3-4.2 3 .7 5.2-5.2-.7-3 4.2-3-4.2-5.2.7.7-5.2-4.2-3 4.2-3-.7-5.2 5.2.7z"/></svg>';
-  var reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-
-  /** The year as the rail shows it: four digits where there are some. */
-  function railYear(m) {
-    if (m.status === "unknown") return "?";
-    var y = String(m.year).match(/\d{4}/);
-    if (y) return y[0];
-    return m.year === "Today" ? "Now" : String(m.year);
-  }
 
   function img(src, alt, w, h) {
     return '<img src="' + esc(src) + '" alt="' + esc(alt || "") + '"' +
       (w && h ? ' width="' + w + '" height="' + h + '"' : "") + ' loading="lazy" decoding="async">';
   }
 
-  /** A photograph (or, with image_fit "contain", a logo shown whole), with its caption. */
+  /** A photograph at its own proportions (or, with image_fit "contain", a logo shown whole), with its caption. */
   function figure(x, cls) {
     if (!x.image) return "";
     var logo = x.image_fit === "contain";
+    var tag = img(x.image, x.image_alt, x.image_width, x.image_height);
+    // A milestone's picture is no taller than a wide one would be (360px; a
+    // logo 130px) and no wider than 500px. Setting that width here lets the
+    // width and height attributes reserve its space before it loads, so the
+    // chapter links land where they should.
+    if (cls === "entry-photo" && x.image_width && x.image_height) {
+      var w = Math.min(500, Math.round((logo ? 130 : 360) * x.image_width / x.image_height));
+      tag = tag.replace("<img ", '<img style="width:' + w + 'px" ');
+    }
     return '<figure class="' + cls + (logo ? " is-logo" : "") + '">' +
       (logo ? '<span class="media-frame">' : "") +
-      img(x.image, x.image_alt, x.image_width, x.image_height) +
+      tag +
       (logo ? "</span>" : "") +
       (x.image_caption ? "<figcaption>" + esc(x.image_caption) + "</figcaption>" : "") +
     "</figure>";
   }
 
-  function card(m) {
+  function entry(m) {
     var unknown = m.status === "unknown";
     var asks = (m.asks || []).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
     var msg = "Salaam, about “" + m.title + "” on the masjid's Our Story page: ";
-    return '<li class="tl-item' + (unknown ? " is-unknown" : "") + '" id="m-' + esc(m.id) + '" data-strand="' + esc(m.strand || "") +
-        '" data-year="' + esc(railYear(m)) + '">' +
-      '<span class="tl-year">' + (unknown ? '<span aria-hidden="true">?</span><span class="visually-hidden">Year not yet known</span>' : esc(m.year)) + "</span>" +
-      '<div class="tl-card">' +
-        figure(m, "tl-media") +
-        (STRANDS[m.strand] ? '<span class="tl-strand">' + STRANDS[m.strand] + "</span>" : "") +
+    return '<li class="entry' + (unknown ? " is-unknown" : "") + '" id="m-' + esc(m.id) + '" data-strand="' + esc(m.strand || "") + '">' +
+      '<p class="entry-year">' + (unknown ? '<span aria-hidden="true">?</span><span class="visually-hidden">Year not yet known</span>' : esc(m.year)) + "</p>" +
+      '<div class="entry-body">' +
         "<h3>" + esc(m.title) + "</h3>" +
-        "<p>" + esc(m.body) + "</p>" +
-        (asks ? '<span class="tl-askhead">Can you fill this in?</span><ul class="tl-asks">' + asks + "</ul>" +
-          '<a class="btn btn-line tl-remember" href="' + WHATSAPP + encodeURIComponent(msg) +
+        '<p class="entry-text">' + esc(m.body) + "</p>" +
+        figure(m, "entry-photo") +
+        (asks ? '<p class="entry-askhead">Can you fill this in?</p><ul class="entry-asks">' + asks + "</ul>" +
+          '<a class="btn btn-line entry-remember" href="' + WHATSAPP + encodeURIComponent(msg) +
           '" target="_blank" rel="noopener">I remember this</a>' : "") +
-        (m.source ? '<span class="tl-source">' + esc(m.source) + "</span>" : "") +
+        (m.source ? '<p class="entry-source"><b>Source:</b> ' + esc(m.source) + "</p>" : "") +
       "</div>" +
     "</li>";
   }
 
+  /** Milestones in order; a run that shares an "aside" goes together under its line. */
+  function entries(items) {
+    var out = "", i = 0;
+    while (i < items.length) {
+      var aside = items[i].aside;
+      if (!aside) { out += entry(items[i]); i++; continue; }
+      var run = [];
+      while (i < items.length && items[i].aside === aside) run.push(items[i++]);
+      out += '<li class="entry-aside"><p class="aside-label">' + esc(aside) + "</p>" +
+        '<ol class="entries">' + run.map(entry).join("") + "</ol></li>";
+    }
+    return out;
+  }
+
   function chapter(c, items) {
-    return '<section class="chapter" id="' + esc(c.id) + '" data-chapter="' + esc(c.id) + '"' +
+    return '<section class="chapter" id="' + esc(c.id) + '"' +
         (c.title ? ' aria-labelledby="ch-' + esc(c.id) + '"' : "") + ">" +
       (c.title ?
-        '<header class="chapter-head">' +
-          '<span class="chapter-star">' + STAR + "</span>" +
-          (c.ar ? '<span class="chapter-watermark ar" lang="ar" aria-hidden="true">' + esc(c.ar) + "</span>" : "") +
-          (c.number ? '<span class="chapter-num">' + esc(c.number) + "</span>" : "") +
-          '<h2 id="ch-' + esc(c.id) + '">' + esc(c.title) + "</h2>" +
-          (c.years ? '<p class="chapter-years">' + esc(c.years) + "</p>" : "") +
-          (c.intro ? '<p class="chapter-intro">' + esc(c.intro) + "</p>" : "") +
+        '<header class="chapter-head' + (c.image ? "" : " no-photo") + '">' +
+          '<div class="chapter-text">' +
+            (c.ar ? '<p class="chapter-ar ar" lang="ar">' + esc(c.ar) + "</p>" : "") +
+            '<h2 id="ch-' + esc(c.id) + '">' + esc(c.title) + "</h2>" +
+            (c.years ? '<p class="chapter-years">' + esc(c.years) + "</p>" : "") +
+            (c.intro ? '<p class="chapter-intro">' + esc(c.intro) + "</p>" : "") +
+          "</div>" +
           figure(c, "chapter-figure") +
         "</header>" : "") +
-      '<ol class="timeline">' + items.map(card).join("") + "</ol>" +
+      '<ol class="entries">' + entries(items) + "</ol>" +
     "</section>";
   }
 
@@ -766,49 +777,17 @@ document.addEventListener("DOMContentLoaded", function () {
     return out.filter(function (g) { return g.items.length; });
   }
 
-  function build(groups) {
-    var nav = groups.filter(function (g) { return g.c.title; }).map(function (g) {
-      return '<li data-chapter="' + esc(g.c.id) + '"><a href="#' + esc(g.c.id) + '"><b>' + esc(g.c.title) + "</b>" +
-        (g.c.years ? "<span>" + esc(g.c.years) + "</span>" : "") + "</a></li>";
-    }).join("");
-    el.innerHTML =
-      '<div class="story-rail">' +
-        '<div aria-hidden="true">' +
-          '<span class="rail-num"></span><span class="rail-ar ar" lang="ar"></span><span class="rail-title"></span>' +
-          '<span class="rail-year"></span><span class="rail-count"></span><span class="rail-bar"><i></i></span>' +
-        "</div>" +
-        (nav ? '<nav class="rail-nav" aria-label="Chapters of the story"><ol>' + nav + "</ol></nav>" : "") +
-      "</div>" +
-      '<div class="story-body">' +
-        '<div class="story-bar" aria-hidden="true"><span class="bar-ar ar" lang="ar"></span><span class="bar-title"></span><span class="bar-year"></span></div>' +
-        '<div class="story-chapters">' + groups.map(function (g) { return chapter(g.c, g.items); }).join("") + "</div>" +
-      "</div>";
+  /** The chapters as a line of links under the heading band. */
+  function contents(groups) {
+    var box = document.getElementById("story-contents");
+    if (!box) return;
+    box.innerHTML = "<ol>" + groups.filter(function (g) { return g.c.title; }).map(function (g) {
+      return '<li data-chapter="' + esc(g.c.id) + '"><a href="#' + esc(g.c.id) + '">' + esc(g.c.title) +
+        (g.c.years ? " <span>" + esc(g.c.years) + "</span>" : "") + "</a></li>";
+    }).join("") + "</ol>";
   }
-
-  /* --- small helpers ------------------------------------------------------ */
 
   function all(sel, root) { return Array.prototype.slice.call((root || el).querySelectorAll(sel)); }
-  function clamp(v) { return Math.min(1, Math.max(0, v)); }
-  function chapterData(groups, id) {
-    for (var i = 0; i < groups.length; i++) if (groups[i].c.id === id) return groups[i].c;
-    return {};
-  }
-
-  /** Roll the rail's year over: the old one leaves, the new one arrives. */
-  function roll(box, text, back) {
-    var cur = box.querySelector("span:not(.is-out)");
-    if (cur && cur.textContent === text) return;
-    if (reduced || !cur) { box.innerHTML = "<span>" + esc(text) + "</span>"; return; }
-    box.classList.toggle("is-back", !!back);
-    var next = document.createElement("span");
-    next.className = "is-in";
-    next.textContent = text;
-    box.appendChild(next);
-    cur.classList.add("is-out");
-    void next.offsetWidth; // start the new year from below before letting it rise
-    next.className = "";
-    setTimeout(function () { if (cur.parentNode) cur.parentNode.removeChild(cur); }, 700);
-  }
 
   function stats(ms) {
     var box = document.getElementById("story-stats");
@@ -819,193 +798,47 @@ document.addEventListener("DOMContentLoaded", function () {
       "<li><b>" + (ms.length - known) + "</b>Still to be remembered</li>");
   }
 
-  /** Split each chapter introduction into words, so they can light up in turn. */
-  function splitIntros() {
-    if (reduced) return;
-    all(".chapter-intro").forEach(function (p) {
-      p.innerHTML = p.textContent.split(/(\s+)/).map(function (w) {
-        return /^\s*$/.test(w) ? w : '<span class="w">' + esc(w) + "</span>";
-      }).join("");
-      p.classList.add("is-split");
-    });
-  }
-
-  /* --- following the reader ---------------------------------------------- */
-
-  var groups = [], current = null, rail = {}, ticking = false;
-
-  function visibleItems() { return all(".tl-item:not([hidden])"); }
-
-  function setCurrent(item, items) {
-    if (!item || item === current) return;
-    var back = current && items.indexOf(item) < items.indexOf(current);
-    if (current) current.classList.remove("is-current");
-    current = item;
-    item.classList.add("is-current");
-    var ch = item.closest(".chapter");
-    var c = chapterData(groups, ch ? ch.getAttribute("data-chapter") : "");
-    var year = item.getAttribute("data-year") || "";
-    rail.num.textContent = c.number || "";
-    rail.ar.textContent = c.ar || "";
-    rail.title.textContent = c.title || "";
-    rail.count.textContent = "Milestone " + (items.indexOf(item) + 1) + " of " + items.length;
-    rail.barAr.textContent = c.ar || "";
-    rail.barTitle.textContent = c.title || "";
-    rail.barYear.textContent = year;
-    roll(rail.year, year, back);
-    all(".rail-nav a").forEach(function (a) {
-      if (a.getAttribute("href") === "#" + (c.id || "")) a.setAttribute("aria-current", "true");
-      else a.removeAttribute("aria-current");
-    });
-  }
-
-  function lightWords() {
-    var vh = window.innerHeight;
-    all(".chapter-intro.is-split").forEach(function (p) {
-      var words = p.querySelectorAll(".w");
-      var r = p.getBoundingClientRect();
-      // Starts as the paragraph comes up past 90% of the screen, done by 45%.
-      var t = clamp((vh * 0.9 - r.top) / (vh * 0.45 + r.height * 0.5));
-      var lit = Math.round(t * words.length);
-      if (+p.getAttribute("data-lit") === lit) return;
-      p.setAttribute("data-lit", lit);
-      for (var i = 0; i < words.length; i++) words[i].classList.toggle("is-lit", i < lit);
-    });
-  }
-
-  function progress() {
-    ticking = false;
-    var line = window.innerHeight * 0.55;
-    var body = el.querySelector(".story-chapters");
-    var r = body.getBoundingClientRect();
-    el.style.setProperty("--progress", (r.height ? clamp((line - r.top) / r.height) : 0).toFixed(4));
-    var items = visibleItems(), last = null;
-    items.forEach(function (item) {
-      var reached = item.getBoundingClientRect().top + 18 < line;
-      if (reached) {
-        last = item;
-        if (!item.classList.contains("is-reached")) {
-          item.classList.add("is-reached");
-          if (!reduced) {
-            item.classList.add("is-pulse");
-            setTimeout(function () { item.classList.remove("is-pulse"); }, 1200);
-          }
-        }
-      } else {
-        item.classList.remove("is-reached");
-      }
-    });
-    var lastChapter = null;
-    all(".chapter:not([hidden])").forEach(function (ch) {
-      var reached = ch.getBoundingClientRect().top + 30 < line;
-      ch.classList.toggle("is-reached", reached);
-      if (reached) lastChapter = ch;
-    });
-    // Reading a chapter's opening, before its first milestone: the rail
-    // already shows the chapter the reader is in, and the year it starts with.
-    if (lastChapter && (!last || !lastChapter.contains(last))) {
-      last = lastChapter.querySelector(".tl-item:not([hidden])") || last;
-    }
-    setCurrent(last || items[0], items);
-    lightWords();
-  }
-  function onScroll() {
-    if (!ticking) { ticking = true; window.requestAnimationFrame(progress); }
-  }
-
-  /** Where the bar and rail pin: just under the part of the header that stays. */
-  function stickTop() {
-    var header = document.querySelector(".site-header"), bar = document.querySelector(".topbar");
-    var h = header ? header.offsetHeight - (bar ? bar.offsetHeight : 0) : 0;
-    el.style.setProperty("--stick-top", Math.max(0, h) + "px");
-  }
-
   function filters() {
     var buttons = document.querySelectorAll(".tl-filter");
     buttons.forEach(function (b) {
       b.addEventListener("click", function () {
         var strand = b.getAttribute("data-strand");
         buttons.forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
-        all(".tl-item").forEach(function (item) {
-          var match = strand === "all" ||
-            (strand === "unknown" ? item.classList.contains("is-unknown") : item.getAttribute("data-strand") === strand);
-          item.hidden = !match;
-          // Filtering must never leave a card waiting for an animation.
-          if (match) item.classList.add("is-visible");
+        all(".entry").forEach(function (item) {
+          item.hidden = !(strand === "all" ||
+            (strand === "unknown" ? item.classList.contains("is-unknown") : item.getAttribute("data-strand") === strand));
         });
+        all(".entry-aside").forEach(function (a) { a.hidden = !a.querySelector(".entry:not([hidden])"); });
         all(".chapter").forEach(function (ch) {
-          var empty = !ch.querySelector(".tl-item:not([hidden])");
+          var empty = !ch.querySelector(".entry:not([hidden])");
           ch.hidden = empty;
-          var li = el.querySelector('.rail-nav li[data-chapter="' + ch.getAttribute("data-chapter") + '"]');
+          var li = document.querySelector('#story-contents li[data-chapter="' + ch.id + '"]');
           if (li) li.hidden = empty;
-          if (!empty) all(".chapter-figure", ch).forEach(function (f) { f.classList.add("is-visible"); });
         });
-        current = null;
-        progress();
       });
     });
   }
-
-  function reveal() {
-    // The cards are already readable at this point: the animation only starts
-    // once we know we can finish it. Anything that stops us - no observer,
-    // reduced motion - simply leaves the timeline as it is, fully visible.
-    if (reduced || !("IntersectionObserver" in window)) return;
-
-    el.classList.add("is-animated");
-
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        io.unobserve(entry.target);
-      });
-    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
-    all(".tl-item, .chapter-figure").forEach(function (i) { io.observe(i); });
-
-    // Belt and braces. If the observer has revealed nothing after a few seconds
-    // - a background tab, a browser quirk - show everything rather than leaving
-    // a reader looking at a page that is waiting for something.
-    setTimeout(function () {
-      if (!el.querySelector(".tl-item.is-visible")) {
-        // Snap, do not fade: a background tab pauses transitions.
-        el.classList.add("is-settled");
-        el.classList.remove("is-animated");
-      }
-    }, 3000);
-  }
-
-  // Printing, or saving the page, shows everything settled.
-  window.addEventListener("beforeprint", function () { el.classList.add("is-settled"); });
 
   getJSON("assets/history.json")
     .then(function (d) {
       var ms = (d && d.milestones) || [];
       if (!ms.length) throw new Error("empty");
-      groups = group(d);
-      build(groups);
-      rail = {
-        num: el.querySelector(".rail-num"), ar: el.querySelector(".rail-ar"), title: el.querySelector(".rail-title"),
-        year: el.querySelector(".rail-year"), count: el.querySelector(".rail-count"),
-        barAr: el.querySelector(".bar-ar"), barTitle: el.querySelector(".bar-title"), barYear: el.querySelector(".bar-year")
-      };
+      var groups = group(d);
+      el.innerHTML = groups.map(function (g) { return chapter(g.c, g.items); }).join("");
+      contents(groups);
       stats(ms);
-      splitIntros();
       filters();
-      reveal();
-      stickTop();
-      progress();
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", function () { stickTop(); onScroll(); });
+      // The chapter links and the filters only mean something once the story is here.
+      var tools = document.querySelector(".story-tools");
+      if (tools) tools.hidden = false;
       // A link to a milestone or chapter (history#m-madrasah) lands on it once it exists.
       if (location.hash.length > 1) {
         var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-        if (target) target.scrollIntoView();
+        if (target) target.scrollIntoView({ behavior: "instant" });
       }
     })
     .catch(function () {
-      el.innerHTML = '<div class="tl-card"><p>The timeline could not be loaded. ' +
-        'Please try again in a moment.</p></div>';
+      el.innerHTML = '<p class="story-error">The story could not be loaded. Please try again in a moment.</p>';
     });
 })();
 
@@ -1081,7 +914,7 @@ document.addEventListener("DOMContentLoaded", function () {
           (r.day === today ? ' <span class="next-tag">Today</span>' : "") + "</th>";
         var cells = r.closed
           ? '<td colspan="' + groups.length + '">' + esc(r.closed) + "</td>"
-          : groups.map(function (g) { return "<td>" + (r[g.id] ? esc(r[g.id]) : "&mdash;") + "</td>"; }).join("");
+          : groups.map(function (g) { return "<td>" + (r[g.id] ? esc(r[g.id]) : '<span aria-hidden="true">-</span><span class="visually-hidden">No class</span>') + "</td>"; }).join("");
         return "<tr" + (cls.length ? ' class="' + cls.join(" ") + '"' : "") + ">" + head + cells + "</tr>";
       }).join("") +
       "</tbody></table></div>";
@@ -1176,8 +1009,7 @@ document.addEventListener("DOMContentLoaded", function () {
    only when it comes near the screen, plays only while on it, and pauses when
    it leaves or the tab is hidden. A reader who asks for reduced motion, or for
    less data, never downloads one: the poster stays, which is the same picture
-   standing still. Without script the poster is all anyone sees. The tour's
-   clips (video.tour-clip) are played by the tour itself, below.
+   standing still. Without script the poster is all anyone sees.
    --------------------------------------------------------------------------- */
 var QUIET = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) ||
   !!(navigator.connection && navigator.connection.saveData);
@@ -1246,12 +1078,15 @@ function playQuietly(v) { var p = v.play(); if (p && p.catch) p.catch(function (
       el.setAttribute("muted", ""); el.setAttribute("playsinline", "");
       el.poster = a.getAttribute("href");
       el.src = clip;
-      el.setAttribute("aria-hidden", "true");
+      // Silent and looping, it stands in for a picture, so it says what it shows.
+      var sr = a.querySelector(".visually-hidden"), th = thumbOf(a);
+      el.setAttribute("role", "img");
+      el.setAttribute("aria-label", (sr && sr.textContent) || (th && th.getAttribute("alt")) || "");
     } else {
       el = document.createElement("img");
       el.src = a.getAttribute("href");
-      var t = thumbOf(a);
-      el.alt = (t && t.getAttribute("alt")) || "";
+      var t = thumbOf(a), label = a.querySelector(".visually-hidden");
+      el.alt = (t && t.getAttribute("alt")) || (label && label.textContent) || "";
     }
     el.className = "lb-media";
     return el;
@@ -1285,7 +1120,10 @@ function playQuietly(v) { var p = v.play(); if (p && p.catch) p.catch(function (
     stage.innerHTML = "";
     stage.appendChild(el);
     if (el.tagName === "VIDEO") playQuietly(el);
-    caption.textContent = a.getAttribute("data-caption") || el.alt || "";
+    // A caption only where one was written on purpose (a date, a credit): the
+    // alt text describes the picture for those who cannot see it, and is not
+    // repeated under it for those who can.
+    caption.textContent = a.getAttribute("data-caption") || "";
     count.textContent = set.length > 1 ? (index + 1) + " of " + set.length : "";
     [index - 1, index + 1].forEach(function (n) {
       var b = set[(n + set.length) % set.length];
@@ -1366,157 +1204,88 @@ function playQuietly(v) { var p = v.play(); if (p && p.catch) p.catch(function (
 })();
 
 /* ---------------------------------------------------------------------------
-   The tour (tour.html).
+   Inside the masjid (homepage): the strip of photographs.
 
-   Each scene ([data-scene]) is several screens tall and holds a stage that
-   stays put while it is scrolled past. All this script does is work out how
-   far through each scene the reader is (0 to 1) and, from that, which shot is
-   showing, how far its slow push has gone, which panels and words are up, and
-   which clips should be playing. The look of every cut, dissolve and reveal
-   is in the stylesheet. A reader who asks for reduced motion never gets the
-   stage: the page stays a photo essay, the same pictures one after another.
+   It scrolls sideways by itself (a trackpad, a swipe, the arrow keys once it
+   has focus); the two buttons move it most of a screen at a time, for a
+   mouse. They appear only when there is more to see, and each one greys out
+   at its end.
    --------------------------------------------------------------------------- */
 (function () {
-  var tour = document.querySelector(".tour");
-  if (!tour || !window.requestAnimationFrame) return;
-  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  var root = document.documentElement;
-  var slice = function (l) { return Array.prototype.slice.call(l); };
-  var portrait = window.matchMedia("(max-aspect-ratio: 3/4)");
-  tour.classList.add("is-cinema");
+  var strip = document.querySelector(".strip");
+  var nav = document.querySelector(".strip-nav");
+  if (!strip || !nav) return;
+  var buttons = nav.querySelectorAll(".strip-btn");
+  var smooth = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
-  function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
-  function clamp(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
-
-  var scenes = slice(tour.querySelectorAll("[data-scene]")).map(function (el) {
-    var stage = el.querySelector(".stage, .stage-open");
-    var shots = slice(stage.children).filter(function (c) { return c.classList.contains("shot"); }).map(function (s) {
-      if (s.getAttribute("data-focus")) s.style.setProperty("--focus", s.getAttribute("data-focus"));
-      return {
-        el: s,
-        at: parseFloat(s.getAttribute("data-at")) || 0,
-        zoom: (s.getAttribute("data-zoom") || "1 1").split(" ").map(Number),
-        media: s.querySelector(":scope > picture > img, :scope > img, :scope > video"),
-        pull: s.hasAttribute("data-focus-pull"),
-        steps: (s.getAttribute("data-steps") || "").split(" ").filter(Boolean).map(Number),
-        panels: slice(s.querySelectorAll(".panel")).map(function (p) { return { el: p, at: parseFloat(p.getAttribute("data-at")) || 0 }; })
-      };
+  // aria-disabled rather than disabled: a disabled button loses the keyboard
+  // focus it has, and a reader at the end of the strip would be dropped.
+  function update() {
+    var max = strip.scrollWidth - strip.clientWidth;
+    nav.hidden = max < 8;
+    buttons[0].setAttribute("aria-disabled", String(strip.scrollLeft < 8));
+    buttons[1].setAttribute("aria-disabled", String(strip.scrollLeft > max - 8));
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (b.getAttribute("aria-disabled") === "true") return;
+      strip.scrollBy({ left: Number(b.getAttribute("data-dir")) * strip.clientWidth * 0.8, behavior: smooth ? "smooth" : "auto" });
     });
-    return {
-      el: el,
-      title: el.getAttribute("data-title"),
-      shots: shots,
-      texts: slice(el.querySelectorAll(".scene-text")).map(function (t) {
-        return { el: t, from: parseFloat(t.getAttribute("data-at")) || 0, to: t.hasAttribute("data-to") ? parseFloat(t.getAttribute("data-to")) : 2 };
-      }),
-      clips: slice(el.querySelectorAll("video.tour-clip")),
-      loaded: false
-    };
   });
-  if (!scenes.length) return;
-
-  // Where you are: the scenes down the side, and a bar of progress on a phone.
-  var rail = document.createElement("nav");
-  rail.className = "tour-rail";
-  rail.setAttribute("aria-label", "Scenes of the tour");
-  rail.innerHTML = "<ol>" + scenes.filter(function (s) { return s.title; }).map(function (s) {
-    return '<li><a href="#' + s.el.id + '"><span>' + s.title.replace(/[<>&]/g, "") + "</span></a></li>";
-  }).join("") + "</ol>";
-  var bar = document.createElement("div");
-  bar.className = "tour-progress";
-  bar.setAttribute("aria-hidden", "true");
-  tour.appendChild(rail);
-  tour.appendChild(bar);
-  scenes.forEach(function (s) { if (s.title) s.link = rail.querySelector('a[href="#' + s.el.id + '"]'); });
-
-  function load(sc) {
-    sc.loaded = true;
-    if (QUIET) return;
-    sc.clips.forEach(function (v) {
-      var tall = portrait.matches && v.getAttribute("data-src-p");
-      if (tall && v.getAttribute("data-poster-p")) v.poster = v.getAttribute("data-poster-p");
-      v.src = tall ? v.getAttribute("data-src-p") : v.getAttribute("data-src");
-      v.preload = "auto";
-    });
-  }
-
-  function setPlaying(v, on) {
-    if (QUIET || !v.getAttribute("src")) return;
-    if (on && !document.hidden) { if (v.paused) playQuietly(v); }
-    else if (!v.paused) v.pause();
-  }
-
-  var lastY = window.pageYOffset, ticking = false;
-
-  function frame() {
-    ticking = false;
-    var vh = window.innerHeight;
-    var current = null;
-    scenes.forEach(function (sc) {
-      var r = sc.el.getBoundingClientRect();
-      if (!sc.loaded && r.top < 2.5 * vh && r.bottom > -vh) load(sc);
-      var visible = r.bottom > 0 && r.top < vh;
-      if (sc.title && r.top <= vh * 0.5 && r.bottom > vh * 0.5) current = sc;
-      if (!visible) {
-        sc.clips.forEach(function (v) { setPlaying(v, false); });
-        return;
-      }
-      var p = clamp(-r.top / Math.max(1, r.height - vh));
-      var active = 0;
-      sc.shots.forEach(function (s, i) { if (p >= s.at) active = i; });
-      sc.shots.forEach(function (s, i) {
-        var on = i === active;
-        var end = i + 1 < sc.shots.length ? sc.shots[i + 1].at : 1;
-        var t = clamp((p - s.at) / Math.max(0.001, end - s.at));
-        s.el.classList.toggle("is-on", on);
-        if (s.media && (on || i === active - 1)) {
-          s.media.style.setProperty("--z", (s.zoom[0] + (s.zoom[1] - s.zoom[0]) * ease(t)).toFixed(4));
-          if (s.pull) s.media.style.setProperty("--blur", (on ? 9 * Math.max(0, 1 - t * 3.5) : 0).toFixed(2) + "px");
-        }
-        if (s.steps.length) {
-          var step = 0;
-          s.steps.forEach(function (at) { if (p >= at) step++; });
-          s.el.setAttribute("data-step", String(step));
-        }
-        s.panels.forEach(function (pn) { pn.el.classList.toggle("is-on", on && p >= pn.at); });
-        slice(s.el.querySelectorAll("video.tour-clip")).forEach(function (v) {
-          var pn = v.closest(".panel");
-          setPlaying(v, on && (!pn || pn.classList.contains("is-on")));
-        });
-      });
-      sc.texts.forEach(function (t) { t.el.classList.toggle("is-on", p >= t.from && p < t.to); });
-    });
-
-    var first = scenes[0].el.getBoundingClientRect();
-    var last = scenes[scenes.length - 1].el.getBoundingClientRect();
-    var inside = first.top <= 0 && last.bottom > vh * 0.5;
-    root.classList.toggle("in-scenes", inside && !!current);
-    root.style.setProperty("--tour-p", clamp(-first.top / Math.max(1, last.bottom - first.top - vh)).toFixed(4));
-    scenes.forEach(function (s) { if (s.link) s.link.classList.toggle("is-current", s === current); });
-
-    // The header steps aside on the way down through the scenes, and comes
-    // back as soon as the reader scrolls up or leaves them.
-    var y = window.pageYOffset;
-    var menuOpen = !!document.querySelector(".site-header.is-open");
-    if (inside && !menuOpen && y > lastY + 6) root.classList.add("tour-immersed");
-    else if (y < lastY - 6 || !inside || menuOpen) root.classList.remove("tour-immersed");
-    lastY = y;
-  }
-
-  function request() { if (!ticking) { ticking = true; window.requestAnimationFrame(frame); } }
-  window.addEventListener("scroll", request, { passive: true });
-  window.addEventListener("resize", request);
-  document.addEventListener("visibilitychange", request);
-
-  // A keyboard user who tabs to a link in words not yet showing is taken to
-  // the point in the scene where those words appear.
-  tour.addEventListener("focusin", function (e) {
-    var t = e.target.closest && e.target.closest(".scene-text");
-    if (!t || t.classList.contains("is-on")) return;
-    var sc = t.closest("[data-scene]");
-    var at = parseFloat(t.getAttribute("data-at")) || 0;
-    var top = sc.getBoundingClientRect().top + window.pageYOffset;
-    window.scrollTo(0, top + (sc.offsetHeight - window.innerHeight) * Math.min(1, at + 0.03));
+  // Tabbing to a picture brings all of it into view.
+  strip.addEventListener("focusin", function (e) {
+    var li = e.target.closest && e.target.closest("li");
+    if (li) li.scrollIntoView({ inline: "nearest", block: "nearest", behavior: smooth ? "smooth" : "auto" });
   });
-  frame();
+  strip.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  update();
+})();
+
+/* ---------------------------------------------------------------------------
+   The tour (tour.html): a walk round the masjid, stop by stop.
+
+   The list of stops marks the one being read (aria-current, shown in weight
+   and colour), so a reader always knows where they are in the building. That
+   is all this does: the page is complete without it.
+   --------------------------------------------------------------------------- */
+(function () {
+  var stops = Array.prototype.slice.call(document.querySelectorAll(".stop[id]"));
+  var links = Array.prototype.slice.call(document.querySelectorAll(".route a[href^='#']"));
+  if (!stops.length || !links.length || !("IntersectionObserver" in window)) return;
+  var current = null;
+
+  function mark(id) {
+    if (id === current) return;
+    current = id;
+    links.forEach(function (a) {
+      if (a.getAttribute("href") === "#" + id) a.setAttribute("aria-current", "location");
+      else a.removeAttribute("aria-current");
+    });
+  }
+
+  // A stop counts as being read once it reaches the upper part of the screen.
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) mark(e.target.id); });
+  }, { rootMargin: "-30% 0px -60% 0px" });
+  stops.forEach(function (s) { io.observe(s); });
+})();
+
+/* At the prayer hall: standing, bowing and prostrating, one at a time, by
+   pressing the position's name. Without script the three sit side by side. */
+(function () {
+  Array.prototype.slice.call(document.querySelectorAll(".positions")).forEach(function (box) {
+    var pick = box.querySelector(".positions-pick");
+    var figs = Array.prototype.slice.call(box.querySelectorAll(".frames--tri > figure"));
+    var btns = Array.prototype.slice.call(box.querySelectorAll(".positions-btn"));
+    if (!pick || !figs.length || figs.length !== btns.length) return;
+    function show(i) {
+      figs.forEach(function (f, j) { f.hidden = j !== i; });
+      btns.forEach(function (b, j) { b.setAttribute("aria-pressed", String(j === i)); });
+    }
+    btns.forEach(function (b, i) { b.addEventListener("click", function () { show(i); }); });
+    box.classList.add("is-picking");
+    pick.hidden = false;
+    show(0);
+  });
 })();
