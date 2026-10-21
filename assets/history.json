@@ -8,7 +8,7 @@
       "ar": "الجذور",
       "ar_en": "the roots",
       "title": "Garrison Lane",
-      "years": "2004 to 2022",
+      "years": "From 2004",
       "intro": "The story starts in Bordesley Green, at the Garrison Centre on Garrison Lane: first a madrasah, then a charity, then a masjid named after it.",
       "image": "assets/history/garrison-centre.jpg",
       "image_width": 1360,
@@ -22,7 +22,7 @@
       "ar": "الدار",
       "ar_en": "the house",
       "title": "Revesby Walk",
-      "years": "2019 to today",
+      "years": "From 2019",
       "intro": "Before it was ours, 2 Revesby Walk was a social club. In 2019 the charity took it on, and over the next three years turned it into a masjid.",
       "image": "assets/photos/exterior-sm.jpg",
       "image_width": 1360,
@@ -35,7 +35,7 @@
       "ar": "اليوم",
       "ar_en": "today",
       "title": "Today",
-      "years": "2023 onwards",
+      "years": "From 2023",
       "intro": "The five daily prayers and Jumu'ah, Madrasah Al Furqan's five groups, conferences and courses, and a record the masjid now keeps in public.",
       "image": "assets/photos/entrance-night.jpg",
       "image_width": 1360,
@@ -92,6 +92,33 @@
       "image_height": 825,
       "image_alt": "The prayer hall at Garrison Lane: a wooden mihrab and minbar above green prayer carpet",
       "image_caption": "The prayer hall at Garrison Lane, November 2012."
+    },
+    {
+      "id": "before",
+      "year": "?",
+      "strand": "building",
+      "title": "Before the club",
+      "status": "unknown",
+      "body": "How long the club was on Revesby Walk, and what the building was before it, is not written down anywhere we can check. Many people remember a pub on the street: that was the Ashted Hamlet, which stood on Revesby Walk from 1966 to 1997 and was later demolished. It was a different building from the masjid.",
+      "asks": [
+        "When was the building built, and who for?",
+        "Was the club ever called the East Birmingham Constitutional Club, the 'Conservative club' at the top of Revesby Walk?",
+        "Do you have photographs of the club, inside or out?"
+      ],
+      "source": "Ashted Hamlet: closedpubs.co.uk and the Birmingham History Forum. The 'Conservative club' at the top of Revesby Walk: a 2005 post on the Birmingham History Forum.",
+      "chapter": "garrison",
+      "aside": "On Revesby Walk, before it was ours"
+    },
+    {
+      "id": "the-club",
+      "year": "2007",
+      "strand": "building",
+      "title": "The Vauxhall Sports and Social Club",
+      "status": "confirmed",
+      "body": "Before it was a masjid, 2 Revesby Walk was a social club. A community interest company for the Vauxhall Sports and Social Club was registered at this address from October 2007 until it was dissolved in June 2010.",
+      "source": "Companies House, company 06409217. The masjid's earlier website also describes the building as the former home of the Vauxhall Sports and Social Club.",
+      "chapter": "garrison",
+      "aside": "On Revesby Walk, before it was ours"
     },
     {
       "id": "youth-2011",
@@ -158,56 +185,12 @@
       "image_caption": "The Al-Kownayn Centre's logo, June 2014."
     },
     {
-      "id": "garrison-lane",
-      "year": "To 2022",
-      "strand": "community",
-      "title": "The Garrison Lane years",
-      "status": "confirmed",
-      "body": "For most of its life the masjid was at the Garrison Centre, 106 Garrison Lane in Bordesley Green, the community the charity was set up to serve. From April 2007 the charity used rooms there under a licence from SOS Education Organisation, which held the centre's lease from Birmingham City Council. It held the five daily prayers, the madrasah's classes, Ramadan tafsir and tarawih, and organised Eid prayers in Garrison Lane park. The charity's accounts give the Garrison Centre as its principal office up to the year ending March 2022. From the following year it is 2 Revesby Walk.",
-      "asks": [
-        "Who remembers the move to Nechells, and the last prayer at Garrison Lane?",
-        "Do you have photographs of the Garrison Centre, inside or out?"
-      ],
-      "source": "The charity's annual accounts, 2021/22 and 2022/23, filed with the Charity Commission. The 2007 licence, the masjid's appeals and its letters from 2012 to 2014, in the masjid's archive.",
-      "chapter": "garrison",
-      "image": "assets/history/garrison-centre-2014.jpg",
-      "image_width": 1280,
-      "image_height": 720,
-      "image_alt": "The main building of the Garrison Centre on a grey day: twin gables with round windows, tall arched windows and purple doors",
-      "image_caption": "The Garrison Centre's main building, January 2014, from a film of the centre."
-    },
-    {
-      "id": "before",
-      "year": "?",
-      "strand": "building",
-      "title": "Before the club",
-      "status": "unknown",
-      "body": "How long the club was on Revesby Walk, and what the building was before it, is not written down anywhere we can check. Many people remember a pub on the street: that was the Ashted Hamlet, which stood on Revesby Walk from 1966 to 1997 and was later demolished. It was a different building from the masjid.",
-      "asks": [
-        "When was the building built, and who for?",
-        "Was the club ever called the East Birmingham Constitutional Club, the 'Conservative club' at the top of Revesby Walk?",
-        "Do you have photographs of the club, inside or out?"
-      ],
-      "source": "Ashted Hamlet: closedpubs.co.uk and the Birmingham History Forum. The 'Conservative club' at the top of Revesby Walk: a 2005 post on the Birmingham History Forum.",
-      "chapter": "revesby"
-    },
-    {
-      "id": "the-club",
-      "year": "2007",
-      "strand": "building",
-      "title": "The Vauxhall Sports and Social Club",
-      "status": "confirmed",
-      "body": "Before it was a masjid, 2 Revesby Walk was a social club. A community interest company for the Vauxhall Sports and Social Club was registered at this address from October 2007 until it was dissolved in June 2010.",
-      "source": "Companies House, company 06409217. The masjid's earlier website also describes the building as the former home of the Vauxhall Sports and Social Club.",
-      "chapter": "revesby"
-    },
-    {
       "id": "revesby-walk",
       "year": "2019",
       "strand": "building",
       "title": "2 Revesby Walk becomes ours",
       "status": "confirmed",
-      "body": "In June 2019 the building at 2 Revesby Walk changes hands, and from then on the charity's accounts list land and buildings of exactly the price that was paid. This is the turning point of the whole story.",
+      "body": "In June 2019 the building at 2 Revesby Walk changes hands, and from then on the charity's accounts list land and buildings of exactly the price that was paid.",
       "asks": [
         "Who made it happen, and how was the money raised?",
         "What state was the building in when we got the keys?"
@@ -256,6 +239,26 @@
       "body": "The charity's Declaration of Trust is amended on 5 March 2021. Today it is registered as Kowneyn Education and Cultural Centre, and its earlier names on the register include Somali Education and Cultural Centre. The community knows it as Attarbiya Masjid.",
       "source": "Charity Commission register: governing document amended 5 March 2021; registered name and previous names.",
       "chapter": "revesby"
+    },
+    {
+      "id": "garrison-lane",
+      "year": "To 2022",
+      "strand": "community",
+      "title": "The Garrison Lane years",
+      "status": "confirmed",
+      "body": "For most of its life the masjid was at the Garrison Centre, 106 Garrison Lane in Bordesley Green, the community the charity was set up to serve. From April 2007 the charity used rooms there under a licence from SOS Education Organisation, which held the centre's lease from Birmingham City Council. It held the five daily prayers, the madrasah's classes, Ramadan tafsir and tarawih, and organised Eid prayers in Garrison Lane park. The charity's accounts give the Garrison Centre as its principal office up to the year ending March 2022. From the following year it is 2 Revesby Walk.",
+      "asks": [
+        "Who remembers the move to Nechells, and the last prayer at Garrison Lane?",
+        "Do you have photographs of the Garrison Centre, inside or out?"
+      ],
+      "source": "The charity's annual accounts, 2021/22 and 2022/23, filed with the Charity Commission. The 2007 licence, the masjid's appeals and its letters from 2012 to 2014, in the masjid's archive.",
+      "chapter": "revesby",
+      "image": "assets/history/garrison-centre-2014.jpg",
+      "image_width": 1280,
+      "image_height": 720,
+      "image_alt": "The main building of the Garrison Centre on a grey day: twin gables with round windows, tall arched windows and purple doors",
+      "image_caption": "The Garrison Centre's main building, January 2014, from a film of the centre.",
+      "aside": "Looking back at Garrison Lane"
     },
     {
       "id": "winter-2023",
@@ -308,10 +311,10 @@
       "body": "Daily prayers and Jumu'ah, the Al Furqan madrasah, lessons and conferences, youth nights and Eid. The timetable is published live on this site and the programme is on the events page.",
       "source": "Prayer times come from the masjid's own Masjidbox timetable; events are evidenced one by one on the events page.",
       "chapter": "today",
-      "image": "assets/photos/congregation.jpg",
-      "image_width": 1360,
-      "image_height": 907,
-      "image_alt": "Brothers standing in rows for Dhuhr in the main prayer hall, seen from behind"
+      "image": "assets/photos/qiyam-wide.jpg",
+      "image_width": 1600,
+      "image_height": 565,
+      "image_alt": "Rows of worshippers standing for Dhuhr in the main prayer hall, seen from behind"
     }
   ]
 }
