@@ -1537,13 +1537,6 @@ strong { color: var(--ink); }
 .portal-photo { margin-top: 36px; }
 .donate-photo { margin: 0 0 24px; max-width: none; }
 
-/* The mosaic: photographs and clips at different sizes, cut like a photo
-   essay rather than a row of equal tiles (a wide shot beside a close-up, a
-   letterbox under a portrait). As a tile scrolls in, it opens like an aperture
-   and its picture pulls back from a close-up; that needs scroll-driven
-   animation, so where a browser lacks it the tiles simply sit still. Every
-   picture opens full size in the viewer (js/main.js), and is a plain link to
-   the image without script. */
 /* Inside the masjid (homepage): one row of photographs that scrolls sideways,
    at one height but in three shapes, so it reads as a strip of prints rather
    than a row of equal tiles. Square corners, no frame, no labels; each opens
@@ -1595,10 +1588,43 @@ strong { color: var(--ink); }
   .strip-track li { height: 220px; }
 }
 
+/* Inside the madrasah: eight pictures, no subject twice, mostly close: the
+   red-carpet class leads, and the wide shots that show the rooms are left
+   out. Cut to different sizes, square corners, no frame. */
+.set {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(2, clamp(130px, 17vw, 210px)) clamp(140px, 18vw, 220px);
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.set > li { position: relative; overflow: hidden; background: var(--green-ink); }
+.set a { position: absolute; inset: 0; display: block; cursor: zoom-in; }
+.set img, .set video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.set a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+.set .set-a { grid-column: 1 / 8; grid-row: 1 / 3; }
+.set .set-b { grid-column: 8 / 13; grid-row: 1; }
+.set .set-c { grid-column: 8 / 10; grid-row: 2; }
+.set .set-d { grid-column: 10 / 13; grid-row: 2; }
+.set .set-e { grid-column: 1 / 6; grid-row: 3; }
+.set .set-f { grid-column: 6 / 8; grid-row: 3; }
+.set .set-g { grid-column: 8 / 10; grid-row: 3; }
+.set .set-h { grid-column: 10 / 13; grid-row: 3; }
+@media (max-width: 760px) {
+  .set { grid-template-columns: 1fr 1fr; grid-template-rows: none; grid-auto-rows: 38vw; grid-auto-flow: dense; }
+  .set .set-b, .set .set-c, .set .set-d, .set .set-f, .set .set-g, .set .set-h { grid-column: auto; grid-row: auto; }
+  .set .set-a { grid-column: 1 / -1; grid-row: span 2; }
+  .set .set-e { grid-column: 1 / -1; grid-row: auto; }
+}
+
+/* The mosaic, now only About's row of three: each a different width, so no
+   two frames are alike. As a picture scrolls in, it opens like an aperture
+   where the browser has scroll-driven animation; elsewhere it simply sits. */
 .mosaic {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-auto-rows: clamp(56px, 7.4vw, 86px);
   gap: 10px;
   list-style: none;
   margin: 0;
@@ -1615,44 +1641,6 @@ strong { color: var(--ink); }
 }
 .mosaic a:hover img, .mosaic a:hover video, .mosaic a:focus-visible img, .mosaic a:focus-visible video { scale: 1.05; }
 .mosaic a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
-.mosaic .m-a { grid-column: 1 / 8; grid-row: 1 / 6; }
-.mosaic .m-b { grid-column: 8 / 13; grid-row: 1 / 4; }
-.mosaic .m-c { grid-column: 8 / 11; grid-row: 4 / 8; }
-.mosaic .m-d { grid-column: 11 / 13; grid-row: 4 / 8; }
-.mosaic .m-e { grid-column: 1 / 8; grid-row: 6 / 8; }
-
-/* The letterbox tile that leads into the tour: the congregation in ruku, with
-   the way in written across it. */
-.mosaic .m-tour a { cursor: pointer; color: var(--white); text-decoration: none; }
-.mosaic .m-tour a::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(8, 20, 19, 0.86) 0%, rgba(8, 20, 19, 0.6) 46%, rgba(8, 20, 19, 0.1) 80%);
-}
-.m-tour-text {
-  position: absolute;
-  z-index: 1;
-  left: clamp(16px, 3vw, 32px);
-  top: 50%;
-  translate: 0 -50%;
-  max-width: 60%;
-}
-.m-tour-text b { display: block; font: 400 clamp(1.4rem, 1rem + 1.6vw, 2.1rem)/1.1 var(--font-head); }
-.m-tour-text span { display: block; margin-top: 6px; font-size: 0.92rem; color: rgba(255, 255, 255, 0.9); }
-.m-tour-text span::after { content: "\2192"; display: inline-block; margin-left: 0.35em; transition: translate 0.3s ease; }
-.m-tour a:hover .m-tour-text span::after { translate: 4px 0; }
-
-@media (max-width: 760px) {
-  .mosaic-section { padding: 52px 0 44px; }
-  .mosaic { grid-template-columns: 1fr 1fr; grid-auto-rows: 27vw; gap: 8px; }
-  .mosaic .m-a { grid-column: 1 / 3; grid-row: 1 / 3; }
-  .mosaic .m-b { grid-column: 1 / 2; grid-row: 3 / 5; }
-  .mosaic .m-c { grid-column: 2 / 3; grid-row: 3 / 6; }
-  .mosaic .m-d { grid-column: 1 / 2; grid-row: 5 / 6; }
-  .mosaic .m-e { grid-column: 1 / 3; grid-row: 6 / 7; }
-  .m-tour-text { max-width: 80%; }
-}
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -1671,7 +1659,6 @@ strong { color: var(--ink); }
 @keyframes mosaic-open { from { clip-path: inset(14% 10% round 6px); } to { clip-path: inset(0 round 6px); } }
 @keyframes mosaic-pull { from { transform: scale(1.25); } to { transform: scale(1); } }
 
-/* One row of three, each a different width, so no two frames are alike. */
 .mosaic--row { grid-auto-rows: clamp(150px, 20vw, 240px); margin-top: 10px; }
 .mosaic--row > .r-6 { grid-column: span 6; }
 .mosaic--row > .r-5 { grid-column: span 5; }
@@ -1679,6 +1666,7 @@ strong { color: var(--ink); }
 .mosaic--row > .r-3 { grid-column: span 3; }
 .about-strands + .mosaic--row { margin-top: 44px; }
 @media (max-width: 760px) {
+  .mosaic { grid-template-columns: 1fr 1fr; gap: 8px; }
   .mosaic--row { grid-auto-rows: 42vw; }
   .mosaic.mosaic--row > li { grid-column: span 1; }
   .mosaic.mosaic--row > li:first-child { grid-column: 1 / -1; }
