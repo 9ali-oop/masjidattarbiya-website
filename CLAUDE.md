@@ -678,11 +678,11 @@ to be left as it is, but it is the next candidate if he wants one more swapped.
 | `photos/strip/<name>.jpg` (600px tall: 4:5, square or 2:1) | crops for the homepage strip | "Inside the masjid" on the homepage |
 | `tour/<name>.jpg` (1920x1280) | the selection, 29 photographs | The viewer (every picture opens its full file) |
 | `tour/g/<name>.jpg` (960x640) | smaller copies | The tour's stops, the madrasah set, the homepage, the tour's contact sheet |
-| `video/<name>.mp4` + `.jpg` poster (1280x720) | silent loops | About, the madrasah page, the tour, the homepage's peek (in the viewer) |
+| `video/<name>.mp4` + `.jpg` poster (1280x720) | silent loops | About, the madrasah page, the tour |
 
 The clips: `class-circle` (the red-carpet class, wide; About only), `class-teacher` (the teacher
 reading, half speed; it leads the madrasah page and the tour's madrasah stop),
-`class-teacher-close` (the homepage's peek), `class-white` (About, the tour's contact sheet),
+`class-white` (About, the tour's contact sheet),
 `class-listening` (the tour's contact sheet), `sign` (the sign, half speed; the tour) and
 `sisters-notes` (About, the tour). A clip plays in the viewer only over
 its own poster: a still of a different moment never opens a clip. The portrait cuts (`-p`
@@ -744,8 +744,10 @@ strip had been better. So:
   user keeps focus. It starts in line with the page and runs off the right-hand edge. A plain
   "Take the tour" link follows it.
 - **Homepage, the madrasah band** (`.peek`): three small pictures under the buttons, one wider
-  than the others, and no child's face: the red-carpet teacher on his own (it opens his clip in
-  the viewer), a pupil reading the Qur'an seen over his shoulder, and notes in a notebook.
+  than the others, and no child's face: a teacher's hands holding the Qur'an with a pencil
+  (`photos/teacher-hands.jpg`, cut from the one-to-one table; Ali asked on 22 October 2026 for
+  a close-up there instead of the teacher's face), a pupil reading the Qur'an seen over his
+  shoulder, and notes in a notebook. The madrasah's pictures carry no date line.
 - **Madrasah page, "Inside the madrasah"** (`.set`): one block of eight, no subject twice,
   mostly close: the red-carpet clip leads, then the mushaf and a boy reading (both from the
   one-to-one table, so Ali's class), boys listening, the row of boys, a boy half smiling (all
