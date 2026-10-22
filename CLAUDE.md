@@ -18,7 +18,7 @@ below. Never invent a value that is not on this list.
 | Madrasah | **Madrasah Al Furqan** (مدرسة الفرقان), the masjid's own madrasah - not a separate organisation |
 | Address | 2 Revesby Walk, Nechells, Birmingham B7 4LG |
 | Charity number | 1142204 |
-| Phone | 07908 854187 (`tel:+447908854187`, `wa.me/447908854187`), confirmed by the masjid 7 October 2026 |
+| Phone | 07929 242914 (`tel:+447929242914`, `wa.me/447929242914`), Malim Husain's mobile, chosen by Ali for the masjid 22 October 2026 |
 | Email | info@masjidatarbiya.org (note: **one** 't', and that is correct - see below) |
 | Website | masjidattarbiya.org (note: **two** t's) |
 | Prayer times | https://masjidbox.com/prayer-times/masjid-attarbiya |
@@ -39,10 +39,12 @@ all. The two simply have different histories. Do not "correct" the email to matc
 (If you ever want `info@masjidattarbiya.org` to work as well, Cloudflare Email Routing forwards
 it free.)
 
-**The phone number is settled.** The masjid's signage shows a number beginning `07929`, but the
-masjid confirmed on 7 October 2026 that 07908 854187 (the number on the Charity Commission
-register) is the one to publish. The 07929 number on the sign is Malim Husain's, the madrasah's
-management. On 9 October 2026 he sent the three maalims' names and mobiles for the site (Husain,
+**The phone number is settled: 07929 242914** (Ali, 22 October 2026). It is Malim Husain's
+mobile (he runs the madrasah's management), and it is the number on the masjid's sign, its
+Google listing and its printed monthly timetables, so the website now matches all three.
+Until then the site carried 07908 854187, the number on the Charity Commission register,
+which the masjid had confirmed on 7 October; the register still shows it, and the trustees
+may want to update it there too. On 9 October 2026 Malim Husain sent the three maalims' names and mobiles for the site (Husain,
 Aden, Shaafici); Ali holds them, they are not in this repo, and they go on the madrasah page only
 once each maalim has agreed to be named. Until the facts table carries a number,
 `check_facts.py` blocks it.
@@ -56,7 +58,8 @@ once each maalim has agreed to be named. Until the facts table carries a number,
    **The one agreed exception** is the madrasah's timetable, term dates, group descriptions,
    places and resources (`assets/madrasah.json`), which the masjid asked for as placeholders in
    October 2026 so the page could be designed and reviewed. Every one of them is marked
-   `"placeholder": true` and carries a visible "To be confirmed" label on the page. On 7 October
+   `"placeholder": true` and carries a visible "To be confirmed" label on the page, except term
+   dates and resources, which are not shown at all until confirmed (see "Madrasah Al Furqan"). On 7 October
    2026 the masjid widened this: a detail a page genuinely needs, which the masjid has not yet
    confirmed, may appear as a **labelled** placeholder (the `.tbc` "To be confirmed" chip) so
    the page can be built and reviewed, provided it is also on the list of questions for the
@@ -85,6 +88,14 @@ Prayer times are **not** an iframe any more, and are **not** hand-written into t
 - **A start time of exactly 00:00 is a placeholder, not a time.** Masjidbox once published an
   Isha of 00:00; the fetch script now drops such values, the page shows a dash for the start
   and still shows the iqamah, and `check_data.py` fails if one ever gets through.
+- **The day the clocks change, Masjidbox's start times are an hour out.** On Sunday 25
+  October 2026 it stamped every start time an hour late (Fajr 06:17 for 05:17, sunrise 07:52
+  for 06:52) while the iqamah times were right, which would have told people Fajr lasted an
+  hour past sunrise. `fetch_prayer_times.py` now reads a start time in the day's own offset
+  whenever Masjidbox has stamped it with another (`start_hhmm`), and `check_data.py` fails on a
+  start time after its iqamah or a Maghrib iqamah more than 20 minutes after Maghrib begins.
+  Look again after the next spring change (Sunday 28 March 2027): the correction assumes
+  Masjidbox makes the same mistake in the other direction, and the check will say if not.
 
 Two things to respect:
 
@@ -194,7 +205,8 @@ you contact us". Things to keep as they are:
   page. Spam is caught by the hidden `_gotcha` honeypot (hidden by the `.gotcha` class, never
   removed) and Formspree's own filtering.
 - The `email` field is the Reply-To, so the masjid can answer from its inbox; the hidden
-  `subject` field sets the email's subject line.
+  `subject` field sets the email's subject line. `contact?about=photo` (the privacy notice's
+  photo removal link) sets it to "Photo removal request" and prompts for which photo.
 - **The form ID is public** (it is in the HTML) and is not a secret. The Formspree account
   login is the masjid's and never goes in the repo, a commit or a chat message. The free plan
   allows 50 messages a month, keeps 30 days of history in Formspree's inbox, and notifies up
@@ -502,8 +514,12 @@ was an explicit request. The page says so in words ("Under one roof") as well as
   curriculum or its publisher**, and do not list the five subjects as if they were all taught
   now; keep it general ("lessons in fiqh and in adab and akhlaq as well").
 - **Still placeholders** (see Rule 1): which ages go in Groups 1 to 3 (`"who_placeholder"` on
-  the group), the term dates, "places", fees and the resources list. They live in
-  `assets/madrasah.json`, each flagged, and each shows a "To be confirmed" label. While `"provisional"` is true the page also shows a draft notice. When the madrasah
+  the group), the term dates, "places" and fees. They live in `assets/madrasah.json`, each
+  flagged, and each shows a "To be confirmed" label. **Term dates and resources are never
+  shown as placeholders** (Ali, 22 October 2026, before the site opened): the sample term dates
+  put a half term in the coming week, which a parent could have acted on, and the sample
+  resources did not exist. Both were deleted from the file; the page asks parents to ask on
+  WhatsApp, and `js/main.js` will not render a term list or resource that is still flagged. While `"provisional"` is true the page also shows a draft notice. When the madrasah
   confirms an item, correct it and delete its flag; `check_madrasah.py` lists what is left and
   fails if the file claims to be final while placeholders remain. Fees are deliberately "to be
   confirmed" with no placeholder figure.
@@ -648,9 +664,14 @@ October 2026 shoot. The children were asked and wanted to take part, so their ph
 are used, and **any parent who objects gets their child's picture removed straight away, no
 questions asked.** To remove one: delete the file from `assets/photos/`, `assets/tour/` or `assets/video/`
 (with its `tour/g/` copy, its crop in `assets/photos/strip/` if it has one, and a clip's poster), remove every
-reference (`grep -rn <name> .`), commit, and take it off the Google Business Profile too. The opt-out only works if parents know, so the
-madrasah should tell them once that the photos are on the site. Older archive photos of
-children are not covered (see "Our Story").
+reference (`grep -rn <name> .`), commit, and take it off the Google Business Profile too.
+**How a parent asks** (Ali, 22 October 2026: the madrasah has no time to message every parent,
+so the site offers the way, quietly): "Photo removal" in the footer's bottom line, next to
+Privacy, and one small line under the madrasah page's pictures, both lead to the privacy
+notice's Photographs section (`privacy#photos`), which says the children were asked and
+offers WhatsApp (message already started) or the contact form (`contact?about=photo`). Keep
+it that small: it is for a parent, not something every visitor should notice. Older archive
+photos of children are not covered (see "Our Story").
 
 **The photo shoot** was Saturday 10 October 2026 (Tayseer, Sony FX30): 62 edited photographs
 (6192x4128, about 20MB each) and 46 clips (4K, 25fps, 2 to 8 seconds, with sound). The camera
@@ -703,8 +724,10 @@ files) were deleted with the old tour on 21 October 2026.
 **Things hidden before anything was published, and they must stay hidden in any new crop:**
 the green information screens in the prayer hall (one cycles through the **masjid's bank
 account details**, another shows a day's prayer times, which must never look like current
-times), the number plates of parked cars outside, and **07929 242914 on the sign**, Malim
-Husain's number, not the masjid's. The sign's close-ups (`tour/sign-night`, the `sign` clip)
+times), and the number plates of parked cars outside. The sign's number (07929 242914) was
+hidden too, when it was thought to be Malim Husain's alone; it has been the masjid's public
+number since 22 October 2026, so hiding it no longer matters, but there is no need to undo
+it. The sign's close-ups (`tour/sign-night`, the `sign` clip)
 are cropped so the number is out of frame (and blurred under the crop as
 well). By day the number panel is blurred in the wide shots. **At night the lit number line at
 the bottom left of the sign was found unblurred** (21 October 2026: a few pixels, but readable
@@ -820,8 +843,8 @@ parental consent - the masjid runs children's classes, so that standard applies 
 The masjid's Google listing ("Attarbiya Masjid", Mosque, 4.8 from 59 reviews in October 2026)
 is managed from the account **info@masjidatarbiya.org**; Ali signs in to it. Nothing in this
 repo can edit it: changes are made by hand, signed in, from the "You manage this Business
-Profile" panel on Google Search. As audited on 21 October 2026 it showed **Malim Husain's
-mobile (07929 242914) instead of the masjid's 07908 854187**, "Closes 5 pm" hours, no
+Profile" panel on Google Search. As audited on 21 October 2026 it showed Malim Husain's
+mobile, 07929 242914, which is now the masjid's number everywhere (keep it), "Closes 5 pm" hours, no
 description, visitor photos from 2023 at the front and a visitor-posted December 2023
 timetable. A private kit with every fix, a 683-character description built only from the
 facts table, review replies, three posts, 26 photos and a logo sized for Google (screens,
@@ -854,8 +877,9 @@ browsers keep those files for ten minutes, so without it a visitor gets the new 
 old stylesheet, which happened once and left the homepage banner unstyled. `check_links.py`
 fails if the pages disagree on the version.
 
-**Maintenance mode: the public sees "being updated" (switched on 21 October 2026, at Ali's
-request, while the site is being worked on).** `js/gate.js`, loaded in the `<head>` of every
+**Maintenance mode is off: the site opened to everyone on 22 October 2026** (it was on from
+21 October, at Ali's request, while the site was reworked). It stays in place, switched off,
+for the next time. With `ON = true`, `js/gate.js`, loaded in the `<head>` of every
 page except `donate.html`, replaces the page with a short notice: the masjid's name, the live
 Masjidbox timetable, the donate page, WhatsApp, phone, email and address. Three things always
 get through, and must keep doing so: **the donate page** (it does not load the script), **a
@@ -863,8 +887,8 @@ donor returning from GoCardless** (any address with `?thanks=` shows the real pa
 thank-you banner), and **the masjid's own team**, after opening any page once with
 `?preview=<TOKEN>` (the token is in `js/gate.js`; `?preview=off` undoes it), who then see the
 full site with a small "Preview" label. It hides the site from ordinary visitors and nothing
-more: the pages are still public files and the token is readable in the script. **To open the
-site to everyone, set `ON = false` in `js/gate.js` and push.** Do not leave it on for weeks:
+more: the pages are still public files and the token is readable in the script. **`ON = true` in
+`js/gate.js` switches it on, `ON = false` off; push either way.** Do not leave it on for weeks:
 search engines that render the page see the notice, and people who check prayer times here
 are sent to Masjidbox instead.
 

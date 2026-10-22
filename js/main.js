@@ -911,8 +911,10 @@ document.addEventListener("DOMContentLoaded", function () {
     classEl.innerHTML = facts + curriculum + cards + table;
   }
 
+  // Term dates and resources are shown only once the madrasah has confirmed
+  // them: a placeholder date is something a parent could act on wrongly.
   function renderTerms(t) {
-    if (!t || !t.list || !t.list.length) return;
+    if (!t || t.placeholder || !t.list || !t.list.length) return;
     termsEl.innerHTML =
       '<p class="terms-year">' + esc(t.year) + " " + tbc(t) + "</p>" +
       '<ol class="terms">' + t.list.map(function (term) {
@@ -924,6 +926,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function renderResources(list) {
+    list = list.filter(function (r) { return !r.placeholder; });
     if (!list.length) return;
     resEl.innerHTML = '<ul class="resource-list">' + list.map(function (r) {
       var inner = "<b>" + esc(r.title) + "</b>" + (r.description ? "<span>" + esc(r.description) + "</span>" : "");
@@ -951,6 +954,12 @@ document.addEventListener("DOMContentLoaded", function () {
    -------------------------------------------------------------------------- */
 (function () {
   var form = document.getElementById("contact-form");
+  // From the privacy notice's photo removal link: the subject line tells the
+  // masjid what the message is about, and the box tells the parent what to say.
+  if (form && /[?&]about=photo\b/.test(location.search)) {
+    form.elements.subject.value = "Photo removal request";
+    form.elements.message.placeholder = "Which page is the photo on, and what does it show?";
+  }
   if (!form || !window.fetch || !window.FormData) return;
   var status = document.getElementById("contact-status");
   var button = document.getElementById("contact-send");

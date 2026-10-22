@@ -75,6 +75,20 @@ for day in days:
     if ordered != sorted(ordered):
         fail(f"{d}: prayer times are out of order - {ordered}")
 
+    # The congregation cannot stand before the prayer's time has begun, and
+    # Maghrib is prayed straight after sunset. A start time after its iqamah, or
+    # a Maghrib iqamah long after Maghrib begins, is the mark of a start time an
+    # hour out, which Masjidbox produced on the day the clocks went back in 2026.
+    for p in ("fajr", "dhuhr", "asr", "maghrib", "isha"):
+        s, q = times.get(p), iqamah.get(p)
+        if valid_hhmm(s) and valid_hhmm(q) and s > q:
+            fail(f"{d}: {p} begins at {s}, after its iqamah at {q} - a start time an hour out?")
+    s, q = times.get("maghrib"), iqamah.get("maghrib")
+    if valid_hhmm(s) and valid_hhmm(q):
+        gap = (int(q[:2]) * 60 + int(q[3:])) - (int(s[:2]) * 60 + int(s[3:]))
+        if gap > 20:
+            fail(f"{d}: maghrib iqamah {q} is {gap} minutes after maghrib begins at {s} - a start time an hour out?")
+
     # A Friday should carry a Jumu'ah time, and it should not equal Dhuhr.
     try:
         is_friday = date.fromisoformat(d).weekday() == 4

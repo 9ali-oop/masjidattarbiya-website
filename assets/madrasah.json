@@ -88,27 +88,7 @@
   "terms": {
     "year": "2026 to 2027",
     "placeholder": true,
-    "list": [
-      {
-        "name": "Autumn term",
-        "start": "2026-09-07",
-        "end": "2026-12-18",
-        "break": "Half term 26 to 30 October"
-      },
-      {
-        "name": "Spring term",
-        "start": "2027-01-04",
-        "end": "2027-03-26",
-        "break": "Half term 15 to 19 February"
-      },
-      {
-        "name": "Summer term",
-        "start": "2027-04-12",
-        "end": "2027-07-16",
-        "break": "Half term 31 May to 4 June"
-      }
-    ],
-    "footnote": "The madrasah closes for both Eids. Eid dates depend on the moon, so they are announced nearer the time."
+    "list": []
   },
   "places": {
     "text": "Ask us which groups have places.",
@@ -117,21 +97,5 @@
   "fees": {
     "text": "To be confirmed. Ask us on WhatsApp in the meantime."
   },
-  "resources": [
-    {
-      "title": "Qaidah practice sheets",
-      "description": "Letters and joining practice to use at home.",
-      "placeholder": true
-    },
-    {
-      "title": "Duas to learn this term",
-      "description": "The duas each group is working on, with transliteration.",
-      "placeholder": true
-    },
-    {
-      "title": "Term letter for parents",
-      "description": "Dates, expectations and how to reach the teachers.",
-      "placeholder": true
-    }
-  ]
+  "resources": []
 }
