@@ -111,6 +111,17 @@ stylesheet that leaves only the masjid's name, the week table and where the time
 the fridge-door timetable every big masjid offers as a PDF, without a PDF to keep up to date.
 Masjidbox only embeds seven days in its page, so a monthly table is not possible from it.
 
+**A monthly PDF is on its way, from the masjid's own printed sheet** (Ali, 22 October 2026:
+"usually what you see is a button to click PDF to download", never a photo of the paper).
+`scripts/timetable/` types up each month's printed timetable, checks it against the sun, and
+prints a one-page A4 PDF that looks like the sheet, without its bank details or the
+printer's advert. Samples for October and November 2026 are with Ali for approval (he may
+edit the design in Canva); nothing on the site links to them until he says yes. The sheet and
+Masjidbox disagree on a few things (Fajr and Isha by 3 to 4 minutes, late-October Asr
+jama'at, Jumu'ah jama'at, the hijri date by a day), listed in `scripts/timetable/README.md`:
+the masjid should settle those first. This is the one place times are typed by hand, so it is
+a document for a named month, never the site's live times.
+
 ## Duplication, and the checks that police it
 
 The header and footer are copy-pasted into every page. There is no templating, so a change to the
