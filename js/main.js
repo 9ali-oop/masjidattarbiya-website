@@ -44,14 +44,12 @@ function getJSON(url) {
   }).catch(function () { /* no notices file, or a broken one: show nothing */ });
 })();
 
-/* Print buttons: anything with data-print prints the page. */
-document.querySelectorAll("[data-print]").forEach(function (b) {
-  b.addEventListener("click", function () { window.print(); });
-});
-
 /* Monthly timetables: the masjid's printed sheet for each month, as a PDF,
-   listed in assets/timetables.json. A month shows until it has ended
-   (Europe/London), so October's button goes by itself on 1 November. */
+   listed in assets/timetables.json, as buttons in the prayer times page's
+   heading band. A month shows until it has ended (Europe/London), so
+   October's button goes by itself on 1 November. Each opens in the browser's
+   own PDF viewer, in a new tab, which has its own download button: Ali wanted
+   people to see the timetable first and choose to download it. */
 (function () {
   var box = document.getElementById("month-timetables");
   if (!box) return;
@@ -60,7 +58,7 @@ document.querySelectorAll("[data-print]").forEach(function (b) {
     var live = ((d && d.months) || []).filter(function (m) { return m.month && m.file && m.month >= month; }).slice(0, 2);
     box.innerHTML = live.map(function (m, i) {
       var name = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(m.month + "-01T12:00:00Z"));
-      return '<a class="btn btn-small ' + (i ? "btn-line" : "btn-teal") + '" href="' + esc(m.file) + '" download="Attarbiya Masjid prayer timetable ' + esc(name) + '.pdf">' +
+      return '<a class="btn ' + (i ? "btn-ghost" : "btn-gold") + '" href="' + esc(m.file) + '" target="_blank" rel="noopener">' +
         esc(name) + " timetable (PDF)</a>";
     }).join("");
   }).catch(function () { /* no list, or a broken one: the week table and print button still stand */ });
@@ -451,7 +449,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<table class="week-table"><caption class="visually-hidden">Prayer times for the week ahead. ' +
       "In each cell the start time is above and the iqamah below.</caption>" +
       "<thead>" + head + "</thead><tbody>" + body + "</tbody></table></div>" +
-      '<p class="week-key">In each cell, the small figure is when the prayer begins and the bold figure is the iqamah, when the congregation stands. Updated every night from the masjid’s own timetable.</p>';
+      '<p class="week-key">In each cell, the small figure is when the prayer begins and the bold figure is the iqamah, when the congregation stands.</p>';
   }
 
   function renderBar(data) {

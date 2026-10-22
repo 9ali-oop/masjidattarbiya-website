@@ -106,10 +106,12 @@ Two things to respect:
 
 To refresh by hand: `python scripts/fetch_prayer_times.py`
 
-**The week can be printed.** The prayer times page has a "Print this week" button and a print
-stylesheet that leaves only the masjid's name, the week table and where the times come from:
-the fridge-door timetable every big masjid offers as a PDF, without a PDF to keep up to date.
-Masjidbox only embeds seven days in its page, so a monthly table is not possible from it.
+**Printing the week.** The print stylesheet still leaves only the masjid's name, the week
+table and a line on what the figures mean, if someone prints the page from the browser. The
+"Print this week" button went on 22 October 2026 (Ali: no longer useful once the monthly PDF
+was there), as did the "Where the times come from" note beside today's times and the
+"updated every night" lines: visitors do not need to know. Masjidbox only embeds seven days in
+its page, so a monthly table is not possible from it.
 
 **And each month can be downloaded as a PDF, made from the masjid's own printed sheet** (Ali,
 22 October 2026: "usually what you see is a button to click PDF to download", never a photo
@@ -117,8 +119,11 @@ of the paper; he approved the design the same day). `scripts/timetable/` types u
 month's printed timetable, checks it against the sun, and prints a one-page A4 PDF that looks
 like the sheet, without its bank details or the printer's advert (see its README).
 `assets/timetables.json` lists the PDFs in `assets/timetables/`; the prayer times page shows
-a button for each month that has not ended yet, at most two, so a month goes by itself on the
-1st of the next. To add a month: make the PDF, drop it in, add a line to the list;
+a button for each month that has not ended yet, at most two, in its heading band where nobody
+has to scroll for it (gold for this month, outlined for the next), so a month goes by itself
+on the 1st of the next. A button opens the PDF in the browser's own viewer, in a new tab,
+never as a straight download: Ali wanted people to see it first and use the viewer's download
+button if they want the file. To add a month: make the PDF, drop it in, add a line to the list;
 `check_data.py` fails on a missing file or a month out of order. The sheet and Masjidbox
 disagree on a few things (Fajr and Isha by 3 to 4 minutes, late-October Asr jama'at,
 Jumu'ah jama'at, the hijri date by a day), listed in the README: the masjid should make them
@@ -254,8 +259,11 @@ to photographs of people. `check_events.py` enforces the location and the alt te
 which is for dated events. The first is Riyadh al-Salihin (facts table). Its book cover,
 `assets/riyadh-al-salihin.jpg`, is a Wikimedia Commons photograph of the Dar Ibn Kathir edition
 by the Commons user أبو آسر, licensed CC BY-SA 4.0, stored here at its native 490px rather than
-hotlinked (the site loads nothing from third parties); the page carries the credit and the
-licence link, which the licence requires, so never drop that caption. Wikimedia rate-limited
+hotlinked (the site loads nothing from third parties). The licence requires a credit. Since
+22 October 2026 (Ali: no masjid's site puts a caption like that under a picture) it is not under
+the cover: the cover links to its Commons page with the credit as its title, and the privacy
+notice ends with a "Credits" line naming the photographer and the licence. Keep both, or drop
+the picture: never the credit alone. Wikimedia rate-limited
 this session's downloads (HTTP 429); the file came through the images.weserv.nl proxy. The homepage's "What's on" and the
 prayer times aside carry a one-line mention that links to `events#weekly`.
 
@@ -766,8 +774,8 @@ channel, linked, never embedded.
 such as "The prayer hall. The marble wall frames the mihrab and minbar" or "Revesby Walk at
 dusk. Facing the building, ..." describe what anyone can see, and read as written by an AI;
 no masjid's site does it. They were all removed. A caption stays only when it adds what the
-picture cannot show: a date and place on an archive photograph in Our Story, and the licence
-credit the Riyadh al-Salihin cover requires. Alt text is a different thing and stays. **The same goes for the viewer**: it shows
+picture cannot show: a date and place on an archive photograph in Our Story. (The Riyadh
+al-Salihin cover's licence credit moved to the privacy notice's Credits line.) Alt text is a different thing and stays. **The same goes for the viewer**: it shows
 a caption only when a link has `data-caption`, and no longer falls back to the alt text (which
 put the same descriptions back under every picture). A clip in the viewer takes its label for
 screen readers from the link's hidden text.
@@ -784,7 +792,8 @@ all sat in the same frame and the site looked templated, "too AI", and then that
 photo essay ("One Saturday in October") dominated the page; the earlier "Inside the masjid"
 strip had been better. So:
 - **Homepage, "Inside the masjid"** (`.strip`): one row, 300px tall (220px on a phone), that
-  scrolls sideways inside its own box: the mihrab, wudu, the rows in ruku, the library, the
+  scrolls sideways inside its own box: the mihrab, wudu, the rows standing in qiyam (ruku until
+  22 October 2026, when Ali noticed the prayer times page shows the same ruku), the library, the
   tafsir and the sign at night, in three shapes (square, 4:5 and one 2:1), so it reads as a
   strip of prints. Nothing the homepage already shows (the building by day is the hero), no
   children, no labels, no captions, no clips. Two round buttons move it for a mouse; they
@@ -792,10 +801,11 @@ strip had been better. So:
   user keeps focus. It starts in line with the page and runs off the right-hand edge. A plain
   "Visit the masjid" link follows it.
 - **Homepage, the madrasah band** (`.peek`): three small pictures under the buttons, one wider
-  than the others, and no child's face: a teacher's hands holding the Qur'an with a pencil
-  (`photos/teacher-hands.jpg`, cut from the one-to-one table; Ali asked on 22 October 2026 for
-  a close-up there instead of the teacher's face), a pupil reading the Qur'an seen over his
-  shoulder, and notes in a notebook. The madrasah's pictures carry no date line.
+  than the others, and no child's face: a pupil's notes on tayammum, written in pencil
+  (`photos/notes-pencil.jpg`, from the sisters' class, DSC05347), a pupil reading the Qur'an
+  seen over his shoulder, and notes in a notebook. The madrasah's pictures carry no date line.
+  The first slot was the teacher's face, then on 22 October 2026 his hands on the Qur'an, which
+  went the same day: one hand had a verruca. Look at hands in a close-up at full size.
 - **Madrasah page, "Inside the madrasah"** (`.set`): one block of eight, no subject twice,
   mostly close: the red-carpet clip leads, then the mushaf and a boy reading (both from the
   one-to-one table, so Ali's class), boys listening, the row of boys, a boy half smiling (all
