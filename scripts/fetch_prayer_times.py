@@ -65,6 +65,31 @@ def hhmm(iso):
         return None
 
 
+def start_hhmm(day_iso, iso):
+    """A start time as the clock on the wall reads it.
+
+    On the two days a year the clocks change, Masjidbox works the start times out
+    in the offset the day began with, then stamps them with the offset in force
+    after the change. On Sunday 25 October 2026 every start time came out an hour
+    late (Fajr "06:17Z" for 05:17, sunrise 07:52 for 06:52), while the iqamah
+    times, which the masjid sets by hand, were right. So where a start time's
+    offset differs from the day's own, read its clock time in the day's offset
+    and move it to the offset in force. On every other day the two match and
+    nothing changes.
+    """
+    if not isinstance(iso, str) or "T" not in iso:
+        return None
+    try:
+        t = datetime.fromisoformat(iso)
+        day = datetime.fromisoformat(day_iso) if isinstance(day_iso, str) else None
+    except ValueError:
+        return None
+    if day is not None and t.utcoffset() is not None and day.utcoffset() is not None \
+            and t.utcoffset() != day.utcoffset():
+        t = t - (day.utcoffset() - t.utcoffset())
+    return t.strftime("%H:%M")
+
+
 def clean_times(date, times):
     """Drop start times that are plainly placeholders rather than times.
 
@@ -91,7 +116,8 @@ def build(rows):
             "date": row["date"][:10],
             "hijri": hijri.get("formatted") or "",
             "times": clean_times(row["date"][:10],
-                                 {p: hhmm(row.get(p)) for p in PRAYERS if hhmm(row.get(p))}),
+                                 {p: start_hhmm(row["date"], row.get(p)) for p in PRAYERS
+                                  if start_hhmm(row["date"], row.get(p))}),
             "iqamah": {p: hhmm(v) for p, v in iq.items() if hhmm(v)},
         }
         # Jumu'ah is its own service, not a relabelled Dhuhr: Masjidbox gives it a

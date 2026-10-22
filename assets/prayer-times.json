@@ -1,6 +1,6 @@
 {
  "source": "https://masjidbox.com/prayer-times/masjid-attarbiya",
- "fetched": "2026-10-22T07:37:33Z",
+ "fetched": "2026-10-22T11:41:51Z",
  "days": [
   {
    "date": "2026-10-22",
@@ -65,12 +65,12 @@
    "date": "2026-10-25",
    "hijri": "الأحد 13 جمادى الأولى 1448",
    "times": {
-    "fajr": "06:17",
-    "sunrise": "07:52",
-    "dhuhr": "12:56",
-    "asr": "15:21",
-    "maghrib": "17:52",
-    "isha": "19:26"
+    "fajr": "05:17",
+    "sunrise": "06:52",
+    "dhuhr": "11:56",
+    "asr": "14:21",
+    "maghrib": "16:52",
+    "isha": "18:26"
    },
    "iqamah": {
     "fajr": "05:45",

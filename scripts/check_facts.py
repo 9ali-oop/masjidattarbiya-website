@@ -5,9 +5,9 @@ end up in one place and not the others. This is the cheap guard against that.
 """
 import glob, re, sys
 
-PHONE = "07908 854187"
-TEL = "tel:+447908854187"
-WA = "wa.me/447908854187"
+PHONE = "07929 242914"
+TEL = "tel:+447929242914"
+WA = "wa.me/447929242914"
 EMAIL = "info@masjidatarbiya.org"
 CHARITY = "1142204"
 

@@ -437,6 +437,7 @@ strong { color: var(--ink); }
 .site-footer li { margin-bottom: 10px; }
 .site-footer a { color: rgba(255, 255, 255, 0.95); text-decoration: none; }
 .site-footer a:hover { color: var(--white); text-decoration: underline; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 4px 20px; }
 .footer-bottom {
   display: flex;
   justify-content: space-between;
@@ -1592,6 +1593,8 @@ strong { color: var(--ink); }
   padding: 0;
 }
 .set > li { position: relative; overflow: hidden; background: var(--green-ink); }
+/* For a parent, not for every visitor: small and quiet under the pictures. */
+.set-note { margin: 12px 0 0; font-size: 0.82rem; color: var(--ink-soft); }
 .set a { position: absolute; inset: 0; display: block; cursor: zoom-in; }
 .set img, .set video { display: block; width: 100%; height: 100%; object-fit: cover; }
 .set a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }

@@ -17,7 +17,7 @@
    file and its <script> tag from the pages) and push.
    --------------------------------------------------------------------------- */
 (function () {
-  var ON = true;
+  var ON = false;
   var TOKEN = "lshsmnyTlbG2";
   var KEY = "atb-preview";
   if (!ON) return;
@@ -78,7 +78,7 @@
           '<a class="btn btn-teal" href="/donate">Donate</a>' +
         "</div>" +
         '<ul class="maintenance-contact">' +
-          '<li>WhatsApp or call <a href="https://wa.me/447908854187">07908 854187</a></li>' +
+          '<li>WhatsApp or call <a href="https://wa.me/447929242914">07929 242914</a></li>' +
           '<li>Email <a href="mailto:info@masjidatarbiya.org">info@masjidatarbiya.org</a></li>' +
           "<li>2 Revesby Walk, Nechells, Birmingham B7 4LG</li>" +
         "</ul>" +
