@@ -111,6 +111,20 @@ stylesheet that leaves only the masjid's name, the week table and where the time
 the fridge-door timetable every big masjid offers as a PDF, without a PDF to keep up to date.
 Masjidbox only embeds seven days in its page, so a monthly table is not possible from it.
 
+**And each month can be downloaded as a PDF, made from the masjid's own printed sheet** (Ali,
+22 October 2026: "usually what you see is a button to click PDF to download", never a photo
+of the paper; he approved the design the same day). `scripts/timetable/` types up each
+month's printed timetable, checks it against the sun, and prints a one-page A4 PDF that looks
+like the sheet, without its bank details or the printer's advert (see its README).
+`assets/timetables.json` lists the PDFs in `assets/timetables/`; the prayer times page shows
+a button for each month that has not ended yet, at most two, so a month goes by itself on the
+1st of the next. To add a month: make the PDF, drop it in, add a line to the list;
+`check_data.py` fails on a missing file or a month out of order. The sheet and Masjidbox
+disagree on a few things (Fajr and Isha by 3 to 4 minutes, late-October Asr jama'at,
+Jumu'ah jama'at, the hijri date by a day), listed in the README: the masjid should make them
+agree. This is the one place times are typed by hand, so it is a document for a named month,
+never the site's live times.
+
 ## Duplication, and the checks that police it
 
 The header and footer are copy-pasted into every page. There is no templating, so a change to the

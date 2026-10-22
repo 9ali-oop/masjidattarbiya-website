@@ -1,0 +1,7 @@
+{
+  "note": "The masjid's monthly prayer timetable as PDFs, made from its printed sheet by scripts/timetable/ (see the README there). js/main.js shows a download button on the prayer times page for every month listed here that has not ended yet (Europe/London), so a month goes by itself on the 1st of the next. To add a month: make its PDF, put it in assets/timetables/ and add it here, oldest first. scripts/check_data.py checks this file.",
+  "months": [
+    { "month": "2026-10", "file": "assets/timetables/attarbiya-prayer-timetable-2026-10.pdf" },
+    { "month": "2026-11", "file": "assets/timetables/attarbiya-prayer-timetable-2026-11.pdf" }
+  ]
+}

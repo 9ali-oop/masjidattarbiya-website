@@ -108,6 +108,35 @@ latest = max((d.get("date", "") for d in days), default="")
 if latest and latest < (today - timedelta(days=1)).isoformat():
     fail(f"newest entry is {latest}, which is already in the past - the daily job may have stopped")
 
+# The monthly timetable PDFs (assets/timetables.json): each month once, in order,
+# with its file present and really a PDF. A broken entry would put a dead button
+# on the prayer times page.
+TIMETABLES = "assets/timetables.json"
+months = []
+try:
+    listed = json.load(open(TIMETABLES, encoding="utf-8")).get("months") or []
+except FileNotFoundError:
+    listed = []
+except Exception as e:  # noqa: BLE001
+    fail(f"{TIMETABLES} does not parse: {e}")
+    listed = []
+for m in listed:
+    month, file = m.get("month", ""), m.get("file", "")
+    try:
+        datetime.strptime(month, "%Y-%m")
+    except ValueError:
+        fail(f"{TIMETABLES}: month {month!r} is not YYYY-MM")
+        continue
+    months.append(month)
+    try:
+        with open(file, "rb") as f:
+            if f.read(5) != b"%PDF-":
+                fail(f"{TIMETABLES}: {file} is not a PDF")
+    except OSError:
+        fail(f"{TIMETABLES}: {month} points to {file!r}, which does not exist")
+if months != sorted(set(months)):
+    fail(f"{TIMETABLES}: months must be listed once each, oldest first")
+
 for p in problems:
     print("FAIL: " + p)
 
@@ -116,3 +145,5 @@ if problems:
     sys.exit(1)
 
 print(f"{PATH}: {len(days)} days, {days[0]['date']} to {days[-1]['date']}, all consistent.")
+if months:
+    print(f"{TIMETABLES}: {len(months)} monthly PDF(s), {months[0]} to {months[-1]}, all present.")

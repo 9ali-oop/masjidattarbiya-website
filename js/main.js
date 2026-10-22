@@ -49,6 +49,23 @@ document.querySelectorAll("[data-print]").forEach(function (b) {
   b.addEventListener("click", function () { window.print(); });
 });
 
+/* Monthly timetables: the masjid's printed sheet for each month, as a PDF,
+   listed in assets/timetables.json. A month shows until it has ended
+   (Europe/London), so October's button goes by itself on 1 November. */
+(function () {
+  var box = document.getElementById("month-timetables");
+  if (!box) return;
+  var month = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London", year: "numeric", month: "2-digit" }).format(new Date());
+  getJSON("assets/timetables.json").then(function (d) {
+    var live = ((d && d.months) || []).filter(function (m) { return m.month && m.file && m.month >= month; }).slice(0, 2);
+    box.innerHTML = live.map(function (m, i) {
+      var name = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(m.month + "-01T12:00:00Z"));
+      return '<a class="btn btn-small ' + (i ? "btn-line" : "btn-teal") + '" href="' + esc(m.file) + '" download="Attarbiya Masjid prayer timetable ' + esc(name) + '.pdf">' +
+        esc(name) + " timetable (PDF)</a>";
+    }).join("");
+  }).catch(function () { /* no list, or a broken one: the week table and print button still stand */ });
+})();
+
 /* Brown or navy: the madrasah's two colour options, previewable side by side.
    Add ?furqan=navy or ?furqan=brown to any address; the choice is kept for the
    visit and a small switch appears. Without the parameter nothing happens and
