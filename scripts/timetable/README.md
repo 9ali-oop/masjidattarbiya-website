@@ -4,10 +4,11 @@ The masjid prints a timetable for each month. Big masjid websites offer theirs a
 download, so this folder rebuilds the printed sheet as a clean one-page A4 PDF instead of
 putting a photo of the paper online.
 
-**Status (22 October 2026): samples for October and November 2026 were sent to Ali for
-approval. Nothing on the website links to these files yet.** Ali may approve them as they
-are, or adjust the design in Canva first. Once a design is approved, the prayer times page
-gets a "Download this month's timetable (PDF)" link, shown only while the month lasts.
+**Published (22 October 2026, design approved by Ali).** The PDFs live in
+`assets/timetables/`, listed in `assets/timetables.json`; the prayer times page shows a
+download button for each month that has not ended yet. To add a month, make its PDF below,
+copy it to `assets/timetables/attarbiya-prayer-timetable-YYYY-MM.pdf` and add a line to the
+list.
 
 ## Making a month
 
@@ -36,7 +37,7 @@ gets a "Download this month's timetable (PDF)" link, shown only while the month 
 ## Where the printed sheet and Masjidbox disagree (found 22 October 2026)
 
 The site's daily times come from Masjidbox; the PDF comes from the printed sheet. For October
-2026 they differ, and the masjid should say which is right before any PDF goes up:
+2026 they differ, and the masjid should make them agree:
 
 - Fajr and Isha start times differ by 3 to 4 minutes (a different calculation method).
 - Asr jama'at from 25 to 31 October: 2:45 on the sheet, 2:30 on Masjidbox.

@@ -928,6 +928,8 @@ strong { color: var(--ink); }
 .week-table tbody tr:last-child > * { border-bottom: 0; }
 .week-key { font-size: 0.86rem; color: var(--ink-soft); margin-top: 12px; }
 .week-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 18px; }
+.month-timetables { display: flex; flex-wrap: wrap; gap: 12px; }
+.month-timetables:empty { display: none; }
 .print-only { display: none; }
 
 /* Printing the week: just the masjid's name, the table and where the times
