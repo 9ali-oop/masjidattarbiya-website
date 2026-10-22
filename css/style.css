@@ -932,7 +932,7 @@ strong { color: var(--ink); }
 /* Printing the week: just the masjid's name, the table and where the times
    come from, on one sheet, for the fridge or the noticeboard. */
 @media print {
-  .story-tools, .entry-remember,
+  .story-tools,
   .site-header, .site-footer, .page-hero, .prayer-layout, .week-actions, .week-key, .colour-preview, .thanks-banner, .skip-link, .notices { display: none !important; }
   .print-only { display: block; margin: 0 0 12px; }
   .print-only .print-title { font: 400 20pt/1.2 var(--font-head); margin: 0 0 4px; color: #000; }
@@ -1124,16 +1124,8 @@ strong { color: var(--ink); }
 /* A logo is shown whole, on a plain panel, never cropped, and never wider
    than the file itself. */
 .entry-photo.is-logo .media-frame { display: inline-flex; padding: 16px; border-radius: 6px; background: var(--gold-light); }
-.entry-source { margin: 14px 0 0; font-size: 0.8rem; line-height: 1.5; color: var(--ink-soft); }
-.entry-source b { color: var(--ink); }
-
-/* Open questions: an unfinished page. */
-.entry.is-unknown .entry-year { color: var(--gold-text); }
-.entry.is-unknown .entry-body { padding: 18px 20px 20px; border: 1.5px dashed var(--gold-deep); border-radius: 4px; background: var(--gold-light); }
-.entry-askhead { margin: 14px 0 0; font-weight: 700; font-size: 0.92rem; color: var(--gold-text); }
-.entry-asks { margin: 6px 0 0; padding-left: 1.1em; list-style: circle; }
-.entry-asks li { margin-bottom: 4px; font-size: 0.95rem; color: var(--ink); }
-.entry-remember { margin-top: 14px; min-height: 44px; padding: 8px 18px; font-size: 0.9rem; }
+/* Where the dates come from: one line under the story, not one under every entry. */
+.story-sources { margin: 40px 0 0; padding-top: 16px; border-top: 1px solid var(--border); font-size: 0.86rem; color: var(--ink-soft); }
 
 /* The building before it was ours: one note, set apart, at its place in time. */
 .entry-aside { margin: 10px 0 18px; padding: 4px 24px 6px; border: 1px solid var(--border); border-radius: 4px; background: var(--white); }
@@ -1750,50 +1742,29 @@ html.lb-open { overflow: hidden; }
 }
 
 /* ==========================================================================
-   Take the tour (tour.html)
-   A walk round the masjid, stop by stop, on the same light page as the rest
-   of the site. On a wide screen the list of stops stays beside them and marks
-   the one being read (in weight and colour: no bar, no progress). Each stop
-   is a heading, a fact or two where there is one, and its photographs, set
-   differently at each stop. Nothing moves but the few silent clips, which
-   behave like every clip on the site, and the prayer hall's three positions,
-   which change only when pressed.
+   Visit the masjid (visit.html)
+   What a first-time visitor needs, then a look inside: four short sections,
+   each a heading, a line or two where there is something to say, and its
+   photographs, set a little differently each time. Square corners, no frames,
+   no captions, no numbering.
    ========================================================================== */
-.tour-section { padding-top: 48px; }
-.tour-layout { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 0 56px; align-items: start; }
-.route { position: sticky; top: 104px; }
-.route ol { list-style: none; margin: 0; padding: 0; counter-reset: stop; border-top: 1px solid var(--border); }
-.route li { counter-increment: stop; }
-.route a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--border);
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-  text-decoration: none;
-}
-.route a::before { content: counter(stop); min-width: 1.1em; font: 400 1rem/1 var(--font-head); color: var(--gold-text); }
-.route a:hover { color: var(--green-dark); }
-.route a[aria-current] { color: var(--green-ink); font-weight: 700; }
+.before-you-come { max-width: 780px; }
+.before-you-come h2 { margin-bottom: 16px; }
+.before-you-come .btn-row { margin-top: 24px; }
 
-.stops { min-width: 0; }
-.stop { padding-bottom: 56px; scroll-margin-top: 96px; }
-.stop + .stop { padding-top: 48px; border-top: 1px solid var(--border); }
-.stop-head { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 14px; }
-.stop-num { font: 400 3rem/0.85 var(--font-head); color: var(--gold-text); }
+.stops { max-width: 940px; }
+.stop { padding-bottom: 48px; scroll-margin-top: 96px; }
+.stop + .stop { padding-top: 44px; border-top: 1px solid var(--border); }
+.stop:last-child { padding-bottom: 0; }
+.stop-head { margin-bottom: 14px; }
 .stop-ar { margin: 0; font: 500 1.15rem/1.3 var(--font-arabic); color: var(--gold-text); }
 .stop-head h2 { margin: 0; font-size: clamp(1.7rem, 1.3rem + 1.4vw, 2.3rem); line-height: 1.1; }
 .stop > p { max-width: 38em; margin: 0 0 12px; }
-.stop > .stop-next { margin: 22px 0 0; }
-.stop-next a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
 
-/* The photographs at each stop: a twelve-column grid, set differently each
-   time (one large with a small one dropped lower, a pair, a column of two),
-   square corners, no frame, no captions. */
+/* The photographs in each section: a twelve-column grid, square corners, no
+   frame, no captions. */
 .frames { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; margin-top: 20px; align-items: start; }
+.frames + .frames { margin-top: 8px; }
 /* A picture fills its frame by sitting absolutely inside it: a percentage
    height inside a grid cell does not always resolve. */
 .f { position: relative; margin: 0; overflow: hidden; background: var(--green-light); }
@@ -1806,69 +1777,22 @@ html.lb-open { overflow: hidden; }
 .f-6 { grid-column: span 6; }
 .f-7 { grid-column: span 7; }
 .f-8 { grid-column: span 8; }
-.f-12 { grid-column: 1 / -1; }
 /* A smaller partner that takes the height of the row, so the edges meet. */
 .f-fill { align-self: stretch; aspect-ratio: auto; }
-.f-col { display: grid; gap: 8px; align-content: start; }
 .a-32 { aspect-ratio: 3 / 2; }
 .a-45 { aspect-ratio: 4 / 5; }
-.a-34 { aspect-ratio: 3 / 4; }
 .a-169 { aspect-ratio: 16 / 9; }
-.a-wide { aspect-ratio: 21 / 9; }
-.frames-note { margin: 10px 0 0; font-size: 0.85rem; color: var(--ink-soft); }
 
-/* At the prayer hall: standing, bowing and prostrating, one at a time when
-   pressed. Without script the three sit side by side. */
-.positions { margin-top: 28px; }
-.positions-pick { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-.positions-pick[hidden] { display: none; }
-.positions-btn {
-  min-height: 44px;
-  padding: 8px 18px;
-  border: 1.5px solid var(--green-dark);
-  border-radius: 999px;
-  background: none;
-  color: var(--green-dark);
-  font: 600 0.92rem/1 var(--font-body);
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-.positions-btn[aria-pressed="true"] { background: var(--green-dark); color: var(--white); }
-.positions .frames--tri { margin-top: 0; }
-.positions.is-picking .frames--tri > .f { grid-column: 1 / -1; aspect-ratio: 21 / 10; }
-.positions.is-picking .frames--tri > .f[hidden] { display: none; }
-
-/* The end of the tour: the practical facts, then the photographs not shown
-   at a stop, as a plain contact sheet. */
-.tour-visit { max-width: 780px; }
-.tour-visit h2 { margin-bottom: 16px; }
-.tour-visit .btn-row { margin-top: 24px; }
-.contact-sheet { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; list-style: none; margin: 0; padding: 0; }
-.contact-sheet li { position: relative; aspect-ratio: 1; overflow: hidden; }
-.contact-sheet li:first-child { grid-column: span 2; aspect-ratio: 2 / 1; }
-.contact-sheet a { position: absolute; inset: 0; display: block; cursor: zoom-in; }
-.contact-sheet img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.contact-sheet a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
-
-@media (max-width: 900px) {
-  .tour-layout { grid-template-columns: minmax(0, 1fr); }
-  .route { position: static; margin-bottom: 32px; }
-  .route ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; }
-}
 @media (max-width: 640px) {
   .frames { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
   /* On a phone: wide pictures full width, pairs side by side, and nothing left
      alone in half a row. */
-  .frames > .f-3, .frames > .f-4, .frames > .f-5 { grid-column: span 1; }
-  .frames > .f-6, .frames > .f-7, .frames > .f-8, .frames > .f-12, .frames > .f-col { grid-column: 1 / -1; }
-  .frames:not(.frames--tri) > .f-4, .frames:not(.frames--tri) > .f-5 { grid-column: 1 / -1; aspect-ratio: 3 / 2; }
+  .frames > .f-3, .frames > .f-5 { grid-column: span 1; }
+  .frames > .f-6, .frames > .f-7, .frames > .f-8 { grid-column: 1 / -1; }
+  .frames > .f-4 { grid-column: 1 / -1; aspect-ratio: 3 / 2; }
   .frames > .f-6.a-45 { grid-column: span 1; }
-  .frames > .f-col { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
   .f-fill { align-self: auto; aspect-ratio: 3 / 2; }
   .frames > .f-3.f-fill { aspect-ratio: 3 / 4; }
-  .positions .frames--tri { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .stop-num { font-size: 2.4rem; }
-  .contact-sheet { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ==========================================================================

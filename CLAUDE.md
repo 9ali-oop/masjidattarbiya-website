@@ -337,7 +337,7 @@ does not go in a file, a commit, or a chat message.
 `history.html` renders `assets/history.json`. It is **in the nav and the sitemap** as "Our
 Story", modelled on Green Lane Masjid's two-part history (the building, then the mosque), with
 each milestone tagged by strand (`charity`, `building`, `learning`, `community`) and filter
-buttons for each, plus "Still unknown".
+buttons for each.
 
 **A written history, read in one direction** (rebuilt 21 October 2026 at Ali's request; he
 found the timeline with its gold spine, dots, rolling year and sticky rail looked like every
@@ -372,10 +372,17 @@ dramatic copy); every other word, ask and source is as it was.
 Milestones and chapters can be linked to directly: `history#m-madrasah`, `history#revesby`.
 One with no known chapter still shows, in a group at the end.
 
-**The gaps are the feature.** Unknown milestones render as dashed "unfinished page" cards with
-their questions and an "I remember this" button that opens WhatsApp with a message already
-started. People correct a draft far faster than they answer "tell me our history". Fill one
-in, give it a `source`, set `status` to `confirmed` and delete its `asks` list.
+**Only what is known is shown** (Ali, 22 October 2026). Milestones with `"status": "unknown"`
+stay in `history.json` with their `asks`, but the page leaves them out until the people who
+were there have answered: the plan is to sit down with the original teachers (an interview
+sheet in date order, with a request for old photos and permission to use them, was written
+for that). The page used to show them as dashed "unfinished page" cards with their questions
+and an "I remember this" button, and every entry ended with its source; Ali found both
+cluttered. Now each entry is a year, a heading, a paragraph and sometimes a picture, one line
+under the story says where the dates come from, and the single "Were you there?" band at the
+end does the asking. `source` and `asks` are still required in the file: they are how we know,
+and what to ask. To publish an answered one, give it a year, a `source`, set `status` to
+`confirmed` and delete its `asks` list.
 
 **What is evidenced.** Researched properly on 7 October 2026 from official records. Read this
 before redoing it.
@@ -451,9 +458,11 @@ where the children took part knowingly, not pictures taken years ago.
 
 **Archive pictures on the site** (`assets/history/`, resized, camera data stripped): the
 Garrison Centre outside (chapter one; the original has a damaged strip along the bottom,
-cropped off), its prayer hall and a corridor (November 2012), a still of the main building
-from the January 2014 film, the Al-Kownayn logo (2014) and an earlier Al Furqan logo, the
-logos shown whole (`image_fit: "contain"`). **Held back on purpose:** two class photos of
+cropped off), the Al-Kownayn logo (2014) and an earlier Al Furqan logo, the logos shown whole
+(`image_fit: "contain"`). The prayer hall and a corridor (November 2012) and a still from the
+January 2014 film were taken off on 22 October 2026 as too low in quality; they are in git
+history and the archive, and better photos of the Garrison Lane years are one of the things to
+ask the original teachers for. **Held back on purpose:** two class photos of
 children seen from behind (wait for a parent's written yes), a 2010 whiteboard lesson whose
 content is not right for the masjid's public site, a 2010 poster for an SOS Education
 Organisation event (not the masjid's, and it carries phone numbers), and pages of a
@@ -486,6 +495,12 @@ was an explicit request. The page says so in words ("Under one roof") as well as
 - **Confirmed by the madrasah (9 October 2026, Malim Husain):** five groups, six days a week,
   **no classes on Friday**; the timetable in the facts table above. Children learn the Qaidah,
   then the Qur'an, and tarbiyah. The minimum age of 6 was confirmed on 7 October.
+- **What the classes cover (Ali, 22 October 2026):** the older children are doing fiqh and Ali's
+  class adab and akhlaq. The madrasah draws on a published tarbiyah curriculum with five
+  subjects (iman and tazkiyah, the Qur'an and its meaning, fiqh and worship, adab and akhlaq,
+  and the sirah and stories) and means to cover all five in time, but not yet. **Never name the
+  curriculum or its publisher**, and do not list the five subjects as if they were all taught
+  now; keep it general ("lessons in fiqh and in adab and akhlaq as well").
 - **Still placeholders** (see Rule 1): which ages go in Groups 1 to 3 (`"who_placeholder"` on
   the group), the term dates, "places", fees and the resources list. They live in
   `assets/madrasah.json`, each flagged, and each shows a "To be confirmed" label. While `"provisional"` is true the page also shows a draft notice. When the madrasah
@@ -648,11 +663,11 @@ are Ali's to keep and are **not in this repo**.
 sitting round the walls and round their teacher, who wears a black jacket and cap and reads
 to them from a book; clips C9791 to C9811) is **Ali's colleague's**, and it was calm and
 attentive, so **it leads** wherever the madrasah is shown: the homepage's madrasah band, the
-madrasah page, About and the tour. The **blue-carpet large hall** (a teacher in a white
+madrasah page, About and the Visit page. The **blue-carpet large hall** (a teacher in a white
 headscarf with a microphone, children with their hands up; C9812 to C9824) is **Ali's own
 class**, which was lively that day, so it plays a supporting part and stays off the Google
 listing's film. The one-to-one reading at a table (from 13:51, the same teacher) counts as
-Ali's too: its close-ups (`mushaf`, `reader`, `teacher-reads`) do not show which class they are
+Ali's too: its close-ups (`mushaf`, `reader`) do not show which class they are
 from, so they can be used, but never described as the red-carpet class. Neither teacher is
 named anywhere until they agree (see the facts table).
 
@@ -665,9 +680,7 @@ masjid" strip shows the building, prayer and the library, and no children from t
 rooms (Ali, 21 October 2026: "avoid any picture that shows a classroom in poor condition"):
 `circle`, `one-to-one`, `big-hall`, `sisters`, `sisters-teacher`, the empty `hall` with its
 peeling left wall, and the clips `madrasah-class`, `sisters-teacher`, `sisters-wide` and
-`hands-up` (cluttered background). They are in git history and among Ali's originals.
-`tour/sujud.jpg` was cropped (to 1344x896, never enlarged) to leave out the same peeling wall,
-because the viewer opens the whole file. About's
+`hands-up` (cluttered background). They are in git history and among Ali's originals. About's
 first clip, `class-circle`, shows the same kind of room; it stays because Ali asked for About
 to be left as it is, but it is the next candidate if he wants one more swapped.
 
@@ -676,15 +689,14 @@ to be left as it is, but it is the next candidate if he wants one more swapped.
 | `photos/*.jpg` (1360; `exterior.jpg` 1920) | the first selection | Homepage hero and About figure, About, contact, portal, donate, Our Story |
 | `photos/ruku-wide.jpg`, `photos/qiyam-wide.jpg` (1600 wide, about 3:1) | the rows at Dhuhr, cut below the ceiling | Prayer times; Our Story's "Today" |
 | `photos/strip/<name>.jpg` (600px tall: 4:5, square or 2:1) | crops for the homepage strip | "Inside the masjid" on the homepage |
-| `tour/<name>.jpg` (1920x1280) | the selection, 29 photographs | The viewer (every picture opens its full file) |
-| `tour/g/<name>.jpg` (960x640) | smaller copies | The tour's stops, the madrasah set, the homepage, the tour's contact sheet |
-| `video/<name>.mp4` + `.jpg` poster (1280x720) | silent loops | About, the madrasah page, the tour |
+| `tour/<name>.jpg` (1920x1280) | the selection, 19 photographs | The viewer (every picture opens its full file) |
+| `tour/g/<name>.jpg` (960x640) | smaller copies | The Visit page, the madrasah set, the homepage |
+| `video/<name>.mp4` + `.jpg` poster (1280x720) | silent loops | About, the madrasah page, the Visit page |
 
 The clips: `class-circle` (the red-carpet class, wide; About only), `class-teacher` (the teacher
-reading, half speed; it leads the madrasah page and the tour's madrasah stop),
-`class-white` (About, the tour's contact sheet),
-`class-listening` (the tour's contact sheet), `sign` (the sign, half speed; the tour) and
-`sisters-notes` (About, the tour). A clip plays in the viewer only over
+reading, half speed; it leads the madrasah page and the Visit page's madrasah),
+`class-white` (About), `sign` (the sign, half speed; the Visit page) and
+`sisters-notes` (About, the Visit page). A clip plays in the viewer only over
 its own poster: a still of a different moment never opens a clip. The portrait cuts (`-p`
 files) were deleted with the old tour on 21 October 2026.
 
@@ -692,12 +704,12 @@ files) were deleted with the old tour on 21 October 2026.
 the green information screens in the prayer hall (one cycles through the **masjid's bank
 account details**, another shows a day's prayer times, which must never look like current
 times), the number plates of parked cars outside, and **07929 242914 on the sign**, Malim
-Husain's number, not the masjid's. The sign's close-ups (`tour/sign-day`, `tour/sign-night`,
-the `sign` clip) are cropped so the number is out of frame (and blurred under the crop as
+Husain's number, not the masjid's. The sign's close-ups (`tour/sign-night`, the `sign` clip)
+are cropped so the number is out of frame (and blurred under the crop as
 well). By day the number panel is blurred in the wide shots. **At night the lit number line at
 the bottom left of the sign was found unblurred** (21 October 2026: a few pixels, but readable
 when the viewer's full file is zoomed), so it has been painted out from the surrounding colours
-in `tour/dusk.jpg`, `tour/entrance.jpg`, their `tour/g/` copies and `photos/entrance-night.jpg`.
+in `photos/entrance-night.jpg` (and in the night shots since deleted with the old tour).
 Check any new night shot of the building for it. The teal line at the top left of the sign is
 the charity's registered name, not a number. Every hall photo was checked at full size for the
 screens; the lower prayer-times board in the hall is unblurred but illegible, so crop it out
@@ -717,9 +729,8 @@ channel, linked, never embedded.
 such as "The prayer hall. The marble wall frames the mihrab and minbar" or "Revesby Walk at
 dusk. Facing the building, ..." describe what anyone can see, and read as written by an AI;
 no masjid's site does it. They were all removed. A caption stays only when it adds what the
-picture cannot show: a date and place on an archive photograph in Our Story, the date under
-the tour's three positions of prayer, and the licence credit the Riyadh al-Salihin cover
-requires. Alt text is a different thing and stays. **The same goes for the viewer**: it shows
+picture cannot show: a date and place on an archive photograph in Our Story, and the licence
+credit the Riyadh al-Salihin cover requires. Alt text is a different thing and stays. **The same goes for the viewer**: it shows
 a caption only when a link has `data-caption`, and no longer falls back to the alt text (which
 put the same descriptions back under every picture). A clip in the viewer takes its label for
 screen readers from the link's hidden text.
@@ -742,7 +753,7 @@ strip had been better. So:
   children, no labels, no captions, no clips. Two round buttons move it for a mouse; they
   appear only when there is more to see, and use `aria-disabled` at the ends so a keyboard
   user keeps focus. It starts in line with the page and runs off the right-hand edge. A plain
-  "Take the tour" link follows it.
+  "Visit the masjid" link follows it.
 - **Homepage, the madrasah band** (`.peek`): three small pictures under the buttons, one wider
   than the others, and no child's face: a teacher's hands holding the Qur'an with a pencil
   (`photos/teacher-hands.jpg`, cut from the one-to-one table; Ali asked on 22 October 2026 for
@@ -763,29 +774,22 @@ arrows, arrow keys or a swipe move through its set, Escape or a tap beside the p
 closes it, and `data-video` plays a clip instead of the still. Without script each link
 opens the image itself.
 
-**The tour (`tour.html`, "Take the tour", linked from the homepage hero, the homepage strip
-and the footer).** Rebuilt on 21 October 2026: Ali had asked for "cinematic" meaning more
-interactive and more enjoyable to go through, not a film, and the dark full-screen scenes,
-the hiding header, the scene rail and the split screens were too much. It is now a calm,
-light page with the site's own heading band and header: nine stops (Revesby Walk, the
-entrances, wudu, the prayer hall, the library, Madrasah Al Furqan, the large hall, the sisters'
-class, at dusk), each a numbered heading with its Arabic name, a fact or two from the facts
-table where there is one (several stops have no text at all), and its photographs set
-differently at each stop on a twelve-column grid (`.frames`, `.f-*` widths, `.a-*` shapes).
-On a wide screen the list of stops (`.route`) stays beside them and marks the one being read
-with `aria-current="location"`, in weight and colour only: no bar, no progress. Each stop ends
-with "Next: ...". At the prayer hall three buttons (Standing, Bowing, Prostrating) show the
-three positions of Dhuhr one at a time; without script they sit side by side. Three silent
-clips (the sign, the red-carpet class, the sisters' notes) behave like every clip on the site.
-Then "Before you come" (the visiting facts) and "More photographs", a plain contact sheet of
-the pictures not shown at a stop (the first one wide, the rest square; two of them open
-clips). Where two pictures share a row, the smaller takes the row's height (`.f-fill`) so the
-edges meet; on a phone, pairs sit side by side and nothing is left alone in half a row. **It stays its own page** because it does a job no other page
-does (showing a first-time visitor the building, room by room), the homepage hero and footer
-link to it, folding thirty photographs into About would crowd the page Ali asked to keep, and
-a separate page is easy to drop if he decides against it. **The order of the stops is not a
-statement about the building's layout**: nobody has confirmed which room a visitor meets
-first, so the page never says it is the order you walk in. Ask the masjid before writing that.
+**Visit the masjid (`visit.html`, linked from the homepage hero, the homepage strip and the
+footer).** On 22 October 2026 Ali agreed that the tour should become a page for someone coming
+for the first time. It replaced `tour.html` (nine numbered stops with "Next" links, a
+Standing / Bowing / Prostrating toggle and a contact sheet of thirty photographs), which still
+read as a showpiece. Now the practical things come first, "Before you come" (address, getting
+in by the two entrances, parking, opening, Jumu'ah, all from the facts table, with directions
+and the prayer times), and then four short sections of photographs, each with its Arabic name:
+outside and the entrances (the building by day, not the dark dusk shot, and the sign clip),
+wudu, the prayer hall (mihrab and minbar, then the rows standing and bowing side by side; no
+sujud, no toggle) and Madrasah Al Furqan (both classes together: the red-carpet clip leads,
+then Ali's class with the microphone, the row of boys, a hand up and the sisters' notes). The
+pictures sit on a twelve-column grid (`.frames`, `.f-*` widths, `.a-*` shapes); where two share
+a row the smaller takes the row's height (`.f-fill`). **Left out on purpose:** the library (its
+books are not open to the public), dusk, numbering and "Next" links, photo dates, and a contact
+sheet. The order is not a statement about the building's layout: nobody has confirmed which
+room a visitor meets first, so the page never says it is the order you walk in.
 
 ## Parked, waiting on content
 
