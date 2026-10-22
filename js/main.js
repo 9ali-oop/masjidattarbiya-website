@@ -681,16 +681,13 @@ document.addEventListener("DOMContentLoaded", function () {
    share an "aside" and follow one another are set together under that line:
    the building's own story, before it was ours, sits at its place in time.
 
-   Entries marked "unknown" are deliberate gaps: they render as open questions
-   rather than being quietly left out, because the point of the page is partly
-   to get them answered. Each carries a button that opens WhatsApp with a
-   message already started. Nothing on the page moves: see CLAUDE.md.
+   Entries marked "unknown" stay in the file, with their questions, and are not
+   shown until someone who was there has answered them; "asks" and "source"
+   are notes for us, not for the page. Nothing on the page moves: see CLAUDE.md.
    --------------------------------------------------------------------------- */
 (function () {
   var el = document.getElementById("timeline");
   if (!el) return;
-
-  var WHATSAPP = "https://wa.me/447908854187?text=";
 
   function img(src, alt, w, h) {
     return '<img src="' + esc(src) + '" alt="' + esc(alt || "") + '"' +
@@ -719,19 +716,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function entry(m) {
-    var unknown = m.status === "unknown";
-    var asks = (m.asks || []).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
-    var msg = "Salaam, about “" + m.title + "” on the masjid's Our Story page: ";
-    return '<li class="entry' + (unknown ? " is-unknown" : "") + '" id="m-' + esc(m.id) + '" data-strand="' + esc(m.strand || "") + '">' +
-      '<p class="entry-year">' + (unknown ? '<span aria-hidden="true">?</span><span class="visually-hidden">Year not yet known</span>' : esc(m.year)) + "</p>" +
+    return '<li class="entry" id="m-' + esc(m.id) + '" data-strand="' + esc(m.strand || "") + '">' +
+      '<p class="entry-year">' + esc(m.year) + "</p>" +
       '<div class="entry-body">' +
         "<h3>" + esc(m.title) + "</h3>" +
         '<p class="entry-text">' + esc(m.body) + "</p>" +
         figure(m, "entry-photo") +
-        (asks ? '<p class="entry-askhead">Can you fill this in?</p><ul class="entry-asks">' + asks + "</ul>" +
-          '<a class="btn btn-line entry-remember" href="' + WHATSAPP + encodeURIComponent(msg) +
-          '" target="_blank" rel="noopener">I remember this</a>' : "") +
-        (m.source ? '<p class="entry-source"><b>Source:</b> ' + esc(m.source) + "</p>" : "") +
       "</div>" +
     "</li>";
   }
@@ -767,12 +757,15 @@ document.addEventListener("DOMContentLoaded", function () {
     "</section>";
   }
 
+  /** What the page shows: everything but the questions still waiting for an answer. */
+  function shown(ms) { return ms.filter(function (m) { return m.status !== "unknown"; }); }
+
   /** Chapters in the file's order; anything without a known chapter still shows, at the end. */
   function group(d) {
     var chapters = (d.chapters || []).filter(function (c) { return c && c.id; });
     var byId = {}, out = [], loose = [];
     chapters.forEach(function (c) { byId[c.id] = { c: c, items: [] }; out.push(byId[c.id]); });
-    d.milestones.forEach(function (m) { (byId[m.chapter] ? byId[m.chapter].items : loose).push(m); });
+    shown(d.milestones).forEach(function (m) { (byId[m.chapter] ? byId[m.chapter].items : loose).push(m); });
     if (loose.length) out.push({ c: { id: "more" }, items: loose });
     return out.filter(function (g) { return g.items.length; });
   }
@@ -792,10 +785,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function stats(ms) {
     var box = document.getElementById("story-stats");
     if (!box) return;
-    var known = ms.filter(function (m) { return m.status !== "unknown"; }).length;
-    box.insertAdjacentHTML("beforeend",
-      "<li><b>" + known + "</b>Milestones on record</li>" +
-      "<li><b>" + (ms.length - known) + "</b>Still to be remembered</li>");
+    box.insertAdjacentHTML("beforeend", "<li><b>" + shown(ms).length + "</b>Milestones on record</li>");
   }
 
   function filters() {
@@ -805,8 +795,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var strand = b.getAttribute("data-strand");
         buttons.forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
         all(".entry").forEach(function (item) {
-          item.hidden = !(strand === "all" ||
-            (strand === "unknown" ? item.classList.contains("is-unknown") : item.getAttribute("data-strand") === strand));
+          item.hidden = !(strand === "all" || item.getAttribute("data-strand") === strand);
         });
         all(".entry-aside").forEach(function (a) { a.hidden = !a.querySelector(".entry:not([hidden])"); });
         all(".chapter").forEach(function (ch) {
@@ -822,7 +811,7 @@ document.addEventListener("DOMContentLoaded", function () {
   getJSON("assets/history.json")
     .then(function (d) {
       var ms = (d && d.milestones) || [];
-      if (!ms.length) throw new Error("empty");
+      if (!shown(ms).length) throw new Error("empty");
       var groups = group(d);
       el.innerHTML = groups.map(function (g) { return chapter(g.c, g.items); }).join("");
       contents(groups);
@@ -1240,52 +1229,4 @@ function playQuietly(v) { var p = v.play(); if (p && p.catch) p.catch(function (
   strip.addEventListener("scroll", update, { passive: true });
   window.addEventListener("resize", update);
   update();
-})();
-
-/* ---------------------------------------------------------------------------
-   The tour (tour.html): a walk round the masjid, stop by stop.
-
-   The list of stops marks the one being read (aria-current, shown in weight
-   and colour), so a reader always knows where they are in the building. That
-   is all this does: the page is complete without it.
-   --------------------------------------------------------------------------- */
-(function () {
-  var stops = Array.prototype.slice.call(document.querySelectorAll(".stop[id]"));
-  var links = Array.prototype.slice.call(document.querySelectorAll(".route a[href^='#']"));
-  if (!stops.length || !links.length || !("IntersectionObserver" in window)) return;
-  var current = null;
-
-  function mark(id) {
-    if (id === current) return;
-    current = id;
-    links.forEach(function (a) {
-      if (a.getAttribute("href") === "#" + id) a.setAttribute("aria-current", "location");
-      else a.removeAttribute("aria-current");
-    });
-  }
-
-  // A stop counts as being read once it reaches the upper part of the screen.
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) { if (e.isIntersecting) mark(e.target.id); });
-  }, { rootMargin: "-30% 0px -60% 0px" });
-  stops.forEach(function (s) { io.observe(s); });
-})();
-
-/* At the prayer hall: standing, bowing and prostrating, one at a time, by
-   pressing the position's name. Without script the three sit side by side. */
-(function () {
-  Array.prototype.slice.call(document.querySelectorAll(".positions")).forEach(function (box) {
-    var pick = box.querySelector(".positions-pick");
-    var figs = Array.prototype.slice.call(box.querySelectorAll(".frames--tri > figure"));
-    var btns = Array.prototype.slice.call(box.querySelectorAll(".positions-btn"));
-    if (!pick || !figs.length || figs.length !== btns.length) return;
-    function show(i) {
-      figs.forEach(function (f, j) { f.hidden = j !== i; });
-      btns.forEach(function (b, j) { b.setAttribute("aria-pressed", String(j === i)); });
-    }
-    btns.forEach(function (b, i) { b.addEventListener("click", function () { show(i); }); });
-    box.classList.add("is-picking");
-    pick.hidden = false;
-    show(0);
-  });
 })();
