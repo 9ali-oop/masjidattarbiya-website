@@ -504,6 +504,7 @@ strong { color: var(--ink); }
 
 /* Buttons and a status line inside a heading band. */
 .page-hero .hero-actions { justify-content: center; margin-top: 22px; }
+.page-hero .hero-actions:empty { display: none; }
 .page-hero .hero-status { margin: 18px auto 0; font-size: 0.92rem; }
 .page-hero .hero-status .tbc { margin-right: 6px; vertical-align: 1px; }
 
@@ -928,8 +929,6 @@ strong { color: var(--ink); }
 .week-table tbody tr:last-child > * { border-bottom: 0; }
 .week-key { font-size: 0.86rem; color: var(--ink-soft); margin-top: 12px; }
 .week-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 18px; }
-.month-timetables { display: flex; flex-wrap: wrap; gap: 12px; }
-.month-timetables:empty { display: none; }
 .print-only { display: none; }
 
 /* Printing the week: just the masjid's name, the table and where the times
@@ -1243,9 +1242,8 @@ strong { color: var(--ink); }
 /* The weekly class on the events page: the book cover beside the details. */
 .weekly-class { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 28px; align-items: center; max-width: 760px; }
 .book-cover { margin: 0; }
+.book-cover a { display: block; }
 .book-cover img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: var(--shadow); }
-.book-cover figcaption { margin-top: 6px; font-size: 0.74rem; line-height: 1.35; color: var(--ink-soft); }
-.book-cover figcaption a { color: var(--ink-soft); }
 .weekly-when { margin: 0 0 4px; font: 400 1.1rem/1.3 var(--font-head); color: var(--green-dark); }
 .weekly-body h3 { font-size: 1.5rem; margin: 0 0 8px; }
 .weekly-body p:last-child { margin-bottom: 0; }
