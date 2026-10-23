@@ -738,7 +738,9 @@ to be left as it is, but it is the next candidate if he wants one more swapped.
 
 The clips: `class-circle` (the red-carpet class, wide; About only), `class-teacher` (the teacher
 reading, half speed; it leads the madrasah page and the Visit page's madrasah),
-`class-white` (About), `sign` (the sign, half speed; the Visit page) and
+`class-white` (About), `sign` (the sign, half speed; the Visit page), `teacher-mic` (Ali
+speaking into the microphone in the large hall, C9819 from 4.8 to 6.3 seconds, cropped to
+2560x1440 around him so he stays centred in a narrow frame, half speed; the Visit page) and
 `sisters-notes` (About, the Visit page). A clip plays in the viewer only over
 its own poster: a still of a different moment never opens a clip. The portrait cuts (`-p`
 files) were deleted with the old tour on 21 October 2026.
@@ -831,9 +833,10 @@ and the prayer times), and then four short sections of photographs, each with it
 outside and the entrances (the building by day, not the dark dusk shot, and the sign clip),
 wudu, the prayer hall (mihrab and minbar, then the rows standing and bowing side by side; no
 sujud, no toggle) and Madrasah Al Furqan (both classes together: the red-carpet clip leads,
-then a boy reading the Qur'an at the one-to-one table (`tour/reading.jpg`, DSC05454; it
-replaced the teacher with the microphone on 22 October 2026, "not the best"), the row of boys,
-a hand up and the sisters' notes). The
+then Ali speaking to his class through the microphone, as a slow-motion clip (`teacher-mic`:
+on 22 October 2026 he found the still of him among the children "not the best", turned down
+a picture of a pupil in its place, and asked for a better one of him or a slow moving shot),
+the row of boys, a hand up and the sisters' notes). The
 pictures sit on a twelve-column grid (`.frames`, `.f-*` widths, `.a-*` shapes); where two share
 a row the smaller takes the row's height (`.f-fill`). **Left out on purpose:** the library (its
 books are not open to the public), dusk, numbering and "Next" links, photo dates, and a contact
@@ -903,9 +906,10 @@ browsers keep those files for ten minutes, so without it a visitor gets the new 
 old stylesheet, which happened once and left the homepage banner unstyled. `check_links.py`
 fails if the pages disagree on the version.
 
-**Maintenance mode is off: the site opened to everyone on 22 October 2026** (it was on from
-21 October, at Ali's request, while the site was reworked). It stays in place, switched off,
-for the next time. With `ON = true`, `js/gate.js`, loaded in the `<head>` of every
+**Maintenance mode is ON again (from 23 October 2026, at Ali's request, while more edits are
+made).** The site first opened to everyone on 22 October 2026, after being hidden from 21
+October while it was reworked. Switch it off again (`ON = false`) when Ali says the edits are
+done. With `ON = true`, `js/gate.js`, loaded in the `<head>` of every
 page except `donate.html`, replaces the page with a short notice: the masjid's name, the live
 Masjidbox timetable, the donate page, WhatsApp, phone, email and address. Three things always
 get through, and must keep doing so: **the donate page** (it does not load the script), **a
