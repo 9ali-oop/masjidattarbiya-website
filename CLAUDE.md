@@ -910,9 +910,12 @@ fails if the pages disagree on the version.
 made).** The site first opened to everyone on 22 October 2026, after being hidden from 21
 October while it was reworked. Switch it off again (`ON = false`) when Ali says the edits are
 done. With `ON = true`, `js/gate.js`, loaded in the `<head>` of every
-page except `donate.html`, replaces the page with a short notice: the masjid's name, the live
-Masjidbox timetable, the donate page, WhatsApp, phone, email and address. Three things always
-get through, and must keep doing so: **the donate page** (it does not load the script), **a
+page except `donate.html`, replaces the page with a short notice: the masjid's name, buttons
+for the prayer times page and the donate page, the monthly timetable PDFs (from
+`assets/timetables.json`, as on the prayer times page), WhatsApp, phone, email and address.
+Four things always get through, and must keep doing so: **the donate page** (it does not load
+the script), **the prayer times page** (Ali, 23 October 2026: visitors should still have "the
+actual prayer timetable tab"; `gate.js` lets `/prayer-times` through), **a
 donor returning from GoCardless** (any address with `?thanks=` shows the real page and the
 thank-you banner), and **the masjid's own team**, after opening any page once with
 `?preview=<TOKEN>` (the token is in `js/gate.js`; `?preview=off` undoes it), who then see the
