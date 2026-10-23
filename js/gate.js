@@ -2,10 +2,11 @@
    "Being updated" notice (maintenance mode).
 
    While ON is true, a visitor sees a short notice instead of the page: the
-   masjid's name, the live prayer timetable on Masjidbox, the donate page,
-   and how to get in touch. Three things always get through:
+   masjid's name, the prayer times page, the monthly timetable PDFs, the
+   donate page, and how to get in touch. Four things always get through:
 
    - the donate page, which does not load this script at all;
+   - the prayer times page (today's times, the week and the monthly PDFs);
    - a donor coming back from GoCardless (any address with ?thanks=), who
      sees the page and the thank-you banner as normal;
    - the masjid's own team, after opening any page once with
@@ -31,6 +32,9 @@
   } catch (e) { /* no storage: the link still works for this one visit */ }
   if (q && q.get("preview") === TOKEN) through = true;
   if (q && q.has("thanks")) return;
+  // The prayer times page stays open to everyone, like the donate page: it is
+  // what most visitors come for, and it keeps the monthly timetable PDFs.
+  if (/^\/prayer-times(\.html)?$/.test(location.pathname)) return;
 
   var root = document.documentElement;
   var css = document.createElement("style");
@@ -43,6 +47,8 @@
     ".maintenance h1{font:400 clamp(2rem,6vw,2.8rem)/1.15 var(--font-head,Georgia,serif);color:var(--green-ink,#0e4a50);margin:4px 0 14px}" +
     ".maintenance p{margin:0 0 14px;line-height:1.6}" +
     ".maintenance .btn-row{justify-content:center;margin:22px 0 26px}" +
+    ".maintenance .maintenance-pdfs{margin:-12px 0 26px}" +
+    ".maintenance .maintenance-pdfs:empty{display:none}" +
     ".maintenance-contact{list-style:none;margin:0 0 18px;padding:18px 0 0;border-top:1px solid var(--border,#e2e0d8);font-size:.95rem}" +
     ".maintenance-contact li{margin:6px 0}" +
     ".maintenance small{color:var(--ink-soft,#4b5a55)}" +
@@ -72,11 +78,12 @@
         '<p class="maintenance-ar" lang="ar">مسجد التربية</p>' +
         "<h1>Attarbiya Masjid</h1>" +
         "<p>Our website is being updated and will be back shortly.</p>" +
-        "<p>The prayer timetable is still live, and donations are open as usual.</p>" +
+        "<p>The prayer times and the monthly timetable are still here, and donations are open as usual.</p>" +
         '<div class="btn-row">' +
-          '<a class="btn btn-gold" href="https://masjidbox.com/prayer-times/masjid-attarbiya">Prayer times</a>' +
+          '<a class="btn btn-gold" href="/prayer-times">Prayer times</a>' +
           '<a class="btn btn-teal" href="/donate">Donate</a>' +
         "</div>" +
+        '<div class="btn-row maintenance-pdfs"></div>' +
         '<ul class="maintenance-contact">' +
           '<li>WhatsApp or call <a href="https://wa.me/447929242914">07929 242914</a></li>' +
           '<li>Email <a href="mailto:info@masjidatarbiya.org">info@masjidatarbiya.org</a></li>' +
@@ -89,5 +96,21 @@
     var other = document.querySelectorAll("main#main");
     if (other.length > 1) other[1].removeAttribute("id");
     document.title = "Being updated | Attarbiya Masjid";
+
+    // The monthly timetable PDFs, as on the prayer times page: each month that
+    // has not ended yet (Europe/London), opened in the browser's own viewer.
+    var month = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London", year: "numeric", month: "2-digit" }).format(new Date());
+    fetch("/assets/timetables.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        var live = ((d && d.months) || []).filter(function (m) {
+          return m.month >= month && /^assets\/timetables\/[\w.-]+\.pdf$/.test(m.file || "");
+        }).slice(0, 2);
+        box.querySelector(".maintenance-pdfs").innerHTML = live.map(function (m) {
+          var name = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(m.month + "-01T12:00:00Z"));
+          return '<a class="btn btn-line" href="/' + m.file + '" target="_blank" rel="noopener">' + name + " timetable (PDF)</a>";
+        }).join("");
+      })
+      .catch(function () { /* no list: the notice stands without it */ });
   });
 })();
