@@ -906,9 +906,10 @@ browsers keep those files for ten minutes, so without it a visitor gets the new 
 old stylesheet, which happened once and left the homepage banner unstyled. `check_links.py`
 fails if the pages disagree on the version.
 
-**Maintenance mode is off: the site opened to everyone on 22 October 2026** (it was on from
-21 October, at Ali's request, while the site was reworked). It stays in place, switched off,
-for the next time. With `ON = true`, `js/gate.js`, loaded in the `<head>` of every
+**Maintenance mode is ON again (from 23 October 2026, at Ali's request, while more edits are
+made).** The site first opened to everyone on 22 October 2026, after being hidden from 21
+October while it was reworked. Switch it off again (`ON = false`) when Ali says the edits are
+done. With `ON = true`, `js/gate.js`, loaded in the `<head>` of every
 page except `donate.html`, replaces the page with a short notice: the masjid's name, the live
 Masjidbox timetable, the donate page, WhatsApp, phone, email and address. Three things always
 get through, and must keep doing so: **the donate page** (it does not load the script), **a
