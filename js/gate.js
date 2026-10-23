@@ -18,7 +18,7 @@
    file and its <script> tag from the pages) and push.
    --------------------------------------------------------------------------- */
 (function () {
-  var ON = true;
+  var ON = false;
   var TOKEN = "lshsmnyTlbG2";
   var KEY = "atb-preview";
   if (!ON) return;
