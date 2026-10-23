@@ -831,12 +831,15 @@ and the prayer times), and then four short sections of photographs, each with it
 outside and the entrances (the building by day, not the dark dusk shot, and the sign clip),
 wudu, the prayer hall (mihrab and minbar, then the rows standing and bowing side by side; no
 sujud, no toggle) and Madrasah Al Furqan (both classes together: the red-carpet clip leads,
-then Ali smiling at a pupil as the class answers into the microphone (`tour/with-pupils.jpg`,
-DSC05317; he wanted himself there "interacting with the kids": a still of him talking among
-them, a pupil photo and a slow-motion clip of him just speaking were all turned down on 22 and
-23 October 2026, and DSC05324, laughing as he hands over the microphone, was "10/10" but for
-puffed cheeks and the verruca on his finger, which 05317 does not show), the row of boys, a
-hand up and the sisters' notes). The
+then Ali holding up an adab lesson on a tablet to his class as a boy raises his hand
+(`tour/tablet-lesson.jpg`, DSC05293, mouth closed, a natural smile). Ali wanted himself there
+"interacting with the kids", and on 22 and 23 October 2026 turned down, in order: a still of
+him talking among them (DSC05320), a pupil photo, a slow-motion clip of him just speaking,
+DSC05324 (laughing as he hands over the microphone: "10/10" but for puffed cheeks and the
+verruca on his finger) and DSC05317 (front teeth showing). **The tablet's browser bar (tabs,
+bookmarks, address) and the PDF's file name under it are blurred in both copies**, inside the
+screen only: they may name the curriculum or its website, which the site never names. Then the row of boys, a hand up
+and the sisters' notes). The
 pictures sit on a twelve-column grid (`.frames`, `.f-*` widths, `.a-*` shapes); where two share
 a row the smaller takes the row's height (`.f-fill`). **Left out on purpose:** the library (its
 books are not open to the public), dusk, numbering and "Next" links, photo dates, and a contact
