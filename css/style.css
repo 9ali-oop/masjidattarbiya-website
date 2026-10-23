@@ -1780,6 +1780,7 @@ html.lb-open { overflow: hidden; }
 .f-6 { grid-column: span 6; }
 .f-7 { grid-column: span 7; }
 .f-8 { grid-column: span 8; }
+.f-12 { grid-column: 1 / -1; }
 /* A smaller partner that takes the height of the row, so the edges meet. */
 .f-fill { align-self: stretch; aspect-ratio: auto; }
 .a-32 { aspect-ratio: 3 / 2; }
