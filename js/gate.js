@@ -95,7 +95,8 @@
     // The page's own main landmark is hidden; give it up so there is one.
     var other = document.querySelectorAll("main#main");
     if (other.length > 1) other[1].removeAttribute("id");
-    document.title = "Being updated | Attarbiya Masjid";
+    // The page keeps its own title: Google reads the title after this script
+    // runs, and on 23 October 2026 it listed the homepage as "Being updated".
 
     // The monthly timetable PDFs, as on the prayer times page: each month that
     // has not ended yet (Europe/London), opened in the browser's own viewer.

@@ -921,7 +921,11 @@ full site with a small "Preview" label. It hides the site from ordinary visitors
 more: the pages are still public files and the token is readable in the script. **`ON = true` in
 `js/gate.js` switches it on, `ON = false` off; push either way.** Do not leave it on for weeks:
 search engines that render the page see the notice, and people who check prayer times here
-are sent to Masjidbox instead.
+are sent to Masjidbox instead. **The notice leaves the page's title alone**: it used to set
+"Being updated", and Google, which reads the title after the script has run, listed the
+homepage as "Attarbiya Masjid: Being updated" for days after the site reopened on 23 October
+2026. A recrawl fixes a stale title; Google Search Console's "Request indexing" (on the
+masjid's Google account) speeds it up.
 
 **Addresses are clean: `/donate`, not `/donate.html`** (since 8 October 2026). GitHub Pages
 serves `donate.html` at both, so every internal link, the canonical tag, `og:url` and the
