@@ -732,7 +732,7 @@ to be left as it is, but it is the next candidate if he wants one more swapped.
 | `photos/*.jpg` (1360; `exterior.jpg` 1920) | the first selection | Homepage hero and About figure, About, contact, portal, donate, Our Story |
 | `photos/ruku-wide.jpg`, `photos/qiyam-wide.jpg` (1600 wide, about 3:1) | the rows at Dhuhr, cut below the ceiling | Prayer times; Our Story's "Today" |
 | `photos/strip/<name>.jpg` (600px tall: 4:5, square or 2:1) | crops for the homepage strip | "Inside the masjid" on the homepage |
-| `tour/<name>.jpg` (1920x1280) | the selection, 19 photographs | The viewer (every picture opens its full file) |
+| `tour/<name>.jpg` (1920x1280) | the selection, 18 photographs | The viewer (every picture opens its full file) |
 | `tour/g/<name>.jpg` (960x640) | smaller copies | The Visit page, the madrasah set, the homepage |
 | `video/<name>.mp4` + `.jpg` poster (1280x720) | silent loops | About, the madrasah page, the Visit page |
 
@@ -830,16 +830,13 @@ in by the two entrances, parking, opening, Jumu'ah, all from the facts table, wi
 and the prayer times), and then four short sections of photographs, each with its Arabic name:
 outside and the entrances (the building by day, not the dark dusk shot, and the sign clip),
 wudu, the prayer hall (mihrab and minbar, then the rows standing and bowing side by side; no
-sujud, no toggle) and Madrasah Al Furqan (both classes together: the red-carpet clip leads,
-then Ali holding up an adab lesson on a tablet to his class as a boy raises his hand
-(`tour/tablet-lesson.jpg`, DSC05293, mouth closed, a natural smile). Ali wanted himself there
-"interacting with the kids", and on 22 and 23 October 2026 turned down, in order: a still of
-him talking among them (DSC05320), a pupil photo, a slow-motion clip of him just speaking,
-DSC05324 (laughing as he hands over the microphone: "10/10" but for puffed cheeks and the
-verruca on his finger) and DSC05317 (front teeth showing). **The tablet's browser bar (tabs,
-bookmarks, address) and the PDF's file name under it are blurred in both copies**, inside the
-screen only: they may name the curriculum or its website, which the site never names. Then the row of boys, a hand up
-and the sisters' notes). The
+sujud, no toggle) and Madrasah Al Furqan (both classes together: the red-carpet clip on its
+own across the full row (`.f-12`), then the row of boys, a hand up and the sisters' notes).
+**No picture of Ali there, by his choice (23 October 2026).** He wanted himself beside the
+clip "interacting with the kids", but there are only five stills of him (DSC05293, 05302,
+05317, 05320, 05324) and he turned every one down: talking, puffed cheeks and a verruca,
+front teeth, frowning. Frames from his class's clips were no better, and he chose to leave
+the slot out. Do not put a picture of him back without asking. The
 pictures sit on a twelve-column grid (`.frames`, `.f-*` widths, `.a-*` shapes); where two share
 a row the smaller takes the row's height (`.f-fill`). **Left out on purpose:** the library (its
 books are not open to the public), dusk, numbering and "Next" links, photo dates, and a contact
