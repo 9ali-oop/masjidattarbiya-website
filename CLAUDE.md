@@ -832,11 +832,9 @@ outside and the entrances (the building by day, not the dark dusk shot, and the 
 wudu, the prayer hall (mihrab and minbar, then the rows standing and bowing side by side; no
 sujud, no toggle) and Madrasah Al Furqan (both classes together: the red-carpet clip on its
 own across the full row (`.f-12`), then the row of boys, a hand up and the sisters' notes).
-**No picture of Ali there, by his choice (23 October 2026).** He wanted himself beside the
-clip "interacting with the kids", but there are only five stills of him (DSC05293, 05302,
-05317, 05320, 05324) and he turned every one down: talking, puffed cheeks and a verruca,
-front teeth, frowning. Frames from his class's clips were no better, and he chose to leave
-the slot out. Do not put a picture of him back without asking. The
+The clip stands alone on purpose (Ali, 23 October 2026): a picture of the teacher beside it
+was tried and he chose the full-width clip instead. Ask him before adding a picture of him
+anywhere. The
 pictures sit on a twelve-column grid (`.frames`, `.f-*` widths, `.a-*` shapes); where two share
 a row the smaller takes the row's height (`.f-fill`). **Left out on purpose:** the library (its
 books are not open to the public), dusk, numbering and "Next" links, photo dates, and a contact
