@@ -24,28 +24,36 @@ function getJSON(url) {
    a "from" and "until" date (inclusive, Europe/London), so an Eid prayer time
    or a changed iqamah disappears by itself the day after.
 
-   A notice with a "banner" name shows instead as a gold bar across the top of
-   every page, for things nobody should miss (the clocks changing), until the
-   visitor closes it. Closing it is remembered on that device by the name, so
-   notices that share one ("tonight", then "on Sunday") are closed once. */
+   A notice with a "banner" name is for things nobody should miss (the clocks
+   changing). The first time a device meets it, it opens as a pop-up over the
+   page; closed, the pop-up flies up into a gold bar across the top of every
+   page, which stays until the visitor closes that too. Both are remembered on
+   the device by the name (atb-seen-, atb-closed-), so notices that share one
+   ("tonight", then "on Sunday") pop up once and are closed once. Without
+   storage there is no pop-up, only the bar, so nobody gets one on every page. */
 (function () {
   var boxes = document.querySelectorAll(".notices");
   var today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+  // A donor back from GoCardless gets the thank-you banner, not a pop-up.
+  var fromPayment = /[?&]thanks=/.test(location.search);
+  var still = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  function closed(name) {
-    try { return localStorage.getItem("atb-closed-" + name) === "1"; } catch (e) { return false; }
-  }
-  function showBanner(n) {
-    if (!n || closed(n.banner)) return;
+  var store = (function () {
+    try { localStorage.setItem("atb-test", "1"); localStorage.removeItem("atb-test"); return localStorage; } catch (e) { return null; }
+  })();
+  function remember(key) { if (store) try { store.setItem(key, "1"); } catch (e) { /* full: forget it */ } }
+
+  function makeBar(n) {
     var bar = document.createElement("div");
     bar.className = "site-banner";
     bar.setAttribute("role", "region");
     bar.setAttribute("aria-label", n.kind || "Notice");
+    bar.tabIndex = -1;
     bar.innerHTML = '<div class="container site-banner-inner"><p><strong>' + esc(n.title) + "</strong> " + esc(n.text || "") +
       (n.link ? ' <a href="' + esc(n.link) + '">' + esc(n.link_text || "More") + "</a>" : "") + "</p>" +
       '<button type="button" class="site-banner-close" aria-label="Close this notice"><span aria-hidden="true">&times;</span></button></div>';
     bar.querySelector("button").addEventListener("click", function () {
-      try { localStorage.setItem("atb-closed-" + n.banner, "1"); } catch (e) { /* closes for this page only */ }
+      remember("atb-closed-" + n.banner);
       bar.remove();
       var home = document.querySelector(".site-header a");
       if (home) home.focus({ preventScroll: true });
@@ -53,6 +61,67 @@ function getJSON(url) {
     // After the skip link, so it stays the first thing a keyboard reaches.
     var skip = document.querySelector("body > .skip-link");
     document.body.insertBefore(bar, skip ? skip.nextSibling : document.body.firstChild);
+    return bar;
+  }
+
+  function popUp(n) {
+    var dlg = document.createElement("dialog");
+    dlg.className = "notice-pop";
+    dlg.setAttribute("aria-labelledby", "notice-pop-title");
+    dlg.innerHTML = '<div class="notice-pop-card" tabindex="-1" autofocus>' +
+      '<button type="button" class="notice-pop-x" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+      '<p class="notice-pop-kind">' + esc(n.kind || "Notice") + "</p>" +
+      '<h2 id="notice-pop-title">' + esc(String(n.title).replace(/\.$/, "")) + "</h2>" +
+      (n.text ? "<p>" + esc(n.text) + "</p>" : "") +
+      '<div class="btn-row">' +
+        (n.link ? '<a class="btn btn-gold" href="' + esc(n.link) + '">' + esc(n.link_text || "More") + "</a>" : "") +
+        '<button type="button" class="btn btn-line" data-close>Got it</button>' +
+      "</div></div>";
+    var card = dlg.querySelector(".notice-pop-card");
+    var closing = false, bar;
+
+    function done() {
+      dlg.close();
+      dlg.remove();
+      bar.style.visibility = "";
+      if (!still && bar.animate) bar.animate([{ transform: "translateY(-100%)" }, { transform: "none" }], { duration: 260, easing: "ease-out" });
+      // After the dialog has handed focus back, so it lands on the bar.
+      requestAnimationFrame(function () { bar.focus({ preventScroll: true }); });
+    }
+    function close() {
+      if (closing) return;
+      closing = true;
+      remember("atb-seen-" + n.banner);
+      // The bar arrives as the pop-up leaves, laid out first so it knows where to fly.
+      bar = makeBar(n);
+      bar.style.visibility = "hidden";
+      if (still || !card.animate) { done(); return; }
+      var from = card.getBoundingClientRect(), to = bar.getBoundingClientRect();
+      var s = Math.max(0.15, to.height / from.height);
+      var dx = to.left + to.width / 2 - (from.left + from.width / 2);
+      var dy = to.top + to.height / 2 - (from.top + from.height / 2);
+      try { dlg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 420, pseudoElement: "::backdrop", fill: "forwards" }); } catch (e) { /* the backdrop just goes */ }
+      card.animate([
+        { transform: "none", opacity: 1 },
+        { transform: "translate(" + dx + "px," + dy + "px) scale(" + s + ")", opacity: 0 }
+      ], { duration: 420, easing: "cubic-bezier(.55,0,.3,1)", fill: "forwards" }).onfinish = done;
+    }
+    dlg.querySelector(".notice-pop-x").addEventListener("click", close);
+    dlg.querySelector("[data-close]").addEventListener("click", close);
+    dlg.addEventListener("cancel", function (e) { e.preventDefault(); close(); });
+    // A tap on the dimmed page around the card closes it too.
+    dlg.addEventListener("click", function (e) { if (e.target === dlg) close(); });
+    var go = dlg.querySelector("a.btn");
+    if (go) go.addEventListener("click", function () { remember("atb-seen-" + n.banner); });
+    document.body.appendChild(dlg);
+    dlg.showModal();
+    if (!still && card.animate) card.animate([{ transform: "scale(.96)", opacity: 0 }, { transform: "none", opacity: 1 }], { duration: 220, easing: "ease-out" });
+  }
+
+  function showBanner(n) {
+    if (!n || (store && store.getItem("atb-closed-" + n.banner))) return;
+    if (store && !store.getItem("atb-seen-" + n.banner) && !fromPayment && typeof HTMLDialogElement === "function") popUp(n);
+    else makeBar(n);
   }
   getJSON("assets/notices.json").then(function (d) {
     var current = ((d && d.notices) || []).filter(function (n) {
@@ -476,8 +545,7 @@ document.addEventListener("DOMContentLoaded", function () {
     weekEl.innerHTML = '<div class="week-wrap" tabindex="0" role="region" aria-label="Prayer times for the week ahead">' +
       '<table class="week-table"><caption class="visually-hidden">Prayer times for the week ahead. ' +
       "In each cell the start time is above and the iqamah below.</caption>" +
-      "<thead>" + head + "</thead><tbody>" + body + "</tbody></table></div>" +
-      '<p class="week-key">In each cell, the small figure is when the prayer begins and the bold figure is the iqamah, when the congregation stands.</p>';
+      "<thead>" + head + "</thead><tbody>" + body + "</tbody></table></div>";
   }
 
   function renderBar(data) {

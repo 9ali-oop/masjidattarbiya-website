@@ -245,10 +245,14 @@ or donate page instead). This is how the big masjid sites handle Eid and Ramadan
 notice, not a rewrite of the page.
 
 **A notice nobody should miss gets a `banner` name** (Ali, 24 October 2026, for the clocks
-going back). It then shows as a gold bar across the top of every page instead of in the
-boxes, until the visitor closes it with the cross; closing it is remembered on that device
-(`localStorage`, `atb-closed-<name>`), so it does not come back on every visit. Notices
-that share a name are closed together, which is how one banner can change its wording by
+going back). The first time a device meets it, it opens as a pop-up over the page (a native
+`<dialog>`, closed by "Got it", the cross, Escape or a tap outside), which then flies up into
+a gold bar across the top of every page; Ali asked for exactly that: "a pop up banner
+covering the screen, exited, then to the top". The bar stays until the visitor closes it
+with its own cross. Both are remembered on that device (`localStorage`, `atb-seen-<name>`
+and `atb-closed-<name>`), so neither comes back on every visit. A device without storage
+gets only the bar, and a donor back from GoCardless (`?thanks=`) gets no pop-up. Notices
+that share a name pop up and close together, which is how one banner can change its wording by
 date: `clocks-2026-10` says "The clocks go back an hour tonight" on 24 October and "The
 clocks went back an hour on Sunday" from 25 October to 1 November. Neither gives a time:
 the times are on the prayer times page, which it links to. Use a new name for the next
