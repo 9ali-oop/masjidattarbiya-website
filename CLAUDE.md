@@ -244,6 +244,17 @@ a missing `until`, or a phone number, email or bank detail in the text (link to 
 or donate page instead). This is how the big masjid sites handle Eid and Ramadan: a dated
 notice, not a rewrite of the page.
 
+**A notice nobody should miss gets a `banner` name** (Ali, 24 October 2026, for the clocks
+going back). It then shows as a gold bar across the top of every page instead of in the
+boxes, until the visitor closes it with the cross; closing it is remembered on that device
+(`localStorage`, `atb-closed-<name>`), so it does not come back on every visit. Notices
+that share a name are closed together, which is how one banner can change its wording by
+date: `clocks-2026-10` says "The clocks go back an hour tonight" on 24 October and "The
+clocks went back an hour on Sunday" from 25 October to 1 November. Neither gives a time:
+the times are on the prayer times page, which it links to. Use a new name for the next
+change (`clocks-2027-03` for Sunday 28 March 2027), or people who closed this one will
+never see it.
+
 ## Events
 
 `events.html` renders two lists, both from JSON, neither typed into the markup. The homepage
