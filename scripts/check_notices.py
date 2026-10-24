@@ -1,6 +1,7 @@
 """Fail if assets/notices.json is malformed, or a notice carries contact or bank details.
 
-Notices show on the homepage and the prayer times page while current (see js/main.js).
+Notices show on the homepage and the prayer times page while current, or as a bar across
+the top of every page when they carry a "banner" name (see js/main.js).
 They are written by hand, so this catches a mistyped date before it hides a notice, and
 the same things check_events.py blocks in event copy: bank details and phone numbers do
 not belong on a page next to a donate button.
@@ -45,6 +46,9 @@ for i, n in enumerate(notices):
             problems.append(f"{where}: {why}")
     if len(str(n.get("text", ""))) > 280:
         problems.append(f"{where}: text over 280 characters - link to a page instead")
+    # A banner's name is the key that remembers it was closed, so keep it a plain slug.
+    if "banner" in n and not re.match(r"^[a-z0-9-]{1,40}$", str(n["banner"])):
+        problems.append(f"{where}: banner must be a short name like clocks-2026-10, got {n['banner']!r}")
 
 live = [n for n in notices if isinstance(n, dict) and n.get("title")]
 for p in problems:

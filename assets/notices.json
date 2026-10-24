@@ -1,4 +1,25 @@
 {
-  "_how": "Short announcements shown on the homepage and prayer times page while current. Each: kind (e.g. Eid, Ramadan, Notice), title, text, optional link and link_text, from and until as YYYY-MM-DD (inclusive, UK dates). Keep to three live at once. No phone numbers or bank details in text: link to the contact or donate page instead.",
-  "notices": []
+  "_how": "Short announcements shown on the homepage and prayer times page while current. Each: kind (e.g. Eid, Ramadan, Notice), title, text, optional link and link_text, from and until as YYYY-MM-DD (inclusive, UK dates). Keep to three live at once. No phone numbers or bank details in text: link to the contact or donate page instead. Add banner (a short name, e.g. clocks-2026-10) for something nobody should miss: it then shows as a gold bar across the top of every page instead, until the visitor closes it, and stays closed on that device. Notices that share a banner name are closed together.",
+  "notices": [
+    {
+      "kind": "Clocks change",
+      "banner": "clocks-2026-10",
+      "title": "The clocks go back an hour tonight.",
+      "text": "From tomorrow, Sunday 25 October, every salah begins about an hour earlier on the clock and the jama'at times move earlier too. Jumu'ah changes from Friday 30 October.",
+      "link": "prayer-times",
+      "link_text": "See the new times",
+      "from": "2026-10-24",
+      "until": "2026-10-24"
+    },
+    {
+      "kind": "Clocks change",
+      "banner": "clocks-2026-10",
+      "title": "The clocks went back an hour on Sunday.",
+      "text": "Every salah now begins about an hour earlier on the clock, and the jama'at times have moved earlier too. Jumu'ah changes from Friday 30 October.",
+      "link": "prayer-times",
+      "link_text": "See the new times",
+      "from": "2026-10-25",
+      "until": "2026-11-01"
+    }
+  ]
 }

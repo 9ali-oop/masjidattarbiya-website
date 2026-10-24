@@ -22,17 +22,45 @@ function getJSON(url) {
 /* Notices: short, dated announcements kept in assets/notices.json and shown
    on the homepage and the prayer times page while they are current. Each has
    a "from" and "until" date (inclusive, Europe/London), so an Eid prayer time
-   or a changed iqamah disappears by itself the day after. */
+   or a changed iqamah disappears by itself the day after.
+
+   A notice with a "banner" name shows instead as a gold bar across the top of
+   every page, for things nobody should miss (the clocks changing), until the
+   visitor closes it. Closing it is remembered on that device by the name, so
+   notices that share one ("tonight", then "on Sunday") are closed once. */
 (function () {
   var boxes = document.querySelectorAll(".notices");
-  if (!boxes.length) return;
   var today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function closed(name) {
+    try { return localStorage.getItem("atb-closed-" + name) === "1"; } catch (e) { return false; }
+  }
+  function showBanner(n) {
+    if (!n || closed(n.banner)) return;
+    var bar = document.createElement("div");
+    bar.className = "site-banner";
+    bar.setAttribute("role", "region");
+    bar.setAttribute("aria-label", n.kind || "Notice");
+    bar.innerHTML = '<div class="container site-banner-inner"><p><strong>' + esc(n.title) + "</strong> " + esc(n.text || "") +
+      (n.link ? ' <a href="' + esc(n.link) + '">' + esc(n.link_text || "More") + "</a>" : "") + "</p>" +
+      '<button type="button" class="site-banner-close" aria-label="Close this notice"><span aria-hidden="true">&times;</span></button></div>';
+    bar.querySelector("button").addEventListener("click", function () {
+      try { localStorage.setItem("atb-closed-" + n.banner, "1"); } catch (e) { /* closes for this page only */ }
+      bar.remove();
+      var home = document.querySelector(".site-header a");
+      if (home) home.focus({ preventScroll: true });
+    });
+    // After the skip link, so it stays the first thing a keyboard reaches.
+    var skip = document.querySelector("body > .skip-link");
+    document.body.insertBefore(bar, skip ? skip.nextSibling : document.body.firstChild);
+  }
   getJSON("assets/notices.json").then(function (d) {
-    var live = ((d && d.notices) || []).filter(function (n) {
+    var current = ((d && d.notices) || []).filter(function (n) {
       return n.title && (!n.from || n.from <= today) && (!n.until || n.until >= today);
-    }).slice(0, 3);
-    if (!live.length) return;
+    });
+    showBanner(current.filter(function (n) { return n.banner; })[0]);
+    var live = current.filter(function (n) { return !n.banner; }).slice(0, 3);
+    if (!live.length || !boxes.length) return;
     var html = live.map(function (n) {
       return '<div class="notice" role="note"><span class="notice-kind">' + esc(n.kind || "Notice") + "</span>" +
         "<h3>" + esc(n.title) + "</h3>" +
