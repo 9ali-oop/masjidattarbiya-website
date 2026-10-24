@@ -927,7 +927,6 @@ strong { color: var(--ink); }
 .week-table .is-today { background: var(--green-light); }
 .week-table thead .is-today { box-shadow: inset 0 3px 0 var(--gold); background: var(--green-light); }
 .week-table tbody tr:last-child > * { border-bottom: 0; }
-.week-key { font-size: 0.86rem; color: var(--ink-soft); margin-top: 12px; }
 .week-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 18px; }
 .print-only { display: none; }
 
@@ -935,7 +934,7 @@ strong { color: var(--ink); }
    come from, on one sheet, for the fridge or the noticeboard. */
 @media print {
   .story-tools,
-  .site-header, .site-footer, .page-hero, .prayer-layout, .week-actions, .week-key, .colour-preview, .thanks-banner, .site-banner, .skip-link, .notices { display: none !important; }
+  .site-header, .site-footer, .page-hero, .prayer-layout, .week-actions, .colour-preview, .thanks-banner, .site-banner, .skip-link, .notices { display: none !important; }
   .print-only { display: block; margin: 0 0 12px; }
   .print-only .print-title { font: 400 20pt/1.2 var(--font-head); margin: 0 0 4px; color: #000; }
   .print-only p { margin: 0; color: #000; font-size: 10pt; }
@@ -1266,6 +1265,21 @@ strong { color: var(--ink); }
 .site-banner-close { flex: none; width: 44px; height: 44px; margin-right: -10px; border: 0; border-radius: 50%; background: transparent; color: var(--ink); font-size: 1.7rem; line-height: 1; cursor: pointer; }
 .site-banner-close:hover { background: rgba(28, 35, 33, 0.1); }
 .site-banner-close:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; }
+.site-banner:focus { outline: none; }
+
+/* The same notice as a pop-up, the first time a device meets it. Closed, it
+   flies up into the bar above (js/main.js). */
+.notice-pop { width: min(520px, calc(100vw - 32px)); max-width: none; padding: 0; border: 0; background: transparent; color: var(--ink); overflow: visible; }
+.notice-pop::backdrop { background: rgba(14, 74, 80, 0.62); }
+.notice-pop-card { position: relative; padding: 30px 28px 26px; border-top: 6px solid var(--gold); border-radius: 14px; background: var(--white); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28); }
+.notice-pop-kind { margin: 0 0 8px; font: 700 0.72rem/1.4 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-text); }
+.notice-pop h2 { margin: 0 44px 12px 0; font: 400 1.65rem/1.25 var(--font-head); color: var(--green-dark); text-wrap: balance; }
+.notice-pop-card > p:not(.notice-pop-kind) { margin: 0 0 22px; font-size: 1rem; line-height: 1.6; color: var(--ink); }
+.notice-pop-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; color: var(--ink); font-size: 1.7rem; line-height: 1; cursor: pointer; }
+.notice-pop-x:hover { background: var(--green-light); }
+.notice-pop-card:focus { outline: none; }
+.notice-pop-x:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+@media (max-width: 480px) { .notice-pop .btn-row .btn { flex: 1 1 100%; } }
 
 .thanks-banner { background: linear-gradient(135deg, var(--green-text), var(--green-dark)); color: var(--white); text-align: center; padding: 16px 20px; line-height: 1.5; font-size: 0.95rem; }
 .thanks-banner strong { display: block; color: var(--white); font: 400 1.15rem/1.3 var(--font-head); margin-bottom: 2px; }
