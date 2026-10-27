@@ -1,9 +1,11 @@
 """Validate assets/prayer-times.json.
 
-This is the only file on the site that changes on its own, written by a scheduled
-job that scrapes a third party. It is therefore the most likely thing to break
-quietly, and the thing most worth checking: wrong prayer times are worse than no
-website at all.
+This is the only file on the site that changes on its own, rebuilt every night by
+scripts/fetch_prayer_times.py from the masjid's printed monthly timetable (typed into
+scripts/timetable/), with Masjidbox only for a day no typed month covers. It is the
+thing most worth checking: wrong prayer times are worse than no website at all. Every
+day taken from a sheet must match that sheet exactly, and the coming week must not
+depend on Masjidbox, whose times have disagreed with the masjid's own sheet.
 
 Run by CI on every push, and worth running after any manual refresh.
 """
@@ -100,6 +102,33 @@ for day in days:
             fail(f"{d} is a Friday but has no jumuah time")
         elif times.get("jumuah") == times.get("dhuhr"):
             fail(f"{d}: jumuah equals dhuhr, which usually means it was read from the wrong field")
+
+# The times are the masjid's printed sheets. A day marked as from a sheet must equal
+# what the sheet says; a day from Masjidbox in the coming week means next month's
+# sheet has not been typed yet, and Masjidbox's times have disagreed with the sheet.
+sys.path.insert(0, "scripts")
+import fetch_prayer_times as sheets  # noqa: E402
+
+typed = {}
+week_end = (date.today() + timedelta(days=6)).isoformat()
+for day in days:
+    d = day.get("date", "")
+    ym = d[:7]
+    if day.get("from") == "sheet":
+        if ym not in typed:
+            try:
+                typed[ym] = sheets.sheet_month(ym)
+            except Exception as e:  # noqa: BLE001
+                fail(f"scripts/timetable/{ym}.txt does not read: {e}")
+                typed[ym] = {}
+        want = typed[ym].get(d)
+        if want is None:
+            fail(f"{d}: marked as from the printed sheet, but scripts/timetable/{ym}.txt has no such day")
+        elif any(want[k] != day.get(k) for k in ("hijri", "times", "iqamah")):
+            fail(f"{d}: differs from the printed sheet in scripts/timetable/{ym}.txt - run python scripts/fetch_prayer_times.py")
+    elif date.today().isoformat() <= d <= week_end:
+        fail(f"{d}: no printed timetable typed for {ym} yet, so the site shows Masjidbox's times for this day. "
+             f"Type the masjid's sheet into scripts/timetable/{ym}.txt (see its README), then run python scripts/fetch_prayer_times.py")
 
 # The data must still be current. Allow a couple of days of slack so a weekend
 # outage in the scheduled job does not fail the build before anyone can act.

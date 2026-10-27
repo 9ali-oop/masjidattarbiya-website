@@ -273,8 +273,10 @@ document.addEventListener("DOMContentLoaded", function () {
 /* --------------------------------------------------------------------------
    Prayer times.
 
-   Rendered from assets/prayer-times.json, refreshed daily by a GitHub Action
-   from the masjid's own Masjidbox timetable. Feeds four places: today's card
+   Rendered from assets/prayer-times.json, rebuilt every night by a GitHub
+   Action from the masjid's own printed monthly timetable (typed into
+   scripts/timetable/; Masjidbox only for a day no typed month covers yet).
+   Feeds four places: today's card
    (#prayer-times), the week grid (#prayer-week), the line in the top bar
    (#topbar-next) and the Jumu'ah note on the homepage (#visit-jumuah).
 
@@ -287,7 +289,9 @@ document.addEventListener("DOMContentLoaded", function () {
    whose start time has passed but whose jama'ah has not is still next.
 
    If the data is missing, or holds no entry for today, each place says so and
-   links to the live Masjidbox page. It never shows guessed or stale times.
+   points to the month's printed timetable (the PDF buttons on the prayer times
+   page). It never shows guessed or stale times. It no longer links to
+   Masjidbox, whose times disagreed with the masjid's sheet.
    -------------------------------------------------------------------------- */
 (function () {
   var todayEl = document.getElementById("prayer-times");
@@ -296,7 +300,6 @@ document.addEventListener("DOMContentLoaded", function () {
   var jumEl = document.getElementById("visit-jumuah");
   if (!todayEl && !weekEl && !barEl && !jumEl) return;
 
-  var LIVE = "https://masjidbox.com/prayer-times/masjid-attarbiya";
   var TZ = "Europe/London";
   var LABELS = {
     fajr: "Fajr", sunrise: "Sunrise", dhuhr: "Dhuhr", jumuah: "Jumu'ah",
@@ -347,7 +350,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function fallback(el, message) {
     if (!el) return;
     el.innerHTML = '<p class="prayer-fallback">' + message +
-      ' <a href="' + LIVE + '" target="_blank" rel="noopener">View live prayer times</a>.</p>';
+      ' <a href="prayer-times#month-timetables">See this month&rsquo;s printed timetable</a>.</p>';
   }
 
   function applies(day, k) {
@@ -491,9 +494,7 @@ document.addEventListener("DOMContentLoaded", function () {
           prettyDate(day.date) + '</caption><thead><tr>' +
           '<th scope="col">Prayer</th><th scope="col">Begins</th><th scope="col">Iqamah</th>' +
         "</tr></thead><tbody>" + rowsFor(day, n, t.minutes) + "</tbody></table>" +
-        (jum ? '<p class="prayer-jumuah">' + jumuahLine(jum, t.date) + "</p>" : "") +
-        '<p class="prayer-source"><a href="' + LIVE + '" target="_blank" rel="noopener">' +
-        "Live timetable on Masjidbox</a></p>";
+        (jum ? '<p class="prayer-jumuah">' + jumuahLine(jum, t.date) + "</p>" : "");
     }
 
     paint(now);

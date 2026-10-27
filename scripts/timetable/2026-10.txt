@@ -4,6 +4,12 @@ hijri: Rabi' al-Akhir and Jumada al-Ula 1448
 jumuah: <b>Jumu'ah:</b> 1:30 PM (Khutbah) / 1:50 PM (Jama'at)
 jumuah-small: *From Fri 30th: 12:30 PM (Khutbah) / 12:50 PM (Jama'at)
 note: The clocks go back on Sunday 25 October; times from then on are GMT.
+# For the website (fetch_prayer_times.py): Jumu'ah khutbah and jama'at from a given day
+# of the month, and the hijri months the day numbers run through, in Arabic.
+jumuah-from-1: 1:30 1:50
+jumuah-from-30: 12:30 12:50
+hijri-months: ربيع الآخر, جمادى الأولى
+hijri-year: 1448
 1 20 | 5:34 6:00 | 7:09 | 1:02 1:45 | 4:02 4:15 | 6:45 | 7:44 8:15
 2 21 | 5:36 6:00 | 7:11 | 1:02 1:30 | 4:00 4:15 | 6:43 | 7:44 8:15
 3 22 | 5:37 6:00 | 7:13 | 1:01 1:45 | 3:59 4:15 | 6:41 | 7:43 8:15

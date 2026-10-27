@@ -1,8 +1,10 @@
 name: Update prayer times
 
-# Masjidbox is the masjid's own timetable and the single source of truth.
-# We refresh a local copy daily so the site can render times in its own design
-# instead of embedding a third-party widget.
+# The masjid's printed monthly timetable is the source of truth (typed into
+# scripts/timetable/YYYY-MM.txt); Masjidbox only fills a day no typed month covers.
+# This rebuilds the coming week every night, then runs the data check, which fails
+# (and emails the repository's owner) when the coming week needs a month that has
+# not been typed yet.
 on:
   schedule:
     - cron: "20 2 * * *"   # 02:20 UTC daily, before Fajr in the UK
@@ -33,5 +35,8 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/prayer-times.json
-          git commit -m "Update prayer times from Masjidbox"
+          git commit -m "Update prayer times"
           git push
+
+      - name: Check the times match the printed timetable
+        run: python scripts/check_data.py
