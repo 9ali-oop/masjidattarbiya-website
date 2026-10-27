@@ -889,8 +889,6 @@ strong { color: var(--ink); }
 .prayer-jumuah { background: var(--gold-light); border-left: 3px solid var(--gold); }
 .prayer-upnext p { background: var(--green-light); border-left: 3px solid var(--green); margin: 0; }
 .prayer-upnext:not(:empty) { margin-top: 14px; }
-.prayer-source { margin: 16px 0 0; font-size: 0.82rem; text-align: right; }
-.prayer-source a { color: var(--ink-soft); }
 .prayer-loading, .prayer-fallback { color: var(--ink-soft); font-size: 0.95rem; margin: 8px 0 0; }
 
 @media (max-width: 420px) {

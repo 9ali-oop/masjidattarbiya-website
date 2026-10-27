@@ -2,6 +2,11 @@
 # day hijri | fajr jama'at | sunrise | dhuhr jama'at (Fridays: khutbah) | asr jama'at | maghrib | isha jama'at
 hijri: Jumada al-Ula and Jumada al-Akhirah 1448
 jumuah: <b>Jumu'ah:</b> Khutbah begins at 12:30 PM and Jama'at is at 12:50 PM
+# For the website (fetch_prayer_times.py): Jumu'ah khutbah and jama'at from a given day
+# of the month, and the hijri months the day numbers run through, in Arabic.
+jumuah-from-1: 12:30 12:50
+hijri-months: جمادى الأولى, جمادى الآخرة
+hijri-year: 1448
 1 21 | 5:26 5:45 | 7:04 | 11:56 12:45 | 2:10 2:45 | 4:38 | 6:08 7:30
 2 22 | 5:28 6:00 | 7:06 | 11:56 12:45 | 2:09 2:30 | 4:37 | 6:07 7:30
 3 23 | 5:29 6:00 | 7:08 | 11:56 12:45 | 2:07 2:30 | 4:35 | 6:05 7:30

@@ -5,8 +5,8 @@
     node scripts/timetable/render_pdf.js 2026-10           # print it to PDF
 
 A month is a text file here (2026-10.txt), typed from the masjid's own printed
-timetable. Nothing on the website reads these files or the PDFs until a month
-has been approved: see README.md.
+timetable. These files are the site's live prayer times too: fetch_prayer_times.py
+builds the coming week from them every night (see README.md).
 """
 import base64, calendar, datetime as dt, html, math, pathlib, statistics, sys, urllib.request
 

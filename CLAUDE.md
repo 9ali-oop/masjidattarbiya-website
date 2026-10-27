@@ -21,7 +21,7 @@ below. Never invent a value that is not on this list.
 | Phone | 07929 242914 (`tel:+447929242914`, `wa.me/447929242914`), Malim Husain's mobile, chosen by Ali for the masjid 22 October 2026 |
 | Email | info@masjidatarbiya.org (note: **one** 't', and that is correct - see below) |
 | Website | masjidattarbiya.org (note: **two** t's) |
-| Prayer times | https://masjidbox.com/prayer-times/masjid-attarbiya |
+| Prayer times | **The masjid's printed monthly timetable** (the sheet given out at the masjid), typed into `scripts/timetable/YYYY-MM.txt`: "these are the proper times" (Ali, 27 October 2026). Masjidbox (https://masjidbox.com/prayer-times/masjid-attarbiya) only fills a day no typed month covers |
 | Contact form | Formspree form `xqpzjjee` (`https://formspree.io/f/xqpzjjee`), delivering to info@masjidatarbiya.org; the masjid holds the Formspree login |
 | Facebook | https://www.facebook.com/p/Attarbiya-Masjid-Kowneyn-Community-Center-100088731259188/ |
 | Instagram | https://www.instagram.com/masjid.attarbiya/ |
@@ -67,7 +67,9 @@ once each maalim has agreed to be named. Until the facts table carries a number,
    a made-up fee, name or phone number, and never anything a visitor could act on wrongly
    (a prayer time, an address, an opening hour).
 2. **Never hardcode prayer times.** They go stale within a day and that is precisely what made
-   the masjid's previous website a problem. See "Prayer times" below for how they actually work.
+   the masjid's previous website a problem. The only times typed by hand are the masjid's own
+   monthly sheets in `scripts/timetable/`, one file per named month, from which the site builds
+   its week every night. See "Prayer times" below for how they actually work.
 3. **Never break the donation flow.** See "Donations" below.
 4. **Plain hyphens, not em dashes,** in all copy.
 5. **British English** throughout.
@@ -76,15 +78,37 @@ once each maalim has agreed to be named. Until the facts table carries a number,
 
 Prayer times are **not** an iframe any more, and are **not** hand-written into the HTML.
 
-- `scripts/fetch_prayer_times.py` reads the masjid's own Masjidbox page, pulls the timetable out
-  of the JSON embedded in it, and writes `assets/prayer-times.json` - about a week of start times,
-  iqamah times, hijri dates, and Jumu'ah as its own field.
-- `.github/workflows/prayer-times.yml` runs that daily at 02:20 UTC and commits any change.
+**The printed sheet is the truth (Ali, 27 October 2026).** The masjid gives out a printed
+timetable each month, and Ali confirmed in person that its times are the proper ones: the site
+had been showing Masjidbox's, which disagreed (Asr jama'at 2:30 for the sheet's 2:45 from 25
+October, Jumu'ah 1:30 for 12:30 from 30 October, a Fajr jama'at of 5:00 on 1 November before
+Fajr even began, Isha up to 25 minutes early from November). So:
+
+- **Each month's sheet is typed into `scripts/timetable/YYYY-MM.txt`** (see its README: one line
+  a day, checked against the sun by `timetable.py check`), with three lines for the website:
+  `jumuah-from-<day>: <khutbah> <jama'at>` (October has two: 1:30 and 1:50 from the 1st, 12:30
+  and 12:50 from the 30th), `hijri-months:` in Arabic and `hijri-year:`.
+- `scripts/fetch_prayer_times.py` builds `assets/prayer-times.json` from those files: yesterday
+  to a week ahead, start times, jama'at times, the hijri date as the sheet numbers it, and
+  Jumu'ah as its own field (on a Friday the sheet's Dhuhr jama'at column is the khutbah; the
+  script checks it against the `jumuah-from` line). Maghrib's jama'at is its start. Every day is
+  marked `"from": "sheet"`. **Masjidbox is used only for a day no typed month covers**, marked
+  `"from": "masjidbox"`.
+- `.github/workflows/prayer-times.yml` runs that daily at 02:20 UTC, commits any change, then
+  runs `check_data.py`, which **fails, and so emails the repository's owner, as soon as any day
+  of the coming week would come from Masjidbox**: that is the reminder, a week before a month
+  starts, to type the next month's sheet (ask the masjid for it, or photograph the one on the
+  wall). It also fails if a day differs in any way from its sheet.
+- **The site no longer links to Masjidbox** (the card's "Live timetable on Masjidbox", the
+  "Full-screen view", the week's link and the no-script fallbacks went on 27 October 2026), since
+  it showed different times. Where the times cannot be shown, the page points to the month's
+  printed timetable instead.
 - `js/main.js` renders it into four places: today's card (`#prayer-times`, homepage and prayer
   times page), the week grid (`#prayer-week`), the "Next" line in the top bar of every page
   (`#topbar-next`) and the Jumu'ah note on the homepage (`#visit-jumuah`).
 - **"Next" is measured against the iqamah**, not the start time, because that is when the
   congregation stands. A prayer that has begun but whose jama'ah has not is still next.
+- **The two notes below are about Masjidbox**, which now only fills an untyped day.
 - **A start time of exactly 00:00 is a placeholder, not a time.** Masjidbox once published an
   Isha of 00:00; the fetch script now drops such values, the page shows a dash for the start
   and still shows the iqamah, and `check_data.py` fails if one ever gets through.
@@ -102,9 +126,10 @@ Two things to respect:
 - **Jumu'ah is its own field, not Friday's Dhuhr.** They are different times (13:30 vs 13:09).
   An earlier version relabelled Dhuhr and would have published the wrong khutbah time.
 - **Failure must stay honest.** If the JSON is missing, or has no entry for today, the page says
-  so and links to the live Masjidbox page. It must never fall back to guessed or stale times.
+  so and points to the month's printed timetable. It must never fall back to guessed or stale times.
 
-To refresh by hand: `python scripts/fetch_prayer_times.py`
+To refresh by hand: `python scripts/fetch_prayer_times.py`. After typing a new month, run that,
+then `python scripts/check_data.py`, and make its PDF (below).
 
 **Printing the week.** The print stylesheet still leaves only the masjid's name, the week
 table and a line on what the figures mean, if someone prints the page from the browser. The
@@ -124,11 +149,10 @@ has to scroll for it (gold for this month, outlined for the next), so a month go
 on the 1st of the next. A button opens the PDF in the browser's own viewer, in a new tab,
 never as a straight download: Ali wanted people to see it first and use the viewer's download
 button if they want the file. To add a month: make the PDF, drop it in, add a line to the list;
-`check_data.py` fails on a missing file or a month out of order. The sheet and Masjidbox
-disagree on a few things (Fajr and Isha by 3 to 4 minutes, late-October Asr jama'at,
-Jumu'ah jama'at, the hijri date by a day), listed in the README: the masjid should make them
-agree. This is the one place times are typed by hand, so it is a document for a named month,
-never the site's live times.
+`check_data.py` fails on a missing file or a month out of order. The PDF and the site's live
+times now come from the same typed sheet, so they cannot disagree. Masjidbox still disagrees
+with the sheet (listed in the README); if the masjid uses it anywhere else (a screen, an app),
+someone with its login should bring it into line with the sheet.
 
 ## Duplication, and the checks that police it
 
