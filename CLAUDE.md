@@ -964,7 +964,10 @@ are sent to Masjidbox instead. **The notice leaves the page's title alone**: it 
 "Being updated", and Google, which reads the title after the script has run, listed the
 homepage as "Attarbiya Masjid: Being updated" for days after the site reopened on 23 October
 2026. A recrawl fixes a stale title; Google Search Console's "Request indexing" (on the
-masjid's Google account) speeds it up.
+masjid's Google account) speeds it up. It was still showing on 31 October, Search Console had
+not been set up, and `sitemap.xml` gained a `<lastmod>` for each page (the date its file last
+changed, from `git log`), which Google reads when deciding what to revisit; update those
+dates when a page changes.
 
 **Addresses are clean: `/donate`, not `/donate.html`** (since 8 October 2026). GitHub Pages
 serves `donate.html` at both, so every internal link, the canonical tag, `og:url` and the
