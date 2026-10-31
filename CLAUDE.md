@@ -967,7 +967,10 @@ homepage as "Attarbiya Masjid: Being updated" for days after the site reopened o
 masjid's Google account) speeds it up. It was still showing on 31 October, Search Console had
 not been set up, and `sitemap.xml` gained a `<lastmod>` for each page (the date its file last
 changed, from `git log`), which Google reads when deciding what to revisit; update those
-dates when a page changes.
+dates when a page changes. **Search Console was set up on 31 October 2026** for the URL prefix
+`https://masjidattarbiya.org`, owned by info@masjidatarbiya.org, verified by the
+`google-site-verification` meta tag in `index.html`'s head. **Never remove that tag**: Google
+re-checks it, and without it the masjid loses Search Console.
 
 **Addresses are clean: `/donate`, not `/donate.html`** (since 8 October 2026). GitHub Pages
 serves `donate.html` at both, so every internal link, the canonical tag, `og:url` and the
