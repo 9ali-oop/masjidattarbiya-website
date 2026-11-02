@@ -627,10 +627,10 @@ request on 2 November 2026. A poster's QR code points at `masjidattarbiya.org/bo
 poster never changes when the form or the payment links do.
 
 - **`books/index.html`** redirects to the Google Form for the book payment (meta refresh, a
-  script, and a plain "tap here" link if both are blocked). **The form is not made yet**: the
-  target is `https://example.com/PLACEHOLDER` with a TODO, so do not let the poster go out
-  until it is replaced. The URL is written twice (the refresh tag and the link; the script
-  reads the tag); change both.
+  script, and a plain "tap here" link if both are blocked). The form, its spreadsheet and the
+  script that matches Revolut payments belong to madrasahalfurqanbham@gmail.com (made on 3
+  November 2026 by an Apps Script Ali ran; not in this repo). The URL is written twice (the
+  refresh tag and the link; the script reads the tag); change both.
 - **`pay/index.html`** is a small standalone page (no site header, the two logos, the site's
   teal and gold): five buttons to Ali's Revolut (`revolut.me/ukii11`) for 1 to 4 children
   (£4, £8, £12, £16) and "Sponsor a child's book, £4", each link carrying the amount and a
