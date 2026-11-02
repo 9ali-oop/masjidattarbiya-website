@@ -620,6 +620,32 @@ the account exists. The reasoning, the runner-up (e-Maktab) and the switch-on st
 **`PORTAL.md`**. A self-built Supabase portal existed briefly and was removed in favour of Teach
 'n Go so that parents never meet two systems; it is in git history at `42ed7b3`.
 
+### Book payment pages: /books and /pay (November 2026)
+
+For the weekend classes' books (Adab & Akhlaq Level 1, £4 a child, kept until July), at Ali's
+request on 2 November 2026. A poster's QR code points at `masjidattarbiya.org/books`, so the
+poster never changes when the form or the payment links do.
+
+- **`books/index.html`** redirects to the Google Form for the book payment (meta refresh, a
+  script, and a plain "tap here" link if both are blocked). **The form is not made yet**: the
+  target is `https://example.com/PLACEHOLDER` with a TODO, so do not let the poster go out
+  until it is replaced. The URL is written twice (the refresh tag and the link; the script
+  reads the tag); change both.
+- **`pay/index.html`** is a small standalone page (no site header, the two logos, the site's
+  teal and gold): five buttons to Ali's Revolut (`revolut.me/ukii11`) for 1 to 4 children
+  (£4, £8, £12, £16) and "Sponsor a child's book, £4", each link carrying the amount and a
+  note ("Madrasah Al-Furqan: books, 2 children" and so on) that shows on the payment screen
+  and the statement, which is how payments are matched to the form. The note on two of the
+  links Ali first made had typos ("Masrasah", "Al Furqan"); the page's links have them
+  corrected, same recipient and amounts. It says payments are collected by Ali Abdelatif,
+  volunteer teacher, on behalf of Madrasah Al-Furqan, and that cash at pickup is fine.
+- Both are `noindex`, linked from nowhere on the site and left out of `sitemap.xml`. They sit
+  in folders, so the checks (which read the top-level pages) do not look at them: check them
+  by hand. Use `../` for assets, never `/`.
+- **The book's cover is not used**: it carries the curriculum publisher's logo, which the
+  site never names (see "What the classes cover"). Take the pages down once the term's books
+  are paid for.
+
 ## Design
 
 **Light and simple, on purpose.** In October 2026 the site was briefly redesigned around dark

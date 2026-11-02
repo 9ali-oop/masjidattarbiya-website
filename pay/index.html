@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<!-- Madrasah Al-Furqan book payment: masjidattarbiya.org/pay, linked from the poster
+     and the book form's confirmation message. Not linked from the rest of the site,
+     not in the sitemap, and kept out of search results.
+     The five Revolut links are the five buttons below, one per amount, each written
+     once: LINK_4, LINK_8, LINK_12, LINK_16 and LINK_SPONSOR. The note on each link is
+     what shows on the payment screen and on the statement. -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Madrasah Al-Furqan: book payment</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="../css/fonts.css">
+<style>
+  :root {
+    --green-dark: #1a7078; --green-ink: #0e4a50; --green-light: #e9f7f9;
+    --gold: #d4ae61; --gold-deep: #b08d3f; --gold-text: #7a5c1f;
+    --ink: #1c2321; --ink-soft: #4b5a55; --border: #e2e0d8; --furqan: #52322e;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: #fff; color: var(--ink);
+         font: 400 1rem/1.55 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+  main { max-width: 440px; margin: 0 auto; padding: 28px max(16px, env(safe-area-inset-right)) 40px max(16px, env(safe-area-inset-left)); }
+  .logos { display: flex; align-items: center; justify-content: center; gap: 18px; padding-bottom: 20px;
+            border-bottom: 3px solid var(--gold); }
+  .logos img { display: block; width: 132px; height: auto; }
+  .logos .rule { width: 1px; align-self: stretch; background: var(--border); }
+  .furqan { width: 132px; aspect-ratio: 1400 / 472; background: var(--furqan);
+             -webkit-mask: url(../assets/furqan/madrasah-al-furqan-brown.svg) center / contain no-repeat;
+                     mask: url(../assets/furqan/madrasah-al-furqan-brown.svg) center / contain no-repeat; }
+  h1 { margin: 24px 0 6px; font: 400 1.75rem/1.2 "Marcellus", Georgia, serif; color: var(--green-dark); text-align: center; }
+  .lede { margin: 0 0 22px; text-align: center; font-size: 1.05rem; }
+  .amounts { display: grid; gap: 12px; }
+  .btn { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 12px 20px;
+          border-radius: 999px; background: var(--green-dark); color: #fff; font-weight: 600; font-size: 1.1rem;
+          text-decoration: none; text-align: center; }
+  .btn:hover { background: var(--green-ink); }
+  .btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .divider { height: 1px; margin: 22px 0; background: var(--border); border: 0; }
+  .btn-sponsor { background: var(--gold); color: var(--ink); }
+  .btn-sponsor:hover { background: var(--gold-deep); color: var(--ink); }
+  .small { margin: 24px 0 0; font-size: 0.88rem; color: var(--ink-soft); text-align: center; }
+</style>
+</head>
+<body>
+<main>
+  <div class="logos">
+    <img src="../assets/logo.png" alt="Attarbiya Masjid" width="400" height="196">
+    <span class="rule" aria-hidden="true"></span>
+    <span class="furqan" role="img" aria-label="Madrasah Al-Furqan"></span>
+  </div>
+
+  <h1>Book payment</h1>
+  <p class="lede">&pound;4 per child. Choose the amount for your family:</p>
+
+  <div class="amounts">
+    <a class="btn" href="https://revolut.me/ukii11?currency=GBP&amp;amount=400&amp;note=Madrasah%20Al-Furqan%3A%20books%2C%201%20child">1 child, &pound;4</a><!-- LINK_4 -->
+    <a class="btn" href="https://revolut.me/ukii11?currency=GBP&amp;amount=800&amp;note=Madrasah%20Al-Furqan%3A%20books%2C%202%20children">2 children, &pound;8</a><!-- LINK_8 -->
+    <a class="btn" href="https://revolut.me/ukii11?currency=GBP&amp;amount=1200&amp;note=Madrasah%20Al-Furqan%3A%20books%2C%203%20children">3 children, &pound;12</a><!-- LINK_12 -->
+    <a class="btn" href="https://revolut.me/ukii11?currency=GBP&amp;amount=1600&amp;note=Madrasah%20Al-Furqan%3A%20books%2C%204%20children">4 children, &pound;16</a><!-- LINK_16 -->
+  </div>
+  <hr class="divider">
+  <div class="amounts">
+    <a class="btn btn-sponsor" href="https://revolut.me/ukii11?currency=GBP&amp;amount=400&amp;note=Madrasah%20Al-Furqan%3A%20sponsor%20a%20child%27s%20book">Sponsor a child&rsquo;s book, &pound;4</a><!-- LINK_SPONSOR -->
+  </div>
+
+  <p class="small">Payments are collected by Ali Abdelatif, volunteer teacher, on behalf of Madrasah Al-Furqan. Cash to the teacher at pickup is also fine.</p>
+</main>
+</body>
+</html>

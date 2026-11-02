@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<!-- FORM_URL: where masjidattarbiya.org/books sends people (the poster's QR code).
+     It is written twice, in the refresh tag below and in the link in the body, because
+     the link has to work with scripts and refresh both blocked; the script reads it from
+     the refresh tag. Change both lines together.
+     TODO: the Google Form for the Madrasah Al-Furqan book payment is not made yet;
+     replace https://example.com/PLACEHOLDER with its link. -->
+<meta http-equiv="refresh" content="0; url=https://example.com/PLACEHOLDER">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Madrasah Al-Furqan books</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<script>
+  window.location.replace(document.querySelector('meta[http-equiv="refresh"]').content.replace(/^\s*0\s*;\s*url=/i, ""));
+</script>
+</head>
+<body>
+<p>If you are not redirected, <a href="https://example.com/PLACEHOLDER">tap here</a>.</p>
+</body>
+</html>
