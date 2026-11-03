@@ -1,6 +1,6 @@
 {
  "account": "masjid.attarbiya",
- "updated": "2026-11-02T12:15:29Z",
+ "updated": "2026-11-03T11:49:44Z",
  "note": "Staging only. Not served: _config.yml excludes staging/. Move an entry into assets/events.json by hand, with a real event date, to publish it.",
  "posts": [
   {
