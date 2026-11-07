@@ -2,21 +2,117 @@
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
-<!-- FORM_URL: where masjidattarbiya.org/books sends people (the poster's QR code): the
-     parents' link to the Madrasah Al-Furqan book form, owned by madrasahalfurqanbham@gmail.com.
-     It is written twice, in the refresh tag below and in the link in the body, because
-     the link has to work with scripts and refresh both blocked; the script reads it from
-     the refresh tag. Change both lines together. -->
-<meta http-equiv="refresh" content="0; url=https://docs.google.com/forms/d/e/1FAIpQLSc-ujOhQoVs45SNFHLokTPyA6UoG0t_E9b2VKX163S2zpyrAQ/viewform">
+<!-- Madrasah Al-Furqan book payment: masjidattarbiya.org/books, the address in the
+     poster's QR code (masjidattarbiya.org/pay redirects here too).
+     Not linked from the rest of the site, not in the sitemap, kept out of search results.
+     Parents pay by bank transfer from any banking app, with their child's name as the
+     reference, or in cash or by card at the door. No Revolut links and no form any more
+     (8 November 2026): parents without Revolut got stuck, and the reference does the
+     matching the form used to do.
+     The bank details are written once each, in the three <code> elements below:
+     ACCOUNT_NAME, SORT_CODE, ACCOUNT_NUMBER. The account must be one that pays no
+     interest (Ali, 7 November 2026). -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Madrasah Al-Furqan books</title>
+<title>Madrasah Al-Furqan: book payment</title>
 <link rel="icon" type="image/png" href="../assets/favicon.png">
-<script>
-  window.location.replace(document.querySelector('meta[http-equiv="refresh"]').content.replace(/^\s*0\s*;\s*url=/i, ""));
-</script>
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="../css/fonts.css">
+<style>
+  :root {
+    --green-dark: #1a7078; --green-ink: #0e4a50; --green-light: #e9f7f9;
+    --gold: #d4ae61; --gold-deep: #b08d3f; --gold-text: #7a5c1f; --gold-light: #f8f0e0;
+    --ink: #1c2321; --ink-soft: #4b5a55; --border: #e2e0d8; --furqan: #52322e;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: #fff; color: var(--ink);
+         font: 400 1rem/1.55 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+  main { max-width: 440px; margin: 0 auto; padding: 28px max(16px, env(safe-area-inset-right)) 40px max(16px, env(safe-area-inset-left)); }
+  .logos { display: flex; align-items: center; justify-content: center; gap: 18px; padding-bottom: 20px;
+           border-bottom: 3px solid var(--gold); }
+  .logos img { display: block; width: 132px; height: auto; }
+  .logos .rule { width: 1px; align-self: stretch; background: var(--border); }
+  .furqan { width: 132px; aspect-ratio: 1400 / 472; background: var(--furqan);
+            -webkit-mask: url(../assets/furqan/madrasah-al-furqan-brown.svg) center / contain no-repeat;
+                    mask: url(../assets/furqan/madrasah-al-furqan-brown.svg) center / contain no-repeat; }
+  h1 { margin: 24px 0 6px; font: 400 1.75rem/1.2 "Marcellus", Georgia, serif; color: var(--green-dark); text-align: center; }
+  .lede { margin: 0 0 8px; text-align: center; font-size: 1.05rem; }
+  .deadline { margin: 0 0 22px; text-align: center; font-weight: 600; color: var(--gold-text); }
+  h2 { margin: 0 0 12px; font: 600 1.05rem/1.3 "Inter", sans-serif; color: var(--green-dark); }
+  .panel { padding: 18px; border-radius: 16px; background: var(--green-light); }
+  .rows { margin: 0; display: grid; gap: 10px; }
+  .row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #fff;
+         border: 1px solid var(--border); }
+  .row dt { flex: 0 0 auto; width: 6.2rem; font-size: 0.85rem; color: var(--ink-soft); }
+  .row dd { flex: 1 1 auto; min-width: 0; margin: 0; }
+  .row code { font: 600 1.1rem/1.3 "Inter", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: 0.02em;
+              overflow-wrap: anywhere; user-select: all; -webkit-user-select: all; }
+  .copy { flex: 0 0 auto; min-width: 64px; min-height: 44px; padding: 0 14px; border: 0; border-radius: 999px;
+          background: var(--green-dark); color: #fff; font: 600 0.9rem "Inter", sans-serif; cursor: pointer; }
+  .copy:hover { background: var(--green-ink); }
+  .copy:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .copy.done { background: var(--gold); color: var(--ink); }
+  .ref { margin: 14px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--gold-light); }
+  .ref strong { color: var(--gold-text); }
+  .amounts { margin: 12px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 14px;
+             font-size: 0.95rem; color: var(--ink-soft); }
+  .amounts b { color: var(--ink); }
+  .or { margin: 22px 0 0; text-align: center; font-size: 1.02rem; }
+  .divider { height: 1px; margin: 22px 0; background: var(--border); border: 0; }
+  .small { margin: 0 0 10px; font-size: 0.9rem; color: var(--ink-soft); text-align: center; }
+</style>
 </head>
 <body>
-<p>If you are not redirected, <a href="https://docs.google.com/forms/d/e/1FAIpQLSc-ujOhQoVs45SNFHLokTPyA6UoG0t_E9b2VKX163S2zpyrAQ/viewform">tap here</a>.</p>
+<main>
+  <div class="logos">
+    <img src="../assets/logo.png" alt="Attarbiya Masjid" width="400" height="196">
+    <span class="rule" aria-hidden="true"></span>
+    <span class="furqan" role="img" aria-label="Madrasah Al-Furqan"></span>
+  </div>
+
+  <h1>Your child&rsquo;s book</h1>
+  <p class="lede">&pound;4 per child: the Adab &amp; Akhlaq workbook and a pencil, kept until July.</p>
+  <p class="deadline">Please pay by Sunday 15 November.</p>
+
+  <section class="panel" aria-labelledby="bank">
+    <h2 id="bank">Pay by bank transfer from any banking app</h2>
+    <dl class="rows">
+      <div class="row"><dt>Name</dt><dd><code id="acc-name">ACCOUNT_NAME</code></dd><button class="copy" type="button" data-copy="acc-name" aria-label="Copy name">Copy</button></div>
+      <div class="row"><dt>Sort code</dt><dd><code id="acc-sort">SORT_CODE</code></dd><button class="copy" type="button" data-copy="acc-sort" aria-label="Copy sort code">Copy</button></div>
+      <div class="row"><dt>Account no.</dt><dd><code id="acc-num">ACCOUNT_NUMBER</code></dd><button class="copy" type="button" data-copy="acc-num" aria-label="Copy account number">Copy</button></div>
+    </dl>
+    <p class="ref"><strong>Reference: your child&rsquo;s name</strong><br>so we know whose book it is.</p>
+    <ul class="amounts">
+      <li><b>1 child</b> &pound;4</li>
+      <li><b>2 children</b> &pound;8</li>
+      <li><b>3 children</b> &pound;12</li>
+      <li><b>4 children</b> &pound;16</li>
+    </ul>
+  </section>
+
+  <p class="or">Or pay cash at the door, before or after class.</p>
+
+  <hr class="divider">
+
+  <p class="small">Struggling with the cost? Please speak to Macalin Adam in confidence. Every child receives their book.</p>
+  <p class="small">Sponsor a child&rsquo;s book: send &pound;4 with the reference <b>SPONSOR</b>. Jazakumullahu khayran.</p>
+  <p class="small">Payments are collected by Ali Abdelatif, volunteer teacher, on behalf of Madrasah Al-Furqan. Questions: 07737 270932.</p>
+</main>
+<script>
+  document.querySelectorAll(".copy").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var el = document.getElementById(btn.dataset.copy);
+      var text = el.textContent.replace(/[\s-]/g, function (c) { return btn.dataset.copy === "acc-name" ? c : ""; });
+      function done() { btn.textContent = "Copied"; btn.classList.add("done");
+        setTimeout(function () { btn.textContent = "Copy"; btn.classList.remove("done"); }, 2000); }
+      function select() { var r = document.createRange(); r.selectNodeContents(el);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, select);
+      } else { select(); }
+    });
+  });
+</script>
 </body>
 </html>
