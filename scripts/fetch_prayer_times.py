@@ -17,7 +17,7 @@ are simply left out and the site says it has no times for them.
 Run daily from GitHub Actions, so the week on the site moves on by itself.
 """
 
-import json, pathlib, re, sys, urllib.parse, urllib.request
+import functools, json, pathlib, re, sys, urllib.parse, urllib.request
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -121,6 +121,8 @@ def clean_times(date, times):
 AR_DAYS = ["الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت", "الأحد"]
 WINDOW = range(-1, 8)   # yesterday (for the hours after midnight) to a week ahead
 ORDERED = ("fajr", "sunrise", "dhuhr", "jumuah", "asr", "maghrib", "isha")
+# What "was" can hold, in the order of the day (see changed()).
+CHANGES = ("fajr", "dhuhr", "khutbah", "jumuah", "asr", "isha")
 
 
 def clock(prayer, t):
@@ -129,8 +131,9 @@ def clock(prayer, t):
     return f"{m // 60:02d}:{m % 60:02d}"
 
 
-def sheet_month(ym):
-    """Every day of a typed month, in the shape the site reads. {} if it is not typed yet."""
+@functools.lru_cache(maxsize=None)
+def _typed(ym):
+    """Every day of a typed month as the sheet has it. {} if it is not typed yet."""
     if not (SHEETS / f"{ym}.txt").exists():
         return {}
     rows, notes = timetable.read(ym)
@@ -173,6 +176,53 @@ def sheet_month(ym):
         for part in ("times", "iqamah"):
             day[part] = {k: day[part][k] for k in ORDERED if k in day[part]}
         out[day["date"]] = day
+    return out
+
+
+def _day(d):
+    return _typed(d.strftime("%Y-%m")).get(d.isoformat())
+
+
+def changed(d):
+    """The jama'at times that are different on this day: {prayer: the time it was before}.
+
+    The site warns people the day before a jama'at time moves (js/main.js), so each day
+    carries what moved and from what. Fajr, Asr and Isha are compared with the day before.
+    Dhuhr is compared with the last day it was prayed in congregation, so a Saturday looks
+    back past Jumu'ah to Thursday. Jumu'ah is compared with the Friday before: "khutbah" is
+    its old khutbah, "jumuah" its old jama'at. Maghrib is left out, since it follows the
+    sun and moves every day, and so are the start times. A day whose earlier day is not
+    typed has nothing to compare with and says nothing.
+    """
+    day, out = _day(d), {}
+    if not day:
+        return out
+    before = _day(d - timedelta(days=1))
+    for p in ("fajr", "asr", "isha"):
+        if before and before["iqamah"][p] != day["iqamah"][p]:
+            out[p] = before["iqamah"][p]
+    if d.weekday() == 4:
+        last = _day(d - timedelta(days=7))
+        if last and last["times"]["jumuah"] != day["times"]["jumuah"]:
+            out["khutbah"] = last["times"]["jumuah"]
+        if last and last["iqamah"]["jumuah"] != day["iqamah"]["jumuah"]:
+            out["jumuah"] = last["iqamah"]["jumuah"]
+    else:
+        last = _day(d - timedelta(days=2 if d.weekday() == 5 else 1))
+        if last and last["iqamah"]["dhuhr"] != day["iqamah"]["dhuhr"]:
+            out["dhuhr"] = last["iqamah"]["dhuhr"]
+    return {k: out[k] for k in CHANGES if k in out}
+
+
+def sheet_month(ym):
+    """Every day of a typed month, in the shape the site reads. {} if it is not typed yet."""
+    out = {}
+    for iso, typed in _typed(ym).items():
+        day, was = dict(typed), changed(date.fromisoformat(iso))
+        if was:
+            day["was"] = was
+        day["from"] = day.pop("from")   # keeps "from" last, after "was"
+        out[iso] = day
     return out
 
 

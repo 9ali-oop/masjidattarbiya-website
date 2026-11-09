@@ -34,6 +34,13 @@ each month before it starts**.
    (not committed). It needs `pip install segno` (the donate QR code) and Playwright with
    Chromium; the Poppins font is fetched into `fonts/` the first time.
 
+## The site's warning of a changed time
+
+`fetch_prayer_times.py` marks each day whose jama'at times differ from the day before, and the
+site warns visitors the day before and on the day (a pop-up, then a bar; see "Notices" in
+CLAUDE.md). It needs nothing typed beyond the sheet itself, so a mistyped jama'at time would
+also announce a change that is not happening: one more reason to run the check in step 2.
+
 ## When the masjid changes a time after printing
 
 Change the day lines in the month's file, add a comment line at the top saying what changed,
