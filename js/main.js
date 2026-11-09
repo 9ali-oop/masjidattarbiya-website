@@ -19,6 +19,12 @@ function getJSON(url) {
   });
 }
 
+/* The week's prayer times, asked for once however many parts of a page use them. */
+var prayerTimesAsked;
+function prayerTimes() {
+  return prayerTimesAsked || (prayerTimesAsked = getJSON("assets/prayer-times.json"));
+}
+
 /* Notices: short, dated announcements kept in assets/notices.json and shown
    on the homepage and the prayer times page while they are current. Each has
    a "from" and "until" date (inclusive, Europe/London), so an Eid prayer time
@@ -30,7 +36,10 @@ function getJSON(url) {
    page, which stays until the visitor closes that too. Both are remembered on
    the device by the name (atb-seen-, atb-closed-), so notices that share one
    ("tonight", then "on Sunday") pop up once and are closed once. Without
-   storage there is no pop-up, only the bar, so nobody gets one on every page. */
+   storage there is no pop-up, only the bar, so nobody gets one on every page.
+
+   A jama'at time that moves gets the same banner without anyone writing it:
+   see timesChange below. */
 (function () {
   var boxes = document.querySelectorAll(".notices");
   var today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
@@ -42,6 +51,8 @@ function getJSON(url) {
     try { localStorage.setItem("atb-test", "1"); localStorage.removeItem("atb-test"); return localStorage; } catch (e) { return null; }
   })();
   function remember(key) { if (store) try { store.setItem(key, "1"); } catch (e) { /* full: forget it */ } }
+  // One pop-up at a time: a second notice waits until the first has been closed.
+  var popped = false, waiting = [];
 
   function makeBar(n) {
     var bar = document.createElement("div");
@@ -87,6 +98,8 @@ function getJSON(url) {
       if (!still && bar.animate) bar.animate([{ transform: "translateY(-100%)" }, { transform: "none" }], { duration: 260, easing: "ease-out" });
       // After the dialog has handed focus back, so it lands on the bar.
       requestAnimationFrame(function () { bar.focus({ preventScroll: true }); });
+      popped = false;
+      showBanner(waiting.shift());
     }
     function close() {
       if (closing) return;
@@ -113,6 +126,7 @@ function getJSON(url) {
     dlg.addEventListener("click", function (e) { if (e.target === dlg) close(); });
     var go = dlg.querySelector("a.btn");
     if (go) go.addEventListener("click", function () { remember("atb-seen-" + n.banner); });
+    popped = true;
     document.body.appendChild(dlg);
     dlg.showModal();
     if (!still && card.animate) card.animate([{ transform: "scale(.96)", opacity: 0 }, { transform: "none", opacity: 1 }], { duration: 220, easing: "ease-out" });
@@ -120,8 +134,9 @@ function getJSON(url) {
 
   function showBanner(n) {
     if (!n || (store && store.getItem("atb-closed-" + n.banner))) return;
-    if (store && !store.getItem("atb-seen-" + n.banner) && !fromPayment && typeof HTMLDialogElement === "function") popUp(n);
-    else makeBar(n);
+    if (store && !store.getItem("atb-seen-" + n.banner) && !fromPayment && typeof HTMLDialogElement === "function") {
+      if (popped) waiting.push(n); else popUp(n);
+    } else makeBar(n);
   }
   getJSON("assets/notices.json").then(function (d) {
     var current = ((d && d.notices) || []).filter(function (n) {
@@ -139,6 +154,56 @@ function getJSON(url) {
     }).join("");
     boxes.forEach(function (b) { b.innerHTML = html; });
   }).catch(function () { /* no notices file, or a broken one: show nothing */ });
+
+  /* A jama'at time that moves is a banner too, and nobody has to write it. The
+     timetable marks each day whose jama'at times differ from the day before
+     ("was": the times they were, from scripts/fetch_prayer_times.py). The day
+     before, and on the day itself, that becomes a banner named after the day,
+     so each change pops up once on a device and is closed once. Maghrib and
+     the start times follow the sun and are never announced. */
+  var MOVES = {
+    fajr: "Fajr jama'at", dhuhr: "Dhuhr jama'at", khutbah: "the Jumu'ah khutbah",
+    jumuah: "the Jumu'ah jama'at", asr: "Asr jama'at", isha: "Isha jama'at"
+  };
+  function timesChange(days) {
+    var next = new Date(today + "T12:00:00Z");
+    next.setUTCDate(next.getUTCDate() + 1);
+    var tomorrow = next.toISOString().slice(0, 10), day = null, ahead = true;
+    function find(date) { return (days || []).filter(function (d) { return d.date === date && d.was; })[0] || null; }
+    day = find(tomorrow);
+    if (!day) { day = find(today); ahead = false; }
+    if (!day) return null;
+    var HM = /^\d\d:\d\d$/, moved = [];
+    Object.keys(MOVES).forEach(function (k) {
+      var now = k === "khutbah" ? (day.times || {}).jumuah : (day.iqamah || {})[k], was = day.was[k];
+      // The khutbah says when to come; its jama'at follows it and need not be read out as well.
+      if (k === "jumuah" && day.was.khutbah) return;
+      if (HM.test(was || "") && HM.test(now || "") && now !== was) moved.push({ key: k, text: MOVES[k] + " is at " + now + " instead of " + was });
+    });
+    if (!moved.length) return null;
+    var what = moved.length > 1 ? "Jama'at times" : /khutbah|jumuah/.test(moved[0].key) ? "The Jumu'ah time" : MOVES[moved[0].key];
+    var many = moved.length > 1;
+    var list = moved.map(function (m) { return m.text; });
+    var last = list.pop();
+    var on = new Date(day.date + "T12:00:00Z").toLocaleDateString("en-GB", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" });
+    return {
+      kind: "Prayer times",
+      banner: "times-" + day.date,
+      title: what + (ahead ? (many ? " change tomorrow." : " changes tomorrow.") : (many ? " have changed." : " has changed.")),
+      text: "From " + (ahead ? "tomorrow" : "today") + ", " + on + ", " + (list.length ? list.join(", ") + " and " : "") + last + ".",
+      link: "prayer-times",
+      link_text: "See the prayer times"
+    };
+  }
+  // Changes that have passed need not be remembered on the device for ever.
+  if (store) try {
+    Object.keys(store).forEach(function (k) {
+      var m = /^atb-(?:seen|closed)-times-(\d{4}-\d{2}-\d{2})$/.exec(k);
+      if (m && m[1] < today) store.removeItem(k);
+    });
+  } catch (e) { /* leave them */ }
+  prayerTimes().then(function (d) { showBanner(timesChange(d && d.days)); })
+    .catch(function () { /* no timetable: the prayer times say so themselves */ });
 })();
 
 /* Monthly timetables: the masjid's printed sheet for each month, as a PDF,
@@ -571,7 +636,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (d) jumEl.innerHTML = "<p>" + jumuahLine(d, now.date) + ".</p>";
   }
 
-  getJSON("assets/prayer-times.json")
+  prayerTimes()
     .then(function (data) {
       if (!data || !data.days || !data.days.length) throw new Error("empty timetable");
       if (todayEl) renderToday(data);

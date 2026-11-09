@@ -91,6 +91,19 @@ for day in days:
         if gap > 20:
             fail(f"{d}: maghrib iqamah {q} is {gap} minutes after maghrib begins at {s} - a start time an hour out?")
 
+    # "was" is what the site's warning of a changed jama'at time is written from: the
+    # time each changed prayer had before. It must name a real change, or the site
+    # would warn people about nothing.
+    was = day.get("was") or {}
+    for name, value in was.items():
+        now = times.get("jumuah") if name == "khutbah" else iqamah.get(name)
+        if name not in ("fajr", "dhuhr", "khutbah", "jumuah", "asr", "isha") or not valid_hhmm(value):
+            fail(f"{d}: was.{name} is not a jama'at time that can change ({value!r})")
+        elif now is None or now == value:
+            fail(f"{d}: was.{name} is {value}, but the day's own time is {now} - nothing changed")
+    if was and day.get("from") != "sheet":
+        fail(f"{d}: carries changed times but is not from a printed sheet")
+
     # A Friday should carry a Jumu'ah time, and it should not equal Dhuhr.
     try:
         is_friday = date.fromisoformat(d).weekday() == 4
@@ -124,7 +137,7 @@ for day in days:
         want = typed[ym].get(d)
         if want is None:
             fail(f"{d}: marked as from the printed sheet, but scripts/timetable/{ym}.txt has no such day")
-        elif any(want[k] != day.get(k) for k in ("hijri", "times", "iqamah")):
+        elif any(want.get(k) != day.get(k) for k in ("hijri", "times", "iqamah", "was")):
             fail(f"{d}: differs from the printed sheet in scripts/timetable/{ym}.txt - run python scripts/fetch_prayer_times.py")
     elif date.today().isoformat() <= d <= week_end:
         fail(f"{d}: no printed timetable typed for {ym} yet, so the site shows Masjidbox's times for this day. "

@@ -99,6 +99,12 @@ Fajr even began, Isha up to 25 minutes early from November). So:
   of the coming week would come from Masjidbox**: that is the reminder, a week before a month
   starts, to type the next month's sheet (ask the masjid for it, or photograph the one on the
   wall). It also fails if a day differs in any way from its sheet.
+- **A day whose jama'at times differ from the day before carries `"was"`**: the time each
+  changed prayer had before (`changed()` in the script). Fajr, Asr and Isha are compared with
+  the day before, Dhuhr with the last day it was prayed in congregation (a Saturday looks back
+  past Jumu'ah to Thursday), and Jumu'ah with the Friday before (`khutbah` and `jumuah`).
+  Maghrib and the start times follow the sun and are never in it. The site writes its warning
+  of a changed time from this (see "Notices"), and `check_data.py` checks it against the sheet.
 - **The site no longer links to Masjidbox** (the card's "Live timetable on Masjidbox", the
   "Full-screen view", the week's link and the no-script fallbacks went on 27 October 2026), since
   it showed different times. Where the times cannot be shown, the page points to the month's
@@ -282,6 +288,20 @@ clocks went back an hour on Sunday" from 25 October to 1 November. Neither gives
 the times are on the prayer times page, which it links to. Use a new name for the next
 change (`clocks-2027-03` for Sunday 28 March 2027), or people who closed this one will
 never see it.
+
+**A jama'at time that moves gets the same banner by itself** (Ali, 9 November 2026: "if a
+prayer time is going to change the next day, add a little pop-up warning that the user can X").
+Nobody writes it: `js/main.js` (`timesChange`) reads `"was"` from `assets/prayer-times.json`
+(see "Prayer times") and, the day before a change and on the day itself, shows the pop-up and
+then the bar, named `times-<the day>` so each change pops up once on a device and is closed
+once. It says which jama'at moves, to what and from what ("From tomorrow, Monday 16 November,
+Isha jama'at is at 18:30 instead of 19:30"), in the 24-hour figures the prayer times use, and
+links to the prayer times page. The figures come from the same file as the times, so they
+cannot disagree, and with no data for tomorrow it says nothing. In winter Fajr's jama'at steps
+most Mondays, so expect one most weeks. If a hand-written banner is current as well (the
+clocks), the two pop up one after the other and both bars show; old `times-` names are cleared
+from the device once their day has passed. To correct a wrong warning, correct the month's
+typed sheet: the warning follows.
 
 ## Events
 
