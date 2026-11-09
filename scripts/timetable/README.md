@@ -34,6 +34,16 @@ each month before it starts**.
    (not committed). It needs `pip install segno` (the donate QR code) and Playwright with
    Chromium; the Poppins font is fetched into `fonts/` the first time.
 
+## When the masjid changes a time after printing
+
+Change the day lines in the month's file, add a comment line at the top saying what changed,
+on whose word and when, then run steps 2 to 4 again and replace the PDF in
+`assets/timetables/`. The site and the PDF then carry the new time; the paper sheets already
+handed out still show the old one.
+
+- November 2026: Fajr jama'at 6:30 from Monday 16 November, where the sheet has 6:20 for 16
+  to 22 November (Ali, 9 November 2026). The sheet's 6:40 on the 30th stands.
+
 ## What the PDF leaves out on purpose
 
 - **The bank details** printed at the foot of the paper sheet (account name, number, sort
