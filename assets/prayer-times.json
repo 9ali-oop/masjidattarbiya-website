@@ -1,6 +1,6 @@
 {
  "source": "The masjid's printed monthly timetable (scripts/timetable); Masjidbox only where no month is typed",
- "fetched": "2026-11-09T21:28:07Z",
+ "fetched": "2026-11-09T21:30:21Z",
  "days": [
   {
    "date": "2026-11-08",
@@ -175,11 +175,11 @@
     "isha": "17:44"
    },
    "iqamah": {
-    "fajr": "06:30",
+    "fajr": "06:20",
     "dhuhr": "12:45",
     "asr": "14:15",
     "maghrib": "16:14",
-    "isha": "19:30"
+    "isha": "18:30"
    },
    "from": "sheet"
   }
