@@ -1,31 +1,7 @@
 {
  "source": "The masjid's printed monthly timetable (scripts/timetable); Masjidbox only where no month is typed",
- "fetched": "2026-11-10T09:53:51Z",
+ "fetched": "2026-11-11T09:28:22Z",
  "days": [
-  {
-   "date": "2026-11-09",
-   "hijri": "الاثنين 29 جمادى الأولى 1448",
-   "times": {
-    "fajr": "05:40",
-    "sunrise": "07:19",
-    "dhuhr": "11:56",
-    "asr": "13:59",
-    "maghrib": "16:24",
-    "isha": "17:55"
-   },
-   "iqamah": {
-    "fajr": "06:10",
-    "dhuhr": "12:45",
-    "asr": "14:15",
-    "maghrib": "16:24",
-    "isha": "19:30"
-   },
-   "was": {
-    "fajr": "06:00",
-    "asr": "14:30"
-   },
-   "from": "sheet"
-  },
   {
    "date": "2026-11-10",
    "hijri": "الثلاثاء 30 جمادى الأولى 1448",
@@ -187,6 +163,26 @@
     "dhuhr": "12:45",
     "asr": "14:15",
     "maghrib": "16:12",
+    "isha": "18:30"
+   },
+   "from": "sheet"
+  },
+  {
+   "date": "2026-11-18",
+   "hijri": "الأربعاء 8 جمادى الآخرة 1448",
+   "times": {
+    "fajr": "05:55",
+    "sunrise": "07:35",
+    "dhuhr": "11:58",
+    "asr": "13:49",
+    "maghrib": "16:11",
+    "isha": "17:41"
+   },
+   "iqamah": {
+    "fajr": "06:20",
+    "dhuhr": "12:45",
+    "asr": "14:15",
+    "maghrib": "16:11",
     "isha": "18:30"
    },
    "from": "sheet"
