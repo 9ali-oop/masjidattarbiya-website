@@ -289,6 +289,25 @@ recruitment including DBS checks, which is what the draft says. Publish a lead's
 that person's agreement. Once adopted: add the policy as a PDF, the leads' names, and a line on
 DBS checks if confirmed.
 
+**The madrasah's safeguarding and staff folder (20 November 2026).** Adam asked for "a folder with
+all the safeguarding policies" and forms the maalims can tick and sign. It is a Google Drive folder
+in Ali's account, shared by him with the trustees:
+https://drive.google.com/drive/folders/1ScQS3ABi5rgVS26gi-DIPqj2D-RUXR5I. It holds a start-here
+guide (what the law requires and what is recommended), policies 01 to 09 (the safeguarding policy
+above, code of conduct, safer recruitment and DBS, whistleblowing, complaints, health and safety,
+online safety and photography, behaviour, data protection), forms 10 to 13 (the maalim agreement
+and self-declaration, child registration and consent, record of concern, accident record), a
+premises and safeguarding agreement between the two charities (14, which also covers the madrasah
+photos already on this site), and an Apps Script (15) that makes the online agreement form and a
+private green/amber/red Staff Checks Record in the madrasah's own Google account. All are drafts
+for the trustees to adopt; nothing in them goes on the site until they are adopted. Built from
+the DfE's out-of-school settings guidance (updated 9 February 2026), the Charity Commission's
+trustee safeguarding guidance and the DBS eligibility guidance of 1 September 2026: every maalim
+or volunteer who teaches or supervises children on more than 3 days in any 30, paid or unpaid,
+supervised or not, needs an Enhanced DBS check with the Children's Barred List. On 20 November
+Adam said he is "the main guy" and that his own DBS is clear; the site still says nothing about
+DBS until the madrasah confirms every maalim's check.
+
 ## Notices
 
 `assets/notices.json` holds short, dated announcements: an Eid prayer time, a changed iqamah,
