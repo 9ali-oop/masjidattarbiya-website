@@ -24,7 +24,8 @@ import re
 import sys
 
 MASJID_PAGES = ["index.html", "about.html", "visit.html", "prayer-times.html", "events.html", "history.html",
-                "madrasah.html", "portal.html", "donate.html", "contact.html", "privacy.html"]
+                "madrasah.html", "portal.html", "donate.html", "contact.html", "privacy.html",
+                "safeguarding.html"]
 # Pages whose nav highlight is another page's item: the portal sits under "Madrasah".
 ACTIVE_AS = {"portal.html": "madrasah", "visit.html": "about"}
 PAGES = MASJID_PAGES
