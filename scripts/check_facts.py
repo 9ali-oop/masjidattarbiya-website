@@ -11,6 +11,20 @@ WA = "wa.me/447929242914"
 EMAIL = "info@masjidatarbiya.org"
 CHARITY = "1142204"
 
+# Public safeguarding services, allowed on the safeguarding page only. Each was checked
+# against the service's own site in November 2026 (see "Safeguarding" in CLAUDE.md);
+# check them again before adding to or changing this list.
+SAFEGUARDING_PAGE = "safeguarding.html"
+SAFEGUARDING_TELS = {
+    "tel:+441213031888",   # Birmingham Children's Trust (CASS)
+    "tel:+441216754806",   # Birmingham Children's Trust, out of hours
+    "tel:+441216751669",   # Birmingham LADO
+    "tel:+441213031234",   # Birmingham City Council adult social care
+    "tel:+441214649001",   # adult social care, out of hours
+    "tel:+448088005000",   # NSPCC helpline (GOV.UK)
+    "tel:08001111",        # Childline (GOV.UK)
+}
+
 problems = []
 
 for page in sorted(glob.glob("*.html")):
@@ -26,7 +40,7 @@ for page in sorted(glob.glob("*.html")):
             problems.append(f"{page}: unexpected phone number {found!r}")
 
     for tel in set(re.findall(r"tel:\+?[\d]+", html)):
-        if tel != TEL:
+        if tel != TEL and not (page == SAFEGUARDING_PAGE and tel in SAFEGUARDING_TELS):
             problems.append(f"{page}: bad tel link {tel!r}")
 
     for wa in set(re.findall(r"wa\.me/[\d]+", html)):

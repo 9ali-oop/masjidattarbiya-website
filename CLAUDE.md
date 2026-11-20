@@ -15,7 +15,8 @@ below. Never invent a value that is not on this list.
 |---|---|
 | Name | Attarbiya Masjid & Kowneyn Community Centre |
 | Registered name | Kowneyn Education and Cultural Centre (what donors see at GoCardless checkout) |
-| Madrasah | **Madrasah Al Furqan** (مدرسة الفرقان), the masjid's own madrasah - not a separate organisation |
+| Madrasah | **Madrasah Al Furqan** (مدرسة الفرقان), teaching at the masjid, **run by its own charity** (next row), not by the masjid's: so said Adam Ise, its chair, 7 and 18 November 2026. Until then the site called it the masjid's own madrasah |
+| Madrasah's charity | **Furqan Help the Children Trust**, registered charity **1140799** (a trust, registered 11 March 2011, formerly Somali Help the Children Trust; register organisation number 4051142). Trustees on the register: Adan Ise (chair, appointed 1 June 2026), Mohmed Shafie (1 June 2026), Ahmed Omar Abdi (20 May 2026). Checked on the Charity Commission register, 20 November 2026 |
 | Address | 2 Revesby Walk, Nechells, Birmingham B7 4LG |
 | Charity number | 1142204 |
 | Phone | 07929 242914 (`tel:+447929242914`, `wa.me/447929242914`), Malim Husain's mobile, chosen by Ali for the masjid 22 October 2026 |
@@ -188,7 +189,7 @@ These checks run in CI on every push, and are worth running before you commit:
 ```bash
 python scripts/sync_chrome.py --check   # header/footer identical across pages
 python scripts/check_links.py           # no broken links or root-relative paths, balanced tags, one h1
-python scripts/check_facts.py           # contact details consistent, no hardcoded prayer times
+python scripts/check_facts.py           # contact details consistent, no hardcoded prayer times (safeguarding numbers allowed on that page)
 python scripts/check_data.py            # prayer times data valid, in order, and still current
 python scripts/check_events.py          # events evidenced, posters local, no contact details in copy
 python scripts/check_madrasah.py        # madrasah data well formed; lists what is still a placeholder
@@ -262,6 +263,31 @@ you contact us". Things to keep as they are:
   to two addresses; if the masjid outgrows that, it is a paid plan, not a code change.
 - `check_facts.py` still polices contact details on the page; the form's own copy must not
   carry a phone number or email beyond the masjid's.
+
+## Safeguarding
+
+`safeguarding.html` (in the footer's bottom line beside Privacy, and linked from the madrasah
+page) says what to do if someone is worried about a child or an adult: 999 in an emergency, tell
+a teacher, the madrasah's management or the masjid, and that nobody has to come to us first.
+Then the public routes, each checked against the service's own site on 20 November 2026:
+Birmingham Children's Trust 0121 303 1888 and out of hours 0121 675 4806, the LADO 0121 675
+1669 (lscpbirmingham.org.uk), adult social care 0121 303 1234 and out of hours 0121 464 9001
+(birmingham.gov.uk/safeguardingadults, updated 14 July 2026), NSPCC 0808 800 5000 and Childline
+0800 1111 (gov.uk/report-child-abuse). `check_facts.py` allows exactly those tel links on that
+page and nowhere else; check them again once a year, and before adding one.
+
+**The policy is not published yet, on purpose.** Adam Ise sent the trustees' "Safeguarding
+Children and Adults Policy and Procedures" on 18 November 2026: a draft for trustee adoption,
+written for the masjid's charity, with the safeguarding lead, deputy and trustee names and the
+chair's sign-off blank, and he asked for "some policy" before the website. A copy with the charity
+changed to Furqan Help the Children Trust (and its adult out-of-hours number corrected from 0121
+675 4806, the children's line, to the council's 0121 464 9001) went back to Ali the same day.
+The page says the trustees are finalising it and that it will be published there with the names
+of the safeguarding leads once adopted. **Do not publish the draft, and do not say teachers are
+DBS checked until the madrasah confirms it**: the page says only that the policy covers safer
+recruitment including DBS checks, which is what the draft says. Publish a lead's name only with
+that person's agreement. Once adopted: add the policy as a PDF, the leads' names, and a line on
+DBS checks if confirmed.
 
 ## Notices
 
@@ -351,9 +377,10 @@ Where the current entries came from, so nobody has to re-derive it:
    reason the events list is not automated.
 2. **A third of the best event posts come from a different account that is still the masjid's.**
    Both Youth Nights and the January community evening were posted by **Al Kissaii**, which is not
-   an outside partner: the masjid runs it as its programme for teens and older children. **Al
-   Furqan** is the same arrangement for the madrasah. Treat all three as one organisation under
-   different names, credit the right one, and never describe them as a partnership. The events
+   an outside partner: the masjid runs it as its programme for teens and older children. Treat
+   the two as one organisation under different names, credit the right one, and never describe
+   them as a partnership. **Al Furqan** was treated the same way until November 2026; it is now
+   the madrasah of its own charity (see "Madrasah Al Furqan"), so credit it by name. The events
    that came from those accounts carry a `credit` line saying which programme ran them.
    Note this also means the Instagram API, which returns only the masjid's own account's media,
    will miss anything posted under the Al Kissaii or Al Furqan accounts.
@@ -580,8 +607,19 @@ like every other page**; the madrasah's own colour appears only in its logo. An 
 gave the madrasah brown heading bands and its own header, and the masjid found the jump from
 teal to brown and back confusing.
 
-**It must always read as part of the masjid**, never as a partner or a separate charity. That
-was an explicit request. The page says so in words ("Under one roof") as well as in the design.
+**It is run by its own charity, Furqan Help the Children Trust (1140799), and teaches at the
+masjid** (Adam Ise, the trust's chair, 7 and 18 November 2026; checked on the register). Until
+then the masjid had asked for it to read as part of the masjid, "not a separate organisation",
+and the site said so; that went on 20 November 2026. The pages now say it has a charity of its
+own and holds its classes in the masjid's building: the madrasah page's "Under one roof"
+section ("A charity of its own, at the masjid", with the register link), the homepage's
+madrasah band, the Visit page, the portal's description, the privacy notice (the trust is
+responsible for what parents give the madrasah) and the footer's madrasah column. Never call it
+a partner, and never say it is the masjid's own madrasah. The design stays the same: one header,
+the masjid's teal. **The trust's entry on the register still gives an old address in Small
+Heath, a hotmail address and a mobile** as its contact details, and declares no policies; none of
+them go on the site, and the trustees should update them. History is unchanged: Al Furqan and
+the masjid's school did become one school in July 2012.
 
 - **The name** is Madrasah Al Furqan (مدرسة الفرقان), taken from its logo. Use "Al Furqan" as
   the short form.
@@ -696,8 +734,7 @@ masjid liked, in its own words: the building's photograph at the top, and a ligh
   with hairlines, and the contact page a list without icons. `.card` is for real things
   only: a class, an event, a step. Links say what they link to and are underlined, with no
   arrow. An eyebrow label stays only where it says something the heading does not (the
-  hero's "Nechells, Birmingham", "Part of Attarbiya Masjid", "Under one roof", "Also run by
-  the masjid"). Do not bring the icon-card rows back. On 21 October 2026 the same went
+  hero's "Nechells, Birmingham", "Under one roof", "Also run by the masjid"). Do not bring the icon-card rows back. On 21 October 2026 the same went
 for the last rows of equal boxes: the madrasah page's "Under one roof" facts (`.one-roof`) and
 its four summary facts (`.furqan-facts`, which keep their "To be confirmed" chips) are ruled
 lists now, and the homepage's Our story band sets its five years in a ruled row with no dots
